@@ -34,7 +34,7 @@ Para criar um ambiente local para o desenvolvimento, enquanto não temos uma bas
 
 8. Instalar o Postman (para este exemplo podem usar um browser normal porque os unícos requests que estão implementados usam o método GET mas usando o postman veem já a sua utilidade).
 
-9. Correr o comando: `npm install` ou simplesmente `npm i` para instalar as dependencias deste projeto.
+9. Correr o comando: `npm ci` para instalar as dependencias deste projeto.
 
 10. Por fim, correr o comando: `npm run dev` e rezar para que não dê nenhum erro.
 
