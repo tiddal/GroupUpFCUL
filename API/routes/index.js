@@ -1,25 +1,28 @@
 const express = require('express');
-const db = require('../db');
-const router = express.Router();
+const app = express();
+const usersRoutes = require('./users.js');
 
-router.get('/', async (req, res, next) => {
-	try {
-		let results = await db.users.all();
-		res.json(results);
-	} catch (err) {
-		console.log(err);
-		res.sendStatus(500);
-	}
-});
+app.use(express.json());
+app.use('/users', usersRoutes);
 
-router.get('/:id', async (req, res, next) => {
-	try {
-		let results = await db.users.byId(req.params.id);
-		res.json(results);
-	} catch (err) {
-		console.log(err);
-		res.sendStatus(500);
-	}
-});
+// router.get('/users', async (req, res, next) => {
+// 	try {
+// 		let results = await db.users.all();
+// 		res.json(results);
+// 	} catch (err) {
+// 		console.log(err);
+// 		res.sendStatus(500);
+// 	}
+// });
 
-module.exports = router;
+// router.get('/users/:id', async (req, res, next) => {
+// 	try {
+// 		let results = await db.users.byId(req.params.id);
+// 		res.json(results);
+// 	} catch (err) {
+// 		console.log(err);
+// 		res.sendStatus(500);
+// 	}
+// });
+
+module.exports = app;
