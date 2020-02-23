@@ -61,7 +61,7 @@ Adicionei ao projeto o [Sequelize](https://sequelize.org/v5/). Vai ajudar-nos a 
 4. Correr o comando `npx sequelize db:create`
 5. Correr o comando `npx sequelize db:migrate`
 6. Finalmente, para testar: `npm run dev`:
-   - Criem um user usando um post request em que o body é por exemplo `{"name": "test"}`
+   - Criem um user usando um post request em que o body é por exemplo `{"name": "test"}` para http://localhost:(porto)/users
    - Para listar todos os users: http://localhost:(porto)/users
    - Para listar um user: http://localhost:(porto)/users/(id)
 
@@ -69,7 +69,7 @@ Adicionei ao projeto o [Sequelize](https://sequelize.org/v5/). Vai ajudar-nos a 
 
 ---
 
-**Links em que me baseei:**
+**Videos em que me baseei:**
 
 - [MySQL Node Express API - Walkthrough](https://youtu.be/LVfH5FDOa3o)
 - [SQL no Node.js com Sequelize | Masterclass #01](https://youtu.be/Fbu7z5dXcRs)
