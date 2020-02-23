@@ -1,6 +1,6 @@
 # PTI - Back-end
 
-## Preparar o workspace
+## Preparar o workspace:
 
 Para criar um ambiente local para o desenvolvimento, enquanto não temos uma base de dados de testes no servidor da AWS vamos usar localhost para criar a API. Instalar e configurar o MySQL é um bocado chato 🙄 mas é preciso:
 
@@ -48,3 +48,28 @@ Para criar um ambiente local para o desenvolvimento, enquanto não temos uma bas
 13. Olhem para o código, é um projeto muito simples mas tem praticamente todas as bases para criar a nossa API! Não sei quão à vontade estão com JavaScript mas consigo explicar tudo o que fiz, é só perguntarem 😃
 
 **Nota:** Há grandes probabilidades de se depararem com problemas... Eu fiz todos esses passos (ou quase) em linux e tive alguns problemas principalmente com o MySQL. Para Windows espero que seja mais fácil... Se tiverem dúvidas: **Discord**
+
+---
+
+## Adicionar um ORM (Sequelize):
+
+Adicionei ao projeto o [Sequelize](https://sequelize.org/v5/). Vai ajudar-nos a estruturar melhor o código através da definição de Models para as tabelas da nossa base de dados. Para além disso, o Sequelize utiliza Migrations que é uma forma de fazer um controlo de versões da BD (como o git faz para o código). Partindo do principio que o workspace está preparado basta:
+
+1. Fazer push do repositório para atualizá-lo.
+2. Correr o comando `npm ci`
+3. Mudar o nome da base de dados no ficheiro .env ou apagar a existente
+4. Correr o comando `npx sequelize db:create`
+5. Correr o comando `npx sequelize db:migrate`
+6. Finalmente, para testar: `npm run dev`:
+   - Criem um user usando um post request em que o body é por exemplo `{"name": "test"}`
+   - Para listar todos os users: http://localhost:(porto)/users
+   - Para listar um user: http://localhost:(porto)/users/(id)
+
+**Nota:** Encontrei uma alternativa ao Postman que estou a gostar mais: https://insomnia.rest/
+
+---
+
+**Links em que me baseei:**
+
+- [MySQL Node Express API - Walkthrough](https://youtu.be/LVfH5FDOa3o)
+- [SQL no Node.js com Sequelize | Masterclass #01](https://youtu.be/Fbu7z5dXcRs)
