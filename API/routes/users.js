@@ -1,9 +1,9 @@
 const express = require('express');
-const db = require('../db');
 const router = express.Router();
-const { getAll, getById } = require('./utils');
+const UserController = require('./controllers/User');
 
-router.get('/', (req, res) => getAll(db.users, res));
-router.get('/:id', (req, res) => getById(db.users, req.params.id, res));
+router.get('/', UserController.selectAll);
+router.get('/:id', UserController.selectById);
+router.post('/', UserController.insert);
 
 module.exports = router;
