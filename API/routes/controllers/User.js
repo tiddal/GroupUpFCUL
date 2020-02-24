@@ -1,9 +1,25 @@
 const User = require('../../db/models/User');
 
 async function insertOne(req, res) {
-	const { name } = req.body;
+	const {
+		number,
+		first_name,
+		last_name,
+		email,
+		password,
+		status,
+		avatarURL
+	} = req.body;
 	try {
-		const user = await User.create({ name });
+		const user = await User.create({
+			number,
+			first_name,
+			last_name,
+			email,
+			password,
+			status,
+			avatarURL
+		});
 		return res.json(user);
 	} catch (err) {
 		return res.status(400).json({ error: 'Bad Request' });
