@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"dev": "node API/server.js"
+		"dev": "nodemon API/server.js"
 	},
 	"keywords": [],
 	"author": "",
@@ -17,6 +17,7 @@
 	},
 	"devDependencies": {
 		"dotenv": "^8.2.0",
+		"nodemon": "^2.0.2",
 		"sequelize-cli": "^5.5.1"
 	}
 }
