@@ -1,24 +1,15 @@
 const User = require('../../db/models/User');
 
 async function insertOne(req, res) {
-	const {
-		number,
-		first_name,
-		last_name,
-		email,
-		password,
-		status,
-		avatarURL
-	} = req.body;
+	const { number, firstName, lastName, email, password } = req.body.user;
+
 	try {
 		const user = await User.create({
 			number,
-			first_name,
-			last_name,
+			firstName,
+			lastName,
 			email,
-			password,
-			status,
-			avatarURL
+			password
 		});
 		return res.json(user);
 	} catch (err) {
@@ -47,10 +38,10 @@ module.exports = {
 	},
 
 	async insert(req, res) {
-		const { option } = req.body;
-		if (option === 'insert_one') {
+		const { action } = req.body;
+		if (action === 'insert_one') {
 			return insertOne(req, res);
-		} else if (option === 'insert_many') {
+		} else if (action === 'insert_many') {
 			return insertMany(req, res);
 		}
 		return res.status(400).json({ error: 'Bad Request' });

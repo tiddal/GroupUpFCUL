@@ -8,6 +8,6 @@ module.exports = {
 	database: process.env.DB_NAME,
 	define: {
 		timestamps: true,
-		underscored: true
+		underscored: false
 	}
 };

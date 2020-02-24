@@ -2,9 +2,9 @@
 
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		return queryInterface.createTable('users', {
+		return queryInterface.createTable('Users', {
 			id: {
-				type: Sequelize.INTEGER(11).ZEROFILL.UNSIGNED,
+				type: Sequelize.INTEGER,
 				primaryKey: true,
 				autoIncrement: true
 			},
@@ -13,11 +13,11 @@ module.exports = {
 				allowNull: false,
 				unique: true
 			},
-			first_name: {
+			firstName: {
 				type: Sequelize.STRING,
 				allowNull: false
 			},
-			last_name: {
+			lastName: {
 				type: Sequelize.STRING,
 				allowNull: false
 			},
@@ -36,8 +36,8 @@ module.exports = {
 			avatarURL: {
 				type: Sequelize.STRING
 			},
-			created_at: Sequelize.DATE,
-			updated_at: Sequelize.DATE
+			createdAt: Sequelize.DATE,
+			updatedAt: Sequelize.DATE
 		});
 	},
 
