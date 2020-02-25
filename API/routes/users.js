@@ -6,5 +6,6 @@ router.get('/', UserController.selectAll);
 router.get('/:id', UserController.selectById);
 router.post('/', UserController.insert);
 router.put('/:id', UserController.edit);
+router.delete('/:id', UserController.delete);
 
 module.exports = router;
