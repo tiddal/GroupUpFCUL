@@ -7,15 +7,3 @@ module.exports.status = (res, code) => {
 	};
 	return res.status(code).json({ code, message: codes[code] });
 };
-
-module.exports.insertOne = (body, res, Model) => {
-	Model.create(body)
-		.then((result) => res.json(result))
-		.catch((err) => status(res, 400));
-};
-
-module.exports.insertMany = (body, res, Model) => {
-	Model.bulkCreate(body)
-		.then((results) => res.json(results))
-		.catch((err) => status(res, 400));
-};

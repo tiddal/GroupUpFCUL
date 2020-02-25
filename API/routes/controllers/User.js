@@ -13,15 +13,11 @@ module.exports = {
 			.catch((err) => status(res, 500)),
 
 	insert: (req, res) => {
-		const { action } = req.body;
-		if (action === 'insert_one') {
-			const user = req.body.user;
-			return insertOne(user, res, User);
-		} else if (action === 'insert_many') {
-			const users = req.body.users;
-			return insertMany(users, res, User);
-		}
-		return status(res, 400);
+		User.bulkCreate(req.body.users)
+			.then((users) => {
+				users.length === 1 ? res.json(users[0]) : res.json(users);
+			})
+			.catch((err) => status(res, 400));
 	},
 
 	edit: (req, res) =>
