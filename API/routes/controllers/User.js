@@ -1,6 +1,7 @@
 const User = require('../../db/models/User');
 const Student = require('../../db/models/Student');
 const Admin = require('../../db/models/Admin');
+const Professor = require('../../db/models/Professor');
 const { status } = require('./utils');
 
 module.exports = {
@@ -31,23 +32,21 @@ module.exports = {
 			const admins = await User.bulkCreate(adminsData);
 			const adminsIds = admins.map((user) => ({ userId: user.id }));
 			const createdAdmins = await Admin.bulkCreate(adminsIds);
+			const professors = await User.bulkCreate(professorsData);
+			const professorsIds = professors.map((user, index) => ({
+				userId: user.id,
+				...professorsData[index].role.data
+			}));
+			const createdProfessors = await Professor.bulkCreate(professorsIds);
 			return res.json({
-				users: [...students, ...admins],
+				users: [...students, ...admins, ...professors],
 				students: createdStudents,
-				admins: createdAdmins
+				admins: createdAdmins,
+				professors: createdProfessors
 			});
 		} catch (err) {
 			return status(res, 400);
 		}
-
-		// User.bulkCreate(students)
-		// 	.then(async (users) => {
-		// 		const studentsIds = users.map((user) => ({ userId: user.id }));
-		// 		const createdStudents = await Student.bulkCreate(studentsIds);
-		// 		const createdAdmins = await Admin.bulkCreate()
-		// 		return res.json({ users, students: createdStudents });
-		// 	})
-		// 	.catch((err) => status(res, 400));
 	},
 
 	edit: (req, res) =>
