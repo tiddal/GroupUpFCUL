@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const UserController = require('./controllers/User');
 const StudentController = require('./controllers/Student');
-const ProfessorController = require('./controllers/Student');
+const ProfessorController = require('./controllers/Professor');
 const AdminsController = require('./controllers/Admin');
 
 router.get('/students/', StudentController.selectAll);
