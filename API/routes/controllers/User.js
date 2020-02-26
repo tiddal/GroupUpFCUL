@@ -5,51 +5,65 @@ const Professor = require('../../db/models/Professor');
 const { status } = require('./utils');
 
 module.exports = {
-	selectAll: (req, res) =>
+	selectAll: (req, res) => {
 		User.findAll()
 			.then((users) => res.json(users))
-			.catch((err) => status(res, 500)),
+			.catch((err) => status(res, 500));
+	},
 
-	selectById: (req, res) =>
+	selectById: (req, res) => {
 		User.findByPk(req.params.id)
 			.then((user) => (user ? res.json(user) : status(res, 404)))
-			.catch((err) => status(res, 500)),
+			.catch((err) => status(res, 500));
+	},
 
 	insert: async (req, res) => {
-		const studentsData = req.body.users.filter(
-			(user) => user.role.type === 'student'
-		);
-		const professorsData = req.body.users.filter(
-			(user) => user.role.type === 'professor'
-		);
-		const adminsData = req.body.users.filter(
-			(user) => user.role.type === 'admin'
-		);
 		try {
-			const students = await User.bulkCreate(studentsData);
-			const studentsIds = students.map((user) => ({ userId: user.id }));
-			const createdStudents = await Student.bulkCreate(studentsIds);
-			const admins = await User.bulkCreate(adminsData);
-			const adminsIds = admins.map((user) => ({ userId: user.id }));
-			const createdAdmins = await Admin.bulkCreate(adminsIds);
-			const professors = await User.bulkCreate(professorsData);
-			const professorsIds = professors.map((user, index) => ({
+			//	Students
+			const studentsRequest = req.body.users.filter(
+				(user) => user.role.type === 'student'
+			);
+			const studentsUsers = await User.bulkCreate(studentsRequest);
+			const studentsData = studentsUsers.map((user, index) => ({
 				userId: user.id,
-				...professorsData[index].role.data
+				...studentsRequest[index].role.data
 			}));
-			const createdProfessors = await Professor.bulkCreate(professorsIds);
+			const students = await Student.bulkCreate(studentsData);
+
+			//	Professors
+			const professorsRequset = req.body.users.filter(
+				(user) => user.role.type === 'professor'
+			);
+			const professorsUsers = await User.bulkCreate(professorsRequset);
+			const professorsData = professorsUsers.map((user, index) => ({
+				userId: user.id,
+				...professorsRequset[index].role.data
+			}));
+			const professors = await Professor.bulkCreate(professorsData);
+
+			//	Admins
+			const adminsRequest = req.body.users.filter(
+				(user) => user.role.type === 'admin'
+			);
+			const adminsUsers = await User.bulkCreate(adminsRequest);
+			const adminsData = adminsUsers.map((user, index) => ({
+				userId: user.id,
+				...adminsRequest[index].role.data
+			}));
+			const admins = await Admin.bulkCreate(adminsData);
+
 			return res.json({
-				users: [...students, ...admins, ...professors],
-				students: createdStudents,
-				admins: createdAdmins,
-				professors: createdProfessors
+				users: [...studentsUsers, ...adminsUsers, ...professorsUsers],
+				students,
+				professors,
+				admins
 			});
 		} catch (err) {
 			return status(res, 400);
 		}
 	},
 
-	edit: (req, res) =>
+	edit: (req, res) => {
 		User.findByPk(req.params.id)
 			.then((user) =>
 				user
@@ -58,12 +72,14 @@ module.exports = {
 							.then((updatedUser) => res.json(updatedUser))
 					: status(res, 404)
 			)
-			.catch((err) => status(res, 500)),
+			.catch((err) => status(res, 500));
+	},
 
-	delete: (req, res) =>
+	delete: (req, res) => {
 		User.findByPk(req.params.id)
 			.then((user) =>
 				user ? user.destroy().then(() => status(res, 200)) : status(res, 404)
 			)
-			.catch((err) => status(res, 500))
+			.catch((err) => status(res, 500));
+	}
 };
