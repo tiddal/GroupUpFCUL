@@ -9,7 +9,7 @@ module.exports = {
 	},
 
 	selectById: (req, res) => {
-		Student.findAll({ where: { userId: req.params.id } })
+		Student.findOne({ where: { userId: req.params.id } })
 			.then((student) => (student ? res.json(student) : status(res, 404)))
 			.catch((err) => status(res, 500));
 	}
