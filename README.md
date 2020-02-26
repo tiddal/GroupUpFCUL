@@ -73,3 +73,97 @@ Adicionei ao projeto o [Sequelize](https://sequelize.org/v5/). Vai ajudar-nos a 
 
 - [MySQL Node Express API - Walkthrough](https://youtu.be/LVfH5FDOa3o)
 - [SQL no Node.js com Sequelize | Masterclass #01](https://youtu.be/Fbu7z5dXcRs)
+
+---
+
+## Funcionamento da API #1
+
+### Routes
+
+| Method | Path                   | Result                     |
+| :----- | :--------------------- | :------------------------- |
+| GET    | /users                 | Gets all users             |
+| GET    | /users/{id}            | Gets a user by his id      |
+| POST   | /users                 | Creates a user             |
+| PUT    | /users/{id}            | Updates a user             |
+| DELETE | /users/{id}            | Deletes a user             |
+| GET    | /users/students        | Gets all students          |
+| GET    | /users/students/{id}   | Gets a student by his id   |
+| GET    | /users/professors      | Gets all professors        |
+| GET    | /users/professors/{id} | Gets a professor by his id |
+| GET    | /users/admins          | Gets all admins            |
+| GET    | /users/admins/{id}     | Gets an admin by his id    |
+
+### POST e PUT requests
+
+Atualmente a API é capaz de criar utilizadores através do envio de dados no "body" do request e também através do envio de ficheiros do tipo JSON. Para isso, os ficheiros ou o "body" devem respeitar a seguinte estrutra:
+
+```
+{
+   "users": [
+      {
+         "number": "fc12345",
+         "firstName": "Exemplo",
+         "lastName": "Aluno",
+         "email": "fc12345@alunos.fc.ul.pt",
+         "password": "test",
+         "role": {
+            "type": "student",
+            "data": {}
+          }
+      },
+      {
+         "number": "fc00000",
+         "firstName": "Exemplo",
+         "lastName": "Professor",
+         "email": "fc00000@alunos.fc.ul.pt",
+         "password": "test",
+         "role": {
+            "type": "professor",
+            "data": {
+               "department" : "DI",
+               "room" : "6.3.99"
+            }
+         }
+      }
+   ]
+}
+```
+
+Dentro do campo "data" devem estar os atributos que dizem respeito apenas à respetiva "role". Como atualmente na base de dados os alunos e os admins não têm nenhum atributo exclusivo, o campo "data" para essas "roles" tem de estar vazio.
+
+O campo "type" não faz parte da base de dados mas serve para identificar que tipo de utilizador está a ser registado para preencher as respetivas tabelas. Pode ter os valores `student`, `professor` ou `admin`.
+
+### Base de Dados
+
+#### Users
+
+| Coluna    |  Tipo  |      Restrições      |
+| :-------- | :----: | :------------------: |
+| number    | string | **not null, unique** |
+| firstName | string |     **not null**     |
+| lastName  | string |     **not null**     |
+| email     | string | **not null, unique** |
+| password  | string |     **not null**     |
+| status    | string |          -           |
+| avatarURL | string |          -           |
+
+#### Students
+
+| Coluna |  Tipo   |  Restrições  |
+| :----- | :-----: | :----------: |
+| userId | integer | **not null** |
+
+#### Professors
+
+| Coluna     |  Tipo   |  Restrições  |
+| :--------- | :-----: | :----------: |
+| userId     | integer | **not null** |
+| department | string  | **not null** |
+| room       | string  |      -       |
+
+#### Admins
+
+| Coluna |  Tipo   |  Restrições  |
+| :----- | :-----: | :----------: |
+| userId | integer | **not null** |
