@@ -1,5 +1,6 @@
 const User = require('../../db/models/User');
-const { status, insertOne, insertMany } = require('./utils');
+const Student = require('../../db/models/Student');
+const { status } = require('./utils');
 
 module.exports = {
 	selectAll: (req, res) =>
@@ -13,9 +14,22 @@ module.exports = {
 			.catch((err) => status(res, 500)),
 
 	insert: (req, res) => {
-		User.bulkCreate(req.body.users)
+		const students = req.body.users.filter(
+			(user) => user.role.type === 'student'
+		);
+		const professors = req.body.users.filter(
+			(user) => user.role.type === 'professor'
+		);
+		const admins = req.body.users.filter((user) => user.role.type === 'admin');
+
+		User.bulkCreate(students)
 			.then((users) => {
-				users.length === 1 ? res.json(users[0]) : res.json(users);
+				const studentsIds = users.map((user) => ({ userId: user.id }));
+				Student.bulkCreate(studentsIds)
+					.then((createdStudents) =>
+						res.json({ users, students: createdStudents })
+					)
+					.catch((err) => status(res, 400));
 			})
 			.catch((err) => status(res, 400));
 	},
