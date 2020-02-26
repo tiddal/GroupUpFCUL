@@ -1,6 +1,6 @@
 # PTI - Back-end
 
-## Preparar o workspace:
+## Preparar o workspace
 
 Para criar um ambiente local para o desenvolvimento, enquanto não temos uma base de dados de testes no servidor da AWS vamos usar localhost para criar a API. Instalar e configurar o MySQL é um bocado chato 🙄 mas é preciso:
 
@@ -51,7 +51,7 @@ Para criar um ambiente local para o desenvolvimento, enquanto não temos uma bas
 
 ---
 
-## Adicionar um ORM (Sequelize):
+## Adicionar um ORM (Sequelize)
 
 Adicionei ao projeto o [Sequelize](https://sequelize.org/v5/). Vai ajudar-nos a estruturar melhor o código através da definição de Models para as tabelas da nossa base de dados. Para além disso, o Sequelize utiliza Migrations que é uma forma de fazer um controlo de versões da BD (como o git faz para o código). Partindo do principio que o workspace está preparado basta:
 
@@ -98,7 +98,7 @@ Adicionei ao projeto o [Sequelize](https://sequelize.org/v5/). Vai ajudar-nos a 
 
 Atualmente a API é capaz de criar utilizadores através do envio de dados no "body" do request e também através do envio de ficheiros do tipo JSON. Para isso, os ficheiros ou o "body" devem respeitar a seguinte estrutra:
 
-```
+```JSON
 {
    "users": [
       {
