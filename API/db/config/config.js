@@ -18,6 +18,9 @@ module.exports = {
 		database: process.env.TEST_DB_NAME,
 		host: process.env.TEST_DB_HOST,
 		dialect: 'mysql',
+		dialectOptions: {
+			ssl: 'Amazon RDS'
+		},
 		define: {
 			timestamps: true,
 			underscored: false
@@ -29,6 +32,9 @@ module.exports = {
 		database: process.env.DB_NAME,
 		host: process.env.DB_HOST,
 		dialect: 'mysql',
+		dialectOptions: {
+			ssl: 'Amazon RDS'
+		},
 		define: {
 			timestamps: true,
 			underscored: false
