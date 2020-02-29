@@ -4,7 +4,9 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"dev": "nodemon API/server.js"
+		"dev": "NODE_ENV=development nodemon API/server.js",
+		"test": "NODE_ENV=test nodemon API/server.js",
+		"start": "NODE_ENV=production node API/server.js"
 	},
 	"keywords": [],
 	"author": "",
