@@ -6,8 +6,8 @@ Para criar um ambiente local para o desenvolvimento, enquanto não temos uma bas
 
 1. Instalar o MySQL, acho que basta o MySQL Workbench e o MySQL Community Server:
 
-   - https://dev.mysql.com/downloads/mysql/
-   - https://youtu.be/WuBcTJnIuzo (Windows)
+   - <https://dev.mysql.com/downloads/mysql/>
+   - <https://youtu.be/WuBcTJnIuzo> (Windows)
 
 2. Recomendo criar um utilizador mas também podem deixar o root.
 
@@ -15,11 +15,11 @@ Para criar um ambiente local para o desenvolvimento, enquanto não temos uma bas
 
 4. Instalar o node.js:
 
-   - https://nodejs.org/en/ (v12.16.1 LTS)
+   - <https://nodejs.org/en/> (v12.16.1 LTS)
 
 5. Fazer clone deste repositório.
 
-   - https://git-scm.com/ (caso não tenham o git instalado 😅)
+   - <https://git-scm.com/> (caso não tenham o git instalado 😅)
 
 6. Criar o ficheiro ".env" para armazenar as variáveis de ambiente. Este ficheiro não está no repositório porque cada um de nós tem as suas. Se repararem é ignorado no ".gitignore".
 
@@ -39,8 +39,8 @@ Para criar um ambiente local para o desenvolvimento, enquanto não temos uma bas
 
 11. No postman (ou num browser) e vejam o que acontece quando acedem a route "/users" e "users/(id)":
 
-    - http://localhost:(porto)/users
-    - http://localhost:(porto)/users/(id)
+    - <http://localhost:(porto)/users>
+    - <http://localhost:(porto)/users/(id)>
 
 12. Mandem-me os vossos githubs para vos adicionar como membros para mudar isto para privado.
 
@@ -60,11 +60,11 @@ Adicionei ao projeto o [Sequelize](https://sequelize.org/v5/). Vai ajudar-nos a 
 4. Correr o comando `npx sequelize db:create`
 5. Correr o comando `npx sequelize db:migrate`
 6. Finalmente, para testar: `npm run dev`:
-   - Criem um user usando um post request em que o body é por exemplo `{"name": "test"}` para http://localhost:(porto)/users
-   - Para listar todos os users: http://localhost:(porto)/users
-   - Para listar um user: http://localhost:(porto)/users/(id)
+   - Criem um user usando um post request em que o body é por exemplo `{"name": "test"}` para <http://localhost:(porto)/users>
+   - Para listar todos os users: <http://localhost:(porto)/users>
+   - Para listar um user: <http://localhost:(porto)/users/(id)>
 
-**Nota:** Encontrei uma alternativa ao Postman que estou a gostar mais: https://insomnia.rest/
+**Nota:** Encontrei uma alternativa ao Postman que estou a gostar mais: <https://insomnia.rest/>
 
 ---
 
@@ -93,7 +93,7 @@ Adicionei ao projeto o [Sequelize](https://sequelize.org/v5/). Vai ajudar-nos a 
 | GET    | /users/admins          | Gets all admins            |
 | GET    | /users/admins/{id}     | Gets an admin by his id    |
 
-### POST e PUT requests
+### POST requests
 
 Atualmente a API é capaz de criar utilizadores através do envio de dados no "body" do request e também através do envio de ficheiros do tipo JSON. Para isso, os ficheiros ou o "body" devem respeitar a seguinte estrutra:
 
@@ -132,6 +132,20 @@ Atualmente a API é capaz de criar utilizadores através do envio de dados no "b
 Dentro do campo "data" devem estar os atributos que dizem respeito apenas à respetiva "role". Como atualmente na base de dados os alunos e os admins não têm nenhum atributo exclusivo, o campo "data" para essas "roles" tem de estar vazio.
 
 O campo "type" não faz parte da base de dados mas serve para identificar que tipo de utilizador está a ser registado para preencher as respetivas tabelas. Pode ter os valores `student`, `professor` ou `admin`.
+
+### PUT requests
+
+Neste momento a API apenas suporta fazer update a um utilizador de cada vez, ou seja, só através de um PUT request para um dado id. Não sei se é suposto ser possivel fazer update de vários utilizadores dado um ficheiro, por exemplo (?). Também para fazer update, o "body" do request tem que respeitar a seguinte estrutra:
+
+```JSON
+{
+   "user": {
+      "password": "exemplo",
+      "status": "offline"
+   }
+}
+
+```
 
 ### Base de Dados
 
