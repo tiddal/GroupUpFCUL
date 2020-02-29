@@ -26,11 +26,10 @@ Para criar um ambiente local para o desenvolvimento, enquanto não temos uma bas
 7. No ficheiro ".env" é preciso definir, sem aspas, sem parênteses, apenas o valor à frente do sinal de igual:
 
    - PORT=(o porto para correr o servidor, muito vulgar usar o 3000)
-   - DB_USER=(o utilizador que criaram quando instalaram o MySQL, ou root)
-   - DB_PASSWORD=(a password respetiva)
-   - DB_PORT=(o porto em que a base de dados está a correr)
-   - DB_HOST=localhost (este é localhost, igual para todos, vamos mudar quando tivermos a base de dados na AWS)
-   - DB_NAME=(o nome que deram à base de dados)
+   - DEV_DB_USER=(o utilizador que criaram quando instalaram o MySQL, ou root)
+   - DEV_DB_PASSWORD=(a password respetiva)
+   - DEV_DB_HOST=localhost (este é localhost, igual para todos, vamos mudar quando tivermos a base de dados na AWS)
+   - DEV_DB_NAME=(o nome que deram à base de dados)
 
 8. Instalar o Postman (para este exemplo podem usar um browser normal porque os unícos requests que estão implementados usam o método GET mas usando o postman veem já a sua utilidade).
 
