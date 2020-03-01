@@ -1,12 +1,12 @@
 const { Model, DataTypes } = require('sequelize');
 
-class Program extends Model {
+class Course extends Model {
 	static init(sequelize) {
 		super.init(
 			{
                 name: DataTypes.STRING,
-                cycle: DataTypes.INTEGER,
-                description: DataTypes.STRING
+                description: DataTypes.STRING,
+                ects: DataTypes.INTEGER
 			},
 			{
 				sequelize
@@ -14,8 +14,8 @@ class Program extends Model {
 		);
     }
     //static associate(models) {
-        //this.belongsToMany(models.Course, {through: "programCourses"});
+       // this.belongsToMany(models.Program, {through: "programCourses" });
 	//}
 }
 
-module.exports = Program;
+module.exports = Course;
