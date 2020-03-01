@@ -1,4 +1,10 @@
 const { Model, DataTypes } = require('sequelize');
+const aws = require('aws-sdk');
+const fs = require('fs');
+const path = require('path');
+const { promisify } = require('util');
+
+const s3 = new aws.S3();
 
 class User extends Model {
 	static init(sequelize) {
@@ -13,6 +19,38 @@ class User extends Model {
 				avatarURL: DataTypes.STRING
 			},
 			{
+				hooks: {
+					beforeUpdate: (user) => {
+						const prevUser = user['_previousDataValues'];
+						if (!prevUser.avatarURL) return;
+
+						const avatarKey = prevUser.avatarURL
+							.split('/')
+							.splice(-1)
+							.toString();
+
+						if (process.env.NODE_ENV === 'development') {
+							return promisify(fs.unlink)(
+								path.resolve(
+									__dirname,
+									'..',
+									'..',
+									'..',
+									'tmp',
+									'uploads',
+									avatarKey
+								)
+							);
+						} else {
+							return s3
+								.deleteObject({
+									Bucket: process.env.AWS_AVATARS_BUCKET_NAME,
+									Key: avatarKey
+								})
+								.promise();
+						}
+					}
+				},
 				sequelize
 			}
 		);

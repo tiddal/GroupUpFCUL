@@ -64,13 +64,20 @@ module.exports = {
 	},
 
 	edit: (req, res) => {
-		console.log(req.file);
-		console.log(req.body);
+		const avatarURL = req.file
+			? req.file.location
+				? req.file.location
+				: `${process.env.APP_URL}/files/${req.file.key}`
+			: null;
 		User.findByPk(req.params.id)
 			.then((user) =>
 				user
 					? user
-							.update(req.body.user)
+							.update({
+								password: req.body.user.password || '',
+								status: req.body.user.status || '',
+								avatarURL
+							})
 							.then((updatedUser) => res.json(updatedUser))
 					: status(res, 404)
 			)
