@@ -25,3 +25,6 @@ benchmarks/graphs
 
 #   Environment variables
 .env
+
+#   Tmp Content
+tmp/uploads/*
