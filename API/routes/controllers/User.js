@@ -64,6 +64,8 @@ module.exports = {
 	},
 
 	edit: (req, res) => {
+		console.log(req.file);
+		console.log(req.body);
 		User.findByPk(req.params.id)
 			.then((user) =>
 				user
