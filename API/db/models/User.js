@@ -22,38 +22,38 @@ class User extends Model {
 				hooks: {
 					beforeUpdate: (user) => {
 						const prevUser = user['_previousDataValues'];
-						if (!prevUser.avatarURL) return;
-
-						const avatarKey = prevUser.avatarURL
-							.split('/')
-							.splice(-1)
-							.toString();
-
-						if (process.env.NODE_ENV === 'development') {
-							return promisify(fs.unlink)(
-								path.resolve(
-									__dirname,
-									'..',
-									'..',
-									'..',
-									'tmp',
-									'uploads',
-									avatarKey
-								)
-							);
-						} else {
-							return s3
-								.deleteObject({
-									Bucket: process.env.AWS_AVATARS_BUCKET_NAME,
-									Key: avatarKey
-								})
-								.promise();
-						}
+						return this.deleteUserAvatar(prevUser);
+					},
+					beforeDestroy: (user) => {
+						return this.deleteUserAvatar(user);
 					}
 				},
 				sequelize
 			}
 		);
+	}
+
+	static deleteUserAvatar(user) {
+		console.log('hi');
+		if (!user.avatarURL) return;
+
+		const avatarKey = user.avatarURL
+			.split('/')
+			.splice(-1)
+			.toString();
+
+		if (process.env.NODE_ENV === 'development') {
+			return promisify(fs.unlink)(
+				path.resolve(__dirname, '..', '..', '..', 'tmp', 'uploads', avatarKey)
+			);
+		} else {
+			return s3
+				.deleteObject({
+					Bucket: process.env.AWS_AVATARS_BUCKET_NAME,
+					Key: avatarKey
+				})
+				.promise();
+		}
 	}
 }
 
