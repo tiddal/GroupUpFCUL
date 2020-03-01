@@ -15,4 +15,4 @@ class Program extends Model {
 	}
 }
 
-module.exports = User;
+module.exports = Program;
