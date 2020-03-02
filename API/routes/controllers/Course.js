@@ -4,10 +4,44 @@ const Course = require('../../db/models/Course');
 const { status } = require('./utils');
 
 module.exports = {
+	selectAllByProgram: (req, res) => {
+		const programId = req.params.id;
+
+		Program.findByPk(programId, {
+			include: {
+				association: 'courses',
+				through: {
+					attributes: []
+				}
+			}
+		})
+			.then((program) => res.json(program.courses))
+			.catch((err) => status(res, 400));
+	},
+
 	selectAll: (req, res) => {
 		Course.findAll()
 			.then((courses) => res.json(courses))
 			.catch((err) => status(res, 500));
+	},
+
+	selectByIdByProgram: (req, res) => {
+		const programId = req.params.id;
+		const courseId = req.params.courseId;
+
+		Program.findByPk(programId, {
+			include: {
+				association: 'courses',
+				through: {
+					where: { courseId },
+					attributes: []
+				}
+			}
+		})
+			.then((program) =>
+				program.courses[0] ? res.json(program.courses[0]) : status(404)
+			)
+			.catch((err) => status(res, 404));
 	},
 
 	selectById: (req, res) => {
