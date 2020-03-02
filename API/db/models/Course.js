@@ -4,18 +4,22 @@ class Course extends Model {
 	static init(sequelize) {
 		super.init(
 			{
-                name: DataTypes.STRING,
-                description: DataTypes.STRING,
-                ects: DataTypes.INTEGER
+				name: DataTypes.STRING,
+				description: DataTypes.STRING,
+				ects: DataTypes.INTEGER
 			},
 			{
 				sequelize
 			}
 		);
-    }
-    //static associate(models) {
-       // this.belongsToMany(models.Program, {through: "programCourses" });
-	//}
+	}
+	static associate(models) {
+		this.belongsToMany(models.Program, {
+			foreignKey: 'courseId',
+			through: 'program_course',
+			as: 'programs'
+		});
+	}
 }
 
 module.exports = Course;

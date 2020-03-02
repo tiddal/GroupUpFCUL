@@ -4,8 +4,8 @@ const User = require('./models/User');
 const Student = require('./models/Student');
 const Admin = require('./models/Admin');
 const Professor = require('./models/Professor');
-const Program = require("./models/Program");
-const Course = require("./models/Course");
+const Program = require('./models/Program');
+const Course = require('./models/Course');
 
 User.init(conn);
 Student.init(conn);
@@ -17,7 +17,7 @@ Course.init(conn);
 Student.associate(conn.models);
 Admin.associate(conn.models);
 Professor.associate(conn.models);
-//Program.associate(conn.models);
-//Course.associate(conn.models);
+Program.associate(conn.models);
+Course.associate(conn.models);
 
 module.exports = conn;
