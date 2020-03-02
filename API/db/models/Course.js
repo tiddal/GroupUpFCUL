@@ -4,6 +4,7 @@ class Course extends Model {
 	static init(sequelize) {
 		super.init(
 			{
+				code: DataTypes.STRING,
 				name: DataTypes.STRING,
 				description: DataTypes.STRING,
 				ects: DataTypes.INTEGER

@@ -16,22 +16,25 @@ module.exports = {
 			.catch((err) => status(res, 500));
 	},
 
-	insert: async (req, res) => {
+	insert: (req, res) => {
 		const programId = req.params.id;
-		const { name, description, ects } = req.body.course;
+		const { name, code, description, ects } = req.body.course;
 
-		const program = await Program.findByPk(programId);
-
-		if (!program) return status(400);
-
-		const [course] = await Course.findOrCreate({
-			where: { name },
-			defaults: { name, description, ects }
-		});
-
-		await program.addCourse(course);
-
-		return res.json(course);
+		Program.findByPk(programId)
+			.then((program) => {
+				return Course.findOrCreate({
+					where: { code },
+					defaults: { code, name, description, ects }
+				})
+					.then(([course, created]) => {
+						return program
+							.addCourse(course)
+							.then(() => res.json(course))
+							.catch((err) => status(res, 400));
+					})
+					.catch((err) => status(res, 400));
+			})
+			.catch((err) => status(res, 400));
 	},
 
 	edit: (req, res) => {
@@ -48,7 +51,7 @@ module.exports = {
 
 	delete: (req, res) => {
 		Course.findByPk(req.params.id)
-			.then((Course) =>
+			.then((course) =>
 				course
 					? course.destroy().then(() => status(res, 200))
 					: status(res, 404)

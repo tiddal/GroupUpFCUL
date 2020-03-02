@@ -4,6 +4,7 @@ class Program extends Model {
 	static init(sequelize) {
 		super.init(
 			{
+				code: DataTypes.INTEGER,
 				name: DataTypes.STRING,
 				cycle: DataTypes.INTEGER,
 				description: DataTypes.STRING
