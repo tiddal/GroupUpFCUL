@@ -20,35 +20,35 @@ module.exports = {
 	insert: async (req, res) => {
 		try {
 			//	Students
-			const studentsRequest = req.body.users.filter(
+			const studentsJSON = req.body.users.filter(
 				(user) => user.role.type === 'student'
 			);
-			const studentsUsers = await User.bulkCreate(studentsRequest);
+			const studentsUsers = await User.bulkCreate(studentsJSON);
 			const studentsData = studentsUsers.map((user, index) => ({
 				userId: user.id,
-				...studentsRequest[index].role.data
+				...studentsJSON[index].role.data
 			}));
 			const students = await Student.bulkCreate(studentsData);
 
 			//	Professors
-			const professorsRequset = req.body.users.filter(
+			const professorsJSON = req.body.users.filter(
 				(user) => user.role.type === 'professor'
 			);
-			const professorsUsers = await User.bulkCreate(professorsRequset);
+			const professorsUsers = await User.bulkCreate(professorsJSON);
 			const professorsData = professorsUsers.map((user, index) => ({
 				userId: user.id,
-				...professorsRequset[index].role.data
+				...professorsJSON[index].role.data
 			}));
 			const professors = await Professor.bulkCreate(professorsData);
 
 			//	Admins
-			const adminsRequest = req.body.users.filter(
+			const adminsJSON = req.body.users.filter(
 				(user) => user.role.type === 'admin'
 			);
-			const adminsUsers = await User.bulkCreate(adminsRequest);
+			const adminsUsers = await User.bulkCreate(adminsJSON);
 			const adminsData = adminsUsers.map((user, index) => ({
 				userId: user.id,
-				...adminsRequest[index].role.data
+				...adminsJSON[index].role.data
 			}));
 			const admins = await Admin.bulkCreate(adminsData);
 
