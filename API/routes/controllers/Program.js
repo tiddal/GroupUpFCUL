@@ -1,4 +1,6 @@
 const Program = require('../../db/models/Program');
+const Course = require('../../db/models/Course');
+
 const { status } = require('./utils');
 
 module.exports = {
@@ -14,10 +16,45 @@ module.exports = {
 			.catch((err) => status(res, 500));
 	},
 
-	insert: (req, res) => {
-        Program.bulkCreate(req.body.programs)
-            .then((program) => res.json(program))
-            .catch((err) => status(res, 400))
+	insert: async (req, res) => {
+		try {
+			const programsJSON = req.body.programs;
+			const programs = await Promise.all(
+				programsJSON.map(async (programJSON) => {
+					const {
+						code,
+						name,
+						cycle,
+						description,
+						courses: coursesJSON
+					} = programJSON;
+
+					const program = await Program.create({
+						code,
+						name,
+						cycle,
+						description
+					});
+
+					const courses = await Promise.all(
+						coursesJSON.map(async (courseJSON) => {
+							const { code } = courseJSON;
+							const [course, created] = await Course.findOrCreate({
+								where: { code },
+								defaults: courseJSON
+							});
+							await program.addCourse(course);
+							return course;
+						})
+					);
+					program.dataValues = { ...program.dataValues, courses };
+					return program;
+				})
+			);
+			return res.json({ programs: [...programs] });
+		} catch (err) {
+			return status(res, 400);
+		}
 	},
 
 	edit: (req, res) => {
@@ -34,8 +71,10 @@ module.exports = {
 
 	delete: (req, res) => {
 		Program.findByPk(req.params.id)
-			.then((Program) =>
-				program ? program.destroy().then(() => status(res, 200)) : status(res, 404)
+			.then((program) =>
+				program
+					? program.destroy().then(() => status(res, 200))
+					: status(res, 404)
 			)
 			.catch((err) => status(res, 500));
 	}
