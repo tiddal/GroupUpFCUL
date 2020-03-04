@@ -3,7 +3,8 @@ const app = express();
 const path = require('path');
 const usersRoutes = require('./users.js');
 const programsRoutes = require('./programs.js');
-const coursesRoutes = require('./courses');
+const coursesRoutes = require('./courses.js');
+const classesRoutes = require('./classes.js');
 
 app.use(express.json());
 app.use(
@@ -13,5 +14,6 @@ app.use(
 app.use('/users', usersRoutes);
 app.use('/programs', programsRoutes);
 app.use('/courses', coursesRoutes);
+app.use('/classes', classesRoutes);
 
 module.exports = app;
