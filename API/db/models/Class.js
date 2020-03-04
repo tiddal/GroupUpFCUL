@@ -6,13 +6,17 @@ class Class extends Model {
 			{
 				courseId: DataTypes.INTEGER,
 				number: DataTypes.STRING,
-                beginsAt: DataTypes.DATE,
-                endsAt: DataTypes.DATE
+				beginsAt: DataTypes.TIME,
+				endsAt: DataTypes.TIME
 			},
 			{
 				sequelize
 			}
 		);
+	}
+
+	static associate(models) {
+		this.belongsTo(models.Course, { foreignKey: 'courseId', as: 'course' });
 	}
 }
 

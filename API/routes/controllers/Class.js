@@ -1,4 +1,6 @@
 const Class = require('../../db/models/Class');
+const Program = require('../../db/models/Program');
+const Course = require('../../db/models/Course');
 
 const { status } = require('./utils');
 
@@ -17,23 +19,25 @@ module.exports = {
 
 	insert: (req, res) => {
 		const programId = req.params.id;
-		const { name, code, description, ects } = req.body.course;
+		const courseId = req.params.course_id;
+
+		const classesJSON = req.body.classes;
 
 		Program.findByPk(programId)
 			.then((program) => {
-				return Course.findOrCreate({
-					where: { code },
-					defaults: { code, name, description, ects }
-				})
-					.then(([course, created]) => {
-						return program
-							.addCourse(course)
-							.then(() => res.json(course))
+				Course.findByPk(courseId)
+					.then((course) => {
+						const classesData = classesJSON.map((_class) => ({
+							..._class,
+							courseId
+						}));
+						Class.bulkCreate(classesData)
+							.then((classes) => res.json(classes))
 							.catch((err) => status(res, 400));
 					})
-					.catch((err) => status(res, 400));
+					.catch((err) => status(res, 404));
 			})
-			.catch((err) => status(res, 400));
+			.catch((err) => status(res, 404));
 	},
 
 	edit: (req, res) => {

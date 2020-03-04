@@ -21,5 +21,6 @@ Admin.associate(conn.models);
 Professor.associate(conn.models);
 Program.associate(conn.models);
 Course.associate(conn.models);
+Class.associate(conn.models);
 
 module.exports = conn;

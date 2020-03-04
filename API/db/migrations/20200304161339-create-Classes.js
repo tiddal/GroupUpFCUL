@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Classes', {
+	up: (queryInterface, Sequelize) => {
+		return queryInterface.createTable('Classes', {
 			id: {
 				type: Sequelize.INTEGER,
 				primaryKey: true,
@@ -13,23 +13,25 @@ module.exports = {
 				references: { model: 'Courses', key: 'id' },
 				onUpdate: 'CASCADE',
 				onDelete: 'CASCADE'
-      },
-      number: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      beginsAt: {
-        type: Sequelize.DATE
-      },
-      endsAt: {
-        type : Sequelize.DATE
-      },
+			},
+			number: {
+				type: Sequelize.STRING,
+				allowNull: false
+			},
+			beginsAt: {
+				type: Sequelize.TIME,
+				allowNull: false
+			},
+			endsAt: {
+				type: Sequelize.TIME,
+				allowNull: false
+			},
 			createdAt: Sequelize.DATE,
 			updatedAt: Sequelize.DATE
 		});
-  },
+	},
 
-  down: (queryInterface, Sequelize) => {
-      return queryInterface.dropTable('Classes');
-  }
+	down: (queryInterface, Sequelize) => {
+		return queryInterface.dropTable('Classes');
+	}
 };
