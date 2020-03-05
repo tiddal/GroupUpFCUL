@@ -25,10 +25,24 @@ module.exports = {
 			.catch((err) => next(err));
 	},
 	loginRequired: (req, res, next) => {
-		!req.user ? status(res, 401) : next();
+		if (!req.user) {
+			const error = new Error('Unauthorized');
+			error.title = 'Not logged in';
+			error.status = 401;
+			error.detail = 'You must be logged in to access this resource.';
+			return next(error);
+		}
+		next();
 	},
 	adminRequired: async (req, res, next) => {
 		const admin = await Admin.findOne({ where: { userId: req.user.id } });
-		!admin ? status(res, 401) : next();
+		if (!admin) {
+			const error = new Error('Unauthorized');
+			error.title = 'Not an Admin';
+			error.status = 401;
+			error.detail = "You don't have admin previleges to access this resource.";
+			return next(error);
+		}
+		next();
 	}
 };

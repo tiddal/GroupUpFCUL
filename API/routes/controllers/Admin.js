@@ -2,7 +2,7 @@ const Admin = require('../../db/models/Admin');
 const { status } = require('./utils');
 
 module.exports = {
-	selectAll: (req, res) => {
+	selectAll: (req, res, next) => {
 		Admin.findAll({
 			attributes: {
 				exclude: ['userId', 'createdAt', 'updatedAt']
