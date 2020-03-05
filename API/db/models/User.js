@@ -3,6 +3,7 @@ const aws = require('aws-sdk');
 const fs = require('fs');
 const path = require('path');
 const { promisify } = require('util');
+const bcrypt = require('bcryptjs');
 
 const s3 = new aws.S3();
 
@@ -26,6 +27,10 @@ class User extends Model {
 					},
 					beforeDestroy: (user) => {
 						return this.deleteUserAvatar(user);
+					},
+					afterCreate: (user) => {
+						user.password = undefined;
+						return user;
 					}
 				},
 				sequelize
@@ -34,7 +39,6 @@ class User extends Model {
 	}
 
 	static deleteUserAvatar(user) {
-		console.log('hi');
 		if (!user.avatarURL) return;
 
 		const avatarKey = user.avatarURL
