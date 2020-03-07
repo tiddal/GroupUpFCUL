@@ -6,6 +6,7 @@ const morgan = require('morgan');
 //	Middleware
 const sessions = require('../middleware/sessions');
 const { sessionRequired } = require('../middleware/permissions');
+const errorHandler = require('../middleware/errorHandler');
 
 //	Routes
 const usersRoutes = require('./users');
@@ -13,6 +14,7 @@ const programsRoutes = require('./programs');
 const coursesRoutes = require('./courses');
 const classesRoutes = require('./classes');
 const authRoutes = require('./auth');
+const pageNotFound = require('./pageNotFound');
 
 app.use(express.json());
 app.use(morgan('dev'));
@@ -28,19 +30,8 @@ app.use('/programs', programsRoutes);
 app.use('/courses', coursesRoutes);
 app.use('/classes', classesRoutes);
 app.use('/', authRoutes);
+app.use(pageNotFound);
 
-app.use((req, res, next) => {
-	const error = new Error('Not found');
-	error.title = 'Not found';
-	error.status = 404;
-	error.detail = "Sorry, we can't find the page you were looking for";
-	next(error);
-});
-
-app.use((error, req, res, next) => {
-	const { title, status, detail } = error;
-	res.status(status);
-	res.json({ error });
-});
+app.use(errorHandler);
 
 module.exports = app;

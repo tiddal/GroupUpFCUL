@@ -21,7 +21,7 @@ router.get('/professors/:id', ProfessorController.selectById);
 router.get('/admins/', AdminsController.selectAll);
 router.get('/admins/:id', AdminsController.selectById);
 
-router.get('/', loginRequired, adminRequired, UserController.selectAll);
+router.get('/', UserController.selectAll);
 router.get('/:id', UserController.selectById);
 router.post('/', UserController.insert);
 router.put('/:id', multer(multerConfig).single('file'), UserController.edit);
