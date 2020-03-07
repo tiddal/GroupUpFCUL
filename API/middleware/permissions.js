@@ -30,7 +30,7 @@ module.exports = {
 	},
 	loginRequired: (req, res, next) => {
 		if (!req.user) {
-			return next(error.LOGGIN_REQUIRED());
+			return next(error.LOGIN_REQUIRED());
 		}
 		return next();
 	},
@@ -40,5 +40,12 @@ module.exports = {
 			return next(error.NO_ADMIN_PERMISSIONS());
 		}
 		return next();
+	},
+	selfRequired: async (req, res, next) => {
+		const admin = await Admin.findOne({ where: { userId: req.user.id } });
+		if (req.params.id === req.user.id.toString() || admin) {
+			return next();
+		}
+		return next(error.INVALID_IDENTITY());
 	}
 };

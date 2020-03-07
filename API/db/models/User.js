@@ -81,12 +81,20 @@ class User extends Model {
 				hooks: {
 					beforeUpdate: (user) => {
 						const prevUser = user['_previousDataValues'];
-						return this.deleteUserAvatar(prevUser);
+						if (user.avatarURL) {
+							return this.deleteUserAvatar(prevUser);
+						}
+						user.avatarURL = prevUser.avatarURL;
+						return user;
 					},
 					beforeDestroy: (user) => {
 						return this.deleteUserAvatar(user);
 					},
 					afterCreate: (user) => {
+						user.password = undefined;
+						return user;
+					},
+					afterUpdate: (user) => {
 						user.password = undefined;
 						return user;
 					}
