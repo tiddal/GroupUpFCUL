@@ -1,5 +1,5 @@
 const express = require('express');
-const app = express();
+const helmet = require('helmet');
 const path = require('path');
 const morgan = require('morgan');
 
@@ -16,7 +16,19 @@ const classesRoutes = require('./classes');
 const authRoutes = require('./auth');
 const pageNotFound = require('./pageNotFound');
 
+const app = express();
+
+app.use(helmet());
+app.use(
+	helmet.contentSecurityPolicy({
+		directives: {
+			defaultSrc: ['self']
+		}
+	})
+);
+app.use(helmet.referrerPolicy({ policy: 'origin-when-cross-origin' }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(sessions);
 app.use(sessionRequired);
