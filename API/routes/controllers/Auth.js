@@ -3,8 +3,6 @@ const error = require('../../utils/errors');
 
 const User = require('../../db/models/User');
 
-const { status } = require('./utils');
-
 module.exports = {
 	login: (req, res, next) => {
 		const { email, password } = req.body.user;
@@ -15,9 +13,13 @@ module.exports = {
 				}
 				req.session.userId = user.id;
 				return res.json({
-					success: `Logged In as ${res.locals.user.username}`
+					success: `Logged In as ${user.username}`
 				});
 			})
 			.catch((err) => next(error.DB_DOWN()));
+	},
+	logout: (req, res, next) => {
+		req.session.reset();
+		return res.json({ message: 'Logged out.' });
 	}
 };

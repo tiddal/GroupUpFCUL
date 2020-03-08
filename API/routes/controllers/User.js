@@ -1,10 +1,11 @@
+const bcrypt = require('bcryptjs');
+const error = require('../../utils/errors');
+const assert = require('assert');
+
 const User = require('../../db/models/User');
 const Student = require('../../db/models/Student');
 const Admin = require('../../db/models/Admin');
 const Professor = require('../../db/models/Professor');
-const bcrypt = require('bcryptjs');
-const error = require('../../utils/errors');
-const assert = require('assert');
 
 module.exports = {
 	selectAll: (req, res, next) => {
