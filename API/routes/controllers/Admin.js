@@ -1,27 +1,34 @@
 const Admin = require('../../db/models/Admin');
+const error = require('../../utils/errors');
 const { status } = require('./utils');
 
 module.exports = {
 	selectAll: (req, res, next) => {
 		Admin.findAll({
 			attributes: {
-				exclude: ['userId', 'createdAt', 'updatedAt']
+				exclude: ['id', 'createdAt', 'updatedAt']
 			},
-			include: { association: 'user' }
+			include: {
+				association: 'user',
+				attributes: { exclude: ['id', 'password'] }
+			}
 		})
 			.then((admins) => res.json(admins))
-			.catch((err) => status(res, 500));
+			.catch((err) => next(error.DB_DOWN()));
 	},
 
-	selectById: (req, res) => {
+	selectById: (req, res, next) => {
 		Admin.findOne({
 			where: { userId: req.params.id },
 			attributes: {
-				exclude: ['userId', 'createdAt', 'updatedAt']
+				exclude: ['id', 'createdAt', 'updatedAt']
 			},
-			include: { association: 'user' }
+			include: {
+				association: 'user',
+				attributes: { exclude: ['id', 'password'] }
+			}
 		})
-			.then((admin) => (admin ? res.json(admin) : status(res, 404)))
-			.catch((err) => status(res, 500));
+			.then((admin) => (admin ? res.json(admin) : next(error.USER_NOT_FOUND())))
+			.catch((err) => next(error.DB_DOWN()));
 	}
 };
