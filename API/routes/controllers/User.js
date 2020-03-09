@@ -184,9 +184,8 @@ module.exports = {
 
 		User.findByPk(req.params.id)
 			.then((user) => {
-				if (!user) {
-					return next(error.USER_NOT_FOUND());
-				}
+				if (!user) return next(error.USER_NOT_FOUND());
+
 				return user
 					.update({ status: req.body.user.status, avatarURL })
 					.then((updatedUser) => res.json(updatedUser));

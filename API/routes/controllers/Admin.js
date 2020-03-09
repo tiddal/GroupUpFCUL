@@ -1,6 +1,5 @@
 const Admin = require('../../db/models/Admin');
 const error = require('../../utils/errors');
-const { status } = require('./utils');
 
 module.exports = {
 	selectAll: (req, res, next) => {

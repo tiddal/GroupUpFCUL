@@ -35,6 +35,13 @@ const errors = {
 		error.detail = 'Sorry, that user does not exist in our system.';
 		return error;
 	},
+	PROGRAM_NOT_FOUND: () => {
+		const error = new Error('Program Not Found');
+		error.title = 'Program Not Found';
+		error.status = 404;
+		error.detail = 'Sorry, that program does not exist in our system.';
+		return error;
+	},
 	INVALID_JSON: () => {
 		const error = new Error('Invalid JSON');
 		error.title = 'Invalid JSON';
@@ -49,7 +56,8 @@ const errors = {
 		error.status = 422;
 		error.detail = {
 			field: err.path,
-			message: err.message
+			message: err.message,
+			instance: err.instance
 		};
 		return error;
 	},
