@@ -42,6 +42,13 @@ const errors = {
 		error.detail = 'Sorry, that program does not exist in our system.';
 		return error;
 	},
+	COURSE_NOT_FOUND: () => {
+		const error = new Error('Course Not Found');
+		error.title = 'Course Not Found';
+		error.status = 404;
+		error.detail = 'Sorry, that course does not exist in our system.';
+		return error;
+	},
 	INVALID_JSON: () => {
 		const error = new Error('Invalid JSON');
 		error.title = 'Invalid JSON';

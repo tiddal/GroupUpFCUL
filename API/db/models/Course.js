@@ -13,6 +13,9 @@ class Course extends Model {
 						},
 						notNull: {
 							msg: 'This field is required.'
+						},
+						isInt: {
+							msg: 'This field must be an integer.'
 						}
 					}
 				},
@@ -25,6 +28,10 @@ class Course extends Model {
 						},
 						notNull: {
 							msg: 'This field is required.'
+						},
+						is: {
+							args: /^[a-zA-Z\u00C0-\u017F ]+$/i,
+							msg: 'This field only accepts letters and spaces.'
 						}
 					}
 				},
@@ -37,6 +44,9 @@ class Course extends Model {
 						},
 						notNull: {
 							msg: 'This field is required.'
+						},
+						isAlphanumeric: {
+							msg: 'This field must be an alphanumeric.'
 						}
 					}
 				},
@@ -49,6 +59,9 @@ class Course extends Model {
 						},
 						notNull: {
 							msg: 'This field is required.'
+						},
+						isInt: {
+							msg: 'This field must be an integer.'
 						}
 					}
 				}

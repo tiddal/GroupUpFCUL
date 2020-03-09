@@ -30,8 +30,9 @@ class Program extends Model {
 						notNull: {
 							msg: 'This field is required.'
 						},
-						isAlpha: {
-							msg: 'This field only accepts letters'
+						is: {
+							args: /^[a-zA-Z\u00C0-\u017F ]+$/i,
+							msg: 'This field only accepts letters and spaces.'
 						}
 					}
 				},
