@@ -1,29 +1,37 @@
 const Student = require('../../db/models/Student');
-const { status } = require('./utils');
+const error = require('../../utils/errors');
 
 module.exports = {
-	selectAll: (req, res) => {
+	selectAll: (req, res, next) => {
 		Student.findAll({
 			attributes: {
-				exclude: ['userId', 'createdAt', 'updatedAt']
+				exclude: ['id', 'createdAt', 'updatedAt']
 			},
-			include: { association: 'user' }
+			include: {
+				association: 'user',
+				attributes: { exclude: ['id', 'password'] }
+			}
 		})
 			.then((students) => {
 				res.json(students);
 			})
-			.catch((err) => status(res, 500));
+			.catch((err) => next(error.DB_DOWN()));
 	},
 
-	selectById: (req, res) => {
+	selectById: (req, res, next) => {
 		Student.findOne({
 			where: { userId: req.params.id },
 			attributes: {
-				exclude: ['userId', 'createdAt', 'updatedAt']
+				exclude: ['id', 'createdAt', 'updatedAt']
 			},
-			include: { association: 'user' }
+			include: {
+				association: 'user',
+				attributes: { exclude: ['id', 'password'] }
+			}
 		})
-			.then((student) => (student ? res.json(student) : status(res, 404)))
-			.catch((err) => status(res, 500));
+			.then((student) =>
+				student ? res.json(student) : next(error.USER_NOT_FOUND())
+			)
+			.catch((err) => next(error.DB_DOWN()));
 	}
 };

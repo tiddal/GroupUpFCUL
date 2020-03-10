@@ -7,7 +7,17 @@ class Professor extends Model {
 				department: DataTypes.STRING,
 				room: DataTypes.STRING
 			},
-			{ sequelize }
+			{
+				hooks: {
+					afterCreate: (professor) => {
+						professor.dataValues.id = undefined;
+						professor.dataValues.createdAt = undefined;
+						professor.dataValues.updatedAt = undefined;
+						return professor;
+					}
+				},
+				sequelize
+			}
 		);
 	}
 

@@ -1,0 +1,40 @@
+{
+	"users": [
+		{
+			"username": "fc60000",
+			"firstName": "Casimer",
+			"lastName": "Goodwin",
+			"email": "fc60000@alunos.fc.ul.pt",
+			"password": "K0Zv4yQYnoKVvLj",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		},
+		{
+			"username": "fc60001",
+			"firstName": "Judah",
+			"lastName": "Koelpin",
+			"email": "judahkoelpin@fc.ul.pt",
+			"password": "UD1mnRKS7IR7aqF",
+			"role": {
+				"type": "professor",
+				"data": {
+					"department": "Departamento de Informática",
+					"room": "6.1.51"
+				}
+			}
+		},
+		{
+			"username": "fc60002",
+			"firstName": "Trace",
+			"lastName": "Ratke",
+			"email": "traceratke@fc.ul.pt",
+			"password": "Ri9mov2FmjjghOX",
+			"role": {
+				"type": "admin",
+				"data": {}
+			}
+		}
+	]
+}

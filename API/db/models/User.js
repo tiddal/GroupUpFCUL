@@ -3,6 +3,7 @@ const aws = require('aws-sdk');
 const fs = require('fs');
 const path = require('path');
 const { promisify } = require('util');
+const bcrypt = require('bcryptjs');
 
 const s3 = new aws.S3();
 
@@ -10,11 +11,69 @@ class User extends Model {
 	static init(sequelize) {
 		super.init(
 			{
-				number: DataTypes.STRING,
-				firstName: DataTypes.STRING,
-				lastName: DataTypes.STRING,
-				email: DataTypes.STRING,
-				password: DataTypes.STRING,
+				username: {
+					type: DataTypes.STRING,
+					allowNull: false,
+					validate: {
+						notEmpty: {
+							msg: 'This field cannot be empty.'
+						},
+						notNull: {
+							msg: 'This field is required.'
+						}
+					}
+				},
+				firstName: {
+					type: DataTypes.STRING,
+					allowNull: false,
+					validate: {
+						notEmpty: {
+							msg: 'This field cannot be empty.'
+						},
+						notNull: {
+							msg: 'This field is required.'
+						}
+					}
+				},
+				lastName: {
+					type: DataTypes.STRING,
+					allowNull: false,
+					validate: {
+						notEmpty: {
+							msg: 'This field cannot be empty.'
+						},
+						notNull: {
+							msg: 'This field is required.'
+						}
+					}
+				},
+				email: {
+					type: DataTypes.STRING,
+					allowNull: false,
+					validate: {
+						notEmpty: {
+							msg: 'This field cannot be empty.'
+						},
+						notNull: {
+							msg: 'This field is required.'
+						},
+						isEmail: {
+							msg: 'This field must be a valid email address.'
+						}
+					}
+				},
+				password: {
+					type: DataTypes.STRING,
+					allowNull: false,
+					validate: {
+						notEmpty: {
+							msg: 'This field cannot be empty.'
+						},
+						notNull: {
+							msg: 'This field is required.'
+						}
+					}
+				},
 				status: DataTypes.STRING,
 				avatarURL: DataTypes.STRING
 			},
@@ -22,10 +81,22 @@ class User extends Model {
 				hooks: {
 					beforeUpdate: (user) => {
 						const prevUser = user['_previousDataValues'];
-						return this.deleteUserAvatar(prevUser);
+						if (user.avatarURL) {
+							return this.deleteUserAvatar(prevUser);
+						}
+						user.avatarURL = prevUser.avatarURL;
+						return user;
 					},
 					beforeDestroy: (user) => {
 						return this.deleteUserAvatar(user);
+					},
+					afterCreate: (user) => {
+						user.password = undefined;
+						return user;
+					},
+					afterUpdate: (user) => {
+						user.password = undefined;
+						return user;
 					}
 				},
 				sequelize
@@ -34,7 +105,6 @@ class User extends Model {
 	}
 
 	static deleteUserAvatar(user) {
-		console.log('hi');
 		if (!user.avatarURL) return;
 
 		const avatarKey = user.avatarURL

@@ -1,27 +1,35 @@
 const Professor = require('../../db/models/Professor');
-const { status } = require('./utils');
+const error = require('../../utils/errors');
 
 module.exports = {
-	selectAll: (req, res) => {
+	selectAll: (req, res, next) => {
 		Professor.findAll({
 			attributes: {
-				exclude: ['userId', 'createdAt', 'updatedAt']
+				exclude: ['id', 'createdAt', 'updatedAt']
 			},
-			include: { association: 'user' }
+			include: {
+				association: 'user',
+				attributes: { exclude: ['id', 'password'] }
+			}
 		})
 			.then((professors) => res.json(professors))
-			.catch((err) => status(res, 500));
+			.catch((err) => next(error.DB_DOWN()));
 	},
 
-	selectById: (req, res) => {
+	selectById: (req, res, next) => {
 		Professor.findOne({
 			where: { userId: req.params.id },
 			attributes: {
-				exclude: ['userId', 'createdAt', 'updatedAt']
+				exclude: ['id', 'createdAt', 'updatedAt']
 			},
-			include: { association: 'user' }
+			include: {
+				association: 'user',
+				attributes: { exclude: ['id', 'password'] }
+			}
 		})
-			.then((professor) => (professor ? res.json(professor) : status(res, 404)))
-			.catch((err) => status(res, 500));
+			.then((professor) =>
+				professor ? res.json(professor) : next(error.USER_NOT_FOUND())
+			)
+			.catch((err) => next(error.DB_DOWN()));
 	}
 };

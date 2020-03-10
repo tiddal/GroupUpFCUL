@@ -1,94 +1,206 @@
+const bcrypt = require('bcryptjs');
+const error = require('../../utils/errors');
+const assert = require('assert');
+
 const User = require('../../db/models/User');
 const Student = require('../../db/models/Student');
 const Admin = require('../../db/models/Admin');
 const Professor = require('../../db/models/Professor');
-const { status } = require('./utils');
 
 module.exports = {
-	selectAll: (req, res) => {
+	selectAll: (req, res, next) => {
 		User.findAll()
 			.then((users) => res.json(users))
-			.catch((err) => status(res, 500));
+			.catch((err) => next(error.DB_DOWN()));
 	},
 
-	selectById: (req, res) => {
+	selectById: (req, res, next) => {
 		User.findByPk(req.params.id)
-			.then((user) => (user ? res.json(user) : status(res, 404)))
-			.catch((err) => status(res, 500));
+			.then((user) => (user ? res.json(user) : next(error.USER_NOT_FOUND())))
+			.catch((err) => next(error.DB_DOWN()));
 	},
 
-	insert: async (req, res) => {
+	insert: async (req, res, next) => {
+		let studentsJSON;
+		let studentsUsers = [];
+		let students = [];
+
+		let professorsJSON;
+		let professorsUsers = [];
+		let professors = [];
+
+		let adminsJSON;
+		let adminsUsers = [];
+		let admins = [];
+
+		//	Check if the tables are set
 		try {
-			//	Students
-			const studentsJSON = req.body.users.filter(
+			await User.findOne();
+			await Student.findOne();
+			await Professor.findOne();
+			await Admin.findOne();
+		} catch (err) {
+			return next(error.DB_DOWN());
+		}
+
+		//	Handle the JSON
+		try {
+			//	Check if role is defined and if it's valid
+			req.body.users.map((user) => {
+				const role = user.role.type;
+				assert(
+					role &&
+						(role === 'student' || role === 'professor' || role === 'admin')
+				);
+			});
+
+			//	Bcrypt the passwords
+			req.body.users = req.body.users.map((user) => ({
+				...user,
+				password: bcrypt.hashSync(user.password, 14)
+			}));
+
+			//	Get the students JSON
+			studentsJSON = req.body.users.filter(
 				(user) => user.role.type === 'student'
 			);
-			const studentsUsers = await User.bulkCreate(studentsJSON);
+
+			//	Get the professors JSON
+			professorsJSON = req.body.users.filter(
+				(user) => user.role.type === 'professor'
+			);
+
+			//	Get the admins JSON
+			adminsJSON = req.body.users.filter((user) => user.role.type === 'admin');
+		} catch (err) {
+			return next(error.INVALID_JSON());
+		}
+
+		//	Populate the DB
+		try {
+			//	Students
+			studentsUsers = await User.bulkCreate(studentsJSON, {
+				individualHooks: true,
+				validate: true
+			});
 			const studentsData = studentsUsers.map((user, index) => ({
 				userId: user.id,
 				...studentsJSON[index].role.data
 			}));
-			const students = await Student.bulkCreate(studentsData);
+			students = await Student.bulkCreate(studentsData, {
+				individualHooks: true,
+				validate: true
+			});
 
 			//	Professors
-			const professorsJSON = req.body.users.filter(
-				(user) => user.role.type === 'professor'
-			);
-			const professorsUsers = await User.bulkCreate(professorsJSON);
+			professorsUsers = await User.bulkCreate(professorsJSON, {
+				individualHooks: true,
+				validate: true
+			});
 			const professorsData = professorsUsers.map((user, index) => ({
 				userId: user.id,
 				...professorsJSON[index].role.data
 			}));
-			const professors = await Professor.bulkCreate(professorsData);
+			professors = await Professor.bulkCreate(professorsData, {
+				individualHooks: true,
+				validate: true
+			});
 
 			//	Admins
-			const adminsJSON = req.body.users.filter(
-				(user) => user.role.type === 'admin'
-			);
-			const adminsUsers = await User.bulkCreate(adminsJSON);
+			adminsUsers = await User.bulkCreate(adminsJSON, {
+				individualHooks: true,
+				validate: true
+			});
 			const adminsData = adminsUsers.map((user, index) => ({
 				userId: user.id,
 				...adminsJSON[index].role.data
 			}));
-			const admins = await Admin.bulkCreate(adminsData);
+			admins = await Admin.bulkCreate(adminsData, {
+				individualHooks: true,
+				validate: true
+			});
 
-			return res.json({
+			return res.status(201).json({
 				users: [...studentsUsers, ...adminsUsers, ...professorsUsers],
-				students,
+				students: students,
 				professors,
 				admins
 			});
 		} catch (err) {
-			return status(res, 400);
+			switch (err.name) {
+				case 'AggregateError':
+					err['0'].errors.errors[0].instance.password = undefined;
+					return res.status(422).json({
+						error: error.VALIDATION_FAILED(err['0'].errors.errors[0]),
+						created: {
+							users: [...studentsUsers, ...adminsUsers, ...professorsUsers],
+							students,
+							professors,
+							admins
+						}
+					});
+
+				case 'SequelizeUniqueConstraintError':
+					if (err.errors[0].path === 'Users.username') {
+						return res.status(409).json({
+							error: error.USERNAME_EXISTS(err.errors[0]),
+							created: {
+								users: [...studentsUsers, ...adminsUsers, ...professorsUsers],
+								students,
+								professors,
+								admins
+							}
+						});
+					} else if (err.errors[0].path === 'Users.email') {
+						return res.status(409).json({
+							error: error.EMAIL_EXISTS(err.errors[0]),
+							created: {
+								users: [...studentsUsers, ...adminsUsers, ...professorsUsers],
+								students,
+								professors,
+								admins
+							}
+						});
+					}
+
+				default:
+					return next(error.DB_DOWN());
+			}
 		}
 	},
 
-	edit: (req, res) => {
+	edit: (req, res, next) => {
+		//	Check if the avatar was uploaded and gets its location
 		const avatarURL = req.file
 			? req.file.location
 				? req.file.location
 				: `${process.env.APP_URL}/files/${req.file.key}`
 			: null;
+
+		try {
+			assert(req.body.user.status);
+		} catch (err) {
+			return next(error.INVALID_JSON());
+		}
+
+		User.findByPk(req.params.id)
+			.then((user) => {
+				if (!user) return next(error.USER_NOT_FOUND());
+
+				return user
+					.update({ status: req.body.user.status, avatarURL })
+					.then((updatedUser) => res.json(updatedUser));
+			})
+			.catch((err) => error.DB_DOWN());
+	},
+
+	delete: (req, res, next) => {
 		User.findByPk(req.params.id)
 			.then((user) =>
 				user
-					? user
-							.update({
-								password: req.body.user.password || '',
-								status: req.body.user.status || '',
-								avatarURL
-							})
-							.then((updatedUser) => res.json(updatedUser))
-					: status(res, 404)
+					? user.destroy().then(() => res.status(204).json())
+					: next(error.NOT_FOUND())
 			)
-			.catch((err) => status(res, 500));
-	},
-
-	delete: (req, res) => {
-		User.findByPk(req.params.id)
-			.then((user) =>
-				user ? user.destroy().then(() => status(res, 200)) : status(res, 404)
-			)
-			.catch((err) => status(res, 500));
+			.catch((err) => next(error.DB_DOWN()));
 	}
 };

@@ -2,9 +2,17 @@ const express = require('express');
 const router = express.Router();
 const ProgramController = require('./controllers/Program');
 const CourseController = require('./controllers/Course');
-const ClassesController = require('./controllers/Class');
 
-router.post('/:id/courses/:course_id/classes', ClassesController.insert);
+const ClassController = require('./controllers/Class');
+
+router.get('/:id/courses/:courseId/classes', ClassController.selectAll);
+router.get(
+	'/:id/courses/:courseId/classes/:classId',
+	ClassController.selectById
+);
+router.post('/:id/courses/:courseId/classes', ClassController.insert);
+router.put('/:id/courses/:courseId/classes', ClassController.edit);
+router.delete('/:id/courses/:courseId/classes', ClassController.delete);
 
 router.get('/:id/courses', CourseController.selectAllByProgram);
 router.get('/:id/courses/:courseId', CourseController.selectByIdByProgram);

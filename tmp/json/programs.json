@@ -4,30 +4,30 @@
 			"code": "L079",
 			"name": "Tecnologias de Informação",
 			"cycle": 1,
-			"description": "LTI",
+			"initials": "LTI",
 			"courses": [
 				{
 					"code": 26719,
 					"name": "Projeto de Tecnologias de Informação",
-					"description": "PTI",
+					"initials": "PTI",
 					"ects": 6
 				},
 				{
 					"code": 26718,
 					"name": "Projeto de Tecnologias de Redes",
-					"description": "PTR",
+					"initials": "PTR",
 					"ects": 6
 				},
 				{
 					"code": 26716,
 					"name": "Planeamento e Gestão de Projeto",
-					"description": "PGP",
+					"initials": "PGP",
 					"ects": 6
 				},
 				{
 					"code": 22701,
 					"name": "Introdução às Probabilidades e Estatística",
-					"description": "IPE",
+					"initials": "IPE",
 					"ects": 6
 				}
 			]
@@ -36,24 +36,24 @@
 			"code": "9119",
 			"name": "Engenharia Informática",
 			"cycle": 1,
-			"description": "LEI",
+			"initials": "LEI",
 			"courses": [
 				{
 					"code": 26737,
 					"name": "Teoria da Computação",
-					"description": "TC",
+					"initials": "TC",
 					"ects": 6
 				},
 				{
 					"code": 26704,
 					"name": "Redes de Computadores",
-					"description": "RC",
+					"initials": "RC",
 					"ects": 6
 				},
 				{
 					"code": 22701,
 					"name": "Introdução às Probabilidades e Estatística",
-					"description": "IPE",
+					"initials": "IPE",
 					"ects": 6
 				}
 			]

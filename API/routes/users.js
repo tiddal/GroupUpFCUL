@@ -1,8 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const multerConfig = require('../middleware/multer');
 
+//  Middleware
+const multerConfig = require('../middleware/multer');
+const {
+	loginRequired,
+	adminRequired,
+	selfRequired
+} = require('../middleware/permissions');
+
+//  Controllers
 const UserController = require('./controllers/User');
 const StudentController = require('./controllers/Student');
 const ProfessorController = require('./controllers/Professor');
@@ -20,7 +28,13 @@ router.get('/admins/:id', AdminsController.selectById);
 router.get('/', UserController.selectAll);
 router.get('/:id', UserController.selectById);
 router.post('/', UserController.insert);
-router.put('/:id', multer(multerConfig).single('file'), UserController.edit);
+router.put(
+	'/:id',
+	loginRequired,
+	selfRequired,
+	multer(multerConfig).single('file'),
+	UserController.edit
+);
 router.delete('/:id', UserController.delete);
 
 module.exports = router;
