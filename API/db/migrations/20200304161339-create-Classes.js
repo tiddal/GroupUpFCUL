@@ -12,11 +12,13 @@ module.exports = {
 				type: Sequelize.INTEGER,
 				references: { model: 'Courses', key: 'id' },
 				onUpdate: 'CASCADE',
-				onDelete: 'CASCADE'
+				onDelete: 'CASCADE',
+				primaryKey: true
 			},
 			number: {
 				type: Sequelize.STRING,
-				allowNull: false
+				allowNull: false,
+				primaryKey: true
 			},
 			beginsAt: {
 				type: Sequelize.TIME,
