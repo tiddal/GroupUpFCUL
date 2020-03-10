@@ -129,6 +129,7 @@ module.exports = {
 		} catch (err) {
 			switch (err.name) {
 				case 'AggregateError':
+					err['0'].errors.errors[0].instance.password = undefined;
 					return res.status(422).json({
 						error: error.VALIDATION_FAILED(err['0'].errors.errors[0]),
 						created: {
