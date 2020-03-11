@@ -3,6 +3,7 @@ const Program = require('../../db/models/Program');
 const Course = require('../../db/models/Course');
 
 const error = require('../../utils/errors');
+const assert = require('assert');
 
 const { status } = require('./utils');
 
@@ -10,15 +11,14 @@ module.exports = {
 	selectAll: (req, res, next) => {
 		const programId = req.params.id;
 		const courseId = req.params.courseId;
-		const classesJSON = req.body.classes;
 
 		Program.findByPk(programId).then((program) => {
 			if (!program) return next(error.PROGRAM_NOT_FOUND());
 			return Course.findByPk(courseId).then((course) => {
 				if (!course) return next(error.COURSE_NOT_FOUND());
-				return Class.bulkCreate(classesJSON)
-					.then((classes) => res.status(201).json(classes))
-					.catch((err) => res.status(400).json(err));
+				return Class.findAll({ where: { courseId } })
+					.then((classes) => res.json(classes))
+					.catch((err) => next(error.DB_DOWN()));
 			});
 		});
 	},
@@ -29,27 +29,35 @@ module.exports = {
 			.catch((err) => status(res, 500));
 	},
 
-	insert: (req, res) => {
+	insert: (req, res, next) => {
 		const programId = req.params.id;
-		const courseId = req.params.course_id;
-
-		const classesJSON = req.body.classes;
+		const courseId = req.params.courseId;
+		try {
+			assert(req.body.classes !== undefined);
+		} catch (err) {
+			return next(error.INVALID_JSON());
+		}
+		const classesJSON = req.body.classes.map((classJSON) => ({
+			courseId,
+			...classJSON
+		}));
 
 		Program.findByPk(programId)
 			.then((program) => {
-				Course.findByPk(courseId)
+				if (!program) return next(error.PROGRAM_NOT_FOUND());
+				return Course.findByPk(courseId)
 					.then((course) => {
-						const classesData = classesJSON.map((_class) => ({
-							..._class,
-							courseId
-						}));
-						Class.bulkCreate(classesData)
-							.then((classes) => res.json(classes))
-							.catch((err) => status(res, 400));
+						if (!course) return next(error.COURSE_NOT_FOUND());
+						return Class.bulkCreate(classesJSON).then((classes) =>
+							res
+								.status(201)
+								.json(classes)
+								.catch((err) => res.json(err))
+						);
 					})
-					.catch((err) => status(res, 404));
+					.catch((err) => res.json(err));
 			})
-			.catch((err) => status(res, 404));
+			.catch((err) => next(error.DB_DOWN()));
 	},
 
 	edit: (req, res) => {

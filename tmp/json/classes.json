@@ -4,6 +4,11 @@
 			"number": "T1",
 			"beginsAt": "10:00",
 			"endsAt": "11:30"
+		},
+		{
+			"number": "T2",
+			"beginsAt": "10:00",
+			"endsAt": "11:30"
 		}
 	]
 }
