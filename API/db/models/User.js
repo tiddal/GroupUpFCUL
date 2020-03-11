@@ -3,7 +3,6 @@ const aws = require('aws-sdk');
 const fs = require('fs');
 const path = require('path');
 const { promisify } = require('util');
-const bcrypt = require('bcryptjs');
 
 const s3 = new aws.S3();
 
@@ -20,6 +19,9 @@ class User extends Model {
 						},
 						notNull: {
 							msg: 'This field is required.'
+						},
+						isAlphanumeric: {
+							msg: 'This field must be an alphanumeric.'
 						}
 					}
 				},
@@ -32,6 +34,10 @@ class User extends Model {
 						},
 						notNull: {
 							msg: 'This field is required.'
+						},
+						is: {
+							args: /^[a-zA-Z\u00C0-\u017F ]+$/i,
+							msg: 'This field only accepts letters and spaces.'
 						}
 					}
 				},
@@ -44,6 +50,10 @@ class User extends Model {
 						},
 						notNull: {
 							msg: 'This field is required.'
+						},
+						is: {
+							args: /^[a-zA-Z\u00C0-\u017F ]+$/i,
+							msg: 'This field only accepts letters and spaces.'
 						}
 					}
 				},
@@ -74,8 +84,23 @@ class User extends Model {
 						}
 					}
 				},
-				status: DataTypes.STRING,
-				avatarURL: DataTypes.STRING
+				status: {
+					type: DataTypes.STRING,
+					validate: {
+						isIn: {
+							args: [['online', 'offline']],
+							msg: 'The users status can only be online or offline'
+						}
+					}
+				},
+				avatarURL: {
+					type: DataTypes.STRING,
+					validate: {
+						isUrl: {
+							msg: 'This field must be an URL'
+						}
+					}
+				}
 			},
 			{
 				hooks: {
