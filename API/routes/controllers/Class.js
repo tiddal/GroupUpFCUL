@@ -5,8 +5,6 @@ const Course = require('../../db/models/Course');
 const error = require('../../utils/errors');
 const assert = require('assert');
 
-const { status } = require('./utils');
-
 module.exports = {
 	selectAll: (req, res, next) => {
 		const programId = req.params.id;
@@ -23,10 +21,27 @@ module.exports = {
 		});
 	},
 
-	selectById: (req, res) => {
-		Class.findByPk(req.params.id)
-			.then((classes) => (classs ? res.json(classs) : status(res, 404)))
-			.catch((err) => status(res, 500));
+	selectById: (req, res, next) => {
+		const programId = req.params.id;
+		const courseId = req.params.courseId;
+		const classId = req.params.classId;
+
+		Program.findByPk(programId)
+			.then((program) => {
+				if (!program) return next(error.PROGRAM_NOT_FOUND());
+				return Course.findByPk(courseId)
+					.then((course) => {
+						if (!course) return next(error.COURSE_NOT_FOUND());
+						return Class.findByPk(classId)
+							.then((class_) => {
+								if (!class_) return next(error.CLASS_NOT_FOUND());
+								return res.json(class_);
+							})
+							.catch((err) => next(error.DB_DOWN()));
+					})
+					.catch((err) => next(error.DB_DOWN()));
+			})
+			.catch((err) => next(error.DB_DOWN()));
 	},
 
 	insert: (req, res, next) => {
@@ -48,37 +63,100 @@ module.exports = {
 				return Course.findByPk(courseId)
 					.then((course) => {
 						if (!course) return next(error.COURSE_NOT_FOUND());
-						return Class.bulkCreate(classesJSON).then((classes) =>
-							res
-								.status(201)
-								.json(classes)
-								.catch((err) => res.json(err))
+						return Class.bulkCreate(classesJSON, { validate: true }).then(
+							(classes) =>
+								res
+									.status(201)
+									.json(classes)
+									.catch((err) => next(error.DB_DOWN()))
 						);
 					})
-					.catch((err) => res.json(err));
+					.catch((err) => {
+						switch (err.name) {
+							case 'AggregateError':
+								return next(error.VALIDATION_FAILED(err['0'].errors.errors[0]));
+							case 'SequelizeUniqueConstraintError':
+								return next(error.UNIQUE_CONSTRAIN(err.errors[0]));
+							default:
+								return next(error.DB_DOWN());
+						}
+					});
 			})
 			.catch((err) => next(error.DB_DOWN()));
 	},
 
-	edit: (req, res) => {
-		Class.findByPk(req.params.id)
-			.then((classs) =>
-				classs
-					? classs
-							.update(req.body.course)
-							.then((updatedClass) => res.json(updatedClass))
-					: status(res, 404)
-			)
-			.catch((err) => status(res, 500));
+	edit: (req, res, next) => {
+		const programId = req.params.id;
+		const courseId = req.params.courseId;
+		const classId = req.params.classId;
+
+		try {
+			assert(req.body.class !== undefined);
+		} catch {
+			return next(error.INVALID_JSON());
+		}
+
+		const { number, beginsAt, endsAt, weekDay, academicYear } = req.body.class;
+
+		Program.findByPk(programId)
+			.then((program) => {
+				if (!program) return next(error.PROGRAM_NOT_FOUND());
+				return Course.findByPk(courseId)
+					.then((course) => {
+						if (!course) return next(error.COURSE_NOT_FOUND());
+						return Class.findByPk(classId)
+							.then((class_) => {
+								if (!class_) return next(error.CLASS_NOT_FOUND());
+								return class_
+									.update({
+										number,
+										beginsAt,
+										endsAt,
+										weekDay,
+										academicYear
+									})
+									.then((updatedClass) => res.json(updatedClass))
+									.catch((err) => {
+										switch (err.name) {
+											case 'SequelizeValidationError':
+												return next(error.VALIDATION_FAILED(err.errors[0]));
+											case 'SequelizeUniqueConstraintError':
+												return next(error.UNIQUE_CONSTRAIN(err.errors[0]));
+											default:
+												return next(error.DB_DOWN());
+										}
+									});
+							})
+							.catch((err) => next(error.DB_DOWN()));
+					})
+					.catch((err) => next(error.DB_DOWN()));
+			})
+			.catch((err) => next(error.DB_DOWN()));
 	},
 
-	delete: (req, res) => {
-		Class.findByPk(req.params.id)
-			.then((classs) =>
-				classs
-					? classs.destroy().then(() => status(res, 200))
-					: status(res, 404)
-			)
-			.catch((err) => status(res, 500));
+	delete: (req, res, next) => {
+		const programId = req.params.id;
+		const courseId = req.params.courseId;
+		const classId = req.params.classId;
+
+		Program.findByPk(programId)
+			.then((program) => {
+				if (!program) return next(error.PROGRAM_NOT_FOUND());
+				return Course.findByPk(courseId)
+					.then((course) => {
+						if (!course) return next(error.COURSE_NOT_FOUND());
+						return Class.findByPk(classId)
+							.then((class_) => {
+								if (!class_) return next(error.CLASS_NOT_FOUND());
+								return class_
+									.destroy()
+									.then(() => res.status(204).json())
+									.catch((err) => error.DB_DOWN());
+							})
+							.catch((err) => next(error.DB_DOWN()));
+					})
+					.catch((err) => next(error.DB_DOWN()));
+			})
+			.catch((err) => next(error.DB_DOWN()));
 	}
 };

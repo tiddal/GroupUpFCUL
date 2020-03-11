@@ -3,12 +3,23 @@
 		{
 			"number": "T1",
 			"beginsAt": "10:00",
-			"endsAt": "11:30"
+			"endsAt": "11:30",
+			"weekDay": 1,
+			"academicYear": "2019/2020"
 		},
 		{
 			"number": "T2",
 			"beginsAt": "10:00",
-			"endsAt": "11:30"
+			"endsAt": "11:30",
+			"weekDay": 1,
+			"academicYear": "2019/2020"
+		},
+		{
+			"number": "T3",
+			"beginsAt": "10:00",
+			"endsAt": "11:30",
+			"weekDay": 1,
+			"academicYear": "2019/2020"
 		}
 	]
 }

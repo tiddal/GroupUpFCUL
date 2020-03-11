@@ -4,8 +4,6 @@ const Course = require('../../db/models/Course');
 const error = require('../../utils/errors');
 const assert = require('assert');
 
-const { status } = require('./utils');
-
 module.exports = {
 	selectAll: (req, res, next) => {
 		Program.findAll()

@@ -1,4 +1,3 @@
-const { status } = require('../routes/controllers/utils');
 const error = require('../utils/errors');
 
 const Admin = require('../db/models/Admin');

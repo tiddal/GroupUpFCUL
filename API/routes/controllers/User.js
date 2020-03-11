@@ -141,27 +141,15 @@ module.exports = {
 					});
 
 				case 'SequelizeUniqueConstraintError':
-					if (err.errors[0].path === 'Users.username') {
-						return res.status(409).json({
-							error: error.USERNAME_EXISTS(err.errors[0]),
-							created: {
-								users: [...studentsUsers, ...adminsUsers, ...professorsUsers],
-								students,
-								professors,
-								admins
-							}
-						});
-					} else if (err.errors[0].path === 'Users.email') {
-						return res.status(409).json({
-							error: error.EMAIL_EXISTS(err.errors[0]),
-							created: {
-								users: [...studentsUsers, ...adminsUsers, ...professorsUsers],
-								students,
-								professors,
-								admins
-							}
-						});
-					}
+					return res.status(409).json({
+						error: error.UNIQUE_CONSTRAIN(err.errors[0]),
+						created: {
+							users: [...studentsUsers, ...adminsUsers, ...professorsUsers],
+							students,
+							professors,
+							admins
+						}
+					});
 
 				default:
 					return next(error.DB_DOWN());

@@ -49,6 +49,13 @@ const errors = {
 		error.detail = 'Sorry, that course does not exist in our system.';
 		return error;
 	},
+	CLASS_NOT_FOUND: () => {
+		const error = new Error('Class Not Found');
+		error.title = 'Class Not Found';
+		error.status = 404;
+		error.detail = 'Sorry, that class does not exist in our system.';
+		return error;
+	},
 	INVALID_JSON: () => {
 		const error = new Error('Invalid JSON');
 		error.title = 'Invalid JSON';
@@ -68,24 +75,12 @@ const errors = {
 		};
 		return error;
 	},
-	USERNAME_EXISTS: (err) => {
-		const error = new Error('Username Already Exists');
-		error.title = 'Username Already Exists';
+	UNIQUE_CONSTRAIN: (err) => {
+		const error = new Error('Unique Constrain Error');
+		error.title = 'Duplicate Entry';
 		error.status = 409;
 		error.detail = {
-			field: 'username',
-			message: 'This username is already in use.',
-			value: err.value
-		};
-		return error;
-	},
-	EMAIL_EXISTS: (err) => {
-		const error = new Error('Email Already Exists');
-		error.title = 'Email Already Exists';
-		error.status = 409;
-		error.detail = {
-			field: 'email',
-			message: 'This email address is already in use.',
+			message: 'This field(s) must be unique in the database.',
 			value: err.value
 		};
 		return error;
