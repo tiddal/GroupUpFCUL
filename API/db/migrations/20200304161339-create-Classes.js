@@ -30,13 +30,25 @@ module.exports = {
 					type: Sequelize.TIME,
 					allowNull: false
 				},
+				weekDay: {
+					type: Sequelize.INTEGER,
+					allowNull: false
+				},
+				room: {
+					type: Sequelize.STRING
+				},
+				academicYear: {
+					type: Sequelize.STRING,
+					allowNull: false,
+					unique: 'actions_unique'
+				},
 				createdAt: Sequelize.DATE,
 				updatedAt: Sequelize.DATE
 			},
 			{
 				uniqueKeys: {
 					actions_unique: {
-						fields: ['courseId', 'number']
+						fields: ['courseId', 'number', 'academicYear']
 					}
 				}
 			}
