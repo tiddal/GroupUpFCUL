@@ -159,6 +159,7 @@ module.exports = {
 
 	edit: (req, res, next) => {
 		//	Check if the avatar was uploaded and gets its location
+
 		const avatarURL = req.file
 			? req.file.location
 				? req.file.location
@@ -166,29 +167,48 @@ module.exports = {
 			: null;
 
 		try {
-			assert(req.body.user.status);
+			assert(req.body.user);
 		} catch (err) {
 			return next(error.INVALID_JSON());
 		}
+
+		let { password, email, status } = req.body.user;
+		if (password) password = bcrypt.hashSync(password, 14);
 
 		User.findByPk(req.params.id)
 			.then((user) => {
 				if (!user) return next(error.USER_NOT_FOUND());
 
 				return user
-					.update({ status: req.body.user.status, avatarURL })
-					.then((updatedUser) => res.json(updatedUser));
+					.update({ password, email, status, avatarURL })
+					.then((updatedUser) => {
+						updatedUser.password = undefined;
+						return res.json(updatedUser);
+					})
+					.catch((err) => {
+						switch (err.name) {
+							case 'SequelizeValidationError':
+								err.errors[0].instance.password = undefined;
+								return next(error.VALIDATION_FAILED(err.errors[0]));
+							case 'SequelizeUniqueConstraintError':
+								return next(error.UNIQUE_CONSTRAIN(err.errors[0]));
+							default:
+								return next(error.DB_DOWN());
+						}
+					});
 			})
 			.catch((err) => error.DB_DOWN());
 	},
 
 	delete: (req, res, next) => {
 		User.findByPk(req.params.id)
-			.then((user) =>
-				user
-					? user.destroy().then(() => res.status(204).json())
-					: next(error.NOT_FOUND())
-			)
+			.then((user) => {
+				if (!user) return next(error.NOT_FOUND());
+				return user
+					.destroy()
+					.then(() => res.status(204).json())
+					.catch((err) => next(error.DB_DOWN()));
+			})
 			.catch((err) => next(error.DB_DOWN()));
 	}
 };
