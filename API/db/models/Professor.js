@@ -23,6 +23,11 @@ class Professor extends Model {
 
 	static associate(models) {
 		this.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+		this.belongsToMany(models.Class, {
+			foreignKey: 'professorId',
+			through: 'class_professor',
+			as: 'classes'
+		});
 	}
 }
 

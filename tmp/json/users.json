@@ -26,6 +26,20 @@
 			}
 		},
 		{
+			"username": "fc60003",
+			"firstName": "Judah",
+			"lastName": "Koelpin",
+			"email": "juda@fc.ul.pt",
+			"password": "UD1mnRKS7IR7aqF",
+			"role": {
+				"type": "professor",
+				"data": {
+					"department": "Departamento de Informática",
+					"room": "6.1.51"
+				}
+			}
+		},
+		{
 			"username": "fc60002",
 			"firstName": "Trace",
 			"lastName": "Ratke",

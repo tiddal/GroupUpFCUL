@@ -56,6 +56,20 @@ const errors = {
 		error.detail = 'Sorry, that class does not exist in our system.';
 		return error;
 	},
+	PROFESSOR_NOT_FOUND: () => {
+		const error = new Error('Professor Not Found');
+		error.title = 'Professor Not Found';
+		error.status = 404;
+		error.detail = 'Sorry, that professor does not exist in our system.';
+		return error;
+	},
+	STUDENT_NOT_FOUND: () => {
+		const error = new Error('Student Not Found');
+		error.title = 'Student Not Found';
+		error.status = 404;
+		error.detail = 'Sorry, that student does not exist in our system.';
+		return error;
+	},
 	INVALID_JSON: () => {
 		const error = new Error('Invalid JSON');
 		error.title = 'Invalid JSON';

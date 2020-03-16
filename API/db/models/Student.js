@@ -20,6 +20,11 @@ class Student extends Model {
 
 	static associate(models) {
 		this.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+		this.belongsToMany(models.Class, {
+			foreignKey: 'studentId',
+			through: 'class_student',
+			as: 'classes'
+		});
 	}
 }
 
