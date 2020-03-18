@@ -4,6 +4,7 @@ const morgan = require('morgan');
 
 //	Middleware
 const helmet = require('../middleware/helmet');
+const cors = require('../middleware/cors');
 const sessions = require('../middleware/sessions');
 const { sessionRequired } = require('../middleware/permissions');
 const errorHandler = require('../middleware/errorHandler');
@@ -18,6 +19,7 @@ const pageNotFound = require('./pageNotFound');
 
 const app = express();
 
+app.use(cors);
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
