@@ -25,7 +25,8 @@ router.get('/professors/:id', ProfessorController.selectById);
 router.get('/admins/', AdminsController.selectAll);
 router.get('/admins/:id', AdminsController.selectById);
 
-router.get('/', UserController.selectAll);
+router.get('/', loginRequired, adminRequired, UserController.selectAll);
+router.get('/me', UserController.me);
 router.get('/:id', UserController.selectById);
 router.post('/', UserController.insert);
 router.put(

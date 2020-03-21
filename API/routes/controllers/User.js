@@ -9,13 +9,29 @@ const Professor = require('../../db/models/Professor');
 
 module.exports = {
 	selectAll: (req, res, next) => {
-		User.findAll()
+		User.findAll({
+			attributes: {
+				exclude: ['password']
+			}
+		})
 			.then((users) => res.json(users))
 			.catch((err) => next(error.DB_DOWN()));
 	},
 
+	me: (req, res, next) => {
+		User.findByPk(req.session.userId, {
+			attributes: { exclude: ['password'] }
+		})
+			.then((user) => (user ? res.json(user) : next(error.USER_NOT_FOUND())))
+			.catch((err) => next(error.DB_DOWN()));
+	},
+
 	selectById: (req, res, next) => {
-		User.findByPk(req.params.id)
+		User.findByPk(req.params.id, {
+			attributes: {
+				exclude: ['password']
+			}
+		})
 			.then((user) => (user ? res.json(user) : next(error.USER_NOT_FOUND())))
 			.catch((err) => next(error.DB_DOWN()));
 	},

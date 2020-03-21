@@ -21,9 +21,8 @@ module.exports = {
 					return next(error.LOGIN_FAILED());
 				}
 				req.session.userId = user.id;
-				return res.json({
-					success: `Logged In as ${user.username}`
-				});
+				user.password = undefined;
+				return res.json(user);
 			})
 			.catch((err) => next(error.DB_DOWN()));
 	},
