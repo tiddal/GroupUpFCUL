@@ -1,3 +1,4 @@
+require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const error = require('../../utils/errors');
 const assert = require('assert');
@@ -20,6 +21,7 @@ module.exports = {
 				if (!user || !bcrypt.compareSync(password, user.password)) {
 					return next(error.LOGIN_FAILED());
 				}
+
 				req.session.userId = user.id;
 				user.password = undefined;
 				return res.json(user);
@@ -29,5 +31,15 @@ module.exports = {
 	logout: (req, res, next) => {
 		req.session.reset();
 		return res.json({ message: 'Logged out.' });
+	},
+
+	me: (req, res, next) => {
+		User.findByPk(req.session.userId, {
+			attributes: { exclude: ['password'] }
+		})
+			.then((user) => {
+				return user ? res.json(user) : next(error.USER_NOT_FOUND());
+			})
+			.catch((err) => next(error.DB_DOWN()));
 	}
 };

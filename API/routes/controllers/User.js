@@ -18,14 +18,6 @@ module.exports = {
 			.catch((err) => next(error.DB_DOWN()));
 	},
 
-	me: (req, res, next) => {
-		User.findByPk(req.session.userId, {
-			attributes: { exclude: ['password'] }
-		})
-			.then((user) => (user ? res.json(user) : next(error.USER_NOT_FOUND())))
-			.catch((err) => next(error.DB_DOWN()));
-	},
-
 	selectById: (req, res, next) => {
 		User.findByPk(req.params.id, {
 			attributes: {

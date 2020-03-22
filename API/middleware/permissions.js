@@ -1,3 +1,4 @@
+require('dotenv').config();
 const error = require('../utils/errors');
 
 const Admin = require('../db/models/Admin');
@@ -10,15 +11,9 @@ module.exports = {
 		}
 		try {
 			const user = await User.findByPk(req.session.userId, {
-				attributes: {
-					exclude: ['password']
-				}
+				attributes: { exclude: ['password'] }
 			});
-
-			if (!user) {
-				return next();
-			}
-
+			if (!user) return next();
 			req.user = user;
 			res.locals.user = user;
 
