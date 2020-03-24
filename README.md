@@ -1,102 +1,126 @@
-# PTI - Back-end
-
-## Preparar o workspace
-
-Para criar um ambiente local para o desenvolvimento, enquanto não temos uma base de dados de testes no servidor da AWS vamos usar localhost para criar a API. Instalar e configurar o MySQL é um bocado chato 🙄 mas é preciso:
-
-1. Instalar o MySQL, acho que basta o MySQL Workbench e o MySQL Community Server:
-
-   - <https://dev.mysql.com/downloads/mysql/>
-   - <https://youtu.be/WuBcTJnIuzo> (Windows)
-
-2. Recomendo criar um utilizador mas também podem deixar o root.
-
-3. Criar uma base de dados com o nome que quiserem e uma tabela chamada "users" para funcionar com este exemplo. Nessa tabela definam uma coluna "id" e se quiserem definir mais colunas estão à vontade. Criem pelo menos uma entrada na tabela.
-
-4. Instalar o node.js:
-
-   - <https://nodejs.org/en/> (v12.16.1 LTS)
-
-5. Fazer clone deste repositório.
-
-   - <https://git-scm.com/> (caso não tenham o git instalado 😅)
-
-6. Criar o ficheiro ".env" para armazenar as variáveis de ambiente. Este ficheiro não está no repositório porque cada um de nós tem as suas. Se repararem é ignorado no ".gitignore".
-
-7. No ficheiro ".env" é preciso definir, sem aspas, sem parênteses, apenas o valor à frente do sinal de igual:
-
-   - PORT=(o porto para correr o servidor, muito vulgar usar o 3000)
-   - DEV_DB_USER=(o utilizador que criaram quando instalaram o MySQL, ou root)
-   - DEV_DB_PASSWORD=(a password respetiva)
-   - DEV_DB_HOST=localhost (este é localhost, igual para todos, vamos mudar quando tivermos a base de dados na AWS)
-   - DEV_DB_NAME=(o nome que deram à base de dados)
-
-8. Instalar o Postman (para este exemplo podem usar um browser normal porque os unícos requests que estão implementados usam o método GET mas usando o postman veem já a sua utilidade).
-
-9. Correr o comando: `npm ci` para instalar as dependencias deste projeto.
-
-10. Por fim, correr o comando: `npm run dev` e rezar para que não dê nenhum erro.
-
-11. No postman (ou num browser) e vejam o que acontece quando acedem a route "/users" e "users/(id)":
-
-    - <http://localhost:(porto)/users>
-    - <http://localhost:(porto)/users/(id)>
-
-12. Mandem-me os vossos githubs para vos adicionar como membros para mudar isto para privado.
-
-13. Olhem para o código, é um projeto muito simples mas tem praticamente todas as bases para criar a nossa API! Não sei quão à vontade estão com JavaScript mas consigo explicar tudo o que fiz, é só perguntarem 😃
-
-**Nota:** Há grandes probabilidades de se depararem com problemas... Eu fiz todos esses passos (ou quase) em linux e tive alguns problemas principalmente com o MySQL. Para Windows espero que seja mais fácil... Se tiverem dúvidas: **Discord**
-
----
-
-## Adicionar um ORM (Sequelize)
-
-Adicionei ao projeto o [Sequelize](https://sequelize.org/v5/). Vai ajudar-nos a estruturar melhor o código através da definição de Models para as tabelas da nossa base de dados. Para além disso, o Sequelize utiliza Migrations que é uma forma de fazer um controlo de versões da BD (como o git faz para o código). Partindo do principio que o workspace está preparado basta:
-
-1. Fazer push do repositório para atualizá-lo.
-2. Correr o comando `npm ci`
-3. Mudar o nome da base de dados no ficheiro .env ou apagar a existente
-4. Correr o comando `npx sequelize db:create`
-5. Correr o comando `npx sequelize db:migrate`
-6. Finalmente, para testar: `npm run dev`:
-   - Criem um user usando um post request em que o body é por exemplo `{"name": "test"}` para <http://localhost:(porto)/users>
-   - Para listar todos os users: <http://localhost:(porto)/users>
-   - Para listar um user: <http://localhost:(porto)/users/(id)>
-
-**Nota:** Encontrei uma alternativa ao Postman que estou a gostar mais: <https://insomnia.rest/>
-
----
-
-**Videos em que me baseei:**
-
-- [MySQL Node Express API - Walkthrough](https://youtu.be/LVfH5FDOa3o)
-- [SQL no Node.js com Sequelize | Masterclass #01](https://youtu.be/Fbu7z5dXcRs)
-
----
-
-## Funcionamento da API #1
-
 ### Routes
 
-| Method | Path                   | Result                     |
-| :----- | :--------------------- | :------------------------- |
-| GET    | /users                 | Gets all users             |
-| GET    | /users/{id}            | Gets a user by his id      |
-| POST   | /users                 | Creates a user             |
-| PUT    | /users/{id}            | Updates a user             |
-| DELETE | /users/{id}            | Deletes a user             |
-| GET    | /users/students        | Gets all students          |
-| GET    | /users/students/{id}   | Gets a student by his id   |
-| GET    | /users/professors      | Gets all professors        |
-| GET    | /users/professors/{id} | Gets a professor by his id |
-| GET    | /users/admins          | Gets all admins            |
-| GET    | /users/admins/{id}     | Gets an admin by his id    |
+| Method | Path                                                                         | Result                                     | Permissions |
+| :----- | :--------------------------------------------------------------------------- | :----------------------------------------- | :---------- |
+| GET    | /users                                                                       | Gets all users                             | Admin       |
+| GET    | /users/{id}                                                                  | Gets a user by their id                    | User        |
+| POST   | /users                                                                       | Creates a user                             | Admin       |
+| PUT    | /users/{id}                                                                  | Updates a user                             | Admin       |
+| DELETE | /users/{id}                                                                  | Deletes a user                             | Admin       |
+| GET    | /users/students                                                              | Gets all students                          | Admin       |
+| GET    | /users/students/{id}                                                         | Gets a student by their id                 | User        |
+| GET    | /users/professors                                                            | Gets all professors                        | Admin       |
+| GET    | /users/professors/{id}                                                       | Gets a professor by their id               | User        |
+| GET    | /users/admins                                                                | Gets all admins                            | Admin       |
+| GET    | /users/admins/{id}                                                           | Gets an admin by their id                  | Admin       |
+| GET    | /programs/                                                                   | Gets all programs                          | User        |
+| GET    | /programs/{id}                                                               | Gets a program by its id                   | User        |
+| POST   | /programs/                                                                   | Creates a program                          | Admin       |
+| PUT    | /programs/{id}                                                               | Updates a program                          | Admin       |
+| DELETE | /programs/{id}                                                               | Deletes a program                          | Admin       |
+| GET    | /programs/{id}/courses                                                       | Gets all courses of a program              | User        |
+| GET    | /programs/{id}/courses/{courseId}                                            | Gets a course of a program by its courseId | User        |
+| POST   | /programs/{id}/courses                                                       | Creates a course of a program              | Admin       |
+| GET    | /programs/{id}/courses/{courseId}/classes                                    | Gets all classes                           | User        |
+| GET    | /programs/{id}/courses/{courseId}/classes/{classId}                          | Gets a class by its id                     | User        |
+| POST   | /programs/{id}/courses/{courseId}/classes/                                   | Creates a class                            | Admin       |
+| PUT    | /programs/{id}/courses/{courseId}/classes/{classId}                          | Updates a class                            | Admin       |
+| DELETE | /programs/{id}/courses/{courseId}/classes/{classId}                          | Deletes a class                            | Admin       |
+| GET    | /programs/{id}/courses/{courseId}/classes/{classId}/students                 | Gets all students from a class             | User        |
+| GET    | /programs/{id}/courses/{courseId}/classes/{classId}/students/{studentId}     | Gets a student from a class by their id    | User        |
+| POST   | /programs/{id}/courses/{courseId}/classes/{classId}/students                 | Inserts a student into a class             | Admin       |
+| DELETE | /programs/{id}/courses/{courseId}/classes/{classId}/students/{studentId}     | Deletes a student from a class             | Admin       |
+| GET    | /programs/{id}/courses/{courseId}/classes/{classId}/professors               | Gets all professors from a class           | User        |
+| GET    | /programs/{id}/courses/{courseId}/classes/{classId}/professors/{professorId} | Gets a professor from a class by their id  | User        |
+| POST   | /programs/{id}/courses/{courseId}/classes/{classId}/professors               | Inserts a professor into a class           | Admin       |
+| DELETE | /programs/{id}/courses/{courseId}/classes/{classId}/professors/{professorId} | Deletes a professor from a class           | Admin       |
+| POST   | /login                                                                       | Logs user in                               | ---         |
+| GET    | /me                                                                          | Verifies if the user is logged in          | User        |
+| GET    | /logout                                                                      | Logs a user out                            | User        |
 
-### POST requests
+## GET /users
 
-Atualmente a API é capaz de criar utilizadores através do envio de dados no "body" do request e também através do envio de ficheiros do tipo JSON. Para isso, os ficheiros ou o "body" devem respeitar a seguinte estrutra:
+### Success: 200 OK
 
+```JSON
+[
+   {
+      "id": 1,
+      "username": "fc12345",
+      "firstName": "Exemplo",
+      "lastName": "Aluno",
+      "email": "fc12345@alunos.fc.ul.pt",
+      "status": "offline",
+      "avatarURL": null,
+      "createdAt": "2020-03-18T14:30:22.000Z",
+      "updatedAt": "2020-03-18T14:30:22.000Z",
+   },
+   {
+      "id": 2,
+      "username": "fc00000",
+      "firstName": "Exemplo",
+      "lastName": "Professor",
+      "email": "fc00000@alunos.fc.ul.pt",
+      "status": "online",
+      "avatarURL": null,
+      "createdAt": "2020-04-18T14:30:22.000Z",
+      "updatedAt": "2020-04-18T14:30:22.000Z",
+   }
+]
+```
+
+### Erros possiveis
+
+ 401 Unauthorized
+
+```JSON
+{
+   "title": "Not an Admin",
+	"status": 401,
+	"detail": "You don't have admin previleges to access this resource."
+}
+```
+
+## GET /users/{id}
+
+```JSON
+{
+   "id": 1,
+   "username": "fc12345",
+   "firstName": "Exemplo",
+   "lastName": "Aluno",
+   "email": "fc12345@alunos.fc.ul.pt",
+   "status": null,
+   "avatarURL": null,
+   "createdAt": "2020-03-18T14:30:22.000Z",
+   "updatedAt": "2020-03-18T14:30:22.000Z",
+}
+```
+
+### Erros possiveis
+
+404 Not Found
+
+```JSON
+{
+   "title": "User Not Found",
+	"status": 404,
+	"detail": "Sorry, that user does not exist in our system."
+}
+```
+
+401 Unauthorized
+
+```JSON
+{
+   "title": "Not logged in",
+	"status": 401,
+	"detail": "You must be logged in to access this resource."
+}
+```
+
+
+## POST /users
 ```JSON
 {
    "users": [
@@ -129,22 +153,1409 @@ Atualmente a API é capaz de criar utilizadores através do envio de dados no "b
 }
 ```
 
-Dentro do campo "data" devem estar os atributos que dizem respeito apenas à respetiva "role". Como atualmente na base de dados os alunos e os admins não têm nenhum atributo exclusivo, o campo "data" para essas "roles" tem de estar vazio.
+### Erros Possiveis
 
-O campo "type" não faz parte da base de dados mas serve para identificar que tipo de utilizador está a ser registado para preencher as respetivas tabelas. Pode ter os valores `student`, `professor` ou `admin`.
-
-### PUT requests
-
-Neste momento a API apenas suporta fazer update a um utilizador de cada vez, ou seja, só através de um PUT request para um dado id. Não sei se é suposto ser possivel fazer update de vários utilizadores dado um ficheiro, por exemplo (?). Também para fazer update, o "body" do request tem que respeitar a seguinte estrutra:
+401 Unauthorized
 
 ```JSON
 {
-   "user": {
-      "password": "exemplo",
-      "status": "offline"
+   "title": "Not an Admin",
+	"status": 401,
+	"detail": "You don't have admin previleges to access this resource."
+}
+```
+
+400 Bad Request
+
+```JSON
+{
+   "title": "Invalid JSON",
+	"status": 400,
+	"detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
+}
+```
+
+409 Conflict
+
+```JSON
+{
+   "title": "Duplicate Entry",
+	"status": 409,
+	"detail": {
+      "message": "This field(s) must be unique in the database.",
+      "value": "username"
    }
 }
+```
 
+## PUT /users/{id}
+
+```JSON
+"users": [
+		{
+			"username": "fc60000",
+			"firstName": "Casimer",
+			"lastName": "Goodwin",
+			"email": "fc60000@alunos.fc.ul.pt",
+			"password": "PTI/PTRzzz",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		},
+```
+
+### Erros Possiveis
+
+400 Bad Request
+
+```JSON
+{
+   "title": "Invalid JSON",
+	"status": 400,
+	"detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
+}
+```
+422 Unprocessable Entity
+
+```JSON
+{
+   "title": "Validation Failed",
+	"status": 422,
+	"detail": {
+      "field": err.path,
+      "message": err.message,
+      "instance": err.instance
+   }
+}
+```
+
+409 Conflict
+
+```JSON
+{
+   "title": "Duplicate Entry",
+	"status": 409,
+	"detail": {
+      "message": "This field(s) must be unique in the database.",
+      "value": "username"
+   }
+}
+```
+
+404 Not Found
+
+```JSON
+{
+   "title": "User Not Found",
+	"status": 404,
+	"detail": "Sorry, that user does not exist in our system."
+}
+```
+
+## DELETE /users/{id}
+
+### Erros Possiveis: 
+
+404 Not Found
+
+```JSON
+{
+   "title": "User Not Found",
+	"status": 404,
+	"detail": "Sorry, that user does not exist in our system."
+}
+```
+
+## GET /users/students
+
+### Success: 200 OK
+
+```JSON
+{
+			"username": "fc60000",
+			"firstName": "Casimer",
+			"lastName": "Goodwin",
+			"email": "fc60000@alunos.fc.ul.pt",
+			"password": "K0Zv4yQYnoKVvLj",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		},
+```
+
+### Erros Possiveis
+
+ 401 Unauthorized
+
+```JSON
+{
+   "title": "Not an Admin",
+	"status": 401,
+	"detail": "You don't have admin previleges to access this resource."
+}
+```
+
+
+## GET /users/students/{id}
+
+```JSON
+"users": [
+   {
+			"username": "fc60000",
+			"firstName": "Casimer",
+			"lastName": "Goodwin",
+			"email": "fc60000@alunos.fc.ul.pt",
+			"password": "K0Zv4yQYnoKVvLj",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+      },
+]
+```
+
+### Erros Possiveis
+
+401 Unauthorized
+
+```JSON
+{
+   "title": "Not logged in",
+	"status": 401,
+	"detail": "You must be logged in to access this resource."
+}
+```
+
+404 Not Found
+
+```JSON
+{
+   "title": "Student Not Found",
+	"status": 404,
+	"detail": "Sorry, that student does not exist in our system."
+}
+```
+
+## GET /users/professors
+
+```JSON
+"users": [
+   {
+      "username": "fc60001",
+      "firstName": "Judah",
+      "lastName": "Koelpin",
+      "email": "judahkoelpin@fc.ul.pt",
+      "password": "UD1mnRKS7IR7aqF",
+      "role": {
+         "type": "professor",
+         "data": {
+            "department": "Departamento de Informática",
+            "room": "6.1.51"
+         }
+      }
+   },
+]
+```
+
+### Erros Possiveis
+
+ 401 Unauthorized
+
+```JSON
+{
+   "title": "Not an Admin",
+	"status": 401,
+	"detail": "You don't have admin previleges to access this resource."
+}
+```
+
+## GET /users/professors/{id}
+
+```JSON
+
+```JSON
+{
+   "username": "fc60001",
+   "firstName": "Judah",
+   "lastName": "Koelpin",
+   "email": "judahkoelpin@fc.ul.pt",
+   "password": "UD1mnRKS7IR7aqF",
+   "role": {
+      "type": "professor",
+      "data": {
+         "department": "Departamento de Informática",
+         "room": "6.1.51"
+      }
+   }
+}
+```
+
+### Erros Possiveis
+
+401 Unauthorized
+
+```JSON
+{
+   "title": "Not logged in",
+	"status": 401,
+	"detail": "You must be logged in to access this resource."
+}
+```
+
+404 Not Found
+
+```JSON
+{
+   "title": "Professor Not Found",
+	"status": 404,
+	"detail": "Sorry, that professor does not exist in our system."
+}
+```
+
+## GET /users/admins
+```JSON
+{
+			"username": "fc60002",
+			"firstName": "Trace",
+			"lastName": "Ratke",
+			"email": "traceratke@fc.ul.pt",
+			"password": "Ri9mov2FmjjghOX",
+			"role": {
+				"type": "admin",
+				"data": {}
+         }
+}
+```
+
+### Erros Possiveis
+
+ 401 Unauthorized
+
+```JSON
+{
+   "title": "Not an Admin",
+	"status": 401,
+	"detail": "You don't have admin previleges to access this resource."
+}
+```
+
+## GET /users/admins/{id}
+
+```JSON
+{
+   "users": [
+      {
+      "username": "fc60002",
+			"firstName": "Trace",
+			"lastName": "Ratke",
+			"email": "traceratke@fc.ul.pt",
+			"password": "Ri9mov2FmjjghOX",
+			"role": {
+				"type": "admin",
+				"data": {}
+         }
+      }
+```
+
+### Erros Possiveis
+
+401 Unauthorized
+
+```JSON
+{
+   "title": "Not an Admin",
+	"status": 401,
+	"detail": "You don't have admin previleges to access this resource."
+}
+```
+
+404 Not Found
+
+```JSON
+{
+   "title": "Admin Not Found",
+	"status": 404,
+	"detail": "Sorry, that admin does not exist in our system."
+}
+```
+
+## GET /programs/
+```JSON
+
+{
+			"code": "L079",
+			"name": "Tecnologias de Informação",
+			"cycle": 1,
+			"initials": "LTI",
+			"courses": [
+				{
+					"code": 26719,
+					"name": "Projeto de Tecnologias de Informação",
+					"initials": "PTI",
+					"ects": 6
+				},
+				{
+					"code": 26718,
+					"name": "Projeto de Tecnologias de Redes",
+					"initials": "PTR",
+					"ects": 6
+				},
+				{
+					"code": 26716,
+					"name": "Planeamento e Gestão de Projeto",
+					"initials": "PGP",
+					"ects": 6
+				},
+				{
+					"code": 22701,
+					"name": "Introdução às Probabilidades e Estatística",
+					"initials": "IPE",
+					"ects": 6
+				}
+			]
+		},
+		{
+			"code": "9119",
+			"name": "Engenharia Informática",
+			"cycle": 1,
+			"initials": "LEI",
+			"courses": [
+				{
+					"code": 26737,
+					"name": "Teoria da Computação",
+					"initials": "TC",
+					"ects": 6
+				},
+				{
+					"code": 26704,
+					"name": "Redes de Computadores",
+					"initials": "RC",
+					"ects": 6
+				},
+				{
+					"code": 22701,
+					"name": "Introdução às Probabilidades e Estatística",
+					"initials": "IPE",
+					"ects": 6
+				}
+			]
+      }
+```
+
+### Erros Possiveis
+
+401 Unauthorized
+
+```JSON
+{
+   "title": "Not logged in",
+	"status": 401,
+	"detail": "You must be logged in to access this resource."
+}
+```
+
+## GET /programs/{id}
+
+```JSON
+
+{
+	"programs": [
+		{
+			"code": "L079",
+			"name": "Tecnologias de Informação",
+			"cycle": 1,
+			"initials": "LTI",
+			"courses": [
+				{
+					"code": 26719,
+					"name": "Projeto de Tecnologias de Informação",
+					"initials": "PTI",
+					"ects": 6
+				},
+				{
+					"code": 26718,
+					"name": "Projeto de Tecnologias de Redes",
+					"initials": "PTR",
+					"ects": 6
+				},
+				{
+					"code": 26716,
+					"name": "Planeamento e Gestão de Projeto",
+					"initials": "PGP",
+					"ects": 6
+				},
+				{
+					"code": 22701,
+					"name": "Introdução às Probabilidades e Estatística",
+					"initials": "IPE",
+					"ects": 6
+				}
+			]
+		},
+	]
+}
+
+		
+```
+
+### Erros Possiveis
+
+401 Unauthorized
+
+```JSON
+{
+   "title": "Not logged in",
+	"status": 401,
+	"detail": "You must be logged in to access this resource."
+}
+```
+
+404 Not Found
+
+```JSON
+{
+   "title": "Program Not Found",
+	"status": 404,
+	"detail": "Sorry, that program does not exist in our system."
+}
+```
+
+## POST /programs/
+
+```JSON
+{
+			"code": "L069",
+			"name": "Estatística Aplicada",
+			"cycle": 1,
+			"initials": "LEA",
+			"courses": [
+				{
+					"code": 1111,
+					"name": "Estatística Paramétrica",
+					"initials": "EPAR",
+					"ects": 6
+				}
+```
+### Erros Possiveis
+
+401 Unauthorized
+
+```JSON
+{
+   "title": "Not an Admin",
+	"status": 401,
+	"detail": "You don't have admin previleges to access this resource."
+}
+```
+
+400 Bad Request
+
+```JSON
+{
+   "title": "Invalid JSON",
+	"status": 400,
+	"detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
+}
+```
+
+409 Conflict
+
+```JSON
+{
+   "title": "Duplicate Entry",
+	"status": 409,
+	"detail": {
+      "message": "This field(s) must be unique in the database.",
+      "value": "code"
+   }
+}
+```
+
+## PUT /programs/{id}
+```JSON
+
+{
+   "code": "L069",
+	"name": "Tecnologias de Informação",
+	"cycle": 1,
+	"initials": "LTI",
+}
+
+
+### Erros Possiveis
+
+400 Bad Request
+
+```JSON
+{
+   "title": "Invalid JSON",
+	"status": 400,
+	"detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
+}
+```
+422 Unprocessable Entity
+
+```JSON
+{
+   "title": "Validation Failed",
+	"status": 422,
+	"detail": {
+      "field": err.path,
+      "message": err.message,
+      "instance": err.instance
+   }
+}
+```
+
+409 Conflict
+
+```JSON
+{
+   "title": "Duplicate Entry",
+	"status": 409,
+	"detail": {
+      "message": "This field(s) must be unique in the database.",
+      "value": error.value
+   }
+}
+```
+
+404 Not Found
+
+```JSON
+{
+   "title": "Program Not Found",
+	"status": 404,
+	"detail": "Sorry, that program does not exist in our system."
+}
+```
+
+## DELETE /programs/{id}
+
+### Erros Possiveis
+
+404 Not Found
+
+```JSON
+{
+   "title": "Program Not Found",
+	"status": 404,
+	"detail": "Sorry, that program does not exist in our system."
+}
+```
+
+## GET /programs/{id}/courses
+
+```JSON
+"courses": [
+				{
+					"code": 26719,
+					"name": "Projeto de Tecnologias de Informação",
+					"initials": "PTI",
+					"ects": 6
+				},
+				{
+					"code": 26718,
+					"name": "Projeto de Tecnologias de Redes",
+					"initials": "PTR",
+					"ects": 6
+				},
+				{
+					"code": 26716,
+					"name": "Planeamento e Gestão de Projeto",
+					"initials": "PGP",
+					"ects": 6
+				},
+				{
+					"code": 22701,
+					"name": "Introdução às Probabilidades e Estatística",
+					"initials": "IPE",
+					"ects": 6
+				}
+			]
+```
+
+### Erros Possiveis
+
+401 Unauthorized
+
+```JSON
+{
+   "title": "Not logged in",
+	"status": 401,
+	"detail": "You must be logged in to access this resource."
+}
+```
+
+```JSON
+{
+   "title": "Program Not Found",
+	"status": 404,
+	"detail": "Sorry, that course does not exist in our system."
+}
+```
+
+## GET /programs/{id}/courses/{courseId}: 
+
+```JSON
+				{
+					"code": 26719,
+					"name": "Projeto de Tecnologias de Informação",
+					"initials": "PTI",
+					"ects": 6
+				},
+			]
+		},
+```
+
+### Erros Possiveis
+
+401 Unauthorized
+
+```JSON
+{
+   "title": "Not logged in",
+	"status": 401,
+	"detail": "You must be logged in to access this resource."
+}
+```
+
+```JSON
+{
+   "title": "Course Not Found",
+	"status": 404,
+	"detail": "Sorry, that course does not exist in our system."
+}
+```
+
+```JSON
+{
+   "title": "Program Not Found",
+	"status": 404,
+	"detail": "Sorry, that course does not exist in our system."
+}
+```
+
+## GET /programs/{id}/courses/{courseId}/classes
+
+```JSON 
+{
+	"classes": [
+		{
+			"number": "T1",
+			"beginsAt": "10:00",
+			"endsAt": "11:30",
+			"weekDay": 1,
+			"academicYear": "2019/2020"
+		},
+		{
+			"number": "T2",
+			"beginsAt": "10:00",
+			"endsAt": "11:30",
+			"weekDay": 1,
+			"academicYear": "2019/2020"
+		},
+		{
+			"number": "T3",
+			"beginsAt": "10:00",
+			"endsAt": "11:30",
+			"weekDay": 1,
+			"academicYear": "2019/2020"
+		}
+	]
+}
+```
+
+### Erros Possiveis
+
+401 Unauthorized
+
+```JSON
+{
+   "title": "Not logged in",
+	"status": 401,
+	"detail": "You must be logged in to access this resource."
+}
+```
+
+```JSON
+{
+   "title": "Course Not Found",
+	"status": 404,
+	"detail": "Sorry, that course does not exist in our system."
+}
+```
+
+```JSON
+{
+   "title": "Program Not Found",
+	"status": 404,
+	"detail": "Sorry, that course does not exist in our system."
+}
+```
+
+## GET /programs/{id}/courses/{courseId}/classes/{classId}
+
+```JSON
+
+{
+	"classes": [
+		{
+			"number": "T1",
+			"beginsAt": "10:00",
+			"endsAt": "11:30",
+			"weekDay": 1,
+			"academicYear": "2019/2020"
+		}
+
+```
+
+### Erros Possiveis
+
+401 Unauthorized
+
+```JSON
+{
+   "title": "Not logged in",
+	"status": 401,
+	"detail": "You must be logged in to access this resource."
+}
+```
+
+```JSON
+{
+   "title": "Class Not Found",
+	"status": 404,
+	"detail": "Sorry, that course does not exist in our system."
+}
+```
+```JSON
+{
+   "title": "Course Not Found",
+	"status": 404,
+	"detail": "Sorry, that course does not exist in our system."
+}
+```
+
+```JSON
+{
+   "title": "Program Not Found",
+	"status": 404,
+	"detail": "Sorry, that course does not exist in our system."
+}
+```
+
+## POST /programs/{id}/courses/{courseId}/classes/
+```JSON
+{
+			"number": "T5",
+			"beginsAt": "15:00",
+			"endsAt": "16:30",
+			"weekDay": 1,
+			"academicYear": "2019/2020"
+		}
+
+```
+
+### Erros Possiveis
+
+400 Bad Request
+
+```JSON
+{
+   "title": "Invalid JSON",
+	"status": 400,
+	"detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
+}
+```
+
+## PUT /programs/{id}/courses/{courseId}/classes/{classId}
+
+```JSON
+{
+   "number": "T5",
+   "beginsAt": "15:00",
+   "endsAt": "16:30",
+   "weekDay": 3,
+   "academicYear": "2019/2020"
+}
+```
+
+### Erros Possiveis
+
+400 Bad Request
+
+```JSON
+{
+   "title": "Invalid JSON",
+	"status": 400,
+	"detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
+}
+```
+422 Unprocessable Entity
+
+```JSON
+{
+   "title": "Validation Failed",
+	"status": 422,
+	"detail": {
+      "field": err.path,
+      "message": err.message,
+      "instance": err.instance
+   }
+}
+```
+
+409 Conflict
+
+```JSON
+{
+   "title": "Duplicate Entry",
+	"status": 409,
+	"detail": {
+      "message": "This field(s) must be unique in the database.",
+      "value": "username"
+   }
+}
+```
+
+404 Not Found
+
+```JSON
+{
+   "title": "Class Not Found",
+	"status": 404,
+	"detail": "Sorry, that class does not exist in our system."
+}
+```
+
+```JSON
+{
+   "title": "Program Not Found",
+	"status": 404,
+	"detail": "Sorry, that program does not exist in our system."
+}
+```
+
+```JSON
+{
+   "title": "Course Not Found",
+	"status": 404,
+	"detail": "Sorry, that course does not exist in our system."
+}
+```
+
+## DELETE /programs/{id}/courses/{courseId}/classes/{classId}
+
+## Erros Possiveis
+
+```JSON
+{
+   "title": "Program Not Found",
+	"status": 404,
+	"detail": "Sorry, that program does not exist in our system."
+}
+```
+
+```JSON
+{
+   "title": "Course Not Found",
+	"status": 404,
+	"detail": "Sorry, that course does not exist in our system."
+}
+```
+
+```JSON
+{
+   "title": "Class Not Found",
+	"status": 404,
+	"detail": "Sorry, that class does not exist in our system."
+}
+```
+
+## GET /programs/{id}/courses/{courseId}/classes/{classId}/students
+
+```JSON
+"users": [
+   {
+      "username": "fc60001",
+      "firstName": "Judah",
+      "lastName": "Koelpin",
+      "email": "judahkoelpin@fc.ul.pt",
+      "password": "UD1mnRKS7IR7aqF",
+      "role": {
+         "type": "professor",
+         "data": {
+            "department": "Departamento de Informática",
+            "room": "6.1.51"
+         }
+      }
+   },
+]
+```
+
+### Erros Possiveis
+
+ 401 Unauthorized
+
+```JSON
+{
+   "title": "Not an Admin",
+	"status": 401,
+	"detail": "You don't have admin previleges to access this resource."
+}
+```
+
+## GET /programs/{id}/courses/{courseId}/classes/{classId}/students/{studentId}
+
+```JSON
+{
+   "username": "fc60001",
+   "firstName": "Judah",
+   "lastName": "Koelpin",
+   "email": "judahkoelpin@fc.ul.pt",
+   "password": "UD1mnRKS7IR7aqF",
+   "role": {
+      "type": "professor",
+      "data": {
+         "department": "Departamento de Informática",
+         "room": "6.1.51"
+      }
+   }
+}
+```
+
+### Erros Possiveis
+
+401 Unauthorized
+
+```JSON
+{
+   "title": "Not logged in",
+	"status": 401,
+	"detail": "You must be logged in to access this resource."
+}
+```
+
+404 Not Found
+
+```JSON
+{
+   "title": "Student Not Found",
+	"status": 404,
+	"detail": "Sorry, that student does not exist in our system."
+}
+```
+
+## POST /programs/{id}/courses/{courseId}/classes/{classId}/students 
+
+```JSON
+{
+   "userId": 1
+}
+```
+
+### Erros Possiveis
+
+400 Bad Request
+
+```JSON
+{
+   "title": "Invalid JSON",
+	"status": 400,
+	"detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
+}
+```
+
+404 Not Found
+
+```JSON
+{
+   "title": "Class Not Found",
+	"status": 404,
+	"detail": "Sorry, that class does not exist in our system."
+}
+```
+
+404 Not Found
+
+```JSON
+{
+   "title": "User Not Found",
+	"status": 404,
+	"detail": "Sorry, that user does not exist in our system."
+}
+```
+
+## DELETE /programs/{id}/courses/{courseId}/classes/{classId}/students/{studentId}
+
+### Erros Possiveis
+
+404 Not Found
+
+```JSON
+{
+   "title": "Class Not Found",
+	"status": 404,
+	"detail": "Sorry, that class does not exist in our system."
+}
+```
+
+404 Not Found
+
+```JSON
+{
+   "title": "User Not Found",
+	"status": 404,
+	"detail": "Sorry, that user does not exist in our system."
+}
+```
+
+## GET /programs/{id}/courses/{courseId}/classes/{classId}/professors
+
+```JSON
+"users": [
+   {
+      "username": "fc60001",
+      "firstName": "Judah",
+      "lastName": "Koelpin",
+      "email": "judahkoelpin@fc.ul.pt",
+      "password": "UD1mnRKS7IR7aqF",
+      "role": {
+         "type": "professor",
+         "data": {
+            "department": "Departamento de Informática",
+            "room": "6.1.51"
+         }
+      }
+   },
+]
+```
+
+### Erros Possiveis
+
+ 401 Unauthorized
+
+```JSON
+{
+   "title": "Not an Admin",
+	"status": 401,
+	"detail": "You don't have admin previleges to access this resource."
+}
+```
+
+## GET /programs/{id}/courses/{courseId}/classes/{classId}/professors/{professorId}
+
+```JSON
+
+```JSON
+{
+   "username": "fc60001",
+   "firstName": "Judah",
+   "lastName": "Koelpin",
+   "email": "judahkoelpin@fc.ul.pt",
+   "password": "UD1mnRKS7IR7aqF",
+   "role": {
+      "type": "professor",
+      "data": {
+         "department": "Departamento de Informática",
+         "room": "6.1.51"
+      }
+   }
+}
+```
+
+### Erros Possiveis
+
+401 Unauthorized
+
+```JSON
+{
+   "title": "Not logged in",
+	"status": 401,
+	"detail": "You must be logged in to access this resource."
+}
+```
+
+404 Not Found
+
+```JSON
+{
+   "title": "Professor Not Found",
+	"status": 404,
+	"detail": "Sorry, that professor does not exist in our system."
+}
+```
+
+## POST /programs/{id}/courses/{courseId}/classes/{classId}/professors
+
+```JSON
+{
+   "userId": 1
+}
+```
+
+### Erros Possiveis
+
+400 Bad Request
+
+```JSON
+{
+   "title": "Invalid JSON",
+	"status": 400,
+	"detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
+}
+```
+
+404 Not Found
+
+```JSON
+{
+   "title": "Class Not Found",
+	"status": 404,
+	"detail": "Sorry, that class does not exist in our system."
+}
+```
+
+404 Not Found
+
+```JSON
+{
+   "title": "User Not Found",
+	"status": 404,
+	"detail": "Sorry, that user does not exist in our system."
+}
+```
+
+## DELETE /programs/{id}/courses/{courseId}/classes/{classId}/professors/{professorId}
+
+### Erros Possiveis
+
+404 Not Found
+
+```JSON
+{
+   "title": "Class Not Found",
+	"status": 404,
+	"detail": "Sorry, that class does not exist in our system."
+}
+```
+
+404 Not Found
+
+```JSON
+{
+   "title": "User Not Found",
+	"status": 404,
+	"detail": "Sorry, that user does not exist in our system."
+}
+```
+
+## POST /login
+
+```JSON
+{
+   "id": 1,
+   "username": "fc12345",
+   "firstName": "Exemplo",
+   "lastName": "Aluno",
+   "email": "fc12345@alunos.fc.ul.pt",
+   "status": null,
+   "avatarURL": null,
+   "createdAt": "2020-03-18T14:30:22.000Z",
+   "updatedAt": "2020-03-18T14:30:22.000Z",
+}
+```
+
+### Erros Possiveis
+
+```JSON
+{
+   "title": "User Not Found",
+	"status": 404,
+	"detail": "Sorry, that user does not exist in our system."
+}
+```
+
+## GET /me
+
+```JSON
+{
+   "id": 1,
+   "username": "fc12345",
+   "firstName": "Exemplo",
+   "lastName": "Aluno",
+   "email": "fc12345@alunos.fc.ul.pt",
+   "status": null,
+   "avatarURL": null,
+   "createdAt": "2020-03-18T14:30:22.000Z",
+   "updatedAt": "2020-03-18T14:30:22.000Z",
+}
+```
+
+### Erros Possiveis
+
+```JSON
+{
+   "title": "User Not Found",
+	"status": 404,
+	"detail": "Sorry, that user does not exist in our system."
+}
+```
+
+## GET /logout
+
+### Erros Possiveis 
+
+```JSON
+{
+   "title": "Not logged in",
+	"status": 401,
+	"detail": "You must be logged in to access this resource."
+}
+```
+
+## Erros
+
+
+### Failiure: 401 Unauthorized
+
+```JSON
+{
+   "title": "Not an Admin",
+	"status": 401,
+	"detail": "You don't have admin previleges to access this resource."
+}
+```
+
+```JSON
+{
+   "title": "Not logged in",
+	"status": 401,
+	"detail": "You must be logged in to access this resource."
+}
+```
+
+```JSON
+{
+   "title": "Invalid Identity",
+	"status": 401,
+	"detail": "You don't have permissions to manage other users accounts."
+}
+```
+
+```JSON
+{
+   "title": "Failed to Log In",
+	"status": 401,
+	"detail": "Wrong email or password."
+}
+```
+
+### 404 Not Found
+
+```JSON
+{
+   "title": "Not Found",
+	"status": 404,
+	"detail": "Sorry, we can't find the page you were looking for."
+}
+```
+
+```JSON
+{
+   "title": "User Not Found",
+	"status": 404,
+	"detail": "Sorry, that user does not exist in our system."
+}
+```
+
+```JSON
+{
+   "title": "Program Not Found",
+	"status": 404,
+	"detail": "Sorry, that program does not exist in our system."
+}
+```
+
+```JSON
+{
+   "title": "Course Not Found",
+	"status": 404,
+	"detail": "Sorry, that course does not exist in our system."
+}
+```
+
+```JSON
+{
+   "title": "Class Not Found",
+	"status": 404,
+	"detail": "Sorry, that class does not exist in our system."
+}
+```
+
+```JSON
+{
+   "title": "Professor Not Found",
+	"status": 404,
+	"detail": "Sorry, that professor does not exist in our system."
+}
+```
+
+```JSON
+{
+   "title": "Student Not Found",
+	"status": 404,
+	"detail": "Sorry, that student does not exist in our system."
+}
+```
+
+### 503 Service Unavailable
+
+```JSON
+{
+   "title": "Service Unavailable",
+	"status": 503,
+	"detail": "Sorry, this service seems to be unavailable... Try again later."
+}
+```
+
+### 400 Bad Request
+
+```JSON
+{
+   "title": "Invalid JSON",
+	"status": 400,
+	"detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
+}
+```
+### 422 Unprocessable Entity
+
+```JSON
+{
+   "title": "Validation Failed",
+	"status": 422,
+	"detail": {
+      "field": err.path,
+      "message": err.message,
+      "instance": err.instance
+   }
+}
+```
+
+### 409 Conflict
+
+```JSON
+{
+   "title": "Duplicate Entry",
+	"status": 409,
+	"detail": {
+      "message": "This field(s) must be unique in the database.",
+      "value": error.value
+   }
+}
 ```
 
 ### Base de Dados
