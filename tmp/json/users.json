@@ -1,54 +1,243 @@
 {
-	"users": [
-		{
-			"username": "fc60000",
-			"firstName": "Casimer",
-			"lastName": "Goodwin",
-			"email": "fc60000@alunos.fc.ul.pt",
-			"password": "K0Zv4yQYnoKVvLj",
-			"role": {
-				"type": "student",
-				"data": {}
-			}
-		},
-		{
-			"username": "fc60001",
-			"firstName": "Judah",
-			"lastName": "Koelpin",
-			"email": "judahkoelpin@fc.ul.pt",
-			"password": "UD1mnRKS7IR7aqF",
-			"role": {
-				"type": "professor",
-				"data": {
-					"department": "Departamento de Informática",
-					"room": "6.1.51"
-				}
-			}
-		},
-		{
-			"username": "fc60003",
-			"firstName": "Judah",
-			"lastName": "Koelpin",
-			"email": "juda@fc.ul.pt",
-			"password": "UD1mnRKS7IR7aqF",
-			"role": {
-				"type": "professor",
-				"data": {
-					"department": "Departamento de Informática",
-					"room": "6.1.51"
-				}
-			}
-		},
-		{
-			"username": "fc60002",
-			"firstName": "Trace",
-			"lastName": "Ratke",
-			"email": "traceratke@fc.ul.pt",
-			"password": "Ri9mov2FmjjghOX",
-			"role": {
-				"type": "admin",
-				"data": {}
-			}
-		}
-	]
+  "users": [
+    {
+      "username": "fc60000",
+      "firstName": "Casimer",
+      "lastName": "Goodwin",
+      "email": "fc60000@alunos.fc.ul.pt",
+      "password": "K0Zv4yQYnoKVvLj",
+      "role": {
+        "type": "student",
+        "data": {}
+      }
+    },
+    {
+      "username": "fc60001",
+      "firstName": "Judah",
+      "lastName": "Koelpin",
+      "email": "judahkoelpin@fc.ul.pt",
+      "password": "UD1mnRKS7IR7aqF",
+      "role": {
+        "type": "professor",
+        "data": {
+          "department": "Departamento de Informática",
+          "room": "6.1.51"
+        }
+      }
+    },
+    {
+      "username": "fc60003",
+      "firstName": "Judah",
+      "lastName": "Koelpin",
+      "email": "juda@fc.ul.pt",
+      "password": "UD1mnRKS7IR7aqF",
+      "role": {
+        "type": "professor",
+        "data": {
+          "department": "Departamento de Informática",
+          "room": "6.1.51"
+        }
+      }
+    },
+    {
+      "username": "fc60002",
+      "firstName": "Trace",
+      "lastName": "Ratke",
+      "email": "traceratke@fc.ul.pt",
+      "password": "Ri9mov2FmjjghOX",
+      "role": {
+        "type": "admin",
+        "data": {}
+      }
+    },
+    {
+      "username": "fc51599",
+      "firstName": "Josefino",
+      "lastName": "Américo",
+      "email": "ja@fc.ul.pt",
+      "password": "JD65yeevcTEfdsa",
+      "role": {
+        "type": "professor",
+        "data": {}
+      }
+    },
+    {
+      "username": "fc51590",
+      "firstName": "João",
+      "lastName": "Felgar",
+      "email": "jfelgasAKAgurdan@fc.ul.pt",
+      "password": "KPOP4LIFE",
+      "role": {
+        "type": "student",
+        "data": {}
+      }
+    },
+    {
+      "username": "fc12345",
+      "firstName": "Jose",
+      "lastName": "Cecílio",
+      "email": "jcecilio@fc.ul.pt",
+      "password": "HFDhjduePEJGB",
+      "role": {
+        "type": "admin",
+        "data": {}
+      }
+    },
+    {
+      "username": "fc54321",
+      "firstName": "António",
+      "lastName": "Ferreira",
+      "email": "aferreira@fc.ul.pt",
+      "password": "TBSa21IOR",
+      "role": {
+        "type": "admin",
+        "data": {}
+      }
+    },
+    {
+      "username": "fc54321",
+      "firstName": "António",
+      "lastName": "Branco",
+      "email": "antoniobranco@fc.ul.pt",
+      "password": "TBSa21IOR",
+      "role": {
+        "type": "professor",
+        "data": {}
+      }
+    },
+    {
+      "username": "fc54321",
+      "firstName": "Rafael",
+      "lastName": "Ramires",
+      "email": "rramirez@fc.ul.pt",
+      "password": "TBSa21IOR",
+      "role": {
+        "type": "professor",
+        "data": {}
+      }
+    },
+    {
+      "username": "fc51602",
+      "firstName": "Alexandre",
+      "lastName": "Ramos",
+      "email": "malfurion@fc.ul.pt",
+      "password": "M41FUR10N",
+      "role": {
+        "type": "aluno",
+        "data": {}
+      }
+    },
+
+    {
+      "username": "fc51601",
+      "firstName": "Cristiano",
+      "lastName": "Matias",
+      "email": "CrisMatiasRonaldo@fc.ul.pt",
+      "password": "SIIIIIM",
+      "role": {
+        "type": "aluno",
+        "data": {}
+      }
+    },
+
+    {
+      "username": "fc49543",
+      "firstName": "Miguel",
+      "lastName": "Ferreira",
+      "email": "mferreira@fc.ul.pt",
+      "password": "JDUEyevc65cA",
+      "role": {
+        "type": "aluno",
+        "data": {}
+      }
+    },
+    {
+      "username": "fc45765",
+      "firstName": "Thibault",
+      "lastName": "Langlois",
+      "email": "tnlanglois@fc.ul.pt",
+      "password": "TBl735ATEFDC",
+      "role": {
+        "type": "professor",
+        "data": {}
+      }
+    },
+    {
+      "username": "fc45765",
+      "firstName": "Joao",
+      "lastName": "Bastos",
+      "email": "jb95@fc.ul.pt",
+      "password": "HCFREKL637HJD",
+      "role": {
+        "type": "aluno",
+        "data": {}
+      }
+    },
+    {
+      "username": "fc45765",
+      "firstName": "José",
+      "lastName": "Resende",
+      "email": "jresende@fc.ul.pt",
+      "password": "FMAGB52UYA",
+      "role": {
+        "type": "admin",
+        "data": {}
+      }
+    },
+    {
+      "username": "fc52365",
+      "firstName": "Rui",
+      "lastName": "Fonseca",
+      "email": "goneMia@fc.ul.pt",
+      "password": "FM83VrPow2",
+      "role": {
+        "type": "professor",
+        "data": {}
+      }
+    },
+    {
+      "username": "fc44489",
+      "firstName": "Alcides",
+      "lastName": "Fonseca",
+      "email": "afonseca@fc.ul.pt",
+      "password": "PPforTheWin",
+      "role": {
+        "type": "professor",
+        "data": {}
+      }
+    },
+    {
+      "username": "fc44521",
+      "firstName": "Teresa",
+      "lastName": "Chambel",
+      "email": "tchambel@fc.ul.pt",
+      "password": "74UIE12902",
+      "role": {
+        "type": "professor",
+        "data": {}
+      }
+    },
+    {
+      "username": "fc",
+      "firstName": "Carlos",
+      "lastName": "Teixeira",
+      "email": "cTeixeira@fc.ul.pt",
+      "password": "7fJR6bf57Gsd",
+      "role": {
+        "type": "professor",
+        "data": {}
+      }
+    },
+    {
+      "username": "fc51452",
+      "firstName": "Pedro",
+      "lastName": "Silva",
+      "email": "pedroSilva@fc.ul.pt",
+      "password": "HJ53HCkljdfask",
+      "role": {
+        "type": "aluno",
+        "data": {}
+      }
+    }
+  ]
 }

@@ -1,62 +1,356 @@
 {
-	"programs": [
-		{
-			"code": "L079",
-			"name": "Tecnologias de Informação",
-			"cycle": 1,
-			"initials": "LTI",
-			"courses": [
-				{
-					"code": 26719,
-					"name": "Projeto de Tecnologias de Informação",
-					"initials": "PTI",
-					"ects": 6
-				},
-				{
-					"code": 26718,
-					"name": "Projeto de Tecnologias de Redes",
-					"initials": "PTR",
-					"ects": 6
-				},
-				{
-					"code": 26716,
-					"name": "Planeamento e Gestão de Projeto",
-					"initials": "PGP",
-					"ects": 6
-				},
-				{
-					"code": 22701,
-					"name": "Introdução às Probabilidades e Estatística",
-					"initials": "IPE",
-					"ects": 6
-				}
-			]
-		},
-		{
-			"code": "9119",
-			"name": "Engenharia Informática",
-			"cycle": 1,
-			"initials": "LEI",
-			"courses": [
-				{
-					"code": 26737,
-					"name": "Teoria da Computação",
-					"initials": "TC",
-					"ects": 6
-				},
-				{
-					"code": 26704,
-					"name": "Redes de Computadores",
-					"initials": "RC",
-					"ects": 6
-				},
-				{
-					"code": 22701,
-					"name": "Introdução às Probabilidades e Estatística",
-					"initials": "IPE",
-					"ects": 6
-				}
-			]
-		}
-	]
+  "programs": [
+    {
+      "code": "L079",
+      "name": "Tecnologias de Informação",
+      "cycle": 1,
+      "initials": "LTI",
+      "courses": [
+        {
+          "code": 26719,
+          "name": "Projeto de Tecnologias de Informação",
+          "initials": "PTI",
+          "ects": 6
+        },
+        {
+          "code": 26718,
+          "name": "Projeto de Tecnologias de Redes",
+          "initials": "PTR",
+          "ects": 6
+        },
+        {
+          "code": 26716,
+          "name": "Planeamento e Gestão de Projeto",
+          "initials": "PGP",
+          "ects": 6
+        },
+        {
+          "code": 22701,
+          "name": "Introdução às Probabilidades e Estatística",
+          "initials": "IPE",
+          "ects": 6
+        },
+        {
+          "code": 26702,
+          "name": "Arquiteturas de Computadores",
+          "initials": "AC",
+          "ects": 6
+        },
+        {
+          "code": 13565,
+          "name": "Elementos de Matemática I",
+          "initials": "EM I",
+          "ects": 6
+        },
+        {
+          "code": 26719,
+          "name": "Produção de Documentos Técnicos",
+          "initials": "PDT",
+          "ects": 6
+        },
+        {
+          "code": 26756,
+          "name": "Programação I (LTI)",
+          "initials": "Prog I",
+          "ects": 6
+        },
+        {
+          "code": 13566,
+          "name": "Elementos de Matemática II",
+          "initials": "EM II",
+          "ects": 6
+        },
+        {
+          "code": 26751,
+          "name": "Introdução às Tecnologias Web",
+          "initials": "ITW",
+          "ects": 6
+        },
+        {
+          "code": 26757,
+          "name": "Programação II (LTI)",
+          "initials": "Prog II",
+          "ects": 6
+        },
+        {
+          "code": 26755,
+          "name": "Redes de Computadores (LTI)",
+          "initials": "RC",
+          "ects": 6
+        },
+        {
+          "code": 26707,
+          "name": "Bases de Dados",
+          "initials": "BD",
+          "ects": 6
+        },
+        {
+          "code": 26710,
+          "name": "Fundamentos e Técnicas de Visualização",
+          "initials": "FTV",
+          "ects": 6
+        },
+        {
+          "code": 26708,
+          "name": "Interação com Computadores",
+          "initials": "IC",
+          "ects": 6
+        },
+        {
+          "code": 26706,
+          "name": "Programação Centrada em Objetos",
+          "initials": "PCO",
+          "ects": 6
+        },
+        {
+          "code": 26754,
+          "name": "Sistemas Operativos (LTI)",
+          "initials": "SO",
+          "ects": 6
+        },
+        {
+          "code": 26711,
+          "name": "Análise e Desenho de Software",
+          "initials": "ADS",
+          "ects": 6
+        },
+        {
+          "code": 26709,
+          "name": "Aplicações Distribuídas",
+          "initials": "AD",
+          "ects": 6
+        },
+        {
+          "code": 26712,
+          "name": "Aplicações e Serviços na Web",
+          "initials": "ASW",
+          "ects": 6
+        },
+        {
+          "code": 26713,
+          "name": "Conceção de Produto",
+          "initials": "CP",
+          "ects": 6
+        },
+        {
+          "code": 26752,
+          "name": "Sistemas Inteligentes",
+          "initials": "SI",
+          "ects": 6
+        },
+        {
+          "code": 26758,
+          "name": "Construção de Sistemas de Software (LTI)",
+          "initials": "CSS",
+          "ects": 6
+        },
+        {
+          "code": 26719,
+          "name": "Ciência em Portugal",
+          "initials": "CPor",
+          "ects": 6
+        },
+        {
+          "code": 26719,
+          "name": "Ciência em Portugal A",
+          "initials": "CPor A",
+          "ects": 3
+        },
+        {
+          "code": 26719,
+          "name": "Computadores e Sociedade",
+          "initials": "CS",
+          "ects": 3
+        },
+        {
+          "code": 26719,
+          "name": "Controvérsias Científicas",
+          "initials": "CC",
+          "ects": 6
+        },
+        {
+          "code": 26719,
+          "name": "Princípios de Programação",
+          "initials": "PP",
+          "ects": 6
+        },
+        {
+          "code": 26719,
+          "name": "Teoria da Computação",
+          "initials": "TC",
+          "ects": 6
+        },
+        {
+          "code": 26719,
+          "name": "Engenharia do Conhecimento",
+          "initials": "EC",
+          "ects": 6
+        },
+        {
+          "code": 26714,
+          "name": "Segurança Informática",
+          "initials": "SInf",
+          "ects": 6
+        }
+      ]
+    },
+    {
+      "code": "9119",
+      "name": "Engenharia Informática",
+      "cycle": 1,
+      "initials": "LEI",
+      "courses": [
+        {
+          "code": 26737,
+          "name": "Teoria da Computação",
+          "initials": "TC",
+          "ects": 6
+        },
+        {
+          "code": 26704,
+          "name": "Redes de Computadores",
+          "initials": "RC",
+          "ects": 6
+        },
+        {
+          "code": 22701,
+          "name": "Introdução às Probabilidades e Estatística",
+          "initials": "IPE",
+          "ects": 6
+        },
+        {
+          "code": 26748,
+          "name": "Arquiteturas de Sistemas Computacionais",
+          "initials": "ASC",
+          "ects": 6
+        },
+        {
+          "code": 13533,
+          "name": "Cálculo",
+          "initials": "Calc",
+          "ects": 6
+        },
+        {
+          "code": 26722,
+          "name": "Introdução à Programação",
+          "initials": "IP",
+          "ects": 6
+        },
+        {
+          "code": 13539,
+          "name": "Lógica de Primeira Ordem",
+          "initials": "LPO",
+          "ects": 6
+        },
+        {
+          "code": 26759,
+          "name": "Produção de Documentos Técnicos",
+          "initials": "PDT",
+          "ects": 6
+        },
+        {
+          "code": 26723,
+          "name": "Algoritmos e Estruturas de Dados",
+          "initials": "AED",
+          "ects": 6
+        },
+        {
+          "code": 13540,
+          "name": "Elementos de Álgebra Linear",
+          "initials": "EAL",
+          "ects": 6
+        },
+        {
+          "code": 34706,
+          "name": "Física A",
+          "initials": "Fisic",
+          "ects": 6
+        },
+        {
+          "code": 26724,
+          "name": "Laboratórios de Programação",
+          "initials": "LabP",
+          "ects": 6
+        },
+        {
+          "code": 85130,
+          "name": "Computadores e Sociedade",
+          "initials": "CS",
+          "ects": 3
+        },
+        {
+          "code": 34707,
+          "name": "Física Experimental",
+          "initials": "FExp",
+          "ects": 6
+        },
+        {
+          "code": 22736,
+          "name": "Introdução à Investigação Operacional",
+          "initials": "IIO",
+          "ects": 6
+        },
+        {
+          "code": 26725,
+          "name": "Princípios de Programação",
+          "initials": "PP",
+          "ects": 6
+        },
+        {
+          "code": 26726,
+          "name": "Sistemas de Informação e Bases de Dados",
+          "initials": "SIBD",
+          "ects": 6
+        },
+        {
+          "code": 26728,
+          "name": "Interfaces Pessoa-Máquina",
+          "initials": "IPM",
+          "ects": 6
+        },
+        {
+          "code": 13528,
+          "name": "Matemática Discreta",
+          "initials": "MDisc",
+          "ects": 6
+        },
+        {
+          "code": 85119,
+          "name": "Pensamento Crítico",
+          "initials": "PC",
+          "ects": 6
+        },
+        {
+          "code": 26703,
+          "name": "Sistemas Operativos",
+          "initials": "SO",
+          "ects": 6
+        },
+        {
+          "code": 34716,
+          "name": "Astronomia e Astrofísica",
+          "initials": "AA",
+          "ects": 3
+        },
+        {
+          "code": 62831,
+          "name": "Bioética",
+          "initials": "Bioeti",
+          "ects": 3
+        },
+        {
+          "code": 93103,
+          "name": "Curso de Competências Sociais e Desenvolvimento Pessoal",
+          "initials": "CCSDP",
+          "ects": 3
+        },
+        {
+          "code": 26733,
+          "name": "Computação Gráfica",
+          "initials": "CG",
+          "ects": 6
+        }
+      ]
+    }
+  ]
 }

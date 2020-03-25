@@ -1,10 +1,10 @@
 {
-	"professors": [
-		{
-			"userId": 2
-		},
-		{
-			"userId": 3
-		}
-	]
+  "professors": [
+    {
+      "userId": 2
+    },
+    {
+      "userId": 3
+    }
+  ]
 }
