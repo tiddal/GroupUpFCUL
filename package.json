@@ -8,17 +8,6 @@
 		"test": "cross-env NODE_ENV=test nodemon API/server.js",
 		"start": "NODE_ENV=production node API/server.js"
 	},
-	"husky": {
-		"hooks": {
-			"commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-			"prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
-		}
-	},
-	"config": {
-		"commitizen": {
-			"path": "./node_modules/cz-conventional-changelog"
-		}
-	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
@@ -45,5 +34,16 @@
 		"morgan": "^1.9.1",
 		"nodemon": "^2.0.2",
 		"sequelize-cli": "^5.5.1"
+	},
+	"husky": {
+		"hooks": {
+			"commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+			"prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
+		}
+	},
+	"config": {
+		"commitizen": {
+			"path": "./node_modules/cz-conventional-changelog"
+		}
 	}
 }
