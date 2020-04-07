@@ -17,7 +17,7 @@ class UserController {
 	}
 
 	async find(request, response, next) {
-		const username = request.params.id;
+		const { username } = request.params;
 		const [user] = await connection('users')
 			.select([
 				'username',
@@ -91,7 +91,7 @@ class UserController {
 			: null;
 
 		//	Finding the User
-		const username = request.params.id;
+		const { username } = request.params;
 		let { password, status } = request.body.user;
 		if (password) password = bcrypt.hashSync(password, 14);
 		const [user] = await connection('users')
@@ -100,7 +100,7 @@ class UserController {
 		if (!user) return next(errors.USER_NOT_FOUND());
 
 		//	Updating the User
-		const updatedUser = await connection('users').where(user).update(
+		const [updatedUser] = await connection('users').where(user).update(
 			{
 				password,
 				status,
@@ -114,7 +114,7 @@ class UserController {
 
 	async remove(request, response, next) {
 		//	Finding the User
-		const username = request.params.id;
+		const { username } = request.params;
 		const [user] = await connection('users')
 			.select('username')
 			.where('username', username);

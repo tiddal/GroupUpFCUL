@@ -70,6 +70,13 @@ const errors = {
 		error.detail = 'Sorry, that student does not exist in our system.';
 		return error;
 	},
+	ADMIN_NOT_FOUND: () => {
+		const error = new Error('Admin Not Found');
+		error.title = 'Admin Not Found';
+		error.status = 404;
+		error.detail = 'Sorry, that admin does not exist in our system.';
+		return error;
+	},
 	INVALID_JSON: () => {
 		const error = new Error('Invalid JSON');
 		error.title = 'Invalid JSON';

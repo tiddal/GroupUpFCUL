@@ -1,7 +1,6 @@
 const express = require('express');
-const router = express.Router();
+const users = express.Router();
 const multer = require('multer');
-const { celebrate, Segments, Joi } = require('celebrate');
 
 //  Middleware
 const multerConfig = require('../middleware/multer');
@@ -17,34 +16,30 @@ const UserValidator = require('../validators/UserValidator');
 //  Controllers
 const UserController = require('../controllers/UserController');
 
-router.get('/', UserController.index);
-router.get('/:id', UserValidator.find, UserController.find);
-router.post('/', UserValidator.create, UserController.store);
-router.put(
-	'/:id',
+//	Routes
+const StudentsRoutes = require('./StudentsRoutes');
+const ProfessorsRoutes = require('./ProfessorsRoutes');
+const AdminsRoutes = require('./AdminsRoutes');
+
+users.use('/students', StudentsRoutes);
+users.use('/professors', ProfessorsRoutes);
+users.use('/admins', AdminsRoutes);
+users.get('/', UserController.index);
+users.get('/:username', UserValidator.find, UserController.find);
+users.post('/', UserValidator.create, UserController.store);
+users.put(
+	'/:username',
 	UserValidator.find,
 	UserValidator.edit,
 	UserController.modify
 );
-router.delete('/:id', UserValidator.find, UserController.remove);
+users.delete('/:username', UserValidator.find, UserController.remove);
 
-// const UserController = require('./controllers/User');
-// const StudentController = require('./controllers/Student');
 // const ProfessorController = require('./controllers/Professor');
-// const AdminsController = require('./controllers/Admin');
-
-// router.get('/students/', StudentController.selectAll);
-// router.get('/students/:id', StudentController.selectById);
 
 // router.get('/professors/', ProfessorController.selectAll);
 // router.get('/professors/:id', ProfessorController.selectById);
 
-// router.get('/admins/', AdminsController.selectAll);
-// router.get('/admins/:id', AdminsController.selectById);
-
-// router.get('/', loginRequired, adminRequired, UserController.selectAll);
-// router.get('/:id', UserController.selectById);
-// router.post('/', UserController.insert);
 // router.put(
 // 	'/:id',
 // 	loginRequired,
@@ -54,4 +49,4 @@ router.delete('/:id', UserValidator.find, UserController.remove);
 // );
 // router.delete('/:id', UserController.delete);
 
-module.exports = router;
+module.exports = users;

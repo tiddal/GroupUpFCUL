@@ -3,7 +3,7 @@ const { celebrate, Segments, Joi } = require('celebrate');
 module.exports = {
 	find: celebrate({
 		[Segments.PARAMS]: Joi.object().keys({
-			id: Joi.string().required(),
+			username: Joi.string().required(),
 		}),
 	}),
 
