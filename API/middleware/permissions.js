@@ -1,45 +1,37 @@
 require('dotenv').config();
 const error = require('../utils/errors');
-
-const Admin = require('../db/models/Admin');
-const User = require('../db/models/User');
+const connection = require('../db/config/connection');
 
 module.exports = {
-	sessionRequired: async (req, res, next) => {
-		if (!(req.session && req.session.userId)) {
-			return next();
-		}
-		try {
-			const user = await User.findByPk(req.session.userId, {
-				attributes: { exclude: ['password'] }
-			});
-			if (!user) return next();
-			req.user = user;
-			res.locals.user = user;
+	sessionRequired: async (request, response, next) => {
+		if (!(request.session && request.session.username)) return next();
+		const [user] = await connection('users')
+			.select('username')
+			.where('username', request.session.username);
+		if (!user) return next();
+		request.user = user;
+		response.locals.user = user;
+		return next();
+	},
 
-			return next();
-		} catch (err) {
-			return next(error.DB_DOWN());
-		}
-	},
-	loginRequired: (req, res, next) => {
-		if (!req.user) {
-			return next(error.LOGIN_REQUIRED());
-		}
+	loginRequired: (request, response, next) => {
+		if (!request.user) return next(error.LOGIN_REQUIRED());
 		return next();
 	},
-	adminRequired: async (req, res, next) => {
-		const admin = await Admin.findOne({ where: { userId: req.user.id } });
-		if (!admin) {
-			return next(error.NO_ADMIN_PERMISSIONS());
-		}
+
+	adminRequired: async (request, response, next) => {
+		const [admin] = await connection('admins')
+			.select('username')
+			.where('username', request.user.username);
+		if (!admin) return next(error.NO_ADMIN_PERMISSIONS());
 		return next();
 	},
-	selfRequired: async (req, res, next) => {
-		const admin = await Admin.findOne({ where: { userId: req.user.id } });
-		if (req.params.id === req.user.id.toString() || admin) {
-			return next();
-		}
+
+	selfRequired: async (request, response, next) => {
+		const [admin] = await connection('admins')
+			.select('username')
+			.where('username', request.user.username);
+		if (request.params.id === request.user.username || admin) return next();
 		return next(error.INVALID_IDENTITY());
-	}
+	},
 };
