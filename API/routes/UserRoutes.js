@@ -17,13 +17,14 @@ const UserValidator = require('../validators/UserValidator');
 const UserController = require('../controllers/UserController');
 
 //	Routes
-const StudentsRoutes = require('./StudentsRoutes');
-const ProfessorsRoutes = require('./ProfessorsRoutes');
-const AdminsRoutes = require('./AdminsRoutes');
+const StudentRoutes = require('./StudentRoutes');
+const ProfessorRoutes = require('./ProfessorRoutes');
+const AdminRoutes = require('./AdminRoutes');
 
-users.use('/students', StudentsRoutes);
-users.use('/professors', ProfessorsRoutes);
-users.use('/admins', AdminsRoutes);
+users.use('/students', StudentRoutes);
+users.use('/professors', ProfessorRoutes);
+users.use('/admins', AdminRoutes);
+
 users.get('/', UserController.index);
 users.get('/:username', UserValidator.find, UserController.find);
 users.post('/', UserValidator.create, UserController.store);
@@ -34,11 +35,6 @@ users.put(
 	UserController.modify
 );
 users.delete('/:username', UserValidator.find, UserController.remove);
-
-// const ProfessorController = require('./controllers/Professor');
-
-// router.get('/professors/', ProfessorController.selectAll);
-// router.get('/professors/:id', ProfessorController.selectById);
 
 // router.put(
 // 	'/:id',
