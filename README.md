@@ -43,30 +43,15 @@
 ### Success: 200 OK
 
 ```JSON
-[
-   {
-      "id": 1,
+{
+   "students": [{
       "username": "fc12345",
-      "firstName": "Exemplo",
-      "lastName": "Aluno",
-      "email": "fc12345@alunos.fc.ul.pt",
-      "status": "offline",
-      "avatarURL": null,
-      "createdAt": "2020-03-18T14:30:22.000Z",
-      "updatedAt": "2020-03-18T14:30:22.000Z",
-   },
-   {
-      "id": 2,
+   }],
+   "professors": [{
       "username": "fc00000",
-      "firstName": "Exemplo",
-      "lastName": "Professor",
-      "email": "fc00000@alunos.fc.ul.pt",
-      "status": "online",
-      "avatarURL": null,
-      "createdAt": "2020-04-18T14:30:22.000Z",
-      "updatedAt": "2020-04-18T14:30:22.000Z",
-   }
-]
+   }],
+   "admins": []
+}
 ```
 
 ### Erros possiveis
