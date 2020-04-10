@@ -32,7 +32,7 @@ class UserController {
 		return response.json(user);
 	}
 
-	async store(request, response, next) {
+	async store(request, response) {
 		const createdUsers = {
 			students: [],
 			professors: [],

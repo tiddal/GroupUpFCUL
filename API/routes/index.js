@@ -5,11 +5,9 @@ const router = express.Router();
 //	Routes
 const UserRoutes = require('./UserRoutes');
 const AuthRoutes = require('./AuthRoutes');
-const programsRoutes = require('./programs');
-const coursesRoutes = require('./courses');
-const classesRoutes = require('./classes');
+const CourseRoutes = require('./CourseRoutes');
 
-const pageNotFound = require('./pageNotFound');
+const PageNotFound = require('./PageNotFound');
 
 router.use(
 	'/files',
@@ -17,11 +15,8 @@ router.use(
 );
 router.use('/users', UserRoutes);
 router.use('/auth', AuthRoutes);
+router.use('/courses', CourseRoutes);
 
-router.use('/programs', programsRoutes);
-router.use('/courses', coursesRoutes);
-router.use('/classes', classesRoutes);
-
-router.use(pageNotFound);
+router.use(PageNotFound);
 
 module.exports = router;

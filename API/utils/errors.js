@@ -1,4 +1,4 @@
-const errors = {
+module.exports = {
 	LOGIN_REQUIRED: () => {
 		const error = new Error('Not Logged In');
 		error.title = 'Not Logged In';
@@ -20,14 +20,6 @@ const errors = {
 		error.detail = "Sorry, we can't find the page you were looking for.";
 		return error;
 	},
-	DB_DOWN: () => {
-		const error = new Error('Service Unavailable');
-		error.title = 'Service Unavailable';
-		error.status = 503;
-		error.detail =
-			'Sorry, this service seems to be unavailable... Try again later.';
-		return error;
-	},
 	USER_NOT_FOUND: () => {
 		const error = new Error('User Not Found');
 		error.title = 'User Not Found';
@@ -35,11 +27,11 @@ const errors = {
 		error.detail = 'Sorry, that user does not exist in our system.';
 		return error;
 	},
-	PROGRAM_NOT_FOUND: () => {
-		const error = new Error('Program Not Found');
-		error.title = 'Program Not Found';
+	UNIT_NOT_FOUND: () => {
+		const error = new Error('Unit Not Found');
+		error.title = 'Unit Not Found';
 		error.status = 404;
-		error.detail = 'Sorry, that program does not exist in our system.';
+		error.detail = 'Sorry, that unit does not exist in our system.';
 		return error;
 	},
 	COURSE_NOT_FOUND: () => {
@@ -77,25 +69,6 @@ const errors = {
 		error.detail = 'Sorry, that admin does not exist in our system.';
 		return error;
 	},
-	INVALID_JSON: () => {
-		const error = new Error('Invalid JSON');
-		error.title = 'Invalid JSON';
-		error.status = 400;
-		error.detail =
-			'Could not parse the given JSON. Make sure your JSON have all the requierd fields.';
-		return error;
-	},
-	VALIDATION_FAILED: (err) => {
-		const error = new Error('Validation Failed');
-		error.title = 'Validation Failed';
-		error.status = 422;
-		error.detail = {
-			field: err.path,
-			message: err.message,
-			instance: err.instance,
-		};
-		return error;
-	},
 	UNIQUE_CONSTRAIN: (err) => {
 		const error = new Error('Unique Constrain Error');
 		error.title = 'Duplicate Entry';
@@ -120,6 +93,12 @@ const errors = {
 		error.detail = 'Wrong email or password.';
 		return error;
 	},
+	DB_DOWN: () => {
+		const error = new Error('Service Unavailable');
+		error.title = 'Service Unavailable';
+		error.status = 503;
+		error.detail =
+			'Sorry, this service seems to be unavailable... Try again later.';
+		return error;
+	},
 };
-
-module.exports = errors;
