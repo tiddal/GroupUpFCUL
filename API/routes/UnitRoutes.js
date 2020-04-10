@@ -7,7 +7,7 @@ const UnitValidator = require('../validators/UnitValidator');
 
 const ClassRoutes = require('./ClassRoutes');
 
-units.use('/:unit_code/classes', ClassRoutes);
+units.use('/:unit_code/classes', UnitValidator.find, ClassRoutes);
 
 units.get('/', UnitController.index);
 units.get('/:unit_code', UnitValidator.find, UnitController.find);
