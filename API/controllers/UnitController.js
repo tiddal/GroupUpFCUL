@@ -83,6 +83,7 @@ class UnitController {
 
 	async modify(request, response, next) {
 		const unit = this.findUnit(request, response, next);
+		if (!unit) return next();
 		const { name, semester, initials, ects } = request.body.unit;
 		const [updatedUnit] = await connection('units')
 			.where(unit)
@@ -98,6 +99,7 @@ class UnitController {
 
 	async remove(request, response, next) {
 		const unit = this.findUnit(request, response, next);
+		if (!unit) return next();
 		await connection('units').where(unit).del();
 		return response.status(204).send();
 	}
@@ -112,7 +114,8 @@ class UnitController {
 	}
 
 	async findUnit(request, response, next) {
-		await this.findCourse(request, response, next);
+		const course = await this.findCourse(request, response, next);
+		if (!course) return next();
 		const { unit_code } = request.params;
 		const [unit] = await connection('units')
 			.select('code')

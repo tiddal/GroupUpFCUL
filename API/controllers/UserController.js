@@ -101,6 +101,7 @@ class UserController {
 
 		//	Finding the User
 		const user = await this.findUser(request, response, next);
+		if (!user) return next();
 
 		//	Updating the User
 		let { password, status } = request.body.user;
@@ -120,6 +121,7 @@ class UserController {
 	async remove(request, response, next) {
 		//	Finding the User
 		const user = await this.findUser(request, response, next);
+		if (!user) return next();
 
 		// Deleting the user
 		await connection('users').where(user).del();

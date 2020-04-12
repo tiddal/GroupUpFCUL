@@ -87,6 +87,7 @@ class CourseController {
 
 	async modify(request, response, next) {
 		const course = await this.findCourse(request, response, next);
+		if (!course) return next();
 		const { name, initials } = request.body.course;
 		const [updatedCourse] = await connection('courses').where(course).update(
 			{
@@ -100,6 +101,7 @@ class CourseController {
 
 	async remove(request, response, next) {
 		const course = await this.findCourse(request, response, next);
+		if (!course) return next();
 		await connection('courses').where(course).del();
 		return response.status(204).send();
 	}
