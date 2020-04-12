@@ -36,10 +36,10 @@ class AuthController {
 					'avatar_url'
 				)
 				.where('username', username);
-			if (!user) return next(errors.USER_NOT_FOUND());
+			if (!user) return next(errors.USER_NOT_FOUND(username, 'cookies'));
 			return response.json(user);
 		} catch (error) {
-			return next(errors.USER_NOT_FOUND());
+			return next(errors.LOGIN_REQUIRED());
 		}
 	}
 }

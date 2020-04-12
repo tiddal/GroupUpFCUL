@@ -25,7 +25,7 @@ class StudentController {
 				'users.email',
 			])
 			.where('students.username', username);
-		if (!student) return next(errors.STUDENT_NOT_FOUND());
+		if (!student) return next(errors.STUDENT_NOT_FOUND(username, 'params'));
 		return response.json(student);
 	}
 
@@ -34,7 +34,7 @@ class StudentController {
 		const [student] = await connection('students')
 			.select('username')
 			.where('username', username);
-		if (!student) return next(errors.STUDENT_NOT_FOUND());
+		if (!student) return next(errors.STUDENT_NOT_FOUND(username, 'params'));
 		const {
 			working_student,
 			github,
