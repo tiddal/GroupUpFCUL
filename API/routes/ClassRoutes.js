@@ -33,6 +33,7 @@ classes.post('/', ClassValidator.create, ClassController.store);
 classes.put(
 	'/:year/:class_number',
 	ClassValidator.find,
+	ClassValidator.edit,
 	ClassController.modify
 );
 classes.delete(

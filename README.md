@@ -467,7 +467,7 @@ Gets all students
     "facebook_url": null,
     "instagram_url": null,
     "twitter_url": null,
-    "first_name": "Student",
+    "first_name": "Student2",
     "last_name": "Example",
     "email": "student2@example.com"
   }
@@ -1611,6 +1611,16 @@ Gets all classes from a unit
 Gets a class by its year and number
 
 #### Success: 200 OK
+```JSON
+{
+  "unit_code": 11111,
+  "number": "T1",
+  "begins_at": "10:30:00",
+  "ends_at": "12:00:00",
+  "week_day": 2,
+  "academic_year": "2019-2020"
+}
+```
 
 #### Failure: 404 Not Found
 
@@ -1618,11 +1628,190 @@ Gets a class by its year and number
 {
   "statusCode": 404,
   "error": "Not Found",
-  "message": "The unit with the code 11111 was not found",
+  "message": "The class T2 from 2019-2020 was not found",
   "validation": {
     "source": "params",
     "values": [
-      11111
+      "T2",
+      "2019-2020"
+    ]
+  }
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"year\" length must be 9 characters long",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "year"
+    ]
+  }
+}
+```
+
+<a name="createclass"></a>
+
+## POST /courses/{code}/units/{unit_code}/classes
+
+Adds a class to a unit
+
+#### Body:
+
+```JSON
+{
+  "classes": [
+    {
+      "number": "T1",
+      "begins_at": "10:30",
+      "ends_at": "12:00",
+      "week_day": 2,
+      "academic_year": "2019-2020"
+    },
+    {
+      "number": "T2",
+      "begins_at": "10:30",
+      "ends_at": "12:00",
+      "week_day": 4,
+      "academic_year": "2019-2020"
+    }
+  ]
+}
+```
+
+
+#### Success: 201 Created
+
+```JSON
+[
+  {
+    "unit_code": 11111,
+    "number": "T1",
+    "begins_at": "10:30:00",
+    "ends_at": "12:00:00",
+    "week_day": 2,
+    "academic_year": "2019-2020"
+  },
+  {
+    "unit_code": 11111,
+    "number": "T2",
+    "begins_at": "10:30:00",
+    "ends_at": "12:00:00",
+    "week_day": 4,
+    "academic_year": "2019-2020"
+  }
+]
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
+}
+```
+
+#### Failure: 409 Conflict
+
+```JSON
+{
+  "error": {
+    "statusCode": 409,
+    "error": "Conflict",
+    "message": "This field(s) must be unique in the database.",
+    "detail": "Key (unit_code, number, academic_year)=(11111, T1, 2019-2020) already exists."
+  },
+  "created": []
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"classes[0].number\" is not allowed to be empty",
+  "validation": {
+    "source": "body",
+    "keys": [
+      "classes.0.number"
+    ]
+  }
+}
+```
+
+<a name="updateclass"></a>
+
+### POST /courses/{code}/units/{unit_code}/classes/{year}/{class_number}
+
+Edits a class
+
+#### Body:
+```JSON
+{
+  "class": {
+    "number": "T2",
+    "begins_at": "12:00",
+    "ends_at": "13:30",
+    "week_day": 3,
+    "academic_year": "2020-2021",
+  }
+}
+```
+
+#### Success: 200 OK
+
+```JSON
+{
+  "unit_code": 11111,
+  "number": "T2",
+  "begins_at": "12:00:00",
+  "ends_at": "13:30:00",
+  "week_day": 3,
+  "academic_year": "2020-2021"
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The class T1 from 2019-2020 was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "T1",
+      "2019-2020"
     ]
   }
 }
@@ -1634,227 +1823,122 @@ Gets a class by its year and number
 {
   "statusCode": 400,
   "error": "Bad Request",
-  "message": "\"unit.semester\" must be a number",
+  "message": "\"class.number\" must only contain alpha-numeric characters",
   "validation": {
     "source": "body",
     "keys": [
-      "unit.semester"
+      "class.number"
     ]
   }
+}
+```
+<a name="deleteclass"></a>
+
+### DELETE /courses/{code}/units/{unit_code}/classes/{year}/{class_number}
+
+Removes a class from a unit
+
+#### Success: 204 No Content
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The class T1 from 2019-2020 was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "T1",
+      "2019-2020"
+    ]
+  }
+}
+```
+<a name="allstudentsfromclass"></a>
+
+### GET /courses/{code}/units/{unit_code}/classes/{year}/{class_number}
+
+Gets all students from a class
+
+#### Success: 200 OK
+
+```JSON
+[
+  {
+    "student_username": "student",
+    "first_name": "Student",
+    "last_name": "Example",
+    "email": "student@example.com",
+    "avatar_url": null,
+    "status": "offline"
+  },
+  {
+    "student_username": "student2",
+    "first_name": "Student2",
+    "last_name": "Example",
+    "email": "student2@example.com",
+    "avatar_url": null,
+    "status": "online"
+  }
+]
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+<a name="studenttoclass"></a>
+
+### POST /courses/{code}/units/{unit_code}/classes/{year}/{class_number}
+
+Adds a student to a class
+
+#### Body:
+```JSON
+{
+  "students": [
+    {
+      "username": "student"
+    },
+    {
+      "username": "student2"
+    }
+  ]
+}
+```
+
+#### Success: 200 OK
+```JSON
+[
+  {
+    "student_username": "student"
+  },
+  {
+    "student_username": "student2"
+  }
+]
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
 }
 ```
 
 ---
 
-### Erros Possiveis
-
-401 Unauthorized
-
-```JSON
-{
-   "title": "Not logged in",
-  "status": 401,
-  "detail": "You must be logged in to access this resource."
-}
-```
-
-```JSON
-{
-   "title": "Course Not Found",
-  "status": 404,
-  "detail": "Sorry, that course does not exist in our system."
-}
-```
-
-```JSON
-{
-   "title": "Program Not Found",
-  "status": 404,
-  "detail": "Sorry, that course does not exist in our system."
-}
-```
-
-## GET /programs/{id}/courses/{courseId}/classes/{classId}
-
-```JSON
-
-{
-  "classes": [
-    {
-      "number": "T1",
-      "beginsAt": "10:00",
-      "endsAt": "11:30",
-      "weekDay": 1,
-      "academicYear": "2019/2020"
-    }
-
-```
-
-### Erros Possiveis
-
-401 Unauthorized
-
-```JSON
-{
-   "title": "Not logged in",
-  "status": 401,
-  "detail": "You must be logged in to access this resource."
-}
-```
-
-```JSON
-{
-   "title": "Class Not Found",
-  "status": 404,
-  "detail": "Sorry, that course does not exist in our system."
-}
-```
-
-```JSON
-{
-   "title": "Course Not Found",
-  "status": 404,
-  "detail": "Sorry, that course does not exist in our system."
-}
-```
-
-```JSON
-{
-   "title": "Program Not Found",
-  "status": 404,
-  "detail": "Sorry, that course does not exist in our system."
-}
-```
-
-## POST /programs/{id}/courses/{courseId}/classes/
-
-```JSON
-{
-      "number": "T5",
-      "beginsAt": "15:00",
-      "endsAt": "16:30",
-      "weekDay": 1,
-      "academicYear": "2019/2020"
-    }
-
-```
-
-### Erros Possiveis
-
-400 Bad Request
-
-```JSON
-{
-   "title": "Invalid JSON",
-  "status": 400,
-  "detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
-}
-```
-
-## PUT /programs/{id}/courses/{courseId}/classes/{classId}
-
-```JSON
-{
-   "number": "T5",
-   "beginsAt": "15:00",
-   "endsAt": "16:30",
-   "weekDay": 3,
-   "academicYear": "2019/2020"
-}
-```
-
-### Erros Possiveis
-
-400 Bad Request
-
-```JSON
-{
-   "title": "Invalid JSON",
-  "status": 400,
-  "detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
-}
-```
-
-422 Unprocessable Entity
-
-```JSON
-{
-   "title": "Validation Failed",
-  "status": 422,
-  "detail": {
-      "field": err.path,
-      "message": err.message,
-      "instance": err.instance
-   }
-}
-```
-
-409 Conflict
-
-```JSON
-{
-   "title": "Duplicate Entry",
-  "status": 409,
-  "detail": {
-      "message": "This field(s) must be unique in the database.",
-      "value": "username"
-   }
-}
-```
-
-404 Not Found
-
-```JSON
-{
-   "title": "Class Not Found",
-  "status": 404,
-  "detail": "Sorry, that class does not exist in our system."
-}
-```
-
-```JSON
-{
-   "title": "Program Not Found",
-  "status": 404,
-  "detail": "Sorry, that program does not exist in our system."
-}
-```
-
-```JSON
-{
-   "title": "Course Not Found",
-  "status": 404,
-  "detail": "Sorry, that course does not exist in our system."
-}
-```
-
-## DELETE /programs/{id}/courses/{courseId}/classes/{classId}
-
-## Erros Possiveis
-
-```JSON
-{
-   "title": "Program Not Found",
-  "status": 404,
-  "detail": "Sorry, that program does not exist in our system."
-}
-```
-
-```JSON
-{
-   "title": "Course Not Found",
-  "status": 404,
-  "detail": "Sorry, that course does not exist in our system."
-}
-```
-
-```JSON
-{
-   "title": "Class Not Found",
-  "status": 404,
-  "detail": "Sorry, that class does not exist in our system."
-}
-```
 
 ## GET /programs/{id}/courses/{courseId}/classes/{classId}/students
 
