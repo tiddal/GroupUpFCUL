@@ -1,12 +1,12 @@
 {
-	"name": "server",
+	"name": "backend",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
+	"main": "API/server.js",
 	"scripts": {
-		"dev": "cross-env NODE_ENV=development nodemon API/server.js",
-		"test": "cross-env NODE_ENV=test nodemon API/server.js",
-		"start": "NODE_ENV=production node API/server.js"
+		"dev": "cross-env NODE_ENV=development nodemon server.js",
+		"test": "cross-env NODE_ENV=test nodemon server.js",
+		"start": "NODE_ENV=production node server.js"
 	},
 	"keywords": [],
 	"author": "",

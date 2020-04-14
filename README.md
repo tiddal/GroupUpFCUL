@@ -4,10 +4,10 @@
 
 | Action                                | Method | Permissions |               Path               |
 | :------------------------------------ | :----- | :---------: | :------------------------------: |
-| Logs a user in                        | POST   |    None     |          [[+](#login)]           |
-| Logs a user out                       | GET    |    User     |          [[+](#logout)]          |
+| Logs an user in                       | POST   |    None     |          [[+](#login)]           |
+| Logs an user out                      | GET    |    User     |          [[+](#logout)]          |
 | Gets all users                        | GET    |    Admin    |         [[+](#allusers)]         |
-| Gets a user by their username         | GET    |    User     |         [[+](#userbyid)]         |
+| Gets an user by their username        | GET    |    User     |         [[+](#userbyid)]         |
 | Creates a new user                    | POST   |    Admin    |        [[+](#createuser)]        |
 | Edits an user                         | PUT    |    Admin    |        [[+](#updateuser)]        |
 | Deletes an user                       | DELETE |    Admin    |        [[+](#deleteuser)]        |
@@ -22,14 +22,14 @@
 | Edits an admin                        | PUT    |    Admin    |       [[+](#updateadmin)]        |
 | Gets all courses                      | GET    |    User     |        [[+](#allcourses)]        |
 | Gets a course by its code             | GET    |    User     |        [[+](#coursebyid)]        |
-| Gets a course by its code             | GET    |    User     |        [[+](#coursebyid)]        |
 | Creates a new course                  | POST   |    Admin    |       [[+](#createcourse)]       |
+| Edits a course                        | PUT    |    Admin    |       [[+](#updatecourse)]       |
 | Deletes a course                      | DELETE |    Admin    |       [[+](#deletecourse)]       |
 | Gets all units from a course          | GET    |    User     |         [[+](#allunits)]         |
 | Gets a unit from a course by its code | GET    |    User     |         [[+](#unitbyid)]         |
 | Creates units for a course            | POST   |    Admin    |        [[+](#createunit)]        |
 | Edits a unit                          | PUT    |    Admin    |        [[+](#updateunit)]        |
-| Removes a unit from a course          | DELETE |    Admin    |        [[+](#removeunit)]        |
+| Deletes a unit                        | DELETE |    Admin    |        [[+](#deleteunit)]        |
 | Gets all classes from a unit          | GET    |    User     |        [[+](#allclasses)]        |
 | Gets a class by its year and number   | GET    |    User     |        [[+](#classbyid)]         |
 | Adds a class to a unit                | POST   |    Admin    |       [[+](#createclass)]        |
@@ -46,9 +46,10 @@
 
 ## Authentication:
 
+<a name="login"></a>
+
 ### POST /login
 
-<a name="login"></a>
 Logs a user in
 
 #### Body:
@@ -80,9 +81,10 @@ Logs a user in
 }
 ```
 
+<a name="logout"></a>
+
 ### GET /logout
 
-<a name="logout"></a>
 Logs a user out
 
 #### Success: 204 No Content
@@ -91,9 +93,10 @@ Logs a user out
 
 ## Users:
 
+<a name="allusers"></a>
+
 ### GET /users
 
-<a name="allusers"></a>
 Gets all users
 
 #### Success: 200 OK
@@ -133,7 +136,6 @@ Gets all users
 
 ### GET /users/{username}
 
-<a name="userbyid"></a>
 Gets a user by their username
 
 #### Success: 200 OK
@@ -195,7 +197,6 @@ Gets a user by their username
 
 ### POST /users
 
-<a name="createuser"></a>
 Creates a new user
 
 #### Body:
@@ -315,7 +316,6 @@ Creates a new user
 
 ### PUT /users/{username}
 
-<a name="updateuser"></a>
 Edits an user
 
 #### Body:
@@ -389,7 +389,6 @@ Edits an user
 
 ### DELETE /users/{username}
 
-<a name="deleteuser"></a>
 Deletes an user
 
 #### Success: 204 No Content
@@ -440,9 +439,10 @@ Deletes an user
 
 ## Students
 
+<a name="allstudents"></a>
+
 ### GET /users/students
 
-<a name="allstudents"></a>
 Gets all students
 
 #### Success: 200 OK
@@ -547,9 +547,10 @@ Gets a student by their username
 }
 ```
 
+<a name="updatestudent"></a>
+
 ### PUT /users/students/{username}
 
-<a name="updatestudent"></a>
 Edits a student
 
 #### Body:
@@ -625,9 +626,10 @@ Edits a student
 
 ## Professors
 
+<a name="allprofessors"></a>
+
 ### GET /users/professors
 
-<a name="allprofessors"></a>
 Gets all professors
 
 #### Success: 200 OK
@@ -663,9 +665,10 @@ Gets all professors
 }
 ```
 
+<a name="professorbyid"></a>
+
 ### GET /users/professors/{username}
 
-<a name="professorbyid"></a>
 Gets a professor by their username
 
 #### Success: 200 OK
@@ -723,9 +726,10 @@ Gets a professor by their username
 }
 ```
 
+<a name="updateprofessor"></a>
+
 ### PUT /users/professors/{username}
 
-<a name="updateprofessor"></a>
 Edits a professor
 
 #### Body:
@@ -795,9 +799,10 @@ Edits a professor
 
 ## Admins
 
+<a name="alladmins"></a>
+
 ### GET /users/admins
 
-<a name="alladmins"></a>
 Gets all admins
 
 #### Success: 200 OK
@@ -831,9 +836,10 @@ Gets all admins
 }
 ```
 
+<a name="adminbyid"></a>
+
 ### GET /users/admins/{username}
 
-<a name="adminbyid"></a>
 Gets an admin by their username
 
 #### Success: 200 OK
@@ -890,18 +896,19 @@ Gets an admin by their username
 }
 ```
 
+<a name="updateadmin"></a>
+
 ### PUT /users/admins/{username}
 
-<a name="updateadmin"></a>
 Edits an admin
 
 #### Body:
 
 ```JSON
 {
-	"admin": {
-		"previleges": 1
-	}
+  "admin": {
+    "previleges": 1
+  }
 }
 ```
 
@@ -958,396 +965,686 @@ Edits an admin
 
 ---
 
-## GET /programs/
+## Courses
+
+<a name="allcourses"></a>
+
+### GET /courses
+
+Gets all courses
+
+#### Success: 200 OK
 
 ```JSON
-
-{
-      "code": "L079",
-      "name": "Tecnologias de Informação",
-      "cycle": 1,
-      "initials": "LTI",
-      "courses": [
-        {
-          "code": 26719,
-          "name": "Projeto de Tecnologias de Informação",
-          "initials": "PTI",
-          "ects": 6
-        },
-        {
-          "code": 26718,
-          "name": "Projeto de Tecnologias de Redes",
-          "initials": "PTR",
-          "ects": 6
-        },
-        {
-          "code": 26716,
-          "name": "Planeamento e Gestão de Projeto",
-          "initials": "PGP",
-          "ects": 6
-        },
-        {
-          "code": 22701,
-          "name": "Introdução às Probabilidades e Estatística",
-          "initials": "IPE",
-          "ects": 6
-        }
-      ]
-    },
-    {
-      "code": "9119",
-      "name": "Engenharia Informática",
-      "cycle": 1,
-      "initials": "LEI",
-      "courses": [
-        {
-          "code": 26737,
-          "name": "Teoria da Computação",
-          "initials": "TC",
-          "ects": 6
-        },
-        {
-          "code": 26704,
-          "name": "Redes de Computadores",
-          "initials": "RC",
-          "ects": 6
-        },
-        {
-          "code": 22701,
-          "name": "Introdução às Probabilidades e Estatística",
-          "initials": "IPE",
-          "ects": 6
-        }
-      ]
-      }
+[
+  {
+    "code": "L111",
+    "name": "Course One",
+    "cycle": 1,
+    "initials": "C1"
+  },
+  {
+    "code": "L112",
+    "name": "Course Two",
+    "cycle": 1,
+    "initials": "C2"
+  }
+]
 ```
 
-### Erros Possiveis
-
-401 Unauthorized
+#### Failure: 401 Unauthorized
 
 ```JSON
 {
-   "title": "Not logged in",
-  "status": 401,
-  "detail": "You must be logged in to access this resource."
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
 }
 ```
 
-## GET /programs/{id}
+<a name="coursebyid"></a>
 
-```JSON
+### GET /courses/{code}
 
-{
-  "programs": [
-    {
-      "code": "L079",
-      "name": "Tecnologias de Informação",
-      "cycle": 1,
-      "initials": "LTI",
-      "courses": [
-        {
-          "code": 26719,
-          "name": "Projeto de Tecnologias de Informação",
-          "initials": "PTI",
-          "ects": 6
-        },
-        {
-          "code": 26718,
-          "name": "Projeto de Tecnologias de Redes",
-          "initials": "PTR",
-          "ects": 6
-        },
-        {
-          "code": 26716,
-          "name": "Planeamento e Gestão de Projeto",
-          "initials": "PGP",
-          "ects": 6
-        },
-        {
-          "code": 22701,
-          "name": "Introdução às Probabilidades e Estatística",
-          "initials": "IPE",
-          "ects": 6
-        }
-      ]
-    },
-  ]
-}
+Gets a course by its code
 
-
-```
-
-### Erros Possiveis
-
-401 Unauthorized
+#### Success: 200 OK
 
 ```JSON
 {
-   "title": "Not logged in",
-  "status": 401,
-  "detail": "You must be logged in to access this resource."
-}
-```
-
-404 Not Found
-
-```JSON
-{
-   "title": "Program Not Found",
-  "status": 404,
-  "detail": "Sorry, that program does not exist in our system."
-}
-```
-
-## POST /programs/
-
-```JSON
-{
-      "code": "L069",
-      "name": "Estatística Aplicada",
-      "cycle": 1,
-      "initials": "LEA",
-      "courses": [
-        {
-          "code": 1111,
-          "name": "Estatística Paramétrica",
-          "initials": "EPAR",
-          "ects": 6
-        }
-```
-
-### Erros Possiveis
-
-401 Unauthorized
-
-```JSON
-{
-   "title": "Not an Admin",
-  "status": 401,
-  "detail": "You don't have admin previleges to access this resource."
-}
-```
-
-400 Bad Request
-
-```JSON
-{
-   "title": "Invalid JSON",
-  "status": 400,
-  "detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
-}
-```
-
-409 Conflict
-
-```JSON
-{
-   "title": "Duplicate Entry",
-  "status": 409,
-  "detail": {
-      "message": "This field(s) must be unique in the database.",
-      "value": "code"
-   }
-}
-```
-
-## PUT /programs/{id}
-
-````JSON
-
-{
-   "code": "L069",
-  "name": "Tecnologias de Informação",
+  "code": "L111",
+  "name": "Course One",
   "cycle": 1,
-  "initials": "LTI",
-}
-
-
-### Erros Possiveis
-
-400 Bad Request
-
-```JSON
-{
-   "title": "Invalid JSON",
-  "status": 400,
-  "detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
-}
-````
-
-422 Unprocessable Entity
-
-```JSON
-{
-   "title": "Validation Failed",
-  "status": 422,
-  "detail": {
-      "field": err.path,
-      "message": err.message,
-      "instance": err.instance
-   }
+  "initials": "C1"
 }
 ```
 
-409 Conflict
+#### Failure: 404 Not Found
 
 ```JSON
 {
-   "title": "Duplicate Entry",
-  "status": 409,
-  "detail": {
-      "message": "This field(s) must be unique in the database.",
-      "value": error.value
-   }
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The course with the code L111 was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "L111"
+    ]
+  }
 }
 ```
 
-404 Not Found
+#### Failure: 401 Unauthorized
 
 ```JSON
 {
-   "title": "Program Not Found",
-  "status": 404,
-  "detail": "Sorry, that program does not exist in our system."
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
 }
 ```
 
-## DELETE /programs/{id}
-
-### Erros Possiveis
-
-404 Not Found
+#### Failure: 400 Bad Request
 
 ```JSON
 {
-   "title": "Program Not Found",
-  "status": 404,
-  "detail": "Sorry, that program does not exist in our system."
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"code\" must only contain alpha-numeric characters",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "code"
+    ]
+  }
 }
 ```
 
-## GET /programs/{id}/courses
+<a name="createcourse"></a>
+
+### POST /courses
+
+Creates a new course
+
+#### Body:
 
 ```JSON
-"courses": [
+{
+  "courses": [
+    {
+      "code": "L111",
+      "name": "Course One",
+      "cycle": 1,
+      "initials": "C1",
+      "units": [
         {
-          "code": 26719,
-          "name": "Projeto de Tecnologias de Informação",
-          "initials": "PTI",
-          "ects": 6
-        },
-        {
-          "code": 26718,
-          "name": "Projeto de Tecnologias de Redes",
-          "initials": "PTR",
-          "ects": 6
-        },
-        {
-          "code": 26716,
-          "name": "Planeamento e Gestão de Projeto",
-          "initials": "PGP",
-          "ects": 6
-        },
-        {
-          "code": 22701,
-          "name": "Introdução às Probabilidades e Estatística",
-          "initials": "IPE",
+          "code": 11111,
+          "name": "Unit One",
+          "semester": 1,
+          "initials": "U1",
           "ects": 6
         }
       ]
-```
-
-### Erros Possiveis
-
-401 Unauthorized
-
-```JSON
-{
-   "title": "Not logged in",
-  "status": 401,
-  "detail": "You must be logged in to access this resource."
-}
-```
-
-```JSON
-{
-   "title": "Program Not Found",
-  "status": 404,
-  "detail": "Sorry, that course does not exist in our system."
-}
-```
-
-## GET /programs/{id}/courses/{courseId}:
-
-```JSON
-        {
-          "code": 26719,
-          "name": "Projeto de Tecnologias de Informação",
-          "initials": "PTI",
-          "ects": 6
-        },
-      ]
-    },
-```
-
-### Erros Possiveis
-
-401 Unauthorized
-
-```JSON
-{
-   "title": "Not logged in",
-  "status": 401,
-  "detail": "You must be logged in to access this resource."
-}
-```
-
-```JSON
-{
-   "title": "Course Not Found",
-  "status": 404,
-  "detail": "Sorry, that course does not exist in our system."
-}
-```
-
-```JSON
-{
-   "title": "Program Not Found",
-  "status": 404,
-  "detail": "Sorry, that course does not exist in our system."
-}
-```
-
-## GET /programs/{id}/courses/{courseId}/classes
-
-```JSON
-{
-  "classes": [
-    {
-      "number": "T1",
-      "beginsAt": "10:00",
-      "endsAt": "11:30",
-      "weekDay": 1,
-      "academicYear": "2019/2020"
-    },
-    {
-      "number": "T2",
-      "beginsAt": "10:00",
-      "endsAt": "11:30",
-      "weekDay": 1,
-      "academicYear": "2019/2020"
-    },
-    {
-      "number": "T3",
-      "beginsAt": "10:00",
-      "endsAt": "11:30",
-      "weekDay": 1,
-      "academicYear": "2019/2020"
     }
   ]
 }
 ```
+
+#### Success: 201 Created
+
+```JSON
+[
+  {
+    "code": "L111",
+    "name": "Course One",
+    "units": [
+      {
+        "code": 11111,
+        "name": "Unit One"
+      }
+    ]
+  }
+]
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
+}
+```
+
+#### Failure: 409 Conflict
+
+```JSON
+{
+  "error": {
+    "statusCode": 409,
+    "error": "Conflict",
+    "message": "This field(s) must be unique in the database.",
+    "detail": "Key (code)=(L111) already exists."
+  },
+  "created": []
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"courses[0].code\" is not allowed to be empty",
+  "validation": {
+    "source": "body",
+    "keys": [
+      "courses.0.code"
+    ]
+  }
+}
+```
+
+<a name="updatecourse"></a>
+
+### PUT /courses/{code}
+
+Edits a course
+
+#### Body:
+
+```JSON
+{
+  "course":
+    {
+      "name": "Example",
+      "initials": "EX"
+    }
+}
+```
+
+#### Success: 200 OK
+
+```JSON
+{
+  "code": "L111",
+  "name": "Example",
+  "cycle": 1,
+  "initials": "EX"
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The course with the code L111 was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "L111"
+    ]
+  }
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"code\" must only contain alpha-numeric characters",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "code"
+    ]
+  }
+}
+```
+
+<a name="deletecourse"></a>
+
+### DELETE /courses/{code}
+
+Deletes a course
+
+#### Success: 204 No Content
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The course with the code L111 was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "L111"
+    ]
+  }
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"code\" must only contain alpha-numeric characters",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "code"
+    ]
+  }
+}
+```
+
+---
+
+## Units
+
+<a name="allunits"></a>
+
+### GET /courses/{code}/units
+
+Gets all units from a course
+
+#### Success: 200 OK
+
+```JSON
+[
+  {
+    "course_code": "L111",
+    "unit_code": 11111,
+    "name": "Unit One",
+    "semester": 5,
+    "initials": "U1",
+    "ects": 6
+  },
+  {
+    "course_code": "L111",
+    "unit_code": 11112,
+    "name": "Unit Two",
+    "semester": 6,
+    "initials": "U2",
+    "ects": 6
+  }
+]
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+<a name="unitbyid"></a>
+
+### GET /courses/{code}/units/{unit_code}
+
+Gets a unit from a course by its code
+
+#### Success: 200 OK
+
+```JSON
+{
+  "course_code": "L111",
+  "unit_code": 11111,
+  "name": "Unit One",
+  "semester": 5,
+  "initials": "U1",
+  "ects": 6
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The unit with the code 11111 was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      11111
+    ]
+  }
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"unit_code\" must be a number",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "unit_code"
+    ]
+  }
+}
+```
+
+<a name="createunit"></a>
+
+### POST /courses/{code}/units
+
+Creates units for a course
+
+#### Body:
+
+```JSON
+{
+  "units": [
+    {
+      "code": 11111,
+      "name": "Unit One",
+      "semester": 6,
+      "initials": "U1",
+      "ects": 6
+    },
+    {
+      "code": 11112,
+      "name": "Unit Two",
+      "semester": 6,
+      "initials": "U2",
+      "ects": 6
+    }
+  ]
+}
+```
+
+#### Success: 201 Created
+
+```JSON
+[
+  {
+    "code": 11111,
+    "name": "Unit One"
+  },
+  {
+    "code": 11112,
+    "name": "Unit Two"
+  }
+]
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
+}
+```
+
+#### Failure: 409 Conflict
+
+```JSON
+{
+  "error": {
+    "statusCode": 409,
+    "error": "Conflict",
+    "message": "This field(s) must be unique in the database.",
+    "detail": "Key (code)=(11111) already exists."
+  },
+  "created": []
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"units[0].name\" is not allowed to be empty",
+  "validation": {
+    "source": "body",
+    "keys": [
+      "units.0.name"
+    ]
+  }
+}
+```
+
+<a name="updateunit"></a>
+
+### PUT /courses/{code}/units/{unit_code}
+
+Edits a unit
+
+#### Body:
+
+```JSON
+{
+  "unit":
+    {
+      "name": "Example",
+      "semester": 5,
+      "initials": "EX",
+      "ects": 3
+    }
+}
+```
+
+#### Success: 200 OK
+
+```JSON
+{
+  "code": 11111,
+  "name": "Example",
+  "semester": 5,
+  "initials": "EX",
+  "ects": 3
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The unit with the code 11111 was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      11111
+    ]
+  }
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"unit.semester\" must be a number",
+  "validation": {
+    "source": "body",
+    "keys": [
+      "unit.semester"
+    ]
+  }
+}
+```
+
+<a name="deleteunit"></a>
+
+### DELETE /courses/{code}/units/{unit_code}
+
+Deletes a unit
+
+#### Success: 204 No Content
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The unit with the code 11111 was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      11111
+    ]
+  }
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"unit_code\" must be a number",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "unit_code"
+    ]
+  }
+}
+```
+
+---
+
+## Classes
+
+<a name="allclasses"></a>
+
+## GET /courses/{code}/units/{unit_code}/classes
+
+Gets all classes from a unit
+
+#### Success: 200 OK
+
+```JSON
+[
+  {
+    "unit_code": 11111,
+    "number": "T1",
+    "begins_at": "10:30:00",
+    "ends_at": "12:00:00",
+    "week_day": 2,
+    "academic_year": "2019-2020"
+  },
+  {
+    "unit_code": 11111,
+    "number": "T2",
+    "begins_at": "10:30:00",
+    "ends_at": "12:00:00",
+    "week_day": 4,
+    "academic_year": "2019-2020"
+  }
+]
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+<a name="classbyid"></a>
+
+## GET /courses/{code}/units/{unit_code}/classes/{year}/{class_number}
+
+Gets a class by its year and number
+
+#### Success: 200 OK
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The unit with the code 11111 was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      11111
+    ]
+  }
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"unit.semester\" must be a number",
+  "validation": {
+    "source": "body",
+    "keys": [
+      "unit.semester"
+    ]
+  }
+}
+```
+
+---
 
 ### Erros Possiveis
 
