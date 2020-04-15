@@ -1,7 +1,7 @@
 exports.up = function (knex) {
 	return knex.schema.createTable('class_professor', function (table) {
 		table.string('professor_username');
-		table.string('class_id');
+		table.uuid('class_id');
 		table
 			.foreign('professor_username')
 			.references('username')

@@ -31,7 +31,7 @@ module.exports = {
 			class: Joi.object({
 				number: Joi.string().alphanum(),
 				begins_at: Joi.string(),
-				ends_at: Joi.string().required(),
+				ends_at: Joi.string(),
 				week_day: Joi.number().min(1).max(7),
 				academic_year: Joi.string().length(9),
 			}).required(),

@@ -2,53 +2,51 @@
 
 ## Routes
 
-| Action                                | Method | Permissions |               Path               |
-| :------------------------------------ | :----- | :---------: | :------------------------------: |
-| Logs an user in                       | POST   |    None     |          [[+](#login)]           |
-| Logs an user out                      | GET    |    User     |          [[+](#logout)]          |
-| Gets all users                        | GET    |    Admin    |         [[+](#allusers)]         |
-| Gets an user by their username        | GET    |    User     |         [[+](#userbyid)]         |
-| Creates a new user                    | POST   |    Admin    |        [[+](#createuser)]        |
-| Edits an user                         | PUT    |    Admin    |        [[+](#updateuser)]        |
-| Deletes an user                       | DELETE |    Admin    |        [[+](#deleteuser)]        |
-| Gets all students                     | GET    |    Admin    |       [[+](#allstudents)]        |
-| Gets a student by their username      | GET    |    User     |       [[+](#studentbyid)]        |
-| Edits a student                       | PUT    |   Student   |      [[+](#updatestudent)]       |
-| Gets all professors                   | GET    |    Admin    |      [[+](#allprofessors)]       |
-| Gets a professor by their username    | GET    |    User     |      [[+](#professorbyid)]       |
-| Edits a professor                     | PUT    |  Professor  |     [[+](#updateprofessor)]      |
-| Gets all admins                       | GET    |    Admin    |        [[+](#alladmins)]         |
-| Gets an admin by their username       | GET    |    User     |        [[+](#adminbyid)]         |
-| Edits an admin                        | PUT    |    Admin    |       [[+](#updateadmin)]        |
-| Gets all courses                      | GET    |    User     |        [[+](#allcourses)]        |
-| Gets a course by its code             | GET    |    User     |        [[+](#coursebyid)]        |
-| Creates a new course                  | POST   |    Admin    |       [[+](#createcourse)]       |
-| Edits a course                        | PUT    |    Admin    |       [[+](#updatecourse)]       |
-| Deletes a course                      | DELETE |    Admin    |       [[+](#deletecourse)]       |
-| Gets all units from a course          | GET    |    User     |         [[+](#allunits)]         |
-| Gets a unit from a course by its code | GET    |    User     |         [[+](#unitbyid)]         |
-| Creates units for a course            | POST   |    Admin    |        [[+](#createunit)]        |
-| Edits a unit                          | PUT    |    Admin    |        [[+](#updateunit)]        |
-| Deletes a unit                        | DELETE |    Admin    |        [[+](#deleteunit)]        |
-| Gets all classes from a unit          | GET    |    User     |        [[+](#allclasses)]        |
-| Gets a class by its year and number   | GET    |    User     |        [[+](#classbyid)]         |
-| Adds a class to a unit                | POST   |    Admin    |       [[+](#createclass)]        |
-| Edits a class                         | PUT    |    Admin    |       [[+](#updateclass)]        |
-| Removes a class from a unit           | DELETE |    Admin    |       [[+](#deleteclass)]        |
-| Gets all students from a class        | GET    |    User     |   [[+](#allstudentsfromclass)]   |
-| Adds a student to a class             | POST   |    Admin    |      [[+](#studenttoclass)]      |
-| Removes a student from a class        | DELETE |    Admin    |  [[+](#removestudentfromclass)]  |
-| Gets all professors from a class      | GET    |    User     |  [[+](#allprofessorsfromclass)]  |
-| Adds a professor to a class           | POST   |    Admin    |     [[+](#professortoclass)]     |
-| Removes a professor from a class      | DELETE |    Admin    | [[+](#removeprofessorfromclass)] |
-
----
+| Action                                      | Method | Permissions |               Path               |
+| :------------------------------------------ | :----- | :---------: | :------------------------------: |
+| Login                                       | POST   |    None     |          [[+](#login)]           |
+| Logout                                      | GET    |    User     |          [[+](#logout)]          |
+| Get all users                               | GET    |    Admin    |         [[+](#allusers)]         |
+| Get an user by their username               | GET    |    User     |         [[+](#userbyid)]         |
+| Create users                                | POST   |    Admin    |        [[+](#createuser)]        |
+| Edit an user                                | PUT    |    Admin    |        [[+](#updateuser)]        |
+| Delete an user                              | DELETE |    Admin    |        [[+](#deleteuser)]        |
+| Get all students                            | GET    |    Admin    |       [[+](#allstudents)]        |
+| Get a student by their username             | GET    |    User     |       [[+](#studentbyid)]        |
+| Edit a student                              | PUT    |   Student   |      [[+](#updatestudent)]       |
+| Get all professors                          | GET    |    Admin    |      [[+](#allprofessors)]       |
+| Get a professor by their username           | GET    |    User     |      [[+](#professorbyid)]       |
+| Edit a professor                            | PUT    |  Professor  |     [[+](#updateprofessor)]      |
+| Get all admins                              | GET    |    Admin    |        [[+](#alladmins)]         |
+| Get an admin by their username              | GET    |    User     |        [[+](#adminbyid)]         |
+| Edit an admin                               | PUT    |    Admin    |       [[+](#updateadmin)]        |
+| Get all courses                             | GET    |    User     |        [[+](#allcourses)]        |
+| Get a course by its code                    | GET    |    User     |        [[+](#coursebyid)]        |
+| Create courses                              | POST   |    Admin    |       [[+](#createcourse)]       |
+| Edit a course                               | PUT    |    Admin    |       [[+](#updatecourse)]       |
+| Delete a course                             | DELETE |    Admin    |       [[+](#deletecourse)]       |
+| Get all units from a course                 | GET    |    User     |         [[+](#allunits)]         |
+| Get a unit from a course by its code        | GET    |    User     |         [[+](#unitbyid)]         |
+| Create units                                | POST   |    Admin    |        [[+](#createunit)]        |
+| Edit an unit                                | PUT    |    Admin    |        [[+](#updateunit)]        |
+| Delete an unit                              | DELETE |    Admin    |        [[+](#deleteunit)]        |
+| Get all classes from an unit                | GET    |    User     |        [[+](#allclasses)]        |
+| Get a class by its academic year and number | GET    |    User     |        [[+](#classbyid)]         |
+| Add a class to an unit                      | POST   |    Admin    |       [[+](#createclass)]        |
+| Edit a class                                | PUT    |    Admin    |       [[+](#updateclass)]        |
+| Remove a class from an unit                 | DELETE |    Admin    |       [[+](#deleteclass)]        |
+| Get all students from a class               | GET    |    User     |   [[+](#allstudentsfromclass)]   |
+| Add a student to a class                    | POST   |    Admin    |      [[+](#studenttoclass)]      |
+| Remove a student from a class               | DELETE |    Admin    |  [[+](#removestudentfromclass)]  |
+| Get all professors from a class             | GET    |    User     |  [[+](#allprofessorsfromclass)]  |
+| Add a professor to a class                  | POST   |    Admin    |     [[+](#professortoclass)]     |
+| Remove a professor from a class             | DELETE |    Admin    | [[+](#removeprofessorfromclass)] |
 
 ## Authentication:
 
 <a name="login"></a>
 
-### POST /login
+### **POST** <br> /login
 
 Logs a user in
 
@@ -81,21 +79,21 @@ Logs a user in
 }
 ```
 
+---
+
 <a name="logout"></a>
 
-### GET /logout
+### **GET** <br> /logout
 
 Logs a user out
 
 #### Success: 204 No Content
 
----
-
 ## Users:
 
 <a name="allusers"></a>
 
-### GET /users
+### **GET** <br> /users
 
 Gets all users
 
@@ -132,9 +130,11 @@ Gets all users
 }
 ```
 
+---
+
 <a name="userbyid"></a>
 
-### GET /users/{username}
+### **GET** <br> /users/{username}
 
 Gets a user by their username
 
@@ -193,9 +193,11 @@ Gets a user by their username
 }
 ```
 
+---
+
 <a name="createuser"></a>
 
-### POST /users
+### **POST** <br> /users
 
 Creates a new user
 
@@ -312,9 +314,11 @@ Creates a new user
 }
 ```
 
+---
+
 <a name="updateuser"></a>
 
-### PUT /users/{username}
+### **PUT** <br> /users/{username}
 
 Edits an user
 
@@ -385,9 +389,11 @@ Edits an user
 }
 ```
 
+---
+
 <a name="deleteuser"></a>
 
-### DELETE /users/{username}
+### **DELETE** <br> /users/{username}
 
 Deletes an user
 
@@ -435,13 +441,11 @@ Deletes an user
 }
 ```
 
----
-
 ## Students
 
 <a name="allstudents"></a>
 
-### GET /users/students
+### **GET** <br> /users/students
 
 Gets all students
 
@@ -484,9 +488,12 @@ Gets all students
 }
 ```
 
-### GET /users/students/{username}
+---
 
 <a name="studentbyid"></a>
+
+### **GET** <br> /users/students/{username}
+
 Gets a student by their username
 
 #### Success: 200 OK
@@ -547,9 +554,11 @@ Gets a student by their username
 }
 ```
 
+---
+
 <a name="updatestudent"></a>
 
-### PUT /users/students/{username}
+### **PUT** <br> /users/students/{username}
 
 Edits a student
 
@@ -622,13 +631,11 @@ Edits a student
 }
 ```
 
----
-
 ## Professors
 
 <a name="allprofessors"></a>
 
-### GET /users/professors
+### **GET** <br> /users/professors
 
 Gets all professors
 
@@ -665,9 +672,11 @@ Gets all professors
 }
 ```
 
+---
+
 <a name="professorbyid"></a>
 
-### GET /users/professors/{username}
+### **GET** <br> /users/professors/{username}
 
 Gets a professor by their username
 
@@ -726,9 +735,11 @@ Gets a professor by their username
 }
 ```
 
+---
+
 <a name="updateprofessor"></a>
 
-### PUT /users/professors/{username}
+### **PUT** <br> /users/professors/{username}
 
 Edits a professor
 
@@ -795,13 +806,11 @@ Edits a professor
 }
 ```
 
----
-
 ## Admins
 
 <a name="alladmins"></a>
 
-### GET /users/admins
+### **GET** <br> /users/admins
 
 Gets all admins
 
@@ -836,9 +845,11 @@ Gets all admins
 }
 ```
 
+---
+
 <a name="adminbyid"></a>
 
-### GET /users/admins/{username}
+### **GET** <br> /users/admins/{username}
 
 Gets an admin by their username
 
@@ -896,9 +907,11 @@ Gets an admin by their username
 }
 ```
 
+---
+
 <a name="updateadmin"></a>
 
-### PUT /users/admins/{username}
+### **PUT** <br> /users/admins/{username}
 
 Edits an admin
 
@@ -963,13 +976,11 @@ Edits an admin
 }
 ```
 
----
-
 ## Courses
 
 <a name="allcourses"></a>
 
-### GET /courses
+### **GET** <br> /courses
 
 Gets all courses
 
@@ -1002,9 +1013,11 @@ Gets all courses
 }
 ```
 
+---
+
 <a name="coursebyid"></a>
 
-### GET /courses/{code}
+### **GET** <br> /courses/{code}
 
 Gets a course by its code
 
@@ -1061,9 +1074,11 @@ Gets a course by its code
 }
 ```
 
+---
+
 <a name="createcourse"></a>
 
-### POST /courses
+### **POST** <br> /courses
 
 Creates a new course
 
@@ -1148,9 +1163,11 @@ Creates a new course
 }
 ```
 
+---
+
 <a name="updatecourse"></a>
 
-### PUT /courses/{code}
+### **PUT** <br> /courses/{code}
 
 Edits a course
 
@@ -1219,9 +1236,11 @@ Edits a course
 }
 ```
 
+---
+
 <a name="deletecourse"></a>
 
-### DELETE /courses/{code}
+### **DELETE** <br> /courses/{code}
 
 Deletes a course
 
@@ -1259,13 +1278,11 @@ Deletes a course
 }
 ```
 
----
-
 ## Units
 
 <a name="allunits"></a>
 
-### GET /courses/{code}/units
+### **GET** <br> /courses/{code}/units
 
 Gets all units from a course
 
@@ -1302,9 +1319,11 @@ Gets all units from a course
 }
 ```
 
+---
+
 <a name="unitbyid"></a>
 
-### GET /courses/{code}/units/{unit_code}
+### **GET** <br> /courses/{code}/units/{unit_code}
 
 Gets a unit from a course by its code
 
@@ -1363,9 +1382,11 @@ Gets a unit from a course by its code
 }
 ```
 
+---
+
 <a name="createunit"></a>
 
-### POST /courses/{code}/units
+### **POST** <br>/courses/{code}/units
 
 Creates units for a course
 
@@ -1447,9 +1468,11 @@ Creates units for a course
 }
 ```
 
+---
+
 <a name="updateunit"></a>
 
-### PUT /courses/{code}/units/{unit_code}
+### **PUT** <br> /courses/{code}/units/{unit_code}
 
 Edits a unit
 
@@ -1521,9 +1544,11 @@ Edits a unit
 }
 ```
 
+---
+
 <a name="deleteunit"></a>
 
-### DELETE /courses/{code}/units/{unit_code}
+### **DELETE** <br> /courses/{code}/units/{unit_code}
 
 Deletes a unit
 
@@ -1561,13 +1586,11 @@ Deletes a unit
 }
 ```
 
----
-
 ## Classes
 
 <a name="allclasses"></a>
 
-## GET /courses/{code}/units/{unit_code}/classes
+### **GET** <br> /courses/{code}/units/{unit_code}/classes
 
 Gets all classes from a unit
 
@@ -1604,13 +1627,16 @@ Gets all classes from a unit
 }
 ```
 
+---
+
 <a name="classbyid"></a>
 
-## GET /courses/{code}/units/{unit_code}/classes/{year}/{class_number}
+### **GET** <br> /courses/{code}/units/{unit_code}/classes/{year}/{class_number}
 
 Gets a class by its year and number
 
 #### Success: 200 OK
+
 ```JSON
 {
   "unit_code": 11111,
@@ -1665,9 +1691,11 @@ Gets a class by its year and number
 }
 ```
 
+---
+
 <a name="createclass"></a>
 
-## POST /courses/{code}/units/{unit_code}/classes
+### **POST** <br> /courses/{code}/units/{unit_code}/classes
 
 Adds a class to a unit
 
@@ -1693,7 +1721,6 @@ Adds a class to a unit
   ]
 }
 ```
-
 
 #### Success: 201 Created
 
@@ -1758,13 +1785,16 @@ Adds a class to a unit
 }
 ```
 
+---
+
 <a name="updateclass"></a>
 
-### POST /courses/{code}/units/{unit_code}/classes/{year}/{class_number}
+### **POST** <br> /courses/{code}/units/{unit_code}/classes/{year}/{class_number}
 
 Edits a class
 
 #### Body:
+
 ```JSON
 {
   "class": {
@@ -1832,13 +1862,26 @@ Edits a class
   }
 }
 ```
+
+---
+
 <a name="deleteclass"></a>
 
-### DELETE /courses/{code}/units/{unit_code}/classes/{year}/{class_number}
+### **DELETE** <br> /courses/{code}/units/{unit_code}/classes/{year}/{class_number}
 
 Removes a class from a unit
 
 #### Success: 204 No Content
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
+}
+```
 
 #### Failure: 404 Not Found
 
@@ -1856,9 +1899,28 @@ Removes a class from a unit
   }
 }
 ```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"year\" length must be 9 characters long",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "year"
+    ]
+  }
+}
+```
+
+---
+
 <a name="allstudentsfromclass"></a>
 
-### GET /courses/{code}/units/{unit_code}/classes/{year}/{class_number}
+### **GET** <br> /courses/{code}/units/{unit_code}/classes/{year}/{class_number}/students
 
 Gets all students from a class
 
@@ -1895,13 +1957,16 @@ Gets all students from a class
 }
 ```
 
+---
+
 <a name="studenttoclass"></a>
 
-### POST /courses/{code}/units/{unit_code}/classes/{year}/{class_number}
+### **POST** <br> /courses/{code}/units/{unit_code}/classes/{year}/{class_number}/students
 
 Adds a student to a class
 
 #### Body:
+
 ```JSON
 {
   "students": [
@@ -1916,6 +1981,7 @@ Adds a student to a class
 ```
 
 #### Success: 200 OK
+
 ```JSON
 [
   {
@@ -1937,522 +2003,333 @@ Adds a student to a class
 }
 ```
 
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "error": {
+    "statusCode": 404,
+    "error": "Not Found",
+    "message": "The student with the username example was not found",
+    "validation": {
+      "source": "body",
+      "values": [
+        "example"
+      ]
+    }
+  },
+  "created": []
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"students[0].username\" is not allowed to be empty",
+  "validation": {
+    "source": "body",
+    "keys": [
+      "students.0.username"
+    ]
+  }
+}
+```
+
 ---
 
+<a name="removestudentfromclass"></a>
 
-## GET /programs/{id}/courses/{courseId}/classes/{classId}/students
+### **DELETE** <br> /courses/{code}/units/{unit_code}/classes/{year}/{class_number}/students/{student_username}
+
+Removes a student from a class
+
+#### Success: 204 No Content
+
+#### Failure: 401 Unauthorized
 
 ```JSON
-"users": [
-   {
-      "username": "fc60001",
-      "firstName": "Judah",
-      "lastName": "Koelpin",
-      "email": "judahkoelpin@fc.ul.pt",
-      "password": "UD1mnRKS7IR7aqF",
-      "role": {
-         "type": "professor",
-         "data": {
-            "department": "Departamento de Informática",
-            "room": "6.1.51"
-         }
-      }
-   },
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The student with the username example was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"student_username\" must only contain alpha-numeric characters",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "student_username"
+    ]
+  }
+}
+```
+
+---
+
+<a name="allprofessorsfromclass"></a>
+
+### **GET** <br> /courses/{code}/units/{unit_code}/classes/{year}/{class_number}/professors
+
+Gets all professors from a class
+
+#### Success: 200 OK
+
+```JSON
+[
+  {
+    "professor_username": "professor",
+    "first_name": "Professor",
+    "last_name": "Example",
+    "email": "professor@example.com",
+    "avatar_url": null,
+    "status": "offline"
+  },
+  {
+    "professor_username": "professor2",
+    "first_name": "Professor2",
+    "last_name": "Example",
+    "email": "professor2@example.com",
+    "avatar_url": null,
+    "status": "online"
+  }
 ]
 ```
 
-### Erros Possiveis
-
-401 Unauthorized
+#### Failure: 401 Unauthorized
 
 ```JSON
 {
-   "title": "Not an Admin",
-  "status": 401,
-  "detail": "You don't have admin previleges to access this resource."
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
 }
 ```
 
-## GET /programs/{id}/courses/{courseId}/classes/{classId}/students/{studentId}
+---
+
+<a name="professortoclass"></a>
+
+### **POST** <br> /courses/{code}/units/{unit_code}/classes/{year}/{class_number}/professors
+
+Adds a professor to a class
+
+#### Body:
 
 ```JSON
 {
-   "username": "fc60001",
-   "firstName": "Judah",
-   "lastName": "Koelpin",
-   "email": "judahkoelpin@fc.ul.pt",
-   "password": "UD1mnRKS7IR7aqF",
-   "role": {
-      "type": "professor",
-      "data": {
-         "department": "Departamento de Informática",
-         "room": "6.1.51"
-      }
-   }
+  "professors": [
+    {
+      "username": "professor"
+    },
+    {
+      "username": "professor2"
+    }
+  ]
 }
 ```
 
-### Erros Possiveis
-
-401 Unauthorized
+#### Success: 200 OK
 
 ```JSON
-{
-   "title": "Not logged in",
-  "status": 401,
-  "detail": "You must be logged in to access this resource."
-}
-```
-
-404 Not Found
-
-```JSON
-{
-   "title": "Student Not Found",
-  "status": 404,
-  "detail": "Sorry, that student does not exist in our system."
-}
-```
-
-## POST /programs/{id}/courses/{courseId}/classes/{classId}/students
-
-```JSON
-{
-   "userId": 1
-}
-```
-
-### Erros Possiveis
-
-400 Bad Request
-
-```JSON
-{
-   "title": "Invalid JSON",
-  "status": 400,
-  "detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
-}
-```
-
-404 Not Found
-
-```JSON
-{
-   "title": "Class Not Found",
-  "status": 404,
-  "detail": "Sorry, that class does not exist in our system."
-}
-```
-
-404 Not Found
-
-```JSON
-{
-   "title": "User Not Found",
-  "status": 404,
-  "detail": "Sorry, that user does not exist in our system."
-}
-```
-
-## DELETE /programs/{id}/courses/{courseId}/classes/{classId}/students/{studentId}
-
-### Erros Possiveis
-
-404 Not Found
-
-```JSON
-{
-   "title": "Class Not Found",
-  "status": 404,
-  "detail": "Sorry, that class does not exist in our system."
-}
-```
-
-404 Not Found
-
-```JSON
-{
-   "title": "User Not Found",
-  "status": 404,
-  "detail": "Sorry, that user does not exist in our system."
-}
-```
-
-## GET /programs/{id}/courses/{courseId}/classes/{classId}/professors
-
-```JSON
-"users": [
-   {
-      "username": "fc60001",
-      "firstName": "Judah",
-      "lastName": "Koelpin",
-      "email": "judahkoelpin@fc.ul.pt",
-      "password": "UD1mnRKS7IR7aqF",
-      "role": {
-         "type": "professor",
-         "data": {
-            "department": "Departamento de Informática",
-            "room": "6.1.51"
-         }
-      }
-   },
+[
+  {
+    "professor_username": "professor"
+  },
+  {
+    "professor_username": "professor2"
+  }
 ]
 ```
 
-### Erros Possiveis
-
-401 Unauthorized
+#### Failure: 401 Unauthorized
 
 ```JSON
 {
-   "title": "Not an Admin",
-  "status": 401,
-  "detail": "You don't have admin previleges to access this resource."
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
 }
 ```
 
-## GET /programs/{id}/courses/{courseId}/classes/{classId}/professors/{professorId}
-
-````JSON
+#### Failure: 404 Not Found
 
 ```JSON
 {
-   "username": "fc60001",
-   "firstName": "Judah",
-   "lastName": "Koelpin",
-   "email": "judahkoelpin@fc.ul.pt",
-   "password": "UD1mnRKS7IR7aqF",
-   "role": {
-      "type": "professor",
-      "data": {
-         "department": "Departamento de Informática",
-         "room": "6.1.51"
-      }
-   }
-}
-````
-
-### Erros Possiveis
-
-401 Unauthorized
-
-```JSON
-{
-   "title": "Not logged in",
-  "status": 401,
-  "detail": "You must be logged in to access this resource."
+  "error": {
+    "statusCode": 404,
+    "error": "Not Found",
+    "message": "The professor with the username example was not found",
+    "validation": {
+      "source": "body",
+      "values": [
+        "example"
+      ]
+    }
+  },
+  "created": []
 }
 ```
 
-404 Not Found
+#### Failure: 400 Bad Request
 
 ```JSON
 {
-   "title": "Professor Not Found",
-  "status": 404,
-  "detail": "Sorry, that professor does not exist in our system."
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"professors[0].username\" is not allowed to be empty",
+  "validation": {
+    "source": "body",
+    "keys": [
+      "professors.0.username"
+    ]
+  }
 }
 ```
 
-## POST /programs/{id}/courses/{courseId}/classes/{classId}/professors
+---
+
+<a name="removeprofessorfromclass"></a>
+
+### **DELETE** <br> /courses/{code}/units/{unit_code}/classes/{year}/{class_number}/professors/{professor_username}
+
+Removes a professor from a class
+
+#### Success: 204 No Content
+
+#### Failure: 401 Unauthorized
 
 ```JSON
 {
-   "userId": 1
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
 }
 ```
 
-### Erros Possiveis
-
-400 Bad Request
+#### Failure: 404 Not Found
 
 ```JSON
 {
-   "title": "Invalid JSON",
-  "status": 400,
-  "detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The professor with the username example was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
 }
 ```
 
-404 Not Found
+#### Failure: 400 Bad Request
 
 ```JSON
 {
-   "title": "Class Not Found",
-  "status": 404,
-  "detail": "Sorry, that class does not exist in our system."
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"professor_username\" must only contain alpha-numeric characters",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "professor_username"
+    ]
+  }
 }
 ```
 
-404 Not Found
+## Entities
 
-```JSON
-{
-   "title": "User Not Found",
-  "status": 404,
-  "detail": "Sorry, that user does not exist in our system."
-}
-```
+### User
 
-## DELETE /programs/{id}/courses/{courseId}/classes/{classId}/professors/{professorId}
+| Attributes |  Type  |         Restrictions          |
+| :--------- | :----: | :---------------------------: |
+| username   | string |     **not null, unique**      |
+| first_name | string |         **not null**          |
+| last_name  | string |         **not null**          |
+| email      | string |     **not null, unique**      |
+| password   | string |         **not null**          |
+| status     | string | **not null, default offline** |
+| avatar_url | string |               -               |
 
-### Erros Possiveis
+### Student
 
-404 Not Found
+| Attributes      |  Type   |        Restrictions         |
+| :-------------- | :-----: | :-------------------------: |
+| username        | string  |         **foreign**         |
+| working_student | boolean | **not null, default false** |
+| github_url      | string  |              -              |
+| facebook_url    | string  |              -              |
+| instagram_url   | string  |              -              |
+| twitter_url     | string  |              -              |
 
-```JSON
-{
-   "title": "Class Not Found",
-  "status": 404,
-  "detail": "Sorry, that class does not exist in our system."
-}
-```
+### Professor
 
-404 Not Found
+| Attributes |  Type  | Restrictions |
+| :--------- | :----: | :----------: |
+| username   | string | **foreign**  |
+| department | string |      -       |
+| room       | string |      -       |
 
-```JSON
-{
-   "title": "User Not Found",
-  "status": 404,
-  "detail": "Sorry, that user does not exist in our system."
-}
-```
+### Admin
 
-## POST /login
+| Attributes |  Type   |      Restrictions       |
+| :--------- | :-----: | :---------------------: |
+| username   | string  |       **foreign**       |
+| previleges | integer | **not null, default 1** |
 
-```JSON
-{
-   "id": 1,
-   "username": "fc12345",
-   "firstName": "Exemplo",
-   "lastName": "Aluno",
-   "email": "fc12345@alunos.fc.ul.pt",
-   "status": null,
-   "avatarURL": null,
-   "createdAt": "2020-03-18T14:30:22.000Z",
-   "updatedAt": "2020-03-18T14:30:22.000Z",
-}
-```
+### Course
 
-### Erros Possiveis
+| Attributes |  Type   |     Restrictions     |
+| :--------- | :-----: | :------------------: |
+| code       | string  | **not null, unique** |
+| name       | string  |     **not null**     |
+| cycle      | integer |     **not null**     |
+| initials   | string  |     **not null**     |
 
-```JSON
-{
-   "title": "User Not Found",
-  "status": 404,
-  "detail": "Sorry, that user does not exist in our system."
-}
-```
+### Unit
 
-## GET /me
+| Attributes |  Type   |     Restrictions     |
+| :--------- | :-----: | :------------------: |
+| code       | integer | **not null, unique** |
+| name       | string  |     **not null**     |
+| semester   | integer |     **not null**     |
+| initials   | string  |     **not null**     |
+| ects       | integer |     **not null**     |
 
-```JSON
-{
-   "id": 1,
-   "username": "fc12345",
-   "firstName": "Exemplo",
-   "lastName": "Aluno",
-   "email": "fc12345@alunos.fc.ul.pt",
-   "status": null,
-   "avatarURL": null,
-   "createdAt": "2020-03-18T14:30:22.000Z",
-   "updatedAt": "2020-03-18T14:30:22.000Z",
-}
-```
+### Class
 
-### Erros Possiveis
-
-```JSON
-{
-   "title": "User Not Found",
-  "status": 404,
-  "detail": "Sorry, that user does not exist in our system."
-}
-```
-
-## GET /logout
-
-### Erros Possiveis
-
-```JSON
-{
-   "title": "Not logged in",
-  "status": 401,
-  "detail": "You must be logged in to access this resource."
-}
-```
-
-## Erros
-
-### Failure: 401 Unauthorized
-
-```JSON
-{
-   "title": "Not an Admin",
-  "status": 401,
-  "detail": "You don't have admin previleges to access this resource."
-}
-```
-
-```JSON
-{
-   "title": "Not logged in",
-  "status": 401,
-  "detail": "You must be logged in to access this resource."
-}
-```
-
-```JSON
-{
-   "title": "Invalid Identity",
-  "status": 401,
-  "detail": "You don't have permissions to manage other users accounts."
-}
-```
-
-```JSON
-{
-   "title": "Failed to Log In",
-  "status": 401,
-  "detail": "Wrong email or password."
-}
-```
-
-### 404 Not Found
-
-```JSON
-{
-   "title": "Not Found",
-  "status": 404,
-  "detail": "Sorry, we can't find the page you were looking for."
-}
-```
-
-```JSON
-{
-   "title": "User Not Found",
-  "status": 404,
-  "detail": "Sorry, that user does not exist in our system."
-}
-```
-
-```JSON
-{
-   "title": "Program Not Found",
-  "status": 404,
-  "detail": "Sorry, that program does not exist in our system."
-}
-```
-
-```JSON
-{
-   "title": "Course Not Found",
-  "status": 404,
-  "detail": "Sorry, that course does not exist in our system."
-}
-```
-
-```JSON
-{
-   "title": "Class Not Found",
-  "status": 404,
-  "detail": "Sorry, that class does not exist in our system."
-}
-```
-
-```JSON
-{
-   "title": "Professor Not Found",
-  "status": 404,
-  "detail": "Sorry, that professor does not exist in our system."
-}
-```
-
-```JSON
-{
-   "title": "Student Not Found",
-  "status": 404,
-  "detail": "Sorry, that student does not exist in our system."
-}
-```
-
-### 503 Service Unavailable
-
-```JSON
-{
-   "title": "Service Unavailable",
-  "status": 503,
-  "detail": "Sorry, this service seems to be unavailable... Try again later."
-}
-```
-
-### 400 Bad Request
-
-```JSON
-{
-   "title": "Invalid JSON",
-  "status": 400,
-  "detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
-}
-```
-
-### 422 Unprocessable Entity
-
-```JSON
-{
-   "title": "Validation Failed",
-  "status": 422,
-  "detail": {
-      "field": err.path,
-      "message": err.message,
-      "instance": err.instance
-   }
-}
-```
-
-### 409 Conflict
-
-```JSON
-{
-   "title": "Duplicate Entry",
-  "status": 409,
-  "detail": {
-      "message": "This field(s) must be unique in the database.",
-      "value": error.value
-   }
-}
-```
-
-### Base de Dados
-
-#### Users
-
-| Coluna    |  Tipo  |      Restrições      |
-| :-------- | :----: | :------------------: |
-| number    | string | **not null, unique** |
-| firstName | string |     **not null**     |
-| lastName  | string |     **not null**     |
-| email     | string | **not null, unique** |
-| password  | string |     **not null**     |
-| status    | string |          -           |
-| avatarURL | string |          -           |
-
-#### Students
-
-| Coluna |  Tipo   |  Restrições  |
-| :----- | :-----: | :----------: |
-| userId | integer | **not null** |
-
-#### Professors
-
-| Coluna     |  Tipo   |  Restrições  |
-| :--------- | :-----: | :----------: |
-| userId     | integer | **not null** |
-| department | string  | **not null** |
-| room       | string  |      -       |
-
-#### Admins
-
-| Coluna |  Tipo   |  Restrições  |
-| :----- | :-----: | :----------: |
-| userId | integer | **not null** |
+| Attributes    |  Type   | Restrictions |
+| :------------ | :-----: | :----------: |
+| unit_code     | integer | **foreign**  |
+| number        | string  | **not null** |
+| begins_at     |  time   | **not null** |
+| ends_at       |  time   | **not null** |
+| week_day      | integer | **not null** |
+| academic_year | string  | **not null** |
