@@ -1,12 +1,12 @@
 {
-  "name": "server",
+  "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "API/server.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon API/server.js",
+    "dev": "cross-env NODE_ENV=development nodemon server.js",
     "test": "cross-env NODE_ENV=test jest",
-    "start": "NODE_ENV=production node API/server.js"
+    "start": "NODE_ENV=production node server.js"
   },
   "keywords": [],
   "author": "",
@@ -16,18 +16,16 @@
     "bcryptjs": "^2.4.3",
     "celebrate": "^12.0.1",
     "client-sessions": "^0.8.0",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "helmet": "^3.21.3",
-    "jest": "^25.2.7",
     "knex": "^0.20.13",
     "multer": "^1.4.2",
     "multer-s3": "^2.9.0",
-    "mysql2": "^2.1.0",
     "pg": "^8.0.0",
-    "sequelize": "^5.21.5",
-    "sqlite": "^4.0.5",
     "sqlite3": "^4.1.1",
+    "supertest": "^4.0.2",
     "uuid": "^7.0.3"
   },
   "devDependencies": {
@@ -39,9 +37,7 @@
     "dotenv": "^8.2.0",
     "husky": "^4.2.3",
     "morgan": "^1.9.1",
-    "nodemon": "^2.0.2",
-    "sequelize-cli": "^5.5.1",
-    "supertest": "^4.0.2"
+    "nodemon": "^2.0.2"
   },
   "husky": {
     "hooks": {

@@ -25,7 +25,7 @@ class ProfessorController {
 				'users.email',
 			])
 			.where('professors.username', username);
-		if (!professor) return next(errors.PROFESSOR_NOT_FOUND());
+		if (!professor) return next(errors.PROFESSOR_NOT_FOUND(username, 'params'));
 		return response.json(professor);
 	}
 
@@ -34,7 +34,7 @@ class ProfessorController {
 		const [professor] = await connection('professors')
 			.select('username')
 			.where('username', username);
-		if (!professor) return next(errors.PROFESSOR_NOT_FOUND());
+		if (!professor) return next(errors.PROFESSOR_NOT_FOUND(username, 'params'));
 		const { room, department } = request.body.professor;
 		const [updatedProfessor] = await connection('professors')
 			.where(professor)

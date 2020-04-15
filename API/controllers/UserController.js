@@ -4,6 +4,15 @@ const bcrypt = require('bcryptjs');
 const errors = require('../utils/errors');
 
 class UserController {
+	constructor() {
+		this.index = this.index.bind(this);
+		this.find = this.find.bind(this);
+		this.store = this.store.bind(this);
+		this.modify = this.modify.bind(this);
+		this.remove = this.remove.bind(this);
+		this.findUser = this.findUser.bind(this);
+	}
+
 	async index(request, response) {
 		const users = await connection('users').select([
 			'username',
@@ -28,11 +37,11 @@ class UserController {
 				'status',
 			])
 			.where('username', username);
-		if (!user) return next(errors.USER_NOT_FOUND());
+		if (!user) return next(errors.USER_NOT_FOUND(username, 'params'));
 		return response.json(user);
 	}
 
-	async store(request, response, next) {
+	async store(request, response) {
 		const createdUsers = {
 			students: [],
 			professors: [],
@@ -73,7 +82,7 @@ class UserController {
 				}
 			} catch (error) {
 				return response.status(409).json({
-					error: errors.UNIQUE_CONSTRAIN(error),
+					error: errors.UNIQUE_CONSTRAIN(error.detail),
 					created: createdUsers,
 				});
 			}
@@ -91,15 +100,12 @@ class UserController {
 			: null;
 
 		//	Finding the User
-		const { username } = request.params;
-		let { password, status } = request.body.user;
-		if (password) password = bcrypt.hashSync(password, 14);
-		const [user] = await connection('users')
-			.select('username')
-			.where('username', username);
-		if (!user) return next(errors.USER_NOT_FOUND());
+		const user = await this.findUser(request, response, next);
+		if (!user) return next();
 
 		//	Updating the User
+		let { password, status } = request.body.user;
+		if (password) password = bcrypt.hashSync(password, 14);
 		const [updatedUser] = await connection('users').where(user).update(
 			{
 				password,
@@ -114,16 +120,22 @@ class UserController {
 
 	async remove(request, response, next) {
 		//	Finding the User
-		const { username } = request.params;
-		const [user] = await connection('users')
-			.select('username')
-			.where('username', username);
-		if (!user) return next(errors.USER_NOT_FOUND());
+		const user = await this.findUser(request, response, next);
+		if (!user) return next();
 
 		// Deleting the user
 		await connection('users').where(user).del();
 
 		return response.status(204).send();
+	}
+
+	async findUser(request, response, next) {
+		const { username } = request.params;
+		const [user] = await connection('users')
+			.select('username')
+			.where('username', username);
+		if (!user) return next(errors.USER_NOT_FOUND(username, 'params'));
+		return user;
 	}
 }
 

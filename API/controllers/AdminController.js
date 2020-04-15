@@ -25,7 +25,7 @@ class AdminController {
 				'users.email',
 			])
 			.where('admins.username', username);
-		if (!admin) return next(errors.ADMIN_NOT_FOUND());
+		if (!admin) return next(errors.ADMIN_NOT_FOUND(username, 'params'));
 		return response.json(admin);
 	}
 
@@ -34,7 +34,7 @@ class AdminController {
 		const [admin] = await connection('admins')
 			.select('username')
 			.where('username', username);
-		if (!admin) return next(errors.ADMIN_NOT_FOUND());
+		if (!admin) return next(errors.ADMIN_NOT_FOUND(username, 'params'));
 		const { previleges } = request.body.admin;
 		const [updatedAdmin] = await connection('admins').where(admin).update(
 			{

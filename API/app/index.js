@@ -11,6 +11,7 @@ class App {
 	middleware() {
 		this.express.use(require('../middleware/cors'));
 		this.express.use(require('../middleware/helmet')());
+		this.express.use(require('cookie-parser')());
 		this.express.use(express.json());
 		this.express.use(express.urlencoded({ extended: true }));
 		this.express.use(require('morgan')('dev'));

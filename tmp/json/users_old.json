@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "users": [
     {
       "username": "fc00000",
@@ -50,4 +51,57 @@
       }
     }
   ]
+=======
+	"users": [
+		{
+			"username": "asdasd",
+			"first_name": "Test",
+			"last_name": "Student",
+			"email": "fc00000@alunos.fc.ul.pt",
+			"password": "password",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		},
+		{
+			"username": "fcAdmin",
+			"first_name": "Test",
+			"last_name": "Admin",
+			"email": "fcAdmin@admins.fc.ul.pt",
+			"password": "password",
+			"role": {
+				"type": "admin",
+				"data": {
+					"previleges": 1
+				}
+			}
+		},
+		{
+			"username": "fc00001",
+			"first_name": "Test",
+			"last_name": "Student",
+			"email": "fc00001@alunos.fc.ul.pt",
+			"password": "password",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		},
+		{
+			"username": "fc10001",
+			"first_name": "Test",
+			"last_name": "Professor",
+			"email": "fc00001@docentes.fc.ul.pt",
+			"password": "password",
+			"role": {
+				"type": "professor",
+				"data": {
+					"room": "6.2.35",
+					"department": "DI"
+				}
+			}
+		}
+	]
+>>>>>>> development
 }

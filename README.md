@@ -1,533 +1,1650 @@
-### Routes
+# Group Up API
 
-| Method | Path                                                                         | Result                                     | Permissions |
-| :----- | :--------------------------------------------------------------------------- | :----------------------------------------- | :---------- |
-| GET    | /users                                                                       | Gets all users                             | Admin       |
-| GET    | /users/{id}                                                                  | Gets a user by their id                    | User        |
-| POST   | /users                                                                       | Creates a user                             | Admin       |
-| PUT    | /users/{id}                                                                  | Updates a user                             | Admin       |
-| DELETE | /users/{id}                                                                  | Deletes a user                             | Admin       |
-| GET    | /users/students                                                              | Gets all students                          | Admin       |
-| GET    | /users/students/{id}                                                         | Gets a student by their id                 | User        |
-| GET    | /users/professors                                                            | Gets all professors                        | Admin       |
-| GET    | /users/professors/{id}                                                       | Gets a professor by their id               | User        |
-| GET    | /users/admins                                                                | Gets all admins                            | Admin       |
-| GET    | /users/admins/{id}                                                           | Gets an admin by their id                  | Admin       |
-| GET    | /programs/                                                                   | Gets all programs                          | User        |
-| GET    | /programs/{id}                                                               | Gets a program by its id                   | User        |
-| POST   | /programs/                                                                   | Creates a program                          | Admin       |
-| PUT    | /programs/{id}                                                               | Updates a program                          | Admin       |
-| DELETE | /programs/{id}                                                               | Deletes a program                          | Admin       |
-| GET    | /programs/{id}/courses                                                       | Gets all courses of a program              | User        |
-| GET    | /programs/{id}/courses/{courseId}                                            | Gets a course of a program by its courseId | User        |
-| POST   | /programs/{id}/courses                                                       | Creates a course of a program              | Admin       |
-| GET    | /programs/{id}/courses/{courseId}/classes                                    | Gets all classes                           | User        |
-| GET    | /programs/{id}/courses/{courseId}/classes/{classId}                          | Gets a class by its id                     | User        |
-| POST   | /programs/{id}/courses/{courseId}/classes/                                   | Creates a class                            | Admin       |
-| PUT    | /programs/{id}/courses/{courseId}/classes/{classId}                          | Updates a class                            | Admin       |
-| DELETE | /programs/{id}/courses/{courseId}/classes/{classId}                          | Deletes a class                            | Admin       |
-| GET    | /programs/{id}/courses/{courseId}/classes/{classId}/students                 | Gets all students from a class             | User        |
-| GET    | /programs/{id}/courses/{courseId}/classes/{classId}/students/{studentId}     | Gets a student from a class by their id    | User        |
-| POST   | /programs/{id}/courses/{courseId}/classes/{classId}/students                 | Inserts a student into a class             | Admin       |
-| DELETE | /programs/{id}/courses/{courseId}/classes/{classId}/students/{studentId}     | Deletes a student from a class             | Admin       |
-| GET    | /programs/{id}/courses/{courseId}/classes/{classId}/professors               | Gets all professors from a class           | User        |
-| GET    | /programs/{id}/courses/{courseId}/classes/{classId}/professors/{professorId} | Gets a professor from a class by their id  | User        |
-| POST   | /programs/{id}/courses/{courseId}/classes/{classId}/professors               | Inserts a professor into a class           | Admin       |
-| DELETE | /programs/{id}/courses/{courseId}/classes/{classId}/professors/{professorId} | Deletes a professor from a class           | Admin       |
-| POST   | /login                                                                       | Logs user in                               | ---         |
-| GET    | /me                                                                          | Verifies if the user is logged in          | User        |
-| GET    | /logout                                                                      | Logs a user out                            | User        |
+## Routes
 
-## GET /users
+| Action                                | Method | Permissions |               Path               |
+| :------------------------------------ | :----- | :---------: | :------------------------------: |
+| Logs an user in                       | POST   |    None     |          [[+](#login)]           |
+| Logs an user out                      | GET    |    User     |          [[+](#logout)]          |
+| Gets all users                        | GET    |    Admin    |         [[+](#allusers)]         |
+| Gets an user by their username        | GET    |    User     |         [[+](#userbyid)]         |
+| Creates a new user                    | POST   |    Admin    |        [[+](#createuser)]        |
+| Edits an user                         | PUT    |    Admin    |        [[+](#updateuser)]        |
+| Deletes an user                       | DELETE |    Admin    |        [[+](#deleteuser)]        |
+| Gets all students                     | GET    |    Admin    |       [[+](#allstudents)]        |
+| Gets a student by their username      | GET    |    User     |       [[+](#studentbyid)]        |
+| Edits a student                       | PUT    |   Student   |      [[+](#updatestudent)]       |
+| Gets all professors                   | GET    |    Admin    |      [[+](#allprofessors)]       |
+| Gets a professor by their username    | GET    |    User     |      [[+](#professorbyid)]       |
+| Edits a professor                     | PUT    |  Professor  |     [[+](#updateprofessor)]      |
+| Gets all admins                       | GET    |    Admin    |        [[+](#alladmins)]         |
+| Gets an admin by their username       | GET    |    User     |        [[+](#adminbyid)]         |
+| Edits an admin                        | PUT    |    Admin    |       [[+](#updateadmin)]        |
+| Gets all courses                      | GET    |    User     |        [[+](#allcourses)]        |
+| Gets a course by its code             | GET    |    User     |        [[+](#coursebyid)]        |
+| Creates a new course                  | POST   |    Admin    |       [[+](#createcourse)]       |
+| Edits a course                        | PUT    |    Admin    |       [[+](#updatecourse)]       |
+| Deletes a course                      | DELETE |    Admin    |       [[+](#deletecourse)]       |
+| Gets all units from a course          | GET    |    User     |         [[+](#allunits)]         |
+| Gets a unit from a course by its code | GET    |    User     |         [[+](#unitbyid)]         |
+| Creates units for a course            | POST   |    Admin    |        [[+](#createunit)]        |
+| Edits a unit                          | PUT    |    Admin    |        [[+](#updateunit)]        |
+| Deletes a unit                        | DELETE |    Admin    |        [[+](#deleteunit)]        |
+| Gets all classes from a unit          | GET    |    User     |        [[+](#allclasses)]        |
+| Gets a class by its year and number   | GET    |    User     |        [[+](#classbyid)]         |
+| Adds a class to a unit                | POST   |    Admin    |       [[+](#createclass)]        |
+| Edits a class                         | PUT    |    Admin    |       [[+](#updateclass)]        |
+| Removes a class from a unit           | DELETE |    Admin    |       [[+](#deleteclass)]        |
+| Gets all students from a class        | GET    |    User     |   [[+](#allstudentsfromclass)]   |
+| Adds a student to a class             | POST   |    Admin    |      [[+](#studenttoclass)]      |
+| Removes a student from a class        | DELETE |    Admin    |  [[+](#removestudentfromclass)]  |
+| Gets all professors from a class      | GET    |    User     |  [[+](#allprofessorsfromclass)]  |
+| Adds a professor to a class           | POST   |    Admin    |     [[+](#professortoclass)]     |
+| Removes a professor from a class      | DELETE |    Admin    | [[+](#removeprofessorfromclass)] |
 
-### Success: 200 OK
+---
+
+## Authentication:
+
+<a name="login"></a>
+
+### POST /login
+
+Logs a user in
+
+#### Body:
 
 ```JSON
 {
-   "students": [{
-      "username": "fc12345",
-   }],
-   "professors": [{
-      "username": "fc00000",
-   }],
-   "admins": []
+  "user": {
+    "email": "example@example.com",
+    "password": "password"
+  }
 }
 ```
 
-### Erros possiveis
-
- 401 Unauthorized
+#### Success: 200 OK
 
 ```JSON
 {
-   "title": "Not an Admin",
-	"status": 401,
-	"detail": "You don't have admin previleges to access this resource."
+  "username": "example"
 }
 ```
 
-## GET /users/{id}
+#### Failure: 401 Unauthorized
 
 ```JSON
 {
-   "id": 1,
-   "username": "fc12345",
-   "firstName": "Exemplo",
-   "lastName": "Aluno",
-   "email": "fc12345@alunos.fc.ul.pt",
-   "status": null,
-   "avatarURL": null,
-   "createdAt": "2020-03-18T14:30:22.000Z",
-   "updatedAt": "2020-03-18T14:30:22.000Z",
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "Wrong email or password"
 }
 ```
 
-### Erros possiveis
+<a name="logout"></a>
 
-404 Not Found
+### GET /logout
 
-```JSON
-{
-   "title": "User Not Found",
-	"status": 404,
-	"detail": "Sorry, that user does not exist in our system."
-}
-```
+Logs a user out
 
-401 Unauthorized
+#### Success: 204 No Content
 
-```JSON
-{
-   "title": "Not logged in",
-	"status": 401,
-	"detail": "You must be logged in to access this resource."
-}
-```
+---
 
+## Users:
 
-## POST /users
-```JSON
-{
-   "users": [
-      {
-         "number": "fc12345",
-         "firstName": "Exemplo",
-         "lastName": "Aluno",
-         "email": "fc12345@alunos.fc.ul.pt",
-         "password": "test",
-         "role": {
-            "type": "student",
-            "data": {}
-          }
-      },
-      {
-         "number": "fc00000",
-         "firstName": "Exemplo",
-         "lastName": "Professor",
-         "email": "fc00000@alunos.fc.ul.pt",
-         "password": "test",
-         "role": {
-            "type": "professor",
-            "data": {
-               "department" : "DI",
-               "room" : "6.3.99"
-            }
-         }
-      }
-   ]
-}
-```
+<a name="allusers"></a>
 
-### Erros Possiveis
+### GET /users
 
-401 Unauthorized
+Gets all users
+
+#### Success: 200 OK
 
 ```JSON
-{
-   "title": "Not an Admin",
-	"status": 401,
-	"detail": "You don't have admin previleges to access this resource."
-}
-```
-
-400 Bad Request
-
-```JSON
-{
-   "title": "Invalid JSON",
-	"status": 400,
-	"detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
-}
-```
-
-409 Conflict
-
-```JSON
-{
-   "title": "Duplicate Entry",
-	"status": 409,
-	"detail": {
-      "message": "This field(s) must be unique in the database.",
-      "value": "username"
-   }
-}
-```
-
-## PUT /users/{id}
-
-```JSON
-"users": [
-		{
-			"username": "fc60000",
-			"firstName": "Casimer",
-			"lastName": "Goodwin",
-			"email": "fc60000@alunos.fc.ul.pt",
-			"password": "PTI/PTRzzz",
-			"role": {
-				"type": "student",
-				"data": {}
-			}
-		},
-```
-
-### Erros Possiveis
-
-400 Bad Request
-
-```JSON
-{
-   "title": "Invalid JSON",
-	"status": 400,
-	"detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
-}
-```
-422 Unprocessable Entity
-
-```JSON
-{
-   "title": "Validation Failed",
-	"status": 422,
-	"detail": {
-      "field": err.path,
-      "message": err.message,
-      "instance": err.instance
-   }
-}
-```
-
-409 Conflict
-
-```JSON
-{
-   "title": "Duplicate Entry",
-	"status": 409,
-	"detail": {
-      "message": "This field(s) must be unique in the database.",
-      "value": "username"
-   }
-}
-```
-
-404 Not Found
-
-```JSON
-{
-   "title": "User Not Found",
-	"status": 404,
-	"detail": "Sorry, that user does not exist in our system."
-}
-```
-
-## DELETE /users/{id}
-
-### Erros Possiveis: 
-
-404 Not Found
-
-```JSON
-{
-   "title": "User Not Found",
-	"status": 404,
-	"detail": "Sorry, that user does not exist in our system."
-}
-```
-
-## GET /users/students
-
-### Success: 200 OK
-
-```JSON
-{
-			"username": "fc60000",
-			"firstName": "Casimer",
-			"lastName": "Goodwin",
-			"email": "fc60000@alunos.fc.ul.pt",
-			"password": "K0Zv4yQYnoKVvLj",
-			"role": {
-				"type": "student",
-				"data": {}
-			}
-		},
-```
-
-### Erros Possiveis
-
- 401 Unauthorized
-
-```JSON
-{
-   "title": "Not an Admin",
-	"status": 401,
-	"detail": "You don't have admin previleges to access this resource."
-}
-```
-
-
-## GET /users/students/{id}
-
-```JSON
-"users": [
-   {
-			"username": "fc60000",
-			"firstName": "Casimer",
-			"lastName": "Goodwin",
-			"email": "fc60000@alunos.fc.ul.pt",
-			"password": "K0Zv4yQYnoKVvLj",
-			"role": {
-				"type": "student",
-				"data": {}
-			}
-      },
+[
+  {
+    "username": "student",
+    "first_name": "Student",
+    "last_name": "Example",
+    "email": "student@example.com",
+    "avatar_url": null,
+    "status": "offline"
+  },
+  {
+    "username": "professor",
+    "first_name": "Professor",
+    "last_name": "Example",
+    "email": "professor@example.com",
+    "avatar_url": null,
+    "status": "online"
+  }
 ]
 ```
 
-### Erros Possiveis
-
-401 Unauthorized
+#### Failure: 401 Unauthorized
 
 ```JSON
 {
-   "title": "Not logged in",
-	"status": 401,
-	"detail": "You must be logged in to access this resource."
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
 }
 ```
 
-404 Not Found
+<a name="userbyid"></a>
+
+### GET /users/{username}
+
+Gets a user by their username
+
+#### Success: 200 OK
 
 ```JSON
 {
-   "title": "Student Not Found",
-	"status": 404,
-	"detail": "Sorry, that student does not exist in our system."
+  "username": "student",
+  "first_name": "Student",
+  "last_name": "Example",
+  "email": "student@example.com",
+  "avatar_url": null,
+  "status": "offline"
 }
 ```
 
-## GET /users/professors
+#### Failure: 404 Not Found
 
 ```JSON
-"users": [
-   {
-      "username": "fc60001",
-      "firstName": "Judah",
-      "lastName": "Koelpin",
-      "email": "judahkoelpin@fc.ul.pt",
-      "password": "UD1mnRKS7IR7aqF",
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The user with the username example was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+      ]
+  }
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"username\" must only contain alpha-numeric characters",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "username"
+    ]
+  }
+}
+```
+
+<a name="createuser"></a>
+
+### POST /users
+
+Creates a new user
+
+#### Body:
+
+```JSON
+{
+  "users": [
+    {
+      "username": "student",
+      "first_name": "Student",
+      "last_name": "Example",
+      "email": "student@example.com",
+      "password": "password",
       "role": {
-         "type": "professor",
-         "data": {
-            "department": "Departamento de Informática",
-            "room": "6.1.51"
-         }
+        "type": "student",
+        "data": {}
       }
-   },
+    },
+    {
+      "username": "admin",
+      "first_name": "Admin",
+      "last_name": "Example",
+      "email": "admin@example.com",
+      "password": "password",
+      "role": {
+        "type": "admin",
+        "data": {
+          "previleges": 1
+        }
+      }
+    },
+    {
+      "username": "professor",
+      "first_name": "Professor",
+      "last_name": "Example",
+      "email": "professor@example.com",
+      "password": "password",
+      "role": {
+        "type": "professor",
+        "data": {
+          "room": "6.2.98",
+          "department": "DI"
+        }
+      }
+    }
+  ]
+}
+```
+
+#### Success: 201 Created
+
+```JSON
+{
+  "students": [
+    {
+      "username": "student"
+    }
+  ],
+  "professors": [
+    {
+      "username": "professor"
+    }
+  ],
+  "admins": [
+    {
+      "username": "admin"
+    }
+  ]
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
+}
+```
+
+#### Failure: 409 Conflict
+
+```JSON
+{
+ "error": {
+   "statusCode": 409,
+   "error": "Conflict",
+   "message": "This field(s) must be unique in the database.",
+   "detail": "Key (username)=(example) already exists."
+ },
+ "created": {
+   "students": [],
+   "professors": [],
+   "admins": []
+ }
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"users[0].username\" is not allowed to be empty",
+  "validation": {
+    "source": "body",
+    "keys": [
+      "users.0.username"
+    ]
+  }
+}
+```
+
+<a name="updateuser"></a>
+
+### PUT /users/{username}
+
+Edits an user
+
+#### Body:
+
+```JSON
+{
+  "user": {
+    "password": "password",
+    "status": "online",
+    "avatar_url": "example.jpg"
+  }
+}
+```
+
+#### Success: 200 OK
+
+```JSON
+{
+  "username": "student",
+  "first_name": "Student",
+  "last_name": "Example",
+  "email": "student@example.com",
+  "avatar_url": null,
+  "status": "online"
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You don't have permissions to manage this resource"
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The user with the username example was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"user.status\" must be one of [online, offline]",
+  "validation": {
+    "source": "body",
+    "keys": [
+      "user.status"
+    ]
+  }
+}
+```
+
+<a name="deleteuser"></a>
+
+### DELETE /users/{username}
+
+Deletes an user
+
+#### Success: 204 No Content
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The user with the username example was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"username\" must only contain alpha-numeric characters",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "username"
+    ]
+  }
+}
+```
+
+---
+
+## Students
+
+<a name="allstudents"></a>
+
+### GET /users/students
+
+Gets all students
+
+#### Success: 200 OK
+
+```JSON
+[
+  {
+    "username": "student",
+    "working_student": true,
+    "github_url": null,
+    "facebook_url": null,
+    "instagram_url": null,
+    "twitter_url": null,
+    "first_name": "Student",
+    "last_name": "Example",
+    "email": "student@example.com"
+  },
+  {
+    "username": "student2",
+    "working_student": false,
+    "github_url": null,
+    "facebook_url": null,
+    "instagram_url": null,
+    "twitter_url": null,
+    "first_name": "Student",
+    "last_name": "Example",
+    "email": "student2@example.com"
+  }
 ]
 ```
 
-### Erros Possiveis
-
- 401 Unauthorized
+#### Failure: 401 Unauthorized
 
 ```JSON
 {
-   "title": "Not an Admin",
-	"status": 401,
-	"detail": "You don't have admin previleges to access this resource."
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
 }
 ```
 
-## GET /users/professors/{id}
+### GET /users/students/{username}
 
-```JSON
+<a name="studentbyid"></a>
+Gets a student by their username
+
+#### Success: 200 OK
 
 ```JSON
 {
-   "username": "fc60001",
-   "firstName": "Judah",
-   "lastName": "Koelpin",
-   "email": "judahkoelpin@fc.ul.pt",
-   "password": "UD1mnRKS7IR7aqF",
-   "role": {
-      "type": "professor",
-      "data": {
-         "department": "Departamento de Informática",
-         "room": "6.1.51"
-      }
-   }
+  "username": "student",
+  "working_student": true,
+  "github_url": null,
+  "facebook_url": null,
+  "instagram_url": null,
+  "twitter_url": null,
+  "first_name": "Student",
+  "last_name": "Example",
+  "email": "student@example.com"
 }
 ```
 
-### Erros Possiveis
-
-401 Unauthorized
+#### Failure: 404 Not Found
 
 ```JSON
 {
-   "title": "Not logged in",
-	"status": 401,
-	"detail": "You must be logged in to access this resource."
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The student with the username example was not found",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "example"
+    ]
+  }
 }
 ```
 
-404 Not Found
+#### Failure: 401 Unauthorized
 
 ```JSON
 {
-   "title": "Professor Not Found",
-	"status": 404,
-	"detail": "Sorry, that professor does not exist in our system."
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
 }
 ```
 
-## GET /users/admins
+#### Failure: 400 Bad Request
+
 ```JSON
 {
-			"username": "fc60002",
-			"firstName": "Trace",
-			"lastName": "Ratke",
-			"email": "traceratke@fc.ul.pt",
-			"password": "Ri9mov2FmjjghOX",
-			"role": {
-				"type": "admin",
-				"data": {}
-         }
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"username\" must only contain alpha-numeric characters",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "username"
+    ]
+  }
 }
 ```
 
-### Erros Possiveis
+<a name="updatestudent"></a>
 
- 401 Unauthorized
+### PUT /users/students/{username}
+
+Edits a student
+
+#### Body:
 
 ```JSON
 {
-   "title": "Not an Admin",
-	"status": 401,
-	"detail": "You don't have admin previleges to access this resource."
+  "student": {
+    "working_student": true,
+    "github": "example",
+    "facebook": "example",
+    "instagram": "example",
+    "twitter": "example"
+  }
 }
 ```
 
-## GET /users/admins/{id}
+#### Success: 200 OK
 
 ```JSON
 {
-   "users": [
+  "username": "example",
+  "working_student": true,
+  "github_url": "https://github.com/example",
+  "facebook_url": "https://facebook.com/example",
+  "instagram_url": "https://instagram.com/example",
+  "twitter_url": "https://twitter.com/example"
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You don't have permissions to manage this resource"
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The student with the username example was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"student.working_student\" must be a boolean",
+  "validation": {
+    "source": "body",
+    "keys": [
+      "student.working_student"
+    ]
+  }
+}
+```
+
+---
+
+## Professors
+
+<a name="allprofessors"></a>
+
+### GET /users/professors
+
+Gets all professors
+
+#### Success: 200 OK
+
+```JSON
+[
+  {
+    "username": "professor",
+    "room": "6.2.98",
+    "department": "DI",
+    "first_name": "Professor",
+    "last_name": "Example",
+    "email": "professor@example.com"
+  },
+  {
+    "username": "professor2",
+    "room": "6.2.99",
+    "department": "DI",
+    "first_name": "Professor2",
+    "last_name": "Example",
+    "email": "professor2@example.com"
+  }
+]
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
+}
+```
+
+<a name="professorbyid"></a>
+
+### GET /users/professors/{username}
+
+Gets a professor by their username
+
+#### Success: 200 OK
+
+```JSON
+{
+  "username": "professor",
+  "room": "10.10.10",
+  "department": "EX",
+  "first_name": "Professor",
+  "last_name": "Example",
+  "email": "professor@example.com"
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The professor with the username example was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"username\" must only contain alpha-numeric characters",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "username"
+    ]
+  }
+}
+```
+
+<a name="updateprofessor"></a>
+
+### PUT /users/professors/{username}
+
+Edits a professor
+
+#### Body:
+
+```JSON
+{
+  "professor": {
+    "room": "1.1.1",
+    "department": "EX",
+  }
+}
+```
+
+#### Success: 200 OK
+
+```JSON
+{
+  "username": "example",
+  "room": "1.1.1",
+  "department": "EX"
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You don't have permissions to manage this resource"
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The professor with the username example was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"professor.room\" must be a string",
+  "validation": {
+    "source": "body",
+    "keys": [
+      "professor.room"
+    ]
+  }
+}
+```
+
+---
+
+## Admins
+
+<a name="alladmins"></a>
+
+### GET /users/admins
+
+Gets all admins
+
+#### Success: 200 OK
+
+```JSON
+[
+  {
+    "username": "admin",
+    "previleges": 1,
+    "first_name": "Admin",
+    "last_name": "Example",
+    "email": "admin@example.com"
+  },
+  {
+    "username": "admin2",
+    "previleges": 1,
+    "first_name": "Admin2",
+    "last_name": "Example",
+    "email": "admin2@example.com"
+  }
+]
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
+}
+```
+
+<a name="adminbyid"></a>
+
+### GET /users/admins/{username}
+
+Gets an admin by their username
+
+#### Success: 200 OK
+
+```JSON
+{
+  "username": "admin",
+  "previleges": 1,
+  "first_name": "Admin",
+  "last_name": "Example",
+  "email": "admin@example.com"
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The admin with the username example was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"username\" must only contain alpha-numeric characters",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "username"
+    ]
+  }
+}
+```
+
+<a name="updateadmin"></a>
+
+### PUT /users/admins/{username}
+
+Edits an admin
+
+#### Body:
+
+```JSON
+{
+  "admin": {
+    "previleges": 1
+  }
+}
+```
+
+#### Success: 200 OK
+
+```JSON
+{
+  "username": "example",
+  "previleges": 1
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You don't have permissions to manage this resource"
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The admin with the username example was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"admin.previleges\" must be one of [1, 2, 3]",
+  "validation": {
+    "source": "body",
+    "keys": [
+      "admin.previleges"
+    ]
+  }
+}
+```
+
+---
+
+## Courses
+
+<a name="allcourses"></a>
+
+### GET /courses
+
+Gets all courses
+
+#### Success: 200 OK
+
+```JSON
+[
+  {
+    "code": "L111",
+    "name": "Course One",
+    "cycle": 1,
+    "initials": "C1"
+  },
+  {
+    "code": "L112",
+    "name": "Course Two",
+    "cycle": 1,
+    "initials": "C2"
+  }
+]
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+<a name="coursebyid"></a>
+
+### GET /courses/{code}
+
+Gets a course by its code
+
+#### Success: 200 OK
+
+```JSON
+{
+  "code": "L111",
+  "name": "Course One",
+  "cycle": 1,
+  "initials": "C1"
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The course with the code L111 was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "L111"
+    ]
+  }
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"code\" must only contain alpha-numeric characters",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "code"
+    ]
+  }
+}
+```
+
+<a name="createcourse"></a>
+
+### POST /courses
+
+Creates a new course
+
+#### Body:
+
+```JSON
+{
+  "courses": [
+    {
+      "code": "L111",
+      "name": "Course One",
+      "cycle": 1,
+      "initials": "C1",
+      "units": [
+        {
+          "code": 11111,
+          "name": "Unit One",
+          "semester": 1,
+          "initials": "U1",
+          "ects": 6
+        }
+      ]
+    }
+  ]
+}
+```
+
+#### Success: 201 Created
+
+```JSON
+[
+  {
+    "code": "L111",
+    "name": "Course One",
+    "units": [
       {
-      "username": "fc60002",
-			"firstName": "Trace",
-			"lastName": "Ratke",
-			"email": "traceratke@fc.ul.pt",
-			"password": "Ri9mov2FmjjghOX",
-			"role": {
-				"type": "admin",
-				"data": {}
-         }
+        "code": 11111,
+        "name": "Unit One"
       }
+    ]
+  }
+]
 ```
 
-### Erros Possiveis
-
-401 Unauthorized
+#### Failure: 401 Unauthorized
 
 ```JSON
 {
-   "title": "Not an Admin",
-	"status": 401,
-	"detail": "You don't have admin previleges to access this resource."
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
 }
 ```
 
-404 Not Found
+#### Failure: 409 Conflict
 
 ```JSON
 {
-   "title": "Admin Not Found",
-	"status": 404,
-	"detail": "Sorry, that admin does not exist in our system."
+  "error": {
+    "statusCode": 409,
+    "error": "Conflict",
+    "message": "This field(s) must be unique in the database.",
+    "detail": "Key (code)=(L111) already exists."
+  },
+  "created": []
 }
 ```
 
-## GET /programs/
-```JSON
+#### Failure: 400 Bad Request
 
+```JSON
 {
-			"code": "L079",
-			"name": "Tecnologias de Informação",
-			"cycle": 1,
-			"initials": "LTI",
-			"courses": [
-				{
-					"code": 26719,
-					"name": "Projeto de Tecnologias de Informação",
-					"initials": "PTI",
-					"ects": 6
-				},
-				{
-					"code": 26718,
-					"name": "Projeto de Tecnologias de Redes",
-					"initials": "PTR",
-					"ects": 6
-				},
-				{
-					"code": 26716,
-					"name": "Planeamento e Gestão de Projeto",
-					"initials": "PGP",
-					"ects": 6
-				},
-				{
-					"code": 22701,
-					"name": "Introdução às Probabilidades e Estatística",
-					"initials": "IPE",
-					"ects": 6
-				}
-			]
-		},
-		{
-			"code": "9119",
-			"name": "Engenharia Informática",
-			"cycle": 1,
-			"initials": "LEI",
-			"courses": [
-				{
-					"code": 26737,
-					"name": "Teoria da Computação",
-					"initials": "TC",
-					"ects": 6
-				},
-				{
-					"code": 26704,
-					"name": "Redes de Computadores",
-					"initials": "RC",
-					"ects": 6
-				},
-				{
-					"code": 22701,
-					"name": "Introdução às Probabilidades e Estatística",
-					"initials": "IPE",
-					"ects": 6
-				}
-			]
-      }
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"courses[0].code\" is not allowed to be empty",
+  "validation": {
+    "source": "body",
+    "keys": [
+      "courses.0.code"
+    ]
+  }
+}
 ```
+
+<a name="updatecourse"></a>
+
+### PUT /courses/{code}
+
+Edits a course
+
+#### Body:
+
+```JSON
+{
+  "course":
+    {
+      "name": "Example",
+      "initials": "EX"
+    }
+}
+```
+
+#### Success: 200 OK
+
+```JSON
+{
+  "code": "L111",
+  "name": "Example",
+  "cycle": 1,
+  "initials": "EX"
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The course with the code L111 was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "L111"
+    ]
+  }
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"code\" must only contain alpha-numeric characters",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "code"
+    ]
+  }
+}
+```
+
+<a name="deletecourse"></a>
+
+### DELETE /courses/{code}
+
+Deletes a course
+
+#### Success: 204 No Content
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The course with the code L111 was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "L111"
+    ]
+  }
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"code\" must only contain alpha-numeric characters",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "code"
+    ]
+  }
+}
+```
+
+---
+
+## Units
+
+<a name="allunits"></a>
+
+### GET /courses/{code}/units
+
+Gets all units from a course
+
+#### Success: 200 OK
+
+```JSON
+[
+  {
+    "course_code": "L111",
+    "unit_code": 11111,
+    "name": "Unit One",
+    "semester": 5,
+    "initials": "U1",
+    "ects": 6
+  },
+  {
+    "course_code": "L111",
+    "unit_code": 11112,
+    "name": "Unit Two",
+    "semester": 6,
+    "initials": "U2",
+    "ects": 6
+  }
+]
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+<a name="unitbyid"></a>
+
+### GET /courses/{code}/units/{unit_code}
+
+Gets a unit from a course by its code
+
+#### Success: 200 OK
+
+```JSON
+{
+  "course_code": "L111",
+  "unit_code": 11111,
+  "name": "Unit One",
+  "semester": 5,
+  "initials": "U1",
+  "ects": 6
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The unit with the code 11111 was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      11111
+    ]
+  }
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"unit_code\" must be a number",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "unit_code"
+    ]
+  }
+}
+```
+
+<a name="createunit"></a>
+
+### POST /courses/{code}/units
+
+Creates units for a course
+
+#### Body:
+
+```JSON
+{
+  "units": [
+    {
+      "code": 11111,
+      "name": "Unit One",
+      "semester": 6,
+      "initials": "U1",
+      "ects": 6
+    },
+    {
+      "code": 11112,
+      "name": "Unit Two",
+      "semester": 6,
+      "initials": "U2",
+      "ects": 6
+    }
+  ]
+}
+```
+
+#### Success: 201 Created
+
+```JSON
+[
+  {
+    "code": 11111,
+    "name": "Unit One"
+  },
+  {
+    "code": 11112,
+    "name": "Unit Two"
+  }
+]
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
+}
+```
+
+#### Failure: 409 Conflict
+
+```JSON
+{
+  "error": {
+    "statusCode": 409,
+    "error": "Conflict",
+    "message": "This field(s) must be unique in the database.",
+    "detail": "Key (code)=(11111) already exists."
+  },
+  "created": []
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"units[0].name\" is not allowed to be empty",
+  "validation": {
+    "source": "body",
+    "keys": [
+      "units.0.name"
+    ]
+  }
+}
+```
+
+<a name="updateunit"></a>
+
+### PUT /courses/{code}/units/{unit_code}
+
+Edits a unit
+
+#### Body:
+
+```JSON
+{
+  "unit":
+    {
+      "name": "Example",
+      "semester": 5,
+      "initials": "EX",
+      "ects": 3
+    }
+}
+```
+
+#### Success: 200 OK
+
+```JSON
+{
+  "code": 11111,
+  "name": "Example",
+  "semester": 5,
+  "initials": "EX",
+  "ects": 3
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be an admin"
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The unit with the code 11111 was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      11111
+    ]
+  }
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"unit.semester\" must be a number",
+  "validation": {
+    "source": "body",
+    "keys": [
+      "unit.semester"
+    ]
+  }
+}
+```
+
+<a name="deleteunit"></a>
+
+### DELETE /courses/{code}/units/{unit_code}
+
+Deletes a unit
+
+#### Success: 204 No Content
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The unit with the code 11111 was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      11111
+    ]
+  }
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"unit_code\" must be a number",
+  "validation": {
+    "source": "params",
+    "keys": [
+      "unit_code"
+    ]
+  }
+}
+```
+
+---
+
+## Classes
+
+<a name="allclasses"></a>
+
+## GET /courses/{code}/units/{unit_code}/classes
+
+Gets all classes from a unit
+
+#### Success: 200 OK
+
+```JSON
+[
+  {
+    "unit_code": 11111,
+    "number": "T1",
+    "begins_at": "10:30:00",
+    "ends_at": "12:00:00",
+    "week_day": 2,
+    "academic_year": "2019-2020"
+  },
+  {
+    "unit_code": 11111,
+    "number": "T2",
+    "begins_at": "10:30:00",
+    "ends_at": "12:00:00",
+    "week_day": 4,
+    "academic_year": "2019-2020"
+  }
+]
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+<a name="classbyid"></a>
+
+## GET /courses/{code}/units/{unit_code}/classes/{year}/{class_number}
+
+Gets a class by its year and number
+
+#### Success: 200 OK
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The unit with the code 11111 was not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      11111
+    ]
+  }
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"unit.semester\" must be a number",
+  "validation": {
+    "source": "body",
+    "keys": [
+      "unit.semester"
+    ]
+  }
+}
+```
+
+---
 
 ### Erros Possiveis
 
@@ -536,348 +1653,24 @@
 ```JSON
 {
    "title": "Not logged in",
-	"status": 401,
-	"detail": "You must be logged in to access this resource."
-}
-```
-
-## GET /programs/{id}
-
-```JSON
-
-{
-	"programs": [
-		{
-			"code": "L079",
-			"name": "Tecnologias de Informação",
-			"cycle": 1,
-			"initials": "LTI",
-			"courses": [
-				{
-					"code": 26719,
-					"name": "Projeto de Tecnologias de Informação",
-					"initials": "PTI",
-					"ects": 6
-				},
-				{
-					"code": 26718,
-					"name": "Projeto de Tecnologias de Redes",
-					"initials": "PTR",
-					"ects": 6
-				},
-				{
-					"code": 26716,
-					"name": "Planeamento e Gestão de Projeto",
-					"initials": "PGP",
-					"ects": 6
-				},
-				{
-					"code": 22701,
-					"name": "Introdução às Probabilidades e Estatística",
-					"initials": "IPE",
-					"ects": 6
-				}
-			]
-		},
-	]
-}
-
-		
-```
-
-### Erros Possiveis
-
-401 Unauthorized
-
-```JSON
-{
-   "title": "Not logged in",
-	"status": 401,
-	"detail": "You must be logged in to access this resource."
-}
-```
-
-404 Not Found
-
-```JSON
-{
-   "title": "Program Not Found",
-	"status": 404,
-	"detail": "Sorry, that program does not exist in our system."
-}
-```
-
-## POST /programs/
-
-```JSON
-{
-			"code": "L069",
-			"name": "Estatística Aplicada",
-			"cycle": 1,
-			"initials": "LEA",
-			"courses": [
-				{
-					"code": 1111,
-					"name": "Estatística Paramétrica",
-					"initials": "EPAR",
-					"ects": 6
-				}
-```
-### Erros Possiveis
-
-401 Unauthorized
-
-```JSON
-{
-   "title": "Not an Admin",
-	"status": 401,
-	"detail": "You don't have admin previleges to access this resource."
-}
-```
-
-400 Bad Request
-
-```JSON
-{
-   "title": "Invalid JSON",
-	"status": 400,
-	"detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
-}
-```
-
-409 Conflict
-
-```JSON
-{
-   "title": "Duplicate Entry",
-	"status": 409,
-	"detail": {
-      "message": "This field(s) must be unique in the database.",
-      "value": "code"
-   }
-}
-```
-
-## PUT /programs/{id}
-```JSON
-
-{
-   "code": "L069",
-	"name": "Tecnologias de Informação",
-	"cycle": 1,
-	"initials": "LTI",
-}
-
-
-### Erros Possiveis
-
-400 Bad Request
-
-```JSON
-{
-   "title": "Invalid JSON",
-	"status": 400,
-	"detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
-}
-```
-422 Unprocessable Entity
-
-```JSON
-{
-   "title": "Validation Failed",
-	"status": 422,
-	"detail": {
-      "field": err.path,
-      "message": err.message,
-      "instance": err.instance
-   }
-}
-```
-
-409 Conflict
-
-```JSON
-{
-   "title": "Duplicate Entry",
-	"status": 409,
-	"detail": {
-      "message": "This field(s) must be unique in the database.",
-      "value": error.value
-   }
-}
-```
-
-404 Not Found
-
-```JSON
-{
-   "title": "Program Not Found",
-	"status": 404,
-	"detail": "Sorry, that program does not exist in our system."
-}
-```
-
-## DELETE /programs/{id}
-
-### Erros Possiveis
-
-404 Not Found
-
-```JSON
-{
-   "title": "Program Not Found",
-	"status": 404,
-	"detail": "Sorry, that program does not exist in our system."
-}
-```
-
-## GET /programs/{id}/courses
-
-```JSON
-"courses": [
-				{
-					"code": 26719,
-					"name": "Projeto de Tecnologias de Informação",
-					"initials": "PTI",
-					"ects": 6
-				},
-				{
-					"code": 26718,
-					"name": "Projeto de Tecnologias de Redes",
-					"initials": "PTR",
-					"ects": 6
-				},
-				{
-					"code": 26716,
-					"name": "Planeamento e Gestão de Projeto",
-					"initials": "PGP",
-					"ects": 6
-				},
-				{
-					"code": 22701,
-					"name": "Introdução às Probabilidades e Estatística",
-					"initials": "IPE",
-					"ects": 6
-				}
-			]
-```
-
-### Erros Possiveis
-
-401 Unauthorized
-
-```JSON
-{
-   "title": "Not logged in",
-	"status": 401,
-	"detail": "You must be logged in to access this resource."
-}
-```
-
-```JSON
-{
-   "title": "Program Not Found",
-	"status": 404,
-	"detail": "Sorry, that course does not exist in our system."
-}
-```
-
-## GET /programs/{id}/courses/{courseId}: 
-
-```JSON
-				{
-					"code": 26719,
-					"name": "Projeto de Tecnologias de Informação",
-					"initials": "PTI",
-					"ects": 6
-				},
-			]
-		},
-```
-
-### Erros Possiveis
-
-401 Unauthorized
-
-```JSON
-{
-   "title": "Not logged in",
-	"status": 401,
-	"detail": "You must be logged in to access this resource."
+  "status": 401,
+  "detail": "You must be logged in to access this resource."
 }
 ```
 
 ```JSON
 {
    "title": "Course Not Found",
-	"status": 404,
-	"detail": "Sorry, that course does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that course does not exist in our system."
 }
 ```
 
 ```JSON
 {
    "title": "Program Not Found",
-	"status": 404,
-	"detail": "Sorry, that course does not exist in our system."
-}
-```
-
-## GET /programs/{id}/courses/{courseId}/classes
-
-```JSON 
-{
-	"classes": [
-		{
-			"number": "T1",
-			"beginsAt": "10:00",
-			"endsAt": "11:30",
-			"weekDay": 1,
-			"academicYear": "2019/2020"
-		},
-		{
-			"number": "T2",
-			"beginsAt": "10:00",
-			"endsAt": "11:30",
-			"weekDay": 1,
-			"academicYear": "2019/2020"
-		},
-		{
-			"number": "T3",
-			"beginsAt": "10:00",
-			"endsAt": "11:30",
-			"weekDay": 1,
-			"academicYear": "2019/2020"
-		}
-	]
-}
-```
-
-### Erros Possiveis
-
-401 Unauthorized
-
-```JSON
-{
-   "title": "Not logged in",
-	"status": 401,
-	"detail": "You must be logged in to access this resource."
-}
-```
-
-```JSON
-{
-   "title": "Course Not Found",
-	"status": 404,
-	"detail": "Sorry, that course does not exist in our system."
-}
-```
-
-```JSON
-{
-   "title": "Program Not Found",
-	"status": 404,
-	"detail": "Sorry, that course does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that course does not exist in our system."
 }
 ```
 
@@ -886,14 +1679,14 @@
 ```JSON
 
 {
-	"classes": [
-		{
-			"number": "T1",
-			"beginsAt": "10:00",
-			"endsAt": "11:30",
-			"weekDay": 1,
-			"academicYear": "2019/2020"
-		}
+  "classes": [
+    {
+      "number": "T1",
+      "beginsAt": "10:00",
+      "endsAt": "11:30",
+      "weekDay": 1,
+      "academicYear": "2019/2020"
+    }
 
 ```
 
@@ -904,43 +1697,45 @@
 ```JSON
 {
    "title": "Not logged in",
-	"status": 401,
-	"detail": "You must be logged in to access this resource."
+  "status": 401,
+  "detail": "You must be logged in to access this resource."
 }
 ```
 
 ```JSON
 {
    "title": "Class Not Found",
-	"status": 404,
-	"detail": "Sorry, that course does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that course does not exist in our system."
 }
 ```
+
 ```JSON
 {
    "title": "Course Not Found",
-	"status": 404,
-	"detail": "Sorry, that course does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that course does not exist in our system."
 }
 ```
 
 ```JSON
 {
    "title": "Program Not Found",
-	"status": 404,
-	"detail": "Sorry, that course does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that course does not exist in our system."
 }
 ```
 
 ## POST /programs/{id}/courses/{courseId}/classes/
+
 ```JSON
 {
-			"number": "T5",
-			"beginsAt": "15:00",
-			"endsAt": "16:30",
-			"weekDay": 1,
-			"academicYear": "2019/2020"
-		}
+      "number": "T5",
+      "beginsAt": "15:00",
+      "endsAt": "16:30",
+      "weekDay": 1,
+      "academicYear": "2019/2020"
+    }
 
 ```
 
@@ -951,8 +1746,8 @@
 ```JSON
 {
    "title": "Invalid JSON",
-	"status": 400,
-	"detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
+  "status": 400,
+  "detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
 }
 ```
 
@@ -975,17 +1770,18 @@
 ```JSON
 {
    "title": "Invalid JSON",
-	"status": 400,
-	"detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
+  "status": 400,
+  "detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
 }
 ```
+
 422 Unprocessable Entity
 
 ```JSON
 {
    "title": "Validation Failed",
-	"status": 422,
-	"detail": {
+  "status": 422,
+  "detail": {
       "field": err.path,
       "message": err.message,
       "instance": err.instance
@@ -998,8 +1794,8 @@
 ```JSON
 {
    "title": "Duplicate Entry",
-	"status": 409,
-	"detail": {
+  "status": 409,
+  "detail": {
       "message": "This field(s) must be unique in the database.",
       "value": "username"
    }
@@ -1011,24 +1807,24 @@
 ```JSON
 {
    "title": "Class Not Found",
-	"status": 404,
-	"detail": "Sorry, that class does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that class does not exist in our system."
 }
 ```
 
 ```JSON
 {
    "title": "Program Not Found",
-	"status": 404,
-	"detail": "Sorry, that program does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that program does not exist in our system."
 }
 ```
 
 ```JSON
 {
    "title": "Course Not Found",
-	"status": 404,
-	"detail": "Sorry, that course does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that course does not exist in our system."
 }
 ```
 
@@ -1039,24 +1835,24 @@
 ```JSON
 {
    "title": "Program Not Found",
-	"status": 404,
-	"detail": "Sorry, that program does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that program does not exist in our system."
 }
 ```
 
 ```JSON
 {
    "title": "Course Not Found",
-	"status": 404,
-	"detail": "Sorry, that course does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that course does not exist in our system."
 }
 ```
 
 ```JSON
 {
    "title": "Class Not Found",
-	"status": 404,
-	"detail": "Sorry, that class does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that class does not exist in our system."
 }
 ```
 
@@ -1083,13 +1879,13 @@
 
 ### Erros Possiveis
 
- 401 Unauthorized
+401 Unauthorized
 
 ```JSON
 {
    "title": "Not an Admin",
-	"status": 401,
-	"detail": "You don't have admin previleges to access this resource."
+  "status": 401,
+  "detail": "You don't have admin previleges to access this resource."
 }
 ```
 
@@ -1119,8 +1915,8 @@
 ```JSON
 {
    "title": "Not logged in",
-	"status": 401,
-	"detail": "You must be logged in to access this resource."
+  "status": 401,
+  "detail": "You must be logged in to access this resource."
 }
 ```
 
@@ -1129,12 +1925,12 @@
 ```JSON
 {
    "title": "Student Not Found",
-	"status": 404,
-	"detail": "Sorry, that student does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that student does not exist in our system."
 }
 ```
 
-## POST /programs/{id}/courses/{courseId}/classes/{classId}/students 
+## POST /programs/{id}/courses/{courseId}/classes/{classId}/students
 
 ```JSON
 {
@@ -1149,8 +1945,8 @@
 ```JSON
 {
    "title": "Invalid JSON",
-	"status": 400,
-	"detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
+  "status": 400,
+  "detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
 }
 ```
 
@@ -1159,8 +1955,8 @@
 ```JSON
 {
    "title": "Class Not Found",
-	"status": 404,
-	"detail": "Sorry, that class does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that class does not exist in our system."
 }
 ```
 
@@ -1169,8 +1965,8 @@
 ```JSON
 {
    "title": "User Not Found",
-	"status": 404,
-	"detail": "Sorry, that user does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that user does not exist in our system."
 }
 ```
 
@@ -1183,8 +1979,8 @@
 ```JSON
 {
    "title": "Class Not Found",
-	"status": 404,
-	"detail": "Sorry, that class does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that class does not exist in our system."
 }
 ```
 
@@ -1193,8 +1989,8 @@
 ```JSON
 {
    "title": "User Not Found",
-	"status": 404,
-	"detail": "Sorry, that user does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that user does not exist in our system."
 }
 ```
 
@@ -1221,19 +2017,19 @@
 
 ### Erros Possiveis
 
- 401 Unauthorized
+401 Unauthorized
 
 ```JSON
 {
    "title": "Not an Admin",
-	"status": 401,
-	"detail": "You don't have admin previleges to access this resource."
+  "status": 401,
+  "detail": "You don't have admin previleges to access this resource."
 }
 ```
 
 ## GET /programs/{id}/courses/{courseId}/classes/{classId}/professors/{professorId}
 
-```JSON
+````JSON
 
 ```JSON
 {
@@ -1250,7 +2046,7 @@
       }
    }
 }
-```
+````
 
 ### Erros Possiveis
 
@@ -1259,8 +2055,8 @@
 ```JSON
 {
    "title": "Not logged in",
-	"status": 401,
-	"detail": "You must be logged in to access this resource."
+  "status": 401,
+  "detail": "You must be logged in to access this resource."
 }
 ```
 
@@ -1269,8 +2065,8 @@
 ```JSON
 {
    "title": "Professor Not Found",
-	"status": 404,
-	"detail": "Sorry, that professor does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that professor does not exist in our system."
 }
 ```
 
@@ -1289,8 +2085,8 @@
 ```JSON
 {
    "title": "Invalid JSON",
-	"status": 400,
-	"detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
+  "status": 400,
+  "detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
 }
 ```
 
@@ -1299,8 +2095,8 @@
 ```JSON
 {
    "title": "Class Not Found",
-	"status": 404,
-	"detail": "Sorry, that class does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that class does not exist in our system."
 }
 ```
 
@@ -1309,8 +2105,8 @@
 ```JSON
 {
    "title": "User Not Found",
-	"status": 404,
-	"detail": "Sorry, that user does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that user does not exist in our system."
 }
 ```
 
@@ -1323,8 +2119,8 @@
 ```JSON
 {
    "title": "Class Not Found",
-	"status": 404,
-	"detail": "Sorry, that class does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that class does not exist in our system."
 }
 ```
 
@@ -1333,8 +2129,8 @@
 ```JSON
 {
    "title": "User Not Found",
-	"status": 404,
-	"detail": "Sorry, that user does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that user does not exist in our system."
 }
 ```
 
@@ -1359,8 +2155,8 @@
 ```JSON
 {
    "title": "User Not Found",
-	"status": 404,
-	"detail": "Sorry, that user does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that user does not exist in our system."
 }
 ```
 
@@ -1385,57 +2181,56 @@
 ```JSON
 {
    "title": "User Not Found",
-	"status": 404,
-	"detail": "Sorry, that user does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that user does not exist in our system."
 }
 ```
 
 ## GET /logout
 
-### Erros Possiveis 
+### Erros Possiveis
 
 ```JSON
 {
    "title": "Not logged in",
-	"status": 401,
-	"detail": "You must be logged in to access this resource."
+  "status": 401,
+  "detail": "You must be logged in to access this resource."
 }
 ```
 
 ## Erros
 
-
-### Failiure: 401 Unauthorized
+### Failure: 401 Unauthorized
 
 ```JSON
 {
    "title": "Not an Admin",
-	"status": 401,
-	"detail": "You don't have admin previleges to access this resource."
+  "status": 401,
+  "detail": "You don't have admin previleges to access this resource."
 }
 ```
 
 ```JSON
 {
    "title": "Not logged in",
-	"status": 401,
-	"detail": "You must be logged in to access this resource."
+  "status": 401,
+  "detail": "You must be logged in to access this resource."
 }
 ```
 
 ```JSON
 {
    "title": "Invalid Identity",
-	"status": 401,
-	"detail": "You don't have permissions to manage other users accounts."
+  "status": 401,
+  "detail": "You don't have permissions to manage other users accounts."
 }
 ```
 
 ```JSON
 {
    "title": "Failed to Log In",
-	"status": 401,
-	"detail": "Wrong email or password."
+  "status": 401,
+  "detail": "Wrong email or password."
 }
 ```
 
@@ -1444,56 +2239,56 @@
 ```JSON
 {
    "title": "Not Found",
-	"status": 404,
-	"detail": "Sorry, we can't find the page you were looking for."
+  "status": 404,
+  "detail": "Sorry, we can't find the page you were looking for."
 }
 ```
 
 ```JSON
 {
    "title": "User Not Found",
-	"status": 404,
-	"detail": "Sorry, that user does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that user does not exist in our system."
 }
 ```
 
 ```JSON
 {
    "title": "Program Not Found",
-	"status": 404,
-	"detail": "Sorry, that program does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that program does not exist in our system."
 }
 ```
 
 ```JSON
 {
    "title": "Course Not Found",
-	"status": 404,
-	"detail": "Sorry, that course does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that course does not exist in our system."
 }
 ```
 
 ```JSON
 {
    "title": "Class Not Found",
-	"status": 404,
-	"detail": "Sorry, that class does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that class does not exist in our system."
 }
 ```
 
 ```JSON
 {
    "title": "Professor Not Found",
-	"status": 404,
-	"detail": "Sorry, that professor does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that professor does not exist in our system."
 }
 ```
 
 ```JSON
 {
    "title": "Student Not Found",
-	"status": 404,
-	"detail": "Sorry, that student does not exist in our system."
+  "status": 404,
+  "detail": "Sorry, that student does not exist in our system."
 }
 ```
 
@@ -1502,8 +2297,8 @@
 ```JSON
 {
    "title": "Service Unavailable",
-	"status": 503,
-	"detail": "Sorry, this service seems to be unavailable... Try again later."
+  "status": 503,
+  "detail": "Sorry, this service seems to be unavailable... Try again later."
 }
 ```
 
@@ -1512,17 +2307,18 @@
 ```JSON
 {
    "title": "Invalid JSON",
-	"status": 400,
-	"detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
+  "status": 400,
+  "detail": "Could not parse the given JSON. Make sure your JSON has all the requierd fields."
 }
 ```
+
 ### 422 Unprocessable Entity
 
 ```JSON
 {
    "title": "Validation Failed",
-	"status": 422,
-	"detail": {
+  "status": 422,
+  "detail": {
       "field": err.path,
       "message": err.message,
       "instance": err.instance
@@ -1535,8 +2331,8 @@
 ```JSON
 {
    "title": "Duplicate Entry",
-	"status": 409,
-	"detail": {
+  "status": 409,
+  "detail": {
       "message": "This field(s) must be unique in the database.",
       "value": error.value
    }
