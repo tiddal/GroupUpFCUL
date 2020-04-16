@@ -14,7 +14,8 @@ class UnitController {
 	}
 
 	async index(request, response, next) {
-		const { code } = await this.findCourse(request, response, next);
+		const course = await this.findCourse(request, response, next);
+		if (!course) return next();
 		const units = await connection('course_unit')
 			.join('units', 'units.code', '=', 'course_unit.unit_code')
 			.select([
@@ -24,12 +25,13 @@ class UnitController {
 				'units.initials',
 				'units.ects',
 			])
-			.where('course_unit.course_code', code);
+			.where('course_unit.course_code', course.code);
 		return response.json(units);
 	}
 
 	async find(request, response, next) {
-		const { code } = await this.findCourse(request, response, next);
+		const course = await this.findCourse(request, response, next);
+		if (!course) return next();
 		const { unit_code } = request.params;
 		const [unit] = await connection('course_unit')
 			.join('units', 'units.code', '=', 'course_unit.unit_code')
@@ -41,7 +43,7 @@ class UnitController {
 				'units.ects',
 			])
 			.where({
-				'course_unit.course_code': code,
+				'course_unit.course_code': course.code,
 				'course_unit.unit_code': unit_code,
 			});
 		if (!unit) return next(errors.UNIT_NOT_FOUND(unit_code, 'params'));
@@ -50,6 +52,7 @@ class UnitController {
 
 	async store(request, response, next) {
 		const course = await this.findCourse(request, response, next);
+		if (!course) return next();
 		const createdUnits = [];
 		for (let unit of request.body.units) {
 			try {

@@ -1,5 +1,6 @@
 const connection = require('../db/config/connection');
 const crypto = require('crypto');
+const { v4: uuidv4 } = require('uuid');
 const errors = require('../utils/errors');
 
 class ClassController {
@@ -61,7 +62,7 @@ class ClassController {
 		for (let class_ of request.body.classes) {
 			try {
 				const { number, begins_at, ends_at, week_day, academic_year } = class_;
-				const id = crypto.randomBytes(4).toString('HEX');
+				const id = uuidv4();
 				const [createdClass] = await connection('classes').insert(
 					{
 						id,
@@ -160,6 +161,7 @@ class ClassController {
 				if (error.code === '23503')
 					return response.status(404).json({
 						error: errors.STUDENT_NOT_FOUND(username, 'body'),
+						created: createdStudents,
 					});
 				return response.status(409).json({
 					error: errors.UNIQUE_CONSTRAIN(error.detail),
@@ -227,6 +229,7 @@ class ClassController {
 				if (error.code === '23503')
 					return response.status(404).json({
 						error: errors.PROFESSOR_NOT_FOUND(username, 'body'),
+						created: createdProfessors,
 					});
 				return response.status(409).json({
 					error: errors.UNIQUE_CONSTRAIN(error.detail),

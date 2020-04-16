@@ -1,7 +1,7 @@
 exports.up = function (knex) {
 	return knex.schema.createTable('admins', function (table) {
 		table.string('username').primary();
-		table.integer('previleges');
+		table.integer('previleges').defaultTo(1).notNullable();
 		table
 			.foreign('username')
 			.references('username')

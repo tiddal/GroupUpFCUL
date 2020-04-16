@@ -1,6 +1,6 @@
 exports.up = function (knex) {
 	return knex.schema.createTable('classes', function (table) {
-		table.string('id').primary();
+		table.uuid('id').primary();
 		table.integer('unit_code').notNullable();
 		table.string('number').notNullable();
 		table.time('begins_at').notNullable();
