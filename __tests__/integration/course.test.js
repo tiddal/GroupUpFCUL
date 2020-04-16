@@ -1,152 +1,81 @@
-const request = require("supertest");
-const app = require("../../app/index");
-const connection = require("../../db/config/connection");
+const request = require('supertest');
+const app = require('../../API/app');
+const connection = require('../../API/db/config/connection');
+const { LTI, LEI } = require('../factory');
 
-describe("Course", () => {
-  beforeEach(async () => {
-    await connection.migrate.rollback();
-    await connection.migrate.latest();
-  });
+describe('Course', () => {
+	beforeEach(async () => {
+		await connection.migrate.rollback();
+		await connection.migrate.latest();
+	});
 
-  afterAll(async () => {
-    await connection.migrate.rollback();
-    await connection.migrate.latest();
-    await connection.destroy();
-  });
+	afterAll(async () => {
+		await connection.destroy();
+	});
 
-  it("should be able to create Courses", async () => {
-    const response = await request(app)
-      .post("/courses")
-      .send({
-        courses: [
-          {
-            code: "L079",
-            name: "Tecnologias de Informação",
-            cycle: 1,
-            initials: "LTI",
-            units: [
-              {
-                code: 26719,
-                name: "Projeto de Tecnologias de Informação",
-                semester: 6,
-                initials: "PTI",
-                ects: 6,
-              },
-            ],
-          },
-        ],
-      });
-    expect(response.status).toBe(201);
-  });
+	it('should be able to create a course', async () => {
+		const response = await request(app)
+			.post('/courses')
+			.send({
+				courses: [LTI],
+			});
+		expect(response.status).toBe(201);
+	});
 
-  it("should be able to get all Courses' information", async () => {
-    const create = await request(app)
-      .post("/courses")
-      .send({
-        courses: [
-          {
-            code: "L079",
-            name: "Tecnologias de Informação",
-            cycle: 1,
-            initials: "LTI",
-            units: [
-              {
-                code: 26719,
-                name: "Projeto de Tecnologias de Informação",
-                semester: 6,
-                initials: "PTI",
-                ects: 6,
-              },
-            ],
-          },
-        ],
-      });
-    const response = await request(app).get("/courses");
-    expect(response.status).toBe(200);
-  });
+	it('should be able to create multiple courses', async () => {
+		const response = await request(app)
+			.post('/courses')
+			.send({
+				courses: [LTI, LEI],
+			});
+		expect(response.status).toBe(201);
+	});
 
-  it("should be able to get a Course's information by their code", async () => {
-    const create = await request(app)
-      .post("/courses")
-      .send({
-        courses: [
-          {
-            code: "L079",
-            name: "Tecnologias de Informação",
-            cycle: 1,
-            initials: "LTI",
-            units: [
-              {
-                code: 26719,
-                name: "Projeto de Tecnologias de Informação",
-                semester: 6,
-                initials: "PTI",
-                ects: 6,
-              },
-            ],
-          },
-        ],
-      });
-    const response = await request(app).get("/L079");
-    expect(response.status).toBe(200);
-  });
+	it('should be able to get all courses', async () => {
+		await request(app)
+			.post('/courses')
+			.send({
+				courses: [LTI, LEI],
+			});
+		const response = await request(app).get('/courses');
+		expect(response.body).toHaveLength(2);
+		expect(response.status).toBe(200);
+	});
 
-  it("should be able to update a Course's information", async () => {
-    const create = await request(app)
-      .post("/courses")
-      .send({
-        courses: [
-          {
-            code: "L079",
-            name: "Tecnologias de Informação",
-            cycle: 1,
-            initials: "LTI",
-            units: [
-              {
-                code: 26719,
-                name: "Projeto de Tecnologias de Informação",
-                semester: 6,
-                initials: "PTI",
-                ects: 6,
-              },
-            ],
-          },
-        ],
-      });
-    const response = await request(app)
-      .put("courses/L079")
-      .send({
-        course: {
-          name: "Tecnologias de Informação",
-          initials: "LTI",
-        },
-      });
-    expect(response.status).toBe(200);
-  });
+	it('should be able to get a course by its code', async () => {
+		await request(app)
+			.post('/courses')
+			.send({
+				courses: [LTI],
+			});
+		const response = await request(app).get('/courses/L079');
+		expect(response.status).toBe(200);
+	});
 
-  it("should be able to delete a Course", async () => {
-    const create = await request(app)
-      .post("/courses")
-      .send({
-        courses: [
-          {
-            code: "L079",
-            name: "Tecnologias de Informação",
-            cycle: 1,
-            initials: "LTI",
-            units: [
-              {
-                code: 26719,
-                name: "Projeto de Tecnologias de Informação",
-                semester: 6,
-                initials: "PTI",
-                ects: 6,
-              },
-            ],
-          },
-        ],
-      });
-    const response = await request(app).delete("/courses/L079");
-    expect(response.status).toBe(204);
-  });
+	it('should be able to update a course', async () => {
+		await request(app)
+			.post('/courses')
+			.send({
+				courses: [LTI],
+			});
+		const response = await request(app)
+			.put('/courses/L079')
+			.send({
+				course: {
+					name: 'Engenharia Informática',
+					initials: 'LEI',
+				},
+			});
+		expect(response.status).toBe(200);
+	});
+
+	it('should be able to delete a course', async () => {
+		await request(app)
+			.post('/courses')
+			.send({
+				courses: [LEI],
+			});
+		const response = await request(app).delete('/courses/9119');
+		expect(response.status).toBe(204);
+	});
 });
