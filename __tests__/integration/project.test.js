@@ -21,14 +21,14 @@ describe('Project', () => {
 	it('should be able to create a new project', async () => {
 		const response = await request(app)
 			.post('/courses/L079/units/26719/projects/')
-			.send({ project: Project });
+			.send({ project: { ...Project } });
 		expect(response.status).toBe(201);
 	});
 
 	it('should be able to get all projects from a unit', async () => {
 		await request(app)
 			.post('/courses/L079/units/26719/projects/')
-			.send([Project]);
+			.send({ project: { ...Project } });
 		const response = await request(app).get(
 			'/courses/L079/units/26719/projects/'
 		);
@@ -38,7 +38,7 @@ describe('Project', () => {
 	it('should be able to get all projects from an academic year', async () => {
 		await request(app)
 			.post('/courses/L079/units/26719/projects/')
-			.send([Project]);
+			.send({ project: { ...Project } });
 		const response = await request(app).get(
 			'/courses/L079/units/26719/projects/2019-2020'
 		);
@@ -48,7 +48,7 @@ describe('Project', () => {
 	it('should be able to get a project by its id', async () => {
 		await request(app)
 			.post('/courses/L079/units/26719/projects/')
-			.send([Project]);
+			.send({ project: { ...Project } });
 		const response = await request(app).get(
 			'/courses/L079/units/26719/projects/2019-2020/1'
 		);
@@ -58,7 +58,7 @@ describe('Project', () => {
 	it('should be able to update a project', async () => {
 		await request(app)
 			.post('/courses/L079/units/26719/projects/')
-			.send([Project]);
+			.send({ project: { ...Project } });
 		const response = await request(app)
 			.put('/courses/L079/units/26719/projects/2019-2020/1')
 			.send({
@@ -77,7 +77,7 @@ describe('Project', () => {
 	it('should be able to delete a project', async () => {
 		await request(app)
 			.post('/courses/L079/units/26719/projects/')
-			.send([Project]);
+			.send({ project: { ...Project } });
 		const response = await request(app).delete(
 			'/courses/L079/units/26719/projects/2019-2020/1'
 		);

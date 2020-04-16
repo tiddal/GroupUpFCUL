@@ -88,7 +88,6 @@ module.exports = {
 
 	Project: {
 		name: 'Nada',
-		academic_year: '2019-2020',
 		min_students: 1,
 		max_students: 2,
 		description: 'Nothing',

@@ -6,8 +6,10 @@ const UnitController = require('../controllers/UnitController');
 const UnitValidator = require('../validators/UnitValidator');
 
 const ClassRoutes = require('./ClassRoutes');
+const ProjectRoutes = require('./ProjectRoutes');
 
 units.use('/:unit_code/classes', UnitValidator.find, ClassRoutes);
+units.use('/:unit_code/projects', UnitValidator.find, ProjectRoutes);
 
 units.get('/', UnitController.index);
 units.get('/:unit_code', UnitValidator.find, UnitController.find);
