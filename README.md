@@ -2374,7 +2374,7 @@ Create a project
 }
 ```
 
-#### Success: 200 OK
+#### Success: 201 Created
 
 ```JSON
 {

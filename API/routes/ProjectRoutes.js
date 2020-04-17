@@ -1,31 +1,31 @@
-const express = require("express");
+const express = require('express');
 const projects = express.Router({ mergeParams: true });
 
-const ProjectController = require("../controllers/ProjectController");
+const ProjectController = require('../controllers/ProjectController');
 
-const ProjectValidator = require("../validators/ProjectValidator");
+const ProjectValidator = require('../validators/ProjectValidator');
 
-projects.get("/", ProjectController.index);
+projects.get('/', ProjectController.index);
 projects.get(
-  "/:project_year",
-  ProjectValidator.findYear,
-  ProjectController.findByAcademicYear
+	'/:project_year',
+	ProjectValidator.findYear,
+	ProjectController.findByAcademicYear
 );
 projects.get(
-  "/:project_year/:project_number",
-  ProjectValidator.find,
-  ProjectController.findById
+	'/:project_year/:project_number',
+	ProjectValidator.find,
+	ProjectController.find
 );
-projects.post("/", ProjectValidator.create, ProjectController.store);
+projects.post('/', ProjectValidator.create, ProjectController.store);
 projects.put(
-  "/:project_year/:project_number",
-  ProjectValidator.find,
-  ProjectController.modify
+	'/:project_year/:project_number',
+	ProjectValidator.find,
+	ProjectController.modify
 );
 projects.delete(
-  "/:project_year/:project_number",
-  ProjectValidator.find,
-  ProjectController.remove
+	'/:project_year/:project_number',
+	ProjectValidator.find,
+	ProjectController.remove
 );
 
 module.exports = projects;
