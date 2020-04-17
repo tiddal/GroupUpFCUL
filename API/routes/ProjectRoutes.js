@@ -5,6 +5,10 @@ const ProjectController = require('../controllers/ProjectController');
 
 const ProjectValidator = require('../validators/ProjectValidator');
 
+const TeamRoutes = require('./TeamRoutes');
+
+projects.use('/:project_year/:project_number/teams', TeamRoutes);
+
 projects.get('/', ProjectController.index);
 projects.get('/:project_year');
 projects.get('/:project_year/:project_number');
