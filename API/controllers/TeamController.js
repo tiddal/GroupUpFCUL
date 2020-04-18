@@ -18,7 +18,7 @@ class TeamController {
 	async index(request, response, next) {
 		const project = await this.findProject(request, response, next);
 		if (!project) return next();
-		const teams = await connection('teams').select([
+		const teams = await connection('Team').select([
 			'team_number',
 			'name',
 			'description',
@@ -31,7 +31,7 @@ class TeamController {
 		const project = await this.findProject(request, response, next);
 		if (!project) return next();
 		const { team_number } = request.params;
-		const [team] = await connection('teams')
+		const [team] = await connection('Team')
 			.select(['team_number', 'name', 'description', 'academic_year'])
 			.where({ team_number, project_id: project.id });
 		if (!team) return next(errors.TEAM_NOT_FOUND(team_number, 'params'));
@@ -45,7 +45,7 @@ class TeamController {
 		const { name, description, logo_url } = request.body.team;
 		const id = uuidv4();
 		const { id: project_id, academic_year } = project;
-		const [existentTeam] = await connection('teams')
+		const [existentTeam] = await connection('Team')
 			.select('team_number')
 			.where({ project_id })
 			.orderBy('team_number', 'desc')
@@ -55,7 +55,7 @@ class TeamController {
 				'T' +
 				('00' + `${parseInt(existentTeam.team_number.slice(1)) + 1}`).slice(-3);
 		try {
-			const [team] = await connection('teams').insert(
+			const [team] = await connection('Team').insert(
 				{
 					id,
 					project_id,
@@ -77,7 +77,7 @@ class TeamController {
 		const team = await this.findTeam(request, response, next);
 		if (!team) return next();
 		const { name, description, logo_url } = request.body.team;
-		const [updatedTeam] = await connection('teams')
+		const [updatedTeam] = await connection('Team')
 			.where(team)
 			.update({ name, description, logo_url }, [
 				'team_number',
@@ -92,13 +92,13 @@ class TeamController {
 	async remove(request, response, next) {
 		const team = await this.findTeam(request, response, next);
 		if (!team) return next();
-		await connection('teams').where(team).del();
+		await connection('Team').where(team).del();
 		return response.status(204).send();
 	}
 
 	async findCourse(request, response, next) {
 		const { code } = request.params;
-		const [course] = await connection('courses').select('code').where({ code });
+		const [course] = await connection('Course').select('id').where({ code });
 		if (!course) return next(errors.COURSE_NOT_FOUND(code, 'params'));
 		return course;
 	}
@@ -108,9 +108,13 @@ class TeamController {
 		if (!course) return next();
 		const { unit_code } = request.params;
 		const [unit] = await connection('course_unit')
-			.select('unit_code')
-			.where({ course_code: course.code, unit_code });
-		if (!unit) return next(errors.UNIT_NOT_FOUND(code, 'params'));
+			.join('Unit', 'Unit.id', '=', 'course_unit.unit_id')
+			.select('Unit.id')
+			.where({
+				'course_unit.course_id': course.id,
+				'Unit.code': unit_code,
+			});
+		if (!unit) return next(errors.UNIT_NOT_FOUND(unit_code, 'params'));
 		return unit;
 	}
 
@@ -121,18 +125,11 @@ class TeamController {
 			project_year: academic_year,
 			project_number: number,
 		} = request.params;
-		const [project] = await connection('projects')
+		const [project] = await connection('Project')
 			.select('id', 'academic_year')
-			.where({ academic_year, number, unit_code: unit.unit_code });
+			.where({ academic_year, number, unit_id: unit.id });
 		if (!project)
-			return next(
-				errors.PROJECT_NOT_FOUND(
-					academic_year,
-					number,
-					unit.unit_code,
-					'params'
-				)
-			);
+			return next(errors.PROJECT_NOT_FOUND(academic_year, number, 'params'));
 		return project;
 	}
 
@@ -140,7 +137,7 @@ class TeamController {
 		const project = await this.findProject(request, response, next);
 		if (!project) return next();
 		const { team_number } = request.params;
-		const [team] = await connection('teams')
+		const [team] = await connection('Team')
 			.select('id')
 			.where({ team_number, project_id: project.id });
 		if (!team) return next(errors.TEAM_NOT_FOUND(team_number, 'params'));

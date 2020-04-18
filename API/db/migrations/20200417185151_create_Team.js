@@ -1,5 +1,5 @@
 exports.up = function (knex) {
-	return knex.schema.createTable('teams', function (table) {
+	return knex.schema.createTable('Team', function (table) {
 		table.uuid('id').primary();
 		table.uuid('project_id').notNullable();
 		table.string('team_number').notNullable();
@@ -18,5 +18,5 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-	return knex.schema.dropTable('teams');
+	return knex.schema.dropTable('Team');
 };
