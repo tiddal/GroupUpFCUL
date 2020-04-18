@@ -102,4 +102,17 @@ module.exports = {
 			},
 		],
 	},
+
+	Stage: {
+		description: 'Fazer absolutamente nada',
+		start_date: '01-03-2019',
+		end_date: '02-04-2019',
+		weight: 1,
+	},
+
+	Team: {
+		name: '20 é derrota',
+		description: 'Queremos 19,9',
+		logo_url: 'atoa.png',
+	},
 };
