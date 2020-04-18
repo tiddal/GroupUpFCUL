@@ -49,12 +49,12 @@ class ProjectController {
 			date.getMonth() > 7
 				? `${date.getFullYear()}-${date.getFullYear() + 1}`
 				: `${date.getFullYear() - 1}-${date.getFullYear()}`;
-		const [existingProject] = await connection('projects')
+		const [existentProject] = await connection('projects')
 			.select('number')
 			.where({ academic_year, unit_code })
 			.orderBy('number', 'desc')
 			.limit(1);
-		if (existingProject) number = existingProject.number + 1;
+		if (existentProject) number = existentProject.number + 1;
 		try {
 			const [project] = await connection('projects').insert(
 				{
