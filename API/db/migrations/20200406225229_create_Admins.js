@@ -1,10 +1,10 @@
 exports.up = function (knex) {
 	return knex.schema.createTable('admins', function (table) {
-		table.string('username').primary();
+		table.uuid('user_id').primary();
 		table.integer('previleges').defaultTo(1).notNullable();
 		table
-			.foreign('username')
-			.references('username')
+			.foreign('user_id')
+			.references('id')
 			.inTable('users')
 			.onDelete('CASCADE');
 	});

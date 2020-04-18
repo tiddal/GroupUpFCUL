@@ -1,10 +1,10 @@
 exports.up = function (knex) {
 	return knex.schema.createTable('class_professor', function (table) {
-		table.string('professor_username');
+		table.uuid('professor_id');
 		table.uuid('class_id');
 		table
-			.foreign('professor_username')
-			.references('username')
+			.foreign('professor_id')
+			.references('user_id')
 			.inTable('professors')
 			.onDelete('CASCADE');
 		table
@@ -12,7 +12,7 @@ exports.up = function (knex) {
 			.references('id')
 			.inTable('classes')
 			.onDelete('CASCADE');
-		table.primary(['professor_username', 'class_id']);
+		table.primary(['professor_id', 'class_id']);
 	});
 };
 

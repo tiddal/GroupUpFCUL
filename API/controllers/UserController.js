@@ -36,7 +36,7 @@ class UserController {
 				'avatar_url',
 				'status',
 			])
-			.where('username', username);
+			.where({ username });
 		if (!user) return next(errors.USER_NOT_FOUND(username, 'params'));
 		return response.json(user);
 	}
@@ -66,15 +66,21 @@ class UserController {
 				);
 				switch (role.type) {
 					case 'student':
-						await connection('students').insert({ username });
+						await connection('students').insert({ user_id: id });
 						createdUsers.students.push(createdUser);
 						break;
 					case 'professor':
-						await connection('professors').insert({ username, ...role.data });
+						const { room, department } = role.data;
+						await connection('professors').insert({
+							user_id: id,
+							room,
+							department,
+						});
 						createdUsers.professors.push(createdUser);
 						break;
 					case 'admin':
-						await connection('admins').insert({ username, ...role.data });
+						const { previleges } = role.data;
+						await connection('admins').insert({ user_id: id, previleges });
 						createdUsers.admins.push(createdUser);
 						break;
 					default:
@@ -104,7 +110,8 @@ class UserController {
 		if (!user) return next();
 
 		//	Updating the User
-		let { password, status } = request.body.user;
+		let { password } = request.body.user;
+		const { status } = request.body.user;
 		if (password) password = bcrypt.hashSync(password, 14);
 		const [updatedUser] = await connection('users').where(user).update(
 			{
@@ -131,9 +138,7 @@ class UserController {
 
 	async findUser(request, response, next) {
 		const { username } = request.params;
-		const [user] = await connection('users')
-			.select('username')
-			.where('username', username);
+		const [user] = await connection('users').select('id').where({ username });
 		if (!user) return next(errors.USER_NOT_FOUND(username, 'params'));
 		return user;
 	}

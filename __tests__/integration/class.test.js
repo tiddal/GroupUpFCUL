@@ -3,7 +3,7 @@ const app = require('../../API/app');
 const connection = require('../../API/db/config/connection');
 const { LTI, Class, Student, Professor } = require('../factory');
 
-describe('User', () => {
+describe('Class', () => {
 	beforeEach(async () => {
 		await connection.migrate.rollback();
 		await connection.migrate.latest();

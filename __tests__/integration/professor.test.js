@@ -29,7 +29,7 @@ describe('Professor', () => {
 		expect(response.status).toBe(200);
 	});
 
-	it('should be able to update a professors', async () => {
+	it('should be able to update a professor', async () => {
 		const response = await request(app)
 			.put('/users/professors/professor')
 			.send({

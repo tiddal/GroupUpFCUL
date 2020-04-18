@@ -28,7 +28,11 @@ module.exports = {
 								type: Joi.string()
 									.valid('student', 'professor', 'admin')
 									.required(),
-								data: Joi.object().required(),
+								data: Joi.object({
+									room: Joi.string(),
+									department: Joi.string(),
+									previleges: Joi.number().integer().valid(1, 2, 3),
+								}).required(),
 							}),
 					}).required()
 				),

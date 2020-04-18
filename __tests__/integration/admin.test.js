@@ -34,10 +34,10 @@ describe('Admin', () => {
 			.put('/users/admins/admin')
 			.send({
 				admin: {
-					previleges: 1,
+					previleges: 2,
 				},
 			});
-		expect(response.body.previleges).toBe(1);
+		expect(response.body.previleges).toBe(2);
 		expect(response.status).toBe(200);
 	});
 });
