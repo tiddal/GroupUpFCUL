@@ -1,8 +1,8 @@
 exports.up = function (knex) {
-	return knex.schema.createTable('projects', function (table) {
+	return knex.schema.createTable('Project', function (table) {
 		table.uuid('id').primary();
 		table.integer('number').notNullable();
-		table.integer('unit_code').notNullable();
+		table.uuid('unit_id').notNullable();
 		table.string('academic_year').notNullable();
 		table.string('name').notNullable();
 		table.integer('min_students').notNullable();
@@ -11,15 +11,15 @@ exports.up = function (knex) {
 		table.string('objectives').notNullable();
 		table.string('assignment_url').notNullable();
 		table.timestamps(true, true);
-		table.unique(['number', 'unit_code', 'academic_year']);
+		table.unique(['number', 'unit_id', 'academic_year']);
 		table
-			.foreign('unit_code')
-			.references('code')
-			.inTable('units')
+			.foreign('unit_id')
+			.references('id')
+			.inTable('Unit')
 			.onDelete('CASCADE');
 	});
 };
 
 exports.down = function (knex) {
-	return knex.schema.dropTable('projects');
+	return knex.schema.dropTable('Project');
 };

@@ -18,7 +18,7 @@ class ProjectController {
 	async index(request, response, next) {
 		const unit = await this.findUnit(request, response, next);
 		if (!unit) return next();
-		const projects = await connection('projects').select([
+		const projects = await connection('Project').select([
 			'name',
 			'min_students',
 			'max_students',
@@ -42,25 +42,25 @@ class ProjectController {
 		} = request.body.project;
 		if (max_students < min_students) max_students = min_students;
 		let number = 1;
-		const unit_code = unit.unit_code;
+		const unit_id = unit.id;
 		const id = uuidv4();
 		const date = new Date();
 		const academic_year =
 			date.getMonth() > 7
 				? `${date.getFullYear()}-${date.getFullYear() + 1}`
 				: `${date.getFullYear() - 1}-${date.getFullYear()}`;
-		const [existingProject] = await connection('projects')
+		const [existingProject] = await connection('Project')
 			.select('number')
-			.where({ academic_year, unit_code })
+			.where({ academic_year, unit_id })
 			.orderBy('number', 'desc')
 			.limit(1);
 		if (existingProject) number = existingProject.number + 1;
 		try {
-			const [project] = await connection('projects').insert(
+			const [project] = await connection('Project').insert(
 				{
 					id,
 					number,
-					unit_code,
+					unit_id,
 					name,
 					academic_year,
 					min_students,
@@ -84,7 +84,7 @@ class ProjectController {
 			project_year: academic_year,
 			project_number: number,
 		} = request.params;
-		const [project] = await connection('projects')
+		const [project] = await connection('Project')
 			.select([
 				'name',
 				'min_students',
@@ -94,14 +94,9 @@ class ProjectController {
 				'assignment_url',
 				'academic_year',
 			])
-			.where({ academic_year, unit_code: unit.unit_code, number });
+			.where({ academic_year, unit_id: unit.id, number });
 		if (!project)
-			return errors.PROJECT_NOT_FOUND(
-				academic_year,
-				number,
-				unit.unit_code,
-				'params'
-			);
+			return errors.PROJECT_NOT_FOUND(academic_year, number, 'params');
 		return response.json(project);
 	}
 
@@ -109,7 +104,7 @@ class ProjectController {
 		const unit = await this.findUnit(request, response, next);
 		if (!unit) return next();
 		const { project_year: academic_year } = request.params;
-		const projects = await connection('projects')
+		const projects = await connection('Project')
 			.select([
 				'name',
 				'min_students',
@@ -119,7 +114,7 @@ class ProjectController {
 				'assignment_url',
 				'academic_year',
 			])
-			.where({ academic_year, unit_code: unit.unit_code });
+			.where({ academic_year, unit_id: unit.id });
 		return response.json(projects);
 	}
 
@@ -134,7 +129,7 @@ class ProjectController {
 			objectives,
 			assignment_url,
 		} = request.body.project;
-		const [updatedProject] = await connection('projects').where(project).update(
+		const [updatedProject] = await connection('Project').where(project).update(
 			{
 				name,
 				min_students,
@@ -160,15 +155,13 @@ class ProjectController {
 	async remove(request, response, next) {
 		const project = await this.findProject(request, response, next);
 		if (!project) return next();
-		await connection('projects').where(project).del();
+		await connection('Project').where(project).del();
 		return response.status(204).send();
 	}
 
 	async findCourse(request, response, next) {
 		const { code } = request.params;
-		const [course] = await connection('courses')
-			.select('code')
-			.where('code', code);
+		const [course] = await connection('Course').select('id').where({ code });
 		if (!course) return next(errors.COURSE_NOT_FOUND(code, 'params'));
 		return course;
 	}
@@ -178,8 +171,12 @@ class ProjectController {
 		if (!course) return next();
 		const { unit_code } = request.params;
 		const [unit] = await connection('course_unit')
-			.select('unit_code')
-			.where({ course_code: course.code, unit_code });
+			.join('Unit', 'Unit.id', '=', 'course_unit.unit_id')
+			.select('Unit.id')
+			.where({
+				'course_unit.course_id': course.id,
+				'Unit.code': unit_code,
+			});
 		if (!unit) return next(errors.UNIT_NOT_FOUND(unit_code, 'params'));
 		return unit;
 	}
@@ -191,18 +188,13 @@ class ProjectController {
 			project_year: academic_year,
 			project_number: number,
 		} = request.params;
-		const [project] = await connection('projects').select('id').where({
-			unit_code: unit.unit_code,
+		const [project] = await connection('Project').select('id').where({
+			unit_id: unit.id,
 			academic_year,
 			number,
 		});
 		if (!project)
-			return errors.PROJECT_NOT_FOUND(
-				academic_year,
-				number,
-				unit_code,
-				'params'
-			);
+			return errors.PROJECT_NOT_FOUND(academic_year, number, 'params');
 		return project;
 	}
 }

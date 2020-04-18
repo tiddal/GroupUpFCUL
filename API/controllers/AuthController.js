@@ -6,7 +6,7 @@ const connection = require('../db/config/connection');
 class AuthController {
 	async login(request, response, next) {
 		const { email, password } = request.body.user;
-		const [user] = await connection('users')
+		const [user] = await connection('User')
 			.select('username', 'password')
 			.where('email', email);
 		if (!user) return next(errors.LOGIN_FAILED());
@@ -26,7 +26,7 @@ class AuthController {
 	async me(request, response, next) {
 		const { username } = request.session;
 		try {
-			const [user] = await connection('users')
+			const [user] = await connection('User')
 				.select(
 					'username',
 					'first_name',

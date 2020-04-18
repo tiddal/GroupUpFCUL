@@ -1,18 +1,18 @@
 exports.up = function (knex) {
 	return knex.schema.createTable('course_unit', function (table) {
-		table.string('course_code');
-		table.integer('unit_code');
+		table.uuid('course_id');
+		table.uuid('unit_id');
 		table
-			.foreign('course_code')
-			.references('code')
-			.inTable('courses')
+			.foreign('course_id')
+			.references('id')
+			.inTable('Course')
 			.onDelete('CASCADE');
 		table
-			.foreign('unit_code')
-			.references('code')
-			.inTable('units')
+			.foreign('unit_id')
+			.references('id')
+			.inTable('Unit')
 			.onDelete('CASCADE');
-		table.primary(['course_code', 'unit_code']);
+		table.primary(['course_id', 'unit_id']);
 	});
 };
 

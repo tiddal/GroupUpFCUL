@@ -13,7 +13,7 @@ class CourseController {
 	}
 
 	async index(request, response) {
-		const courses = await connection('courses').select([
+		const courses = await connection('Course').select([
 			'code',
 			'name',
 			'cycle',
@@ -24,9 +24,9 @@ class CourseController {
 
 	async find(request, response, next) {
 		const { code } = request.params;
-		const [course] = await connection('courses')
+		const [course] = await connection('Course')
 			.select(['code', 'name', 'cycle', 'initials'])
-			.where('code', code);
+			.where({ code });
 		if (!course) return next(errors.COURSE_NOT_FOUND(code, 'params'));
 		return response.json(course);
 	}
@@ -36,11 +36,11 @@ class CourseController {
 
 		for (let [index, course] of request.body.courses.entries()) {
 			const { code, name, cycle, initials, units } = course;
-			const id = uuidv4();
+			const course_id = uuidv4();
 			try {
-				const [createdCourse] = await connection('courses').insert(
+				const [createdCourse] = await connection('Course').insert(
 					{
-						id,
+						id: course_id,
 						code,
 						name,
 						cycle,
@@ -51,12 +51,12 @@ class CourseController {
 				createdCourses.push({ ...createdCourse, units: [] });
 				for (let unit of units) {
 					const { code, name, semester, initials, ects } = unit;
-					const id = uuidv4();
-					let [courseUnit] = await connection('units')
-						.select('code')
-						.where('code', code);
+					let [courseUnit] = await connection('Unit')
+						.select('id')
+						.where({ code });
 					if (!courseUnit) {
-						[courseUnit] = await connection('units').insert(
+						const id = uuidv4();
+						[courseUnit] = await connection('Unit').insert(
 							{
 								id,
 								code,
@@ -65,13 +65,14 @@ class CourseController {
 								initials,
 								ects,
 							},
-							['code', 'name']
+							['id', 'code', 'name']
 						);
 					}
 					await connection('course_unit').insert({
-						course_code: createdCourse.code,
-						unit_code: courseUnit.code,
+						course_id: course_id,
+						unit_id: courseUnit.id,
 					});
+					courseUnit.id = undefined;
 					createdCourses[index].units.push(courseUnit);
 				}
 			} catch (error) {
@@ -89,7 +90,7 @@ class CourseController {
 		const course = await this.findCourse(request, response, next);
 		if (!course) return next();
 		const { name, initials } = request.body.course;
-		const [updatedCourse] = await connection('courses').where(course).update(
+		const [updatedCourse] = await connection('Course').where(course).update(
 			{
 				name,
 				initials,
@@ -102,15 +103,13 @@ class CourseController {
 	async remove(request, response, next) {
 		const course = await this.findCourse(request, response, next);
 		if (!course) return next();
-		await connection('courses').where(course).del();
+		await connection('Course').where(course).del();
 		return response.status(204).send();
 	}
 
 	async findCourse(request, response, next) {
 		const { code } = request.params;
-		const [course] = await connection('courses')
-			.select('code')
-			.where('code', code);
+		const [course] = await connection('Course').select('id').where({ code });
 		if (!course) return next(errors.COURSE_NOT_FOUND(code, 'params'));
 		return course;
 	}

@@ -14,7 +14,7 @@ class UserController {
 	}
 
 	async index(request, response) {
-		const users = await connection('users').select([
+		const users = await connection('User').select([
 			'username',
 			'first_name',
 			'last_name',
@@ -27,7 +27,7 @@ class UserController {
 
 	async find(request, response, next) {
 		const { username } = request.params;
-		const [user] = await connection('users')
+		const [user] = await connection('User')
 			.select([
 				'username',
 				'first_name',
@@ -53,7 +53,7 @@ class UserController {
 			const id = uuidv4();
 			const hashed_password = bcrypt.hashSync(password, 14);
 			try {
-				const [createdUser] = await connection('users').insert(
+				const [createdUser] = await connection('User').insert(
 					{
 						id,
 						username,
@@ -66,12 +66,12 @@ class UserController {
 				);
 				switch (role.type) {
 					case 'student':
-						await connection('students').insert({ user_id: id });
+						await connection('Student').insert({ user_id: id });
 						createdUsers.students.push(createdUser);
 						break;
 					case 'professor':
 						const { room, department } = role.data;
-						await connection('professors').insert({
+						await connection('Professor').insert({
 							user_id: id,
 							room,
 							department,
@@ -80,7 +80,7 @@ class UserController {
 						break;
 					case 'admin':
 						const { previleges } = role.data;
-						await connection('admins').insert({ user_id: id, previleges });
+						await connection('Admin').insert({ user_id: id, previleges });
 						createdUsers.admins.push(createdUser);
 						break;
 					default:
@@ -113,7 +113,7 @@ class UserController {
 		let { password } = request.body.user;
 		const { status } = request.body.user;
 		if (password) password = bcrypt.hashSync(password, 14);
-		const [updatedUser] = await connection('users').where(user).update(
+		const [updatedUser] = await connection('User').where(user).update(
 			{
 				password,
 				status,
@@ -131,14 +131,14 @@ class UserController {
 		if (!user) return next();
 
 		// Deleting the user
-		await connection('users').where(user).del();
+		await connection('User').where(user).del();
 
 		return response.status(204).send();
 	}
 
 	async findUser(request, response, next) {
 		const { username } = request.params;
-		const [user] = await connection('users').select('id').where({ username });
+		const [user] = await connection('User').select('id').where({ username });
 		if (!user) return next(errors.USER_NOT_FOUND(username, 'params'));
 		return user;
 	}

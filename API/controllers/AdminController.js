@@ -8,14 +8,14 @@ class AdminController {
 	}
 
 	async index(request, response) {
-		const admins = await connection('admins')
-			.join('users', 'users.id', '=', 'admins.user_id')
+		const admins = await connection('Admin')
+			.join('User', 'User.id', '=', 'Admin.user_id')
 			.select([
-				'users.username',
-				'users.first_name',
-				'users.last_name',
-				'users.email',
-				'admins.previleges',
+				'User.username',
+				'User.first_name',
+				'User.last_name',
+				'User.email',
+				'Admin.previleges',
 			]);
 		return response.json(admins);
 	}
@@ -23,16 +23,16 @@ class AdminController {
 	async find(request, response, next) {
 		const user = await this.findUser(request, response, next);
 		if (!user) return next();
-		const [admin] = await connection('admins')
-			.join('users', 'users.id', '=', 'admins.user_id')
+		const [admin] = await connection('Admin')
+			.join('User', 'User.id', '=', 'Admin.user_id')
 			.select([
-				'users.username',
-				'users.first_name',
-				'users.last_name',
-				'users.email',
-				'admins.previleges',
+				'User.username',
+				'User.first_name',
+				'User.last_name',
+				'User.email',
+				'Admin.previleges',
 			])
-			.where('admins.user_id', user.id);
+			.where('Admin.user_id', user.id);
 		if (!admin) return next(errors.ADMIN_NOT_FOUND(user.username, 'params'));
 		return response.json(admin);
 	}
@@ -40,12 +40,12 @@ class AdminController {
 	async modify(request, response, next) {
 		const user = await this.findUser(request, response, next);
 		if (!user) return next();
-		const [admin] = await connection('admins')
+		const [admin] = await connection('Admin')
 			.select('user_id')
 			.where({ user_id: user.id });
 		if (!admin) return next(errors.ADMIN_NOT_FOUND(user.username, 'params'));
 		const { previleges } = request.body.admin;
-		const [updatedAdmin] = await connection('admins').where(admin).update(
+		const [updatedAdmin] = await connection('Admin').where(admin).update(
 			{
 				previleges,
 			},
@@ -57,7 +57,7 @@ class AdminController {
 
 	async findUser(request, response, next) {
 		const { username } = request.params;
-		const [user] = await connection('users')
+		const [user] = await connection('User')
 			.select(['id', 'username'])
 			.where({ username });
 		if (!user) return next(errors.USER_NOT_FOUND(username, 'params'));

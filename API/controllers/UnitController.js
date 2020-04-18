@@ -17,15 +17,15 @@ class UnitController {
 		const course = await this.findCourse(request, response, next);
 		if (!course) return next();
 		const units = await connection('course_unit')
-			.join('units', 'units.code', '=', 'course_unit.unit_code')
+			.join('Unit', 'Unit.id', '=', 'course_unit.unit_id')
 			.select([
-				'course_unit.*',
-				'units.name',
-				'units.semester',
-				'units.initials',
-				'units.ects',
+				'Unit.code',
+				'Unit.name',
+				'Unit.semester',
+				'Unit.initials',
+				'Unit.ects',
 			])
-			.where('course_unit.course_code', course.code);
+			.where('course_unit.course_id', course.id);
 		return response.json(units);
 	}
 
@@ -34,17 +34,17 @@ class UnitController {
 		if (!course) return next();
 		const { unit_code } = request.params;
 		const [unit] = await connection('course_unit')
-			.join('units', 'units.code', '=', 'course_unit.unit_code')
+			.join('Unit', 'Unit.id', '=', 'course_unit.unit_id')
 			.select([
-				'course_unit.*',
-				'units.name',
-				'units.semester',
-				'units.initials',
-				'units.ects',
+				'Unit.code',
+				'Unit.name',
+				'Unit.semester',
+				'Unit.initials',
+				'Unit.ects',
 			])
 			.where({
-				'course_unit.course_code': course.code,
-				'course_unit.unit_code': unit_code,
+				'course_unit.course_id': course.id,
+				'Unit.code': unit_code,
 			});
 		if (!unit) return next(errors.UNIT_NOT_FOUND(unit_code, 'params'));
 		return response.json(unit);
@@ -58,7 +58,7 @@ class UnitController {
 			try {
 				const { code, name, semester, initials, ects } = unit;
 				const id = uuidv4();
-				const [createdUnit] = await connection('units').insert(
+				const [createdUnit] = await connection('Unit').insert(
 					{
 						id,
 						code,
@@ -70,8 +70,8 @@ class UnitController {
 					['code', 'name']
 				);
 				await connection('course_unit').insert({
-					course_code: course.code,
-					unit_code: createdUnit.code,
+					course_id: course.id,
+					unit_id: id,
 				});
 				createdUnits.push(createdUnit);
 			} catch (error) {
@@ -88,7 +88,7 @@ class UnitController {
 		const unit = await this.findUnit(request, response, next);
 		if (!unit) return next();
 		const { name, semester, initials, ects } = request.body.unit;
-		const [updatedUnit] = await connection('units')
+		const [updatedUnit] = await connection('Unit')
 			.where(unit)
 			.update({ name, semester, initials, ects }, [
 				'code',
@@ -103,15 +103,13 @@ class UnitController {
 	async remove(request, response, next) {
 		const unit = await this.findUnit(request, response, next);
 		if (!unit) return next();
-		await connection('units').where(unit).del();
+		await connection('Unit').where(unit).del();
 		return response.status(204).send();
 	}
 
 	async findCourse(request, response, next) {
 		const { code } = request.params;
-		const [course] = await connection('courses')
-			.select('code')
-			.where('code', code);
+		const [course] = await connection('Course').select('id').where({ code });
 		if (!course) return next(errors.COURSE_NOT_FOUND(code, 'params'));
 		return course;
 	}
@@ -120,9 +118,13 @@ class UnitController {
 		const course = await this.findCourse(request, response, next);
 		if (!course) return next();
 		const { unit_code } = request.params;
-		const [unit] = await connection('units')
-			.select('code')
-			.where('code', unit_code);
+		const [unit] = await connection('course_unit')
+			.join('Unit', 'Unit.id', '=', 'course_unit.unit_id')
+			.select('Unit.id')
+			.where({
+				'course_unit.course_id': course.id,
+				'Unit.code': unit_code,
+			});
 		if (!unit) return next(errors.UNIT_NOT_FOUND(unit_code, 'params'));
 		return unit;
 	}

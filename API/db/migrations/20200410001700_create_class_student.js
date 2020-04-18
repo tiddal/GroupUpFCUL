@@ -5,12 +5,12 @@ exports.up = function (knex) {
 		table
 			.foreign('student_id')
 			.references('user_id')
-			.inTable('students')
+			.inTable('Student')
 			.onDelete('CASCADE');
 		table
 			.foreign('class_id')
 			.references('id')
-			.inTable('classes')
+			.inTable('Class')
 			.onDelete('CASCADE');
 		table.primary(['student_id', 'class_id']);
 	});

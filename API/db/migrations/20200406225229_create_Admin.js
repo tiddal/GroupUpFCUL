@@ -1,16 +1,15 @@
 exports.up = function (knex) {
-	return knex.schema.createTable('professors', function (table) {
+	return knex.schema.createTable('Admin', function (table) {
 		table.uuid('user_id').primary();
-		table.string('room');
-		table.string('department');
+		table.integer('previleges').defaultTo(1).notNullable();
 		table
 			.foreign('user_id')
 			.references('id')
-			.inTable('users')
+			.inTable('User')
 			.onDelete('CASCADE');
 	});
 };
 
 exports.down = function (knex) {
-	return knex.schema.dropTable('professors');
+	return knex.schema.dropTable('Admin');
 };

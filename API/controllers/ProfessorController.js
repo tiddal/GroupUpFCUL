@@ -8,15 +8,15 @@ class ProfessorController {
 	}
 
 	async index(request, response) {
-		const professors = await connection('professors')
-			.join('users', 'users.id', '=', 'professors.user_id')
+		const professors = await connection('Professor')
+			.join('User', 'User.id', '=', 'Professor.user_id')
 			.select([
-				'users.username',
-				'users.first_name',
-				'users.last_name',
-				'users.email',
-				'professors.room',
-				'professors.department',
+				'User.username',
+				'User.first_name',
+				'User.last_name',
+				'User.email',
+				'Professor.room',
+				'Professor.department',
 			]);
 		return response.json(professors);
 	}
@@ -24,17 +24,17 @@ class ProfessorController {
 	async find(request, response, next) {
 		const user = await this.findUser(request, response, next);
 		if (!user) return next();
-		const [professor] = await connection('professors')
-			.join('users', 'users.id', '=', 'professors.user_id')
+		const [professor] = await connection('Professor')
+			.join('User', 'User.id', '=', 'Professor.user_id')
 			.select([
-				'users.username',
-				'users.first_name',
-				'users.last_name',
-				'users.email',
-				'professors.room',
-				'professors.department',
+				'User.username',
+				'User.first_name',
+				'User.last_name',
+				'User.email',
+				'Professor.room',
+				'Professor.department',
 			])
-			.where('professors.user_id', user.id);
+			.where('Professor.user_id', user.id);
 		if (!professor)
 			return next(errors.PROFESSOR_NOT_FOUND(user.username, 'params'));
 		return response.json(professor);
@@ -43,13 +43,13 @@ class ProfessorController {
 	async modify(request, response, next) {
 		const user = await this.findUser(request, response, next);
 		if (!user) return next();
-		const [professor] = await connection('professors')
+		const [professor] = await connection('Professor')
 			.select('user_id')
 			.where({ user_id: user.id });
 		if (!professor)
 			return next(errors.PROFESSOR_NOT_FOUND(user.username, 'params'));
 		const { room, department } = request.body.professor;
-		const [updatedProfessor] = await connection('professors')
+		const [updatedProfessor] = await connection('Professor')
 			.where(professor)
 			.update(
 				{
@@ -64,7 +64,7 @@ class ProfessorController {
 
 	async findUser(request, response, next) {
 		const { username } = request.params;
-		const [user] = await connection('users')
+		const [user] = await connection('User')
 			.select(['id', 'username'])
 			.where({ username });
 		if (!user) return next(errors.USER_NOT_FOUND(username, 'params'));

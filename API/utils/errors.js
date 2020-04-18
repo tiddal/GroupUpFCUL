@@ -123,11 +123,11 @@ module.exports = {
 		return error;
 	},
 
-	PROJECT_NOT_FOUND: (year, number, unit, source) => {
+	PROJECT_NOT_FOUND: (year, number, source) => {
 		const error = new Error();
 		error.statusCode = 404;
 		error.error = 'Not Found';
-		error.message = `The project ${number} from ${year} from the unit ${unit} was not found`;
+		error.message = `The project ${number} from ${year} was not found`;
 		error.validation = {
 			source,
 			values: [year, number, unit],

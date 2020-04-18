@@ -8,18 +8,18 @@ class StudentController {
 	}
 
 	async index(request, response) {
-		const students = await connection('students')
-			.join('users', 'users.id', '=', 'students.user_id')
+		const students = await connection('Student')
+			.join('User', 'User.id', '=', 'Student.user_id')
 			.select([
-				'users.username',
-				'users.first_name',
-				'users.last_name',
-				'users.email',
-				'students.working_student',
-				'students.github_url',
-				'students.facebook_url',
-				'students.instagram_url',
-				'students.twitter_url',
+				'User.username',
+				'User.first_name',
+				'User.last_name',
+				'User.email',
+				'Student.working_student',
+				'Student.github_url',
+				'Student.facebook_url',
+				'Student.instagram_url',
+				'Student.twitter_url',
 			]);
 		return response.json(students);
 	}
@@ -27,18 +27,18 @@ class StudentController {
 	async find(request, response, next) {
 		const user = await this.findUser(request, response, next);
 		if (!user) return next();
-		const [student] = await connection('students')
-			.join('users', 'users.id', '=', 'students.user_id')
+		const [student] = await connection('Student')
+			.join('User', 'User.id', '=', 'Student.user_id')
 			.select([
-				'users.username',
-				'users.first_name',
-				'users.last_name',
-				'users.email',
-				'students.working_student',
-				'students.github_url',
-				'students.facebook_url',
-				'students.instagram_url',
-				'students.twitter_url',
+				'User.username',
+				'User.first_name',
+				'User.last_name',
+				'User.email',
+				'Student.working_student',
+				'Student.github_url',
+				'Student.facebook_url',
+				'Student.instagram_url',
+				'Student.twitter_url',
 			])
 			.where({ user_id: user.id });
 		if (!student)
@@ -49,7 +49,7 @@ class StudentController {
 	async modify(request, response, next) {
 		const user = await this.findUser(request, response, next);
 		if (!user) return next();
-		const [student] = await connection('students')
+		const [student] = await connection('Student')
 			.select('user_id')
 			.where({ user_id: user.id });
 		if (!student)
@@ -61,7 +61,7 @@ class StudentController {
 			instagram,
 			twitter,
 		} = request.body.student;
-		const [updatedStudent] = await connection('students')
+		const [updatedStudent] = await connection('Student')
 			.where(student)
 			.update(
 				{
@@ -89,7 +89,7 @@ class StudentController {
 
 	async findUser(request, response, next) {
 		const { username } = request.params;
-		const [user] = await connection('users')
+		const [user] = await connection('User')
 			.select(['id', 'username'])
 			.where({ username });
 		if (!user) return next(errors.USER_NOT_FOUND(username, 'params'));

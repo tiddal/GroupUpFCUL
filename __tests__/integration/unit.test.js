@@ -10,6 +10,7 @@ describe('Units', () => {
 	});
 
 	afterAll(async () => {
+		await connection.migrate.rollback();
 		await connection.destroy();
 	});
 
