@@ -57,7 +57,10 @@ class TeamController {
 		const [project] = await connection('projects')
 			.select('id')
 			.where({ academic_year, number, unit_code: unit.unit_code });
-		if (!project) return next(errors.NOT_FOUND());
+		if (!project)
+			return next(
+				errors.PROJECT_NOT_FOUND(academic_year, number, unit.unit_code)
+			);
 		return project;
 	}
 }

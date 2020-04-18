@@ -81,7 +81,7 @@ class UnitController {
 				});
 			}
 		}
-		return response.json(createdUnits);
+		return response.status(201).json(createdUnits);
 	}
 
 	async modify(request, response, next) {
