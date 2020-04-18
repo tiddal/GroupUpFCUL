@@ -39,12 +39,12 @@ describe('Team', () => {
 		expect(response.status).toBe(200);
 	});
 
-	it('should be able to get a team by its code', async () => {
+	it('should be able to get a team by its number', async () => {
 		await request(app)
 			.post('/courses/L079/units/26719/projects/2019-2020/1/teams')
 			.send({ team: { ...Team } });
 		const response = await request(app).get(
-			'/courses/L079/units/26719/projects/2019-2020/1/teams/T01'
+			'/courses/L079/units/26719/projects/2019-2020/1/teams/T001'
 		);
 		expect(response.status).toBe(200);
 	});
@@ -54,7 +54,7 @@ describe('Team', () => {
 			.post('/courses/L079/units/26719/projects/2019-2020/1/teams')
 			.send({ team: { ...Team } });
 		const response = await request(app)
-			.put('/courses/L079/units/26719/projects/2019-2020/1/teams/T01')
+			.put('/courses/L079/units/26719/projects/2019-2020/1/teams/T001')
 			.send({
 				team: {
 					name: '20 é vitoria',
@@ -70,7 +70,7 @@ describe('Team', () => {
 			.post('/courses/L079/units/26719/projects/2019-2020/1/teams')
 			.send({ team: { ...Team } });
 		const response = await request(app).delete(
-			'/courses/L079/units/26719/projects/2019-2020/1/teams/T01'
+			'/courses/L079/units/26719/projects/2019-2020/1/teams/T001'
 		);
 		expect(response.status).toBe(204);
 	});
