@@ -4,7 +4,7 @@ module.exports = {
 		first_name: 'Student',
 		last_name: 'Test',
 		email: 'student@test.com',
-		password: 'K0Zv4yQYnoKVvLj',
+		password: 'password',
 		role: {
 			type: 'student',
 			data: {},
@@ -15,7 +15,7 @@ module.exports = {
 		first_name: 'Professor',
 		last_name: 'Test',
 		email: 'professor@test.com',
-		password: 'K0Zv4yQYnoKVvLj',
+		password: 'password',
 		role: {
 			type: 'professor',
 			data: {
@@ -29,7 +29,7 @@ module.exports = {
 		first_name: 'Admin',
 		last_name: 'Test',
 		email: 'admin@test.com',
-		password: 'K0Zv4yQYnoKVvLj',
+		password: 'password',
 		role: {
 			type: 'admin',
 			data: {
