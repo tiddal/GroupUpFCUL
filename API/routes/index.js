@@ -14,7 +14,7 @@ router.use(
 	express.static(path.resolve(__dirname, '..', '..', 'tmp', 'uploads'))
 );
 router.use('/users', UserRoutes);
-router.use('/auth', AuthRoutes);
+router.use('/authenticate', AuthRoutes);
 router.use('/courses', CourseRoutes);
 
 router.use(PageNotFound);

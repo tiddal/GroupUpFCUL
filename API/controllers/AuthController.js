@@ -2,45 +2,38 @@ require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const errors = require('../utils/errors');
 const connection = require('../db/config/connection');
+const jwt = require('jsonwebtoken');
 
 class AuthController {
 	async login(request, response, next) {
 		const { email, password } = request.body.user;
 		const [user] = await connection('User')
-			.select('username', 'password')
-			.where('email', email);
+			.select('id', 'username', 'password')
+			.where({ email });
 		if (!user) return next(errors.LOGIN_FAILED());
 		if (!bcrypt.compareSync(password, user.password))
 			return next(errors.LOGIN_FAILED());
-		request.session.username = user.username;
-		user.password = undefined;
-		return response.json(user);
-	}
-
-	async logout(request, response) {
-		request.session.reset();
-		response.clearCookie('session');
-		return response.status(204).send();
-	}
-
-	async me(request, response, next) {
-		const { username } = request.session;
-		try {
-			const [user] = await connection('User')
-				.select(
-					'username',
-					'first_name',
-					'last_name',
-					'email',
-					'status',
-					'avatar_url'
-				)
-				.where('username', username);
-			if (!user) return next(errors.USER_NOT_FOUND(username, 'cookies'));
-			return response.json(user);
-		} catch (error) {
-			return next(errors.LOGIN_REQUIRED());
-		}
+		const [admin] = await connection('Admin')
+			.select('user_id')
+			.where('user_id', user.id);
+		const [professor] = await connection('Professor')
+			.select('user_id')
+			.where('user_id', user.id);
+		const [student] = await connection('Student')
+			.select('user_id')
+			.where('user_id', user.id);
+		if (admin) user.role = 'admin';
+		if (professor) user.role = 'professor';
+		if (student) user.role = 'student';
+		if (!user.role) return next(errors.LOGIN_FAILED());
+		const token = jwt.sign(
+			{ id: user.id, role: user.role },
+			process.env.APP_SECRET,
+			{
+				expiresIn: '1d',
+			}
+		);
+		return response.json({ token });
 	}
 }
 

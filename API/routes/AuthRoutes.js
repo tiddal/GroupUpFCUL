@@ -4,8 +4,6 @@ const AuthController = require('../controllers/AuthController');
 
 const AuthValidator = require('../validators/AuthValidator');
 
-auth.post('/login', AuthValidator.login, AuthController.login);
-auth.get('/logout', AuthController.logout);
-auth.get('/me', AuthValidator.cookie, AuthController.me);
+auth.post('/', AuthValidator.login, AuthController.login);
 
 module.exports = auth;

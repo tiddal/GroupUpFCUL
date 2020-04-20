@@ -5,6 +5,7 @@ const multer = require('multer');
 //  Middleware
 const multerConfig = require('../middleware/multer');
 const {
+	sessionRequired,
 	loginRequired,
 	adminRequired,
 	selfRequired,
@@ -25,16 +26,22 @@ users.use('/students', StudentRoutes);
 users.use('/professors', ProfessorRoutes);
 users.use('/admins', AdminRoutes);
 
-users.get('/', UserController.index);
+users.get('/', adminRequired, UserController.index);
 users.get('/:username', UserValidator.find, UserController.find);
-users.post('/', UserValidator.create, UserController.store);
+users.post('/', adminRequired, UserValidator.create, UserController.store);
 users.put(
 	'/:username',
+	adminRequired,
 	UserValidator.find,
 	UserValidator.edit,
 	UserController.modify
 );
-users.delete('/:username', UserValidator.find, UserController.remove);
+users.delete(
+	'/:username',
+	adminRequired,
+	UserValidator.find,
+	UserController.remove
+);
 
 // router.put(
 // 	'/:id',

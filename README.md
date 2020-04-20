@@ -4,8 +4,7 @@
 
 | Action                                        | Method | Permissions |               Path               |
 | :-------------------------------------------- | :----- | :---------: | :------------------------------: |
-| Login                                         | POST   |    None     |          [[+](#login)]           |
-| Logout                                        | GET    |    User     |          [[+](#logout)]          |
+| Authenticate                                  | POST   |    None     |          [[+](#login)]           |
 | Get all users                                 | GET    |    Admin    |         [[+](#allusers)]         |
 | Get an user by their username                 | GET    |    User     |         [[+](#userbyid)]         |
 | Create users                                  | POST   |    Admin    |        [[+](#createuser)]        |
@@ -52,7 +51,7 @@
 
 <a name="login"></a>
 
-### **POST** <br> /login
+### **POST** <br> /authenticate
 
 Logs a user in
 
@@ -71,7 +70,7 @@ Logs a user in
 
 ```JSON
 {
-  "username": "example"
+  "token": "example"
 }
 ```
 
@@ -84,16 +83,6 @@ Logs a user in
   "message": "Wrong email or password"
 }
 ```
-
----
-
-<a name="logout"></a>
-
-### **GET** <br> /logout
-
-Logs a user out
-
-#### Success: 204 No Content
 
 ## Users:
 

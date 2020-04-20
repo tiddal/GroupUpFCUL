@@ -51,7 +51,7 @@ class UserController {
 		for (let user of request.body.users) {
 			const { username, first_name, last_name, email, password, role } = user;
 			const id = uuidv4();
-			const hashed_password = bcrypt.hashSync(password, 14);
+			const hashed_password = bcrypt.hashSync(password, 10);
 			try {
 				const [createdUser] = await connection('User').insert(
 					{
@@ -112,7 +112,7 @@ class UserController {
 		//	Updating the User
 		let { password } = request.body.user;
 		const { status } = request.body.user;
-		if (password) password = bcrypt.hashSync(password, 14);
+		if (password) password = bcrypt.hashSync(password, 10);
 		const [updatedUser] = await connection('User').where(user).update(
 			{
 				password,

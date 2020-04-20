@@ -7,11 +7,7 @@ describe('Auth', () => {
 	beforeEach(async () => {
 		await connection.migrate.rollback();
 		await connection.migrate.latest();
-		await request(app)
-			.post('/users')
-			.send({
-				users: [Admin],
-			});
+		await connection.seed.run();
 	});
 
 	afterAll(async () => {
@@ -21,22 +17,22 @@ describe('Auth', () => {
 
 	it('should be able to log an user in', async () => {
 		const response = await request(app)
-			.post('/auth/login')
+			.post('/authenticate')
 			.send({
 				user: {
-					email: 'admin@test.com',
+					email: 'fc000000@test.com',
 					password: 'password',
 				},
 			});
 		expect(response.status).toBe(200);
 	});
 
-	it('should return a jwt token when authneticated', async () => {
+	it('should return a token when authenticated', async () => {
 		const response = await request(app)
-			.post('/auth/login')
+			.post('/authenticate')
 			.send({
 				user: {
-					email: 'admin@test.com',
+					email: 'fc000000@test.com',
 					password: 'password',
 				},
 			});
@@ -46,10 +42,10 @@ describe('Auth', () => {
 
 	it('should not be able to log an user in giving a wrong password', async () => {
 		const response = await request(app)
-			.post('/auth/login')
+			.post('/authenticate')
 			.send({
 				user: {
-					email: 'admin@test.com',
+					email: 'fc000000@test.com',
 					password: 'wrongpassword',
 				},
 			});
@@ -58,7 +54,7 @@ describe('Auth', () => {
 
 	it('should not be able to log an user in giving a wrong email', async () => {
 		const response = await request(app)
-			.post('/auth/login')
+			.post('/authenticate')
 			.send({
 				user: {
 					email: 'wrongemail@test.com',

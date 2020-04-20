@@ -15,8 +15,7 @@ class App {
 		this.express.use(express.json());
 		this.express.use(express.urlencoded({ extended: true }));
 		this.express.use(require('morgan')('dev'));
-		this.express.use(require('../middleware/sessions'));
-		this.express.use(require('../middleware/permissions').sessionRequired);
+		this.express.use(require('../middleware/permissions').verifyToken);
 	}
 
 	routes() {
