@@ -1,17 +1,23 @@
 const request = require('supertest');
 const app = require('../../API/app');
 const connection = require('../../API/db/config/connection');
-const { Professor } = require('../factory');
 
 describe('Professor', () => {
+	let token;
 	beforeEach(async () => {
 		await connection.migrate.rollback();
 		await connection.migrate.latest();
-		await request(app)
-			.post('/users')
+		await connection.seed.run();
+		({
+			body: { token },
+		} = await request(app)
+			.post('/authenticate')
 			.send({
-				users: [Professor],
-			});
+				user: {
+					email: 'fc00000@test.com',
+					password: 'password',
+				},
+			}));
 	});
 
 	afterAll(async () => {
@@ -20,25 +26,30 @@ describe('Professor', () => {
 	});
 
 	it('should be able to get all professors', async () => {
-		const response = await request(app).get('/users/professors');
-		expect(response.body).toHaveLength(1);
+		const response = await request(app)
+			.get('/users/professors')
+			.set('Authorization', `Bearer ${token}`);
 		expect(response.status).toBe(200);
+		expect(response.body).toHaveLength(1);
 	});
 
 	it('should be able to get a professor by their username', async () => {
-		const response = await request(app).get('/users/professors/professor');
+		const response = await request(app)
+			.get('/users/professors/fc00002')
+			.set('Authorization', `Bearer ${token}`);
 		expect(response.status).toBe(200);
 	});
 
 	it('should be able to update a professor', async () => {
 		const response = await request(app)
-			.put('/users/professors/professor')
+			.put('/users/professors/fc00002')
 			.send({
 				professor: {
 					room: '2.2.2',
 				},
-			});
-		expect(response.body.room).toBe('2.2.2');
+			})
+			.set('Authorization', `Bearer ${token}`);
 		expect(response.status).toBe(200);
+		expect(response.body.room).toBe('2.2.2');
 	});
 });

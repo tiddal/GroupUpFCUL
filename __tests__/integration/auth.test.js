@@ -20,7 +20,7 @@ describe('Auth', () => {
 			.post('/authenticate')
 			.send({
 				user: {
-					email: 'fc000000@test.com',
+					email: 'fc00000@test.com',
 					password: 'password',
 				},
 			});
@@ -32,7 +32,7 @@ describe('Auth', () => {
 			.post('/authenticate')
 			.send({
 				user: {
-					email: 'fc000000@test.com',
+					email: 'fc00000@test.com',
 					password: 'password',
 				},
 			});
@@ -45,7 +45,7 @@ describe('Auth', () => {
 			.post('/authenticate')
 			.send({
 				user: {
-					email: 'fc000000@test.com',
+					email: 'fc00000@test.com',
 					password: 'wrongpassword',
 				},
 			});

@@ -27,7 +27,7 @@ class AuthController {
 		if (student) user.role = 'student';
 		if (!user.role) return next(errors.LOGIN_FAILED());
 		const token = jwt.sign(
-			{ id: user.id, role: user.role },
+			{ id: user.id, username: user.username, role: user.role },
 			process.env.APP_SECRET,
 			{
 				expiresIn: '1d',

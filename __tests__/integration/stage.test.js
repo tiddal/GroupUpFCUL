@@ -4,17 +4,43 @@ const connection = require('../../API/db/config/connection');
 const { LTI, Project, Stage } = require('../factory');
 
 describe('Stage', () => {
+	let adminToken;
+	let professorToken;
 	beforeEach(async () => {
 		await connection.migrate.rollback();
 		await connection.migrate.latest();
+		await connection.seed.run();
+		({
+			body: { token: adminToken },
+		} = await request(app)
+			.post('/authenticate')
+			.send({
+				user: {
+					email: 'fc00000@test.com',
+					password: 'password',
+				},
+			}));
 		await request(app)
 			.post('/courses')
 			.send({
 				courses: [LTI],
-			});
+			})
+			.set('Authorization', `Bearer ${adminToken}`);
+
+		({
+			body: { token: professorToken },
+		} = await request(app)
+			.post('/authenticate')
+			.send({
+				user: {
+					email: 'fc00002@test.com',
+					password: 'password',
+				},
+			}));
 		await request(app)
 			.post('/courses/L079/units/26719/projects')
-			.send({ project: { ...Project } });
+			.send({ project: Project })
+			.set('Authorization', `Bearer ${professorToken}`);
 	});
 
 	afterAll(async () => {

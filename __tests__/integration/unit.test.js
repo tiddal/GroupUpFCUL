@@ -4,9 +4,27 @@ const connection = require('../../API/db/config/connection');
 const { Unit, LTI } = require('../factory');
 
 describe('Units', () => {
+	let token;
 	beforeEach(async () => {
 		await connection.migrate.rollback();
 		await connection.migrate.latest();
+		await connection.seed.run();
+		({
+			body: { token },
+		} = await request(app)
+			.post('/authenticate')
+			.send({
+				user: {
+					email: 'fc00000@test.com',
+					password: 'password',
+				},
+			}));
+		await request(app)
+			.post('/courses')
+			.send({
+				courses: [LTI],
+			})
+			.set('Authorization', `Bearer ${token}`);
 	});
 
 	afterAll(async () => {
@@ -15,45 +33,30 @@ describe('Units', () => {
 	});
 
 	it('should be able to create a new unit', async () => {
-		await request(app)
-			.post('/courses')
-			.send({
-				courses: [LTI],
-			});
 		const response = await request(app)
 			.post('/courses/L079/units')
 			.send({
 				units: [Unit],
-			});
+			})
+			.set('Authorization', `Bearer ${token}`);
 		expect(response.status).toBe(201);
 	});
 
 	it('should be able to get all the units', async () => {
-		await request(app)
-			.post('/courses')
-			.send({
-				courses: [LTI],
-			});
-		const response = await request(app).get('/courses/L079/units');
+		const response = await request(app)
+			.get('/courses/L079/units')
+			.set('Authorization', `Bearer ${token}`);
 		expect(response.status).toBe(200);
 	});
 
 	it("should be able to get an unit by it's code", async () => {
-		await request(app)
-			.post('/courses')
-			.send({
-				courses: [LTI],
-			});
-		const response = await request(app).get('/courses/L079/units/26719');
+		const response = await request(app)
+			.get('/courses/L079/units/26719')
+			.set('Authorization', `Bearer ${token}`);
 		expect(response.status).toBe(200);
 	});
 
 	it('should be able to update an unit', async () => {
-		await request(app)
-			.post('/courses')
-			.send({
-				courses: [LTI],
-			});
 		const response = await request(app)
 			.put('/courses/L079/units/26719')
 			.send({
@@ -63,17 +66,15 @@ describe('Units', () => {
 					initials: 'EX',
 					ects: 3,
 				},
-			});
+			})
+			.set('Authorization', `Bearer ${token}`);
 		expect(response.status).toBe(200);
 	});
 
 	it('should be able to delete a Unit', async () => {
-		await request(app)
-			.post('/courses')
-			.send({
-				courses: [LTI],
-			});
-		const response = await request(app).delete('/courses/L079/units/26719');
+		const response = await request(app)
+			.delete('/courses/L079/units/26719')
+			.set('Authorization', `Bearer ${token}`);
 		expect(response.status).toBe(204);
 	});
 });

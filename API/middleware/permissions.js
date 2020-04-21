@@ -14,7 +14,11 @@ module.exports = {
 
 		jwt.verify(token, process.env.APP_SECRET, async (err, decoded) => {
 			if (err) return next();
-			request.user = { id: decoded.id, role: decoded.role };
+			request.user = {
+				id: decoded.id,
+				username: decoded.username,
+				role: decoded.role,
+			};
 			return next();
 		});
 	},
@@ -34,13 +38,16 @@ module.exports = {
 	professorRequired: async (request, response, next) => {
 		if (!request.user) return next(error.LOGIN_REQUIRED());
 		if (request.user.role !== 'professor')
-			return next(error.NO_ADMIN_PERMISSIONS());
+			return next(error.NO_PROFESSOR_PERMISSIONS());
 		return next();
 	},
 
 	selfRequired: async (request, response, next) => {
 		if (!request.user) return next(error.LOGIN_REQUIRED());
-		if (request.params.id === request.user.id || request.user.role !== 'admin')
+		if (
+			request.params.username === request.user.username ||
+			request.user.role === 'admin'
+		)
 			return next();
 		return next(error.INVALID_IDENTITY());
 	},

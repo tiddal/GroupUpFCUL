@@ -1,6 +1,12 @@
 const express = require('express');
 const units = express.Router({ mergeParams: true });
 
+const {
+	loginRequired,
+	selfRequired,
+	adminRequired,
+} = require('../middleware/permissions');
+
 const UnitController = require('../controllers/UnitController');
 
 const UnitValidator = require('../validators/UnitValidator');
@@ -11,15 +17,26 @@ const ProjectRoutes = require('./ProjectRoutes');
 units.use('/:unit_code/classes', UnitValidator.find, ClassRoutes);
 units.use('/:unit_code/projects', UnitValidator.find, ProjectRoutes);
 
-units.get('/', UnitController.index);
-units.get('/:unit_code', UnitValidator.find, UnitController.find);
-units.post('/', UnitValidator.create, UnitController.store);
+units.get('/', loginRequired, UnitController.index);
+units.get(
+	'/:unit_code',
+	loginRequired,
+	UnitValidator.find,
+	UnitController.find
+);
+units.post('/', adminRequired, UnitValidator.create, UnitController.store);
 units.put(
 	'/:unit_code',
+	adminRequired,
 	UnitValidator.find,
 	UnitValidator.edit,
 	UnitController.modify
 );
-units.delete('/:unit_code', UnitValidator.find, UnitController.remove);
+units.delete(
+	'/:unit_code',
+	adminRequired,
+	UnitValidator.find,
+	UnitController.remove
+);
 
 module.exports = units;

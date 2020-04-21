@@ -13,10 +13,10 @@ exports.seed = function (knex) {
 				.insert([
 					{
 						id,
-						username: 'fc000000',
+						username: 'fc00000',
 						first_name: 'Admin',
 						last_name: 'Test',
-						email: 'fc000000@test.com',
+						email: 'fc00000@test.com',
 						password: hashed_password,
 					},
 				])

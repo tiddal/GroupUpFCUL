@@ -15,6 +15,14 @@ module.exports = {
 		return error;
 	},
 
+	NO_PROFESSOR_PERMISSIONS: () => {
+		const error = new Error();
+		error.statusCode = 401;
+		error.error = 'Unauthorized';
+		error.message = 'You must be a professor';
+		return error;
+	},
+
 	INVALID_IDENTITY: () => {
 		const error = new Error();
 		error.statusCode = 401;

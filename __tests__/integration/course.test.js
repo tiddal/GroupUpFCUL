@@ -4,9 +4,27 @@ const connection = require('../../API/db/config/connection');
 const { LTI, LEI } = require('../factory');
 
 describe('Course', () => {
+	let token;
 	beforeEach(async () => {
 		await connection.migrate.rollback();
 		await connection.migrate.latest();
+		await connection.seed.run();
+		({
+			body: { token },
+		} = await request(app)
+			.post('/authenticate')
+			.send({
+				user: {
+					email: 'fc00000@test.com',
+					password: 'password',
+				},
+			}));
+		await request(app)
+			.post('/courses')
+			.send({
+				courses: [LTI],
+			})
+			.set('Authorization', `Bearer ${token}`);
 	});
 
 	afterAll(async () => {
@@ -18,47 +36,27 @@ describe('Course', () => {
 		const response = await request(app)
 			.post('/courses')
 			.send({
-				courses: [LTI],
-			});
-		expect(response.status).toBe(201);
-	});
-
-	it('should be able to create multiple courses', async () => {
-		const response = await request(app)
-			.post('/courses')
-			.send({
-				courses: [LTI, LEI],
-			});
+				courses: [LEI],
+			})
+			.set('Authorization', `Bearer ${token}`);
 		expect(response.status).toBe(201);
 	});
 
 	it('should be able to get all courses', async () => {
-		await request(app)
-			.post('/courses')
-			.send({
-				courses: [LTI, LEI],
-			});
-		const response = await request(app).get('/courses');
-		expect(response.body).toHaveLength(2);
+		const response = await request(app)
+			.get('/courses')
+			.set('Authorization', `Bearer ${token}`);
 		expect(response.status).toBe(200);
 	});
 
 	it('should be able to get a course by its code', async () => {
-		await request(app)
-			.post('/courses')
-			.send({
-				courses: [LTI],
-			});
-		const response = await request(app).get('/courses/L079');
+		const response = await request(app)
+			.get('/courses/L079')
+			.set('Authorization', `Bearer ${token}`);
 		expect(response.status).toBe(200);
 	});
 
 	it('should be able to update a course', async () => {
-		await request(app)
-			.post('/courses')
-			.send({
-				courses: [LTI],
-			});
 		const response = await request(app)
 			.put('/courses/L079')
 			.send({
@@ -66,17 +64,15 @@ describe('Course', () => {
 					name: 'Engenharia Informática',
 					initials: 'LEI',
 				},
-			});
+			})
+			.set('Authorization', `Bearer ${token}`);
 		expect(response.status).toBe(200);
 	});
 
 	it('should be able to delete a course', async () => {
-		await request(app)
-			.post('/courses')
-			.send({
-				courses: [LEI],
-			});
-		const response = await request(app).delete('/courses/9119');
+		const response = await request(app)
+			.delete('/courses/L079')
+			.set('Authorization', `Bearer ${token}`);
 		expect(response.status).toBe(204);
 	});
 });
