@@ -2265,7 +2265,7 @@ Removes a professor from a class
 
 ### **GET** <br> /courses/{code}/units/{unit_code}/projects
 
-Gets all projects
+Gets all projects from a unit
 
 #### Success: 200 OK
 
@@ -2281,8 +2281,6 @@ Gets all projects
   }
 ]
 ```
-
-#### Failure: 401 Unauthorized
 
 ---
 
@@ -2307,7 +2305,21 @@ Gets all projects from a certain academic year
 ]
 ```
 
-#### Failure: 401 Unauthorized
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The projects with the academic year example were not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
+}
+```
 
 ---
 
@@ -2330,8 +2342,21 @@ Gets a project from a certain academic year and with a certain project_number
 }
 ```
 
-#### Failure: 401 Unauthorized
+#### Failure: 404 Not Found
 
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The projects with the academic year example were not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
+}
+```
 ---
 
 <a name="createproject"></a>
@@ -2383,6 +2408,22 @@ Create a project
 }
 ```
 
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"project.name\" is required",
+  "validation": {
+    "source": "body",
+    "keys": [
+      "project.name"
+    ]
+  }
+}
+```
+
 ---
 
 <a name="updateproject"></a>
@@ -2415,11 +2456,32 @@ Update a project
   "max_students": 3,
   "description": "Everything",
   "objectives": "All",
-  "assignment_url": "assignment.pdf"
+  "assignment_url": "new_harder_assignment.pdf",
+  "academic_year": "2019-2020"
 }
 ```
 
 #### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be a professor"
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "expose": true,
+  "statusCode": 400,
+  "status": 400,
+  "body": "{\n  \"project\": {\n      \"name\": \"Tudo\",\n      \"min_students\": %#%%3535,\n      \"max_students\": 3,\n      \"description\": \"Everything\",\n      \"objectives\": \"All\",\n      \"assignment_url\": \"new_harder_assignment.pdf\"\n    }\n}",
+  "type": "entity.parse.failed"
+}
+```
 
 ---
 
