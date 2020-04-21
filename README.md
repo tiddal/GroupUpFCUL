@@ -2,50 +2,50 @@
 
 ## Routes
 
-| Action                                        | Method | Permissions |               Path               |
-| :-------------------------------------------- | :----- | :---------: | :------------------------------: |
-| Authenticate                                  | POST   |    None     |          [[+](#login)]           |
-| Get all users                                 | GET    |    Admin    |         [[+](#allusers)]         |
-| Get an user by their username                 | GET    |    User     |         [[+](#userbyid)]         |
-| Create users                                  | POST   |    Admin    |        [[+](#createuser)]        |
-| Edit an user                                  | PUT    |    Admin    |        [[+](#updateuser)]        |
-| Delete an user                                | DELETE |    Admin    |        [[+](#deleteuser)]        |
-| Get all students                              | GET    |    Admin    |       [[+](#allstudents)]        |
-| Get a student by their username               | GET    |    User     |       [[+](#studentbyid)]        |
-| Edit a student                                | PUT    |   Student   |      [[+](#updatestudent)]       |
-| Get all professors                            | GET    |    Admin    |      [[+](#allprofessors)]       |
-| Get a professor by their username             | GET    |    User     |      [[+](#professorbyid)]       |
-| Edit a professor                              | PUT    |  Professor  |     [[+](#updateprofessor)]      |
-| Get all admins                                | GET    |    Admin    |        [[+](#alladmins)]         |
-| Get an admin by their username                | GET    |    User     |        [[+](#adminbyid)]         |
-| Edit an admin                                 | PUT    |    Admin    |       [[+](#updateadmin)]        |
-| Get all courses                               | GET    |    User     |        [[+](#allcourses)]        |
-| Get a course by its code                      | GET    |    User     |        [[+](#coursebyid)]        |
-| Create courses                                | POST   |    Admin    |       [[+](#createcourse)]       |
-| Edit a course                                 | PUT    |    Admin    |       [[+](#updatecourse)]       |
-| Delete a course                               | DELETE |    Admin    |       [[+](#deletecourse)]       |
-| Get all units from a course                   | GET    |    User     |         [[+](#allunits)]         |
-| Get a unit from a course by its code          | GET    |    User     |         [[+](#unitbyid)]         |
-| Create units                                  | POST   |    Admin    |        [[+](#createunit)]        |
-| Edit an unit                                  | PUT    |    Admin    |        [[+](#updateunit)]        |
-| Delete an unit                                | DELETE |    Admin    |        [[+](#deleteunit)]        |
-| Get all classes from an unit                  | GET    |    User     |        [[+](#allclasses)]        |
-| Get a class by its academic year and number   | GET    |    User     |        [[+](#classbyid)]         |
-| Add a class to an unit                        | POST   |    Admin    |       [[+](#createclass)]        |
-| Edit a class                                  | PUT    |    Admin    |       [[+](#updateclass)]        |
-| Remove a class from an unit                   | DELETE |    Admin    |       [[+](#deleteclass)]        |
-| Get all students from a class                 | GET    |    User     |   [[+](#allstudentsfromclass)]   |
-| Add a student to a class                      | POST   |    Admin    |      [[+](#studenttoclass)]      |
-| Remove a student from a class                 | DELETE |    Admin    |  [[+](#removestudentfromclass)]  |
-| Get all professors from a class               | GET    |    User     |  [[+](#allprofessorsfromclass)]  |
-| Add a professor to a class                    | POST   |    Admin    |     [[+](#professortoclass)]     |
-| Remove a professor from a class               | DELETE |    Admin    | [[+](#removeprofessorfromclass)] |
-| Get a project from an unit                    | GET    |    User     |       [[+](#allprojects)]        |
-| Get a project by its academic year            | GET    |    User     |       [[+](#yearprojects)]       |
-| Get a project by its academic year and number | GET    |    User     |    [[+](#yearnumberproject)]     |
-| Create a project                              | POST   |  Professor  |      [[+](#createproject)]       |
-| Edit a project                                | PUT    |  Professor  |      [[+](#updateproject)]       |
-| Delete a project                              | DELETE |  Professor  |      [[+](#deleteproject)]       |
+| Action                                        | Method | Permissions |               Path               |         Entity          |
+| :-------------------------------------------- | :----- | :---------: | :------------------------------: | :---------------------: |
+| Authenticate                                  | POST   |    None     |          [[+](#login)]           |            -            |
+| Get all users                                 | GET    |    Admin    |         [[+](#allusers)]         |      [User](#user)      |
+| Get an user by their username                 | GET    |    User     |         [[+](#userbyid)]         |      [User](#user)      |
+| Create users                                  | POST   |    Admin    |        [[+](#createuser)]        |      [User](#user)      |
+| Edit an user                                  | PUT    |    Admin    |        [[+](#updateuser)]        |      [User](#user)      |
+| Delete an user                                | DELETE |    Admin    |        [[+](#deleteuser)]        |      [User](#user)      |
+| Get all students                              | GET    |    Admin    |       [[+](#allstudents)]        |   [Student](#student)   |
+| Get a student by their username               | GET    |    User     |       [[+](#studentbyid)]        |   [Student](#student)   |
+| Edit a student                                | PUT    |   Student   |      [[+](#updatestudent)]       |   [Student](#student)   |
+| Get all professors                            | GET    |    Admin    |      [[+](#allprofessors)]       | [Professor](#professor) |
+| Get a professor by their username             | GET    |    User     |      [[+](#professorbyid)]       | [Professor](#professor) |
+| Edit a professor                              | PUT    |  Professor  |     [[+](#updateprofessor)]      | [Professor](#professor) |
+| Get all admins                                | GET    |    Admin    |        [[+](#alladmins)]         |     [Admin](#admin)     |
+| Get an admin by their username                | GET    |    User     |        [[+](#adminbyid)]         |     [Admin](#admin)     |
+| Edit an admin                                 | PUT    |    Admin    |       [[+](#updateadmin)]        |     [Admin](#admin)     |
+| Get all courses                               | GET    |    User     |        [[+](#allcourses)]        |    [Course](#course)    |
+| Get a course by its code                      | GET    |    User     |        [[+](#coursebyid)]        |    [Course](#course)    |
+| Create courses                                | POST   |    Admin    |       [[+](#createcourse)]       |    [Course](#course)    |
+| Edit a course                                 | PUT    |    Admin    |       [[+](#updatecourse)]       |    [Course](#course)    |
+| Delete a course                               | DELETE |    Admin    |       [[+](#deletecourse)]       |    [Course](#course)    |
+| Get all units from a course                   | GET    |    User     |         [[+](#allunits)]         |      [Unit](#unit)      |
+| Get a unit from a course by its code          | GET    |    User     |         [[+](#unitbyid)]         |      [Unit](#unit)      |
+| Create units                                  | POST   |    Admin    |        [[+](#createunit)]        |      [Unit](#unit)      |
+| Edit an unit                                  | PUT    |    Admin    |        [[+](#updateunit)]        |      [Unit](#unit)      |
+| Delete an unit                                | DELETE |    Admin    |        [[+](#deleteunit)]        |      [Unit](#unit)      |
+| Get all classes from an unit                  | GET    |    User     |        [[+](#allclasses)]        |     [Class](#class)     |
+| Get a class by its academic year and number   | GET    |    User     |        [[+](#classbyid)]         |     [Class](#class)     |
+| Add a class to an unit                        | POST   |    Admin    |       [[+](#createclass)]        |     [Class](#class)     |
+| Edit a class                                  | PUT    |    Admin    |       [[+](#updateclass)]        |     [Class](#class)     |
+| Remove a class from an unit                   | DELETE |    Admin    |       [[+](#deleteclass)]        |     [Class](#class)     |
+| Get all students from a class                 | GET    |    User     |   [[+](#allstudentsfromclass)]   |     [Class](#class)     |
+| Add a student to a class                      | POST   |    Admin    |      [[+](#studenttoclass)]      |     [Class](#class)     |
+| Remove a student from a class                 | DELETE |    Admin    |  [[+](#removestudentfromclass)]  |     [Class](#class)     |
+| Get all professors from a class               | GET    |    User     |  [[+](#allprofessorsfromclass)]  |     [Class](#class)     |
+| Add a professor to a class                    | POST   |    Admin    |     [[+](#professortoclass)]     |     [Class](#class)     |
+| Remove a professor from a class               | DELETE |    Admin    | [[+](#removeprofessorfromclass)] |     [Class](#class)     |
+| Get a project from an unit                    | GET    |    User     |       [[+](#allprojects)]        |   [Project](#project)   |
+| Get a project by its academic year            | GET    |    User     |       [[+](#yearprojects)]       |   [Project](#project)   |
+| Get a project by its academic year and number | GET    |    User     |    [[+](#yearnumberproject)]     |   [Project](#project)   |
+| Create a project                              | POST   |  Professor  |      [[+](#createproject)]       |   [Project](#project)   |
+| Edit a project                                | PUT    |  Professor  |      [[+](#updateproject)]       |   [Project](#project)   |
+| Delete a project                              | DELETE |  Professor  |      [[+](#deleteproject)]       |   [Project](#project)   |
 
 ## Authentication:
 
@@ -2357,6 +2357,7 @@ Gets a project from a certain academic year and with a certain project_number
   }
 }
 ```
+
 ---
 
 <a name="createproject"></a>
@@ -2505,6 +2506,8 @@ Delete a project
 
 ## Entities
 
+<a name="user"></a>
+
 ### User
 
 | Attributes |  Type  |         Restrictions          |
@@ -2517,31 +2520,36 @@ Delete a project
 | status     | string | **not null, default offline** |
 | avatar_url | string |               -               |
 
+<a name="student"></a>
+
 ### Student
 
 | Attributes      |  Type   |        Restrictions         |
 | :-------------- | :-----: | :-------------------------: |
-| username        | string  |         **foreign**         |
 | working_student | boolean | **not null, default false** |
 | github_url      | string  |              -              |
 | facebook_url    | string  |              -              |
 | instagram_url   | string  |              -              |
 | twitter_url     | string  |              -              |
 
+<a name="professor"></a>
+
 ### Professor
 
 | Attributes |  Type  | Restrictions |
 | :--------- | :----: | :----------: |
-| username   | string | **foreign**  |
 | department | string |      -       |
 | room       | string |      -       |
+
+<a name="admin"></a>
 
 ### Admin
 
 | Attributes |  Type   |      Restrictions       |
 | :--------- | :-----: | :---------------------: |
-| username   | string  |       **foreign**       |
 | previleges | integer | **not null, default 1** |
+
+<a name="course"></a>
 
 ### Course
 
@@ -2551,6 +2559,8 @@ Delete a project
 | name       | string  |     **not null**     |
 | cycle      | integer |     **not null**     |
 | initials   | string  |     **not null**     |
+
+<a name="unit"></a>
 
 ### Unit
 
@@ -2562,13 +2572,29 @@ Delete a project
 | initials   | string  |     **not null**     |
 | ects       | integer |     **not null**     |
 
+<a name="class"></a>
+
 ### Class
 
 | Attributes    |  Type   | Restrictions |
 | :------------ | :-----: | :----------: |
-| unit_code     | integer | **foreign**  |
 | number        | string  | **not null** |
 | begins_at     |  time   | **not null** |
 | ends_at       |  time   | **not null** |
 | week_day      | integer | **not null** |
 | academic_year | string  | **not null** |
+
+<a name="project"></a>
+
+### Project
+
+| Attributes     |  Type   | Restrictions |
+| :------------- | :-----: | :----------: |
+| number         | string  | **not null** |
+| academic_year  | string  | **not null** |
+| name           | string  | **not null** |
+| min_students   | integer | **not null** |
+| max_students   | integer | **not null** |
+| description    | string  | **not null** |
+| objectives     | string  | **not null** |
+| assignment_url | string  | **not null** |
