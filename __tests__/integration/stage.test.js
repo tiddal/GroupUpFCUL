@@ -41,6 +41,10 @@ describe('Stage', () => {
 			.post('/courses/L079/units/26719/projects')
 			.send({ project: Project })
 			.set('Authorization', `Bearer ${professorToken}`);
+
+		await request(app)
+			.post('/courses/L079/units/26719/projects/2019-2020/1/stages/')
+			.send({ stage: Stage });
 	});
 
 	afterAll(async () => {
@@ -51,14 +55,11 @@ describe('Stage', () => {
 	it('should be able to add a stage to a project', async () => {
 		const response = await request(app)
 			.post('/courses/L079/units/26719/projects/2019-2020/1/stages/')
-			.send({ stage: { ...Stage } });
+			.send({ stage: Stage });
 		expect(response.status).toBe(201);
 	});
 
 	it('should be able to get all stages of a project', async () => {
-		await request(app)
-			.post('/courses/L079/units/26719/projects/2019-2020/1/stages/')
-			.send({ stage: { ...Stage } });
 		const response = await request(app).get(
 			'/courses/L079/units/26719/projects/2019-2020/1/stages'
 		);
@@ -66,9 +67,6 @@ describe('Stage', () => {
 	});
 
 	it('should be able to get a stage from a project by its number', async () => {
-		await request(app)
-			.post('/courses/L079/units/26719/projects/2019-2020/1/stages/')
-			.send({ stage: { ...Stage } });
 		const response = await request(app).get(
 			'/courses/L079/units/26719/projects/2019-2020/1/stages/1'
 		);
@@ -76,9 +74,6 @@ describe('Stage', () => {
 	});
 
 	it('should be able to update a stage', async () => {
-		await request(app)
-			.post('/courses/L079/units/26719/projects/2019-2020/1/stages/')
-			.send({ stage: { ...Stage } });
 		const response = await request(app)
 			.put('/courses/L079/units/26719/projects/2019-2020/1/stages/1')
 			.send({
@@ -93,12 +88,34 @@ describe('Stage', () => {
 	});
 
 	it('should be able to delete a stage', async () => {
-		await request(app)
-			.post('/courses/L079/units/26719/projects/2019-2020/1/stages/')
-			.send({ stage: { ...Stage } });
 		const response = await request(app).delete(
 			'/courses/L079/units/26719/projects/2019-2020/1/stages/1'
 		);
 		expect(response.status).toBe(204);
+	});
+
+	it('should be able to add a team to a stage', async () => {
+		const response = await request(app)
+			.post('/courses/L079/units/26719/projects/2019-2020/1/stages/1/teams')
+			.send({
+				team_number: 'T001',
+			});
+		expect(response.status).toBe(201);
+	});
+
+	it('should be able to get the teams from a stage', async () => {
+		const response = await request(app).get(
+			'/courses/L079/units/26719/projects/2019-2020/1/stages/1/teams'
+		);
+		expect(response.status).toBe(200);
+	});
+
+	it('should be able to update the stage of a team', async () => {
+		const response = await request(app)
+			.put('/courses/L079/units/26719/projects/2019-2020/1/stages/1/teams/T001')
+			.send({
+				grade: 20,
+			});
+		expect(response.status).toBe(200);
 	});
 });
