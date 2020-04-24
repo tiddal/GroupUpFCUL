@@ -12,8 +12,11 @@ const ProjectValidator = require('../validators/ProjectValidator');
 
 const TeamRoutes = require('./TeamRoutes');
 
-projects.use('/:project_year/:project_number/teams', TeamRoutes);
+const StageRoutes = require('./StageRoutes')
 
+
+projects.use('/:project_year/:project_number/teams', TeamRoutes);
+projects.use('/:project_year/:project_number/stages', StageRoutes)
 projects.get('/', loginRequired, ProjectController.index);
 projects.get(
 	'/:project_year',
