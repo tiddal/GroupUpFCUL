@@ -9,7 +9,13 @@ class TeamController {
 		this.find = this.find.bind(this);
 		this.modify = this.modify.bind(this);
 		this.remove = this.remove.bind(this);
+		this.findMembers = this.findMembers.bind(this);
+		this.findMember = this.findMember.bind(this);
+		this.storeMember = this.storeMember.bind(this);
+		this.updateMember = this.updateMember.bind(this);
+		this.removeMember = this.removeMember.bind(this);
 
+		this.findTeamOwner = this.findTeamOwner.bind(this);
 		this.findTeam = this.findTeam.bind(this);
 		this.findProject = this.findProject.bind(this);
 	}
@@ -36,21 +42,20 @@ class TeamController {
 
 	async store(request, response, next) {
 		const { id: user_id, role } = request.user;
-		if (role === 'admin') return next(errors.NOT_FOUND());
+		if (role !== 'student') return next(errors.INVALID_IDENTITY());
 		const project = await this.findProject(request, response, next);
 		if (!project) return next();
+		const [userInTeam] = await connection('team_student')
+			.join('Team', 'Team.id', 'team_student.team_id')
+			.select('team_number')
+			.where({ project_id: project.id, student_id: user_id });
+		if (userInTeam) return next(errors.ALREADY_IN_TEAM(userInTeam.team_number));
 
 		const [class_] = await connection('Class')
-			.leftJoin('class_student', 'class_student.class_id', '=', 'Class.id')
-			.leftJoin('class_professor', 'class_professor.class_id', '=', 'Class.id')
+			.join('class_student', 'class_student.class_id', '=', 'Class.id')
 			.select('Class.id')
 			.where({
 				student_id: user_id,
-				unit_id: project.unit_id,
-				academic_year: project.academic_year,
-			})
-			.orWhere({
-				professor_id: user_id,
 				unit_id: project.unit_id,
 				academic_year: project.academic_year,
 			});
@@ -80,8 +85,20 @@ class TeamController {
 					logo_url,
 					academic_year,
 				},
-				['team_number', 'name', 'description', 'logo_url', 'academic_year']
+				[
+					'id',
+					'team_number',
+					'name',
+					'description',
+					'logo_url',
+					'academic_year',
+				]
 			);
+			await connection('team_student').insert({
+				team_id: team.id,
+				student_id: user_id,
+				role: 'owner',
+			});
 			return response.status(201).json(team);
 		} catch (error) {
 			return next(errors.UNIQUE_CONSTRAIN(error.detail));
@@ -111,6 +128,155 @@ class TeamController {
 		return response.status(204).send();
 	}
 
+	async findMembers(request, response, next) {
+		const team = await this.findTeam(request, response, next);
+		if (!team) return next();
+		const members = await connection('team_student')
+			.join('User', 'User.id', '=', 'team_student.student_id')
+			.select([
+				'User.username',
+				'User.first_name',
+				'User.last_name',
+				'User.email',
+				'team_student.role',
+			]);
+		return response.json(members);
+	}
+
+	async findMember(request, response, next) {
+		const team = await this.findTeam(request, response, next);
+		if (!team) return next();
+		const { username } = request.params;
+		const [member] = await connection('team_student')
+			.join('User', 'User.id', '=', 'team_student.student_id')
+			.select([
+				'User.username',
+				'User.first_name',
+				'User.last_name',
+				'User.email',
+				'team_student.role',
+			])
+			.where('User.username', username);
+		if (!member) return next(errors.USER_NOT_FOUND(username, 'params'));
+		return response.json(member);
+	}
+
+	async storeMember(request, response, next) {
+		const owner = await this.findTeamOwner(request, response, next);
+		if (!owner) return next();
+		const project = await this.findProject(request, response, next);
+		const { username } = request.body;
+		const [user] = await connection('Student')
+			.join('User', 'User.id', '=', 'Student.user_id')
+			.select('*')
+			.where('User.username', username);
+		if (!user) return next(errors.STUDENT_NOT_FOUND(username, 'body'));
+
+		const [class_] = await connection('Class')
+			.join('class_student', 'class_student.class_id', '=', 'Class.id')
+			.select('Class.id')
+			.where({
+				student_id: user.id,
+				unit_id: project.unit_id,
+				academic_year: project.academic_year,
+			});
+		if (!class_) return next(errors.STUDENT_NOT_IN_UNIT(username));
+
+		const members = await connection('team_student')
+			.select('*')
+			.where({ team_id: owner.team_id });
+
+		if (members.length === project.max_students)
+			return next(errors.MAX_MEMBERS_REACHED(project.max_students));
+
+		try {
+			await connection('team_student').insert({
+				student_id: user.id,
+				team_id: owner.team_id,
+				role: 'pending',
+			});
+			return response.status(201).json(username);
+		} catch (error) {
+			return next(errors.UNIQUE_CONSTRAIN(error.detail));
+		}
+	}
+
+	async updateMember(request, response, next) {
+		const team = await this.findTeam(request, response, next);
+		if (!team) return next();
+		const { id: student_id, username: self } = request.user;
+		const { username } = request.params;
+		if (self === username) {
+			const [member] = await connection('team_student')
+				.select('*')
+				.where({ team_id: team.id, student_id, role: 'pending' });
+			if (!member) return next(errors.USER_NOT_FOUND(username, 'params'));
+			const [updatedMember] = await connection('team_student')
+				.where(member)
+				.update({ role: 'member' }, ['role']);
+			return response.json(updatedMember);
+		} else {
+			const owner = await this.findTeamOwner(request, response, next);
+			if (!owner) return next(errors.INVALID_IDENTITY());
+			const [userToUpdate] = await connection('Student')
+				.join('User', 'User.id', 'Student.user_id')
+				.select('User.id')
+				.where('User.username', username);
+			if (!userToUpdate) return next(errors.USER_NOT_FOUND(username, 'params'));
+
+			const [member] = await connection('team_student')
+				.select('*')
+				.where({ team_id: owner.team_id, student_id: userToUpdate.id });
+			if (!member) return next(errors.USER_NOT_FOUND(username, 'params'));
+
+			const { role } = request.body;
+			if (!role) return next(errors.INVALID_BODY(['role']));
+			const [updatedMember] = await connection('team_student')
+				.where(member)
+				.update({ role }, ['role']);
+			return response.json(updatedMember);
+		}
+	}
+
+	async removeMember(request, response, next) {
+		const team = await this.findTeam(request, response, next);
+		if (!team) return next();
+		const { id: student_id, username: self } = request.user;
+		const { username } = request.params;
+		const [user] = await connection('team_student')
+			.select('*')
+			.where({ team_id: team.id, student_id });
+		if (!user) return next(errors.USER_NOT_FOUND());
+
+		if (self === username) {
+			const members = await connection('team_student')
+				.select('*')
+				.where({ team_id: team.id });
+			if (user.role === 'owner' && members.length > 1)
+				return next(errors.TEAM_NOT_EMPTY());
+			await connection('team_student').where(user).del();
+			if (user.role !== 'owner') {
+				return response.status(204).send();
+			} else {
+				await connection('Team').where({ id: team.id }).del();
+				return response.status(204).send();
+			}
+		} else {
+			if (user.role !== 'owner') return next(errors.INVALID_IDENTITY());
+			const [userToRemove] = await connection('Student')
+				.join('User', 'User.id', 'Student.user_id')
+				.select('User.id')
+				.where('User.username', username);
+			if (!userToRemove) return next(errors.USER_NOT_FOUND(username, 'params'));
+			const [member] = await connection('team_student')
+				.select('*')
+				.where({ team_id: team.id, student_id: userToRemove.id });
+			if (!member) return next(errors.USER_NOT_FOUND(username, 'params'));
+			await connection('team_student').where(member).del();
+			return response.status(204).send();
+		}
+	}
+
 	async findProject(request, response, next) {
 		const { code } = request.params;
 		const [course] = await connection('Course').select('id').where({ code });
@@ -129,7 +295,7 @@ class TeamController {
 			project_number: number,
 		} = request.params;
 		const [project] = await connection('Project')
-			.select('id', 'academic_year', 'unit_id')
+			.select('id', 'academic_year', 'unit_id', 'max_students', 'min_students')
 			.where({ academic_year, number, unit_id: unit.id });
 		if (!project)
 			return next(errors.PROJECT_NOT_FOUND(academic_year, number, 'params'));
@@ -145,6 +311,18 @@ class TeamController {
 			.where({ team_number, project_id: project.id });
 		if (!team) return next(errors.TEAM_NOT_FOUND(team_number, 'params'));
 		return team;
+	}
+
+	async findTeamOwner(request, response, next) {
+		const team = await this.findTeam(request, response, next);
+		if (!team) return next();
+		const { id: student_id, role } = request.user;
+		if (role !== 'student') return next(errors.INVALID_IDENTITY());
+		const [owner] = await connection('team_student')
+			.select('student_id', 'team_id')
+			.where({ student_id, team_id: team.id, role: 'owner' });
+		if (!owner) return next(errors.INVALID_IDENTITY());
+		return owner;
 	}
 }
 

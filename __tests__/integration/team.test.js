@@ -51,6 +51,17 @@ describe('Team', () => {
 			})
 			.set('Authorization', `Bearer ${adminToken}`);
 
+		await request(app)
+			.post('/courses/L079/units/26719/classes/2019-2020/T1/students')
+			.send({
+				students: [
+					{
+						username: 'student',
+					},
+				],
+			})
+			.set('Authorization', `Bearer ${adminToken}`);
+
 		({
 			body: { token: professorToken },
 		} = await request(app)
@@ -88,10 +99,20 @@ describe('Team', () => {
 	});
 
 	it('should be able to create a new team', async () => {
+		({
+			body: { token: localToken },
+		} = await request(app)
+			.post('/authenticate')
+			.send({
+				user: {
+					email: 'student@test.com',
+					password: 'password',
+				},
+			}));
 		const response = await request(app)
 			.post('/courses/L079/units/26719/projects/2019-2020/1/teams')
 			.send({ team: Team })
-			.set('Authorization', `Bearer ${studentToken}`);
+			.set('Authorization', `Bearer ${localToken}`);
 		expect(response.status).toBe(201);
 	});
 
@@ -133,30 +154,57 @@ describe('Team', () => {
 	it('should be able to add a student to a team', async () => {
 		const response = await request(app)
 			.post('/courses/L079/units/26719/projects/2019-2020/1/teams/T001/members')
-			.send({ username: 'fc00001' });
+			.send({ username: 'student' })
+			.set('Authorization', `Bearer ${studentToken}`);
 		expect(response.status).toBe(201);
 	});
 
 	it('should be able to get the members of a team', async () => {
-		const response = await request(app).get(
-			'/courses/L079/units/26719/projects/2019-2020/1/teams/T001/members'
-		);
+		const response = await request(app)
+			.get('/courses/L079/units/26719/projects/2019-2020/1/teams/T001/members')
+			.set('Authorization', `Bearer ${studentToken}`);
+		expect(response.status).toBe(200);
+	});
+
+	it('should be able to get a member of a team', async () => {
+		const response = await request(app)
+			.get(
+				'/courses/L079/units/26719/projects/2019-2020/1/teams/T001/members/fc00001'
+			)
+			.set('Authorization', `Bearer ${studentToken}`);
 		expect(response.status).toBe(200);
 	});
 
 	it('should be able to update a member of a team', async () => {
+		({
+			body: { token: localToken },
+		} = await request(app)
+			.post('/authenticate')
+			.send({
+				user: {
+					email: 'student@test.com',
+					password: 'password',
+				},
+			}));
+
+		await request(app)
+			.post('/courses/L079/units/26719/projects/2019-2020/1/teams/T001/members')
+			.send({ username: 'student' })
+			.set('Authorization', `Bearer ${studentToken}`);
 		const response = await request(app)
 			.put(
-				'/courses/L079/units/26719/projects/2019-2020/1/teams/T001/members/fc00001'
+				'/courses/L079/units/26719/projects/2019-2020/1/teams/T001/members/student'
 			)
-			.send({ role: 'member' });
+			.set('Authorization', `Bearer ${localToken}`);
 		expect(response.status).toBe(200);
 	});
 
 	it('should be able to remove a member from a team', async () => {
-		const response = await request(app).get(
-			'/courses/L079/units/26719/projects/2019-2020/1/teams/T001/fc00001'
-		);
+		const response = await request(app)
+			.delete(
+				'/courses/L079/units/26719/projects/2019-2020/1/teams/T001/members/fc00001'
+			)
+			.set('Authorization', `Bearer ${studentToken}`);
 		expect(response.status).toBe(204);
 	});
 });

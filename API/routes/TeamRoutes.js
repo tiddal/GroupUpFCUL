@@ -37,4 +37,22 @@ teams.delete(
 	TeamController.remove
 );
 
+teams.get('/:team_number/members', loginRequired, TeamController.findMembers);
+teams.get(
+	'/:team_number/members/:username',
+	loginRequired,
+	TeamController.findMember
+);
+teams.post('/:team_number/members', loginRequired, TeamController.storeMember);
+teams.put(
+	'/:team_number/members/:username',
+	loginRequired,
+	TeamController.updateMember
+);
+teams.delete(
+	'/:team_number/members/:username',
+	loginRequired,
+	TeamController.removeMember
+);
+
 module.exports = teams;
