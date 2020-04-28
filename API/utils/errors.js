@@ -154,6 +154,19 @@ module.exports = {
 		};
 		return error;
 	},
+	
+	STAGE_NOT_FOUND: (number, source) => {
+		const error = new Error();
+		error.statusCode = 404;
+		error.error = 'Not Found';
+		error.message = `The Stage ${number} was not found`;
+		error.validation = {
+			source,
+			values: [number],
+		};
+		return error;
+	},
+
 
 	UNIQUE_CONSTRAIN: (detail) => {
 		const error = new Error();
