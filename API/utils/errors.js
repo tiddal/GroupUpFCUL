@@ -154,6 +154,38 @@ module.exports = {
 		};
 		return error;
 	},
+	STUDENT_NOT_IN_UNIT: (username) => {
+		const error = new Error();
+		error.statusCode = 404;
+		error.error = 'Not Found';
+		error.message = `The user ${username} was not found in this unit`;
+		error.validation = {
+			values: [username],
+		};
+		return error;
+	},
+
+	MAX_MEMBERS_REACHED: (members) => {
+		const error = new Error();
+		error.statusCode = 401;
+		error.error = 'Unauthorized';
+		error.message = `This project doesn't allow more than ${members} members`;
+		error.validation = {
+			values: [members],
+		};
+		return error;
+	},
+
+	ALREADY_IN_TEAM: (number) => {
+		const error = new Error();
+		error.statusCode = 400;
+		error.error = 'Bad Request';
+		error.message = `You are already in a team for this project`;
+		error.validation = {
+			values: [number],
+		};
+		return error;
+	},
 
 	UNIQUE_CONSTRAIN: (detail) => {
 		const error = new Error();
@@ -161,6 +193,17 @@ module.exports = {
 		error.error = 'Conflict';
 		error.message = 'This field(s) must be unique in the database.';
 		error.detail = detail;
+		return error;
+	},
+
+	INVALID_BODY: (properties) => {
+		const error = new Error();
+		error.statusCode = 400;
+		error.error = 'Bad Request';
+		error.message = `Missing properties`;
+		error.validation = {
+			source: [...properties],
+		};
 		return error;
 	},
 
