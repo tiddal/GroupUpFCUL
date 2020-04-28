@@ -46,6 +46,14 @@
 | Create a project                              | POST   |  Professor  |      [[+](#createproject)]       |   [Project](#project)   |
 | Edit a project                                | PUT    |  Professor  |      [[+](#updateproject)]       |   [Project](#project)   |
 | Delete a project                              | DELETE |  Professor  |      [[+](#deleteproject)]       |   [Project](#project)   |
+| Create a meeting                              | POST   |  Professor  |      [[+](#createmeeting)]       |   [Project](#project)   |
+| Get all meetings from a team                  | GET    |    User     |       [[+](#teammeetings)]       |   [Meeting](#meeting)   |
+| Get a meeting by its number                   | GET    |    User     |       [[+](#meetingbyid)]        |   [Meeting](#meeting)   |
+| Edit a meeting                                | PUT    |    User     |      [[+](#updatemeeting)]       |   [Meeting](#meeting)   |
+| Remove a meeting                              | DELETE |    User     |      [[+](#deletemeeting)]       |   [Meeting](#meeting)   |
+| Add a student to a meeting                    | POST   |   Student   |   [[+](#addstudenttomeeting)]    |   [Meeting](#meeting)   |
+| Get all students from a meeting               | GET    |   Student   |  [[+](#allstudentsfrommeeting)]  |   [Meeting](#meeting)   |
+| Remove a student from a meeting               | DELETE |   Student   | [[+](#removestudentfrommeeting)] |   [Meeting](#meeting)   |
 
 ## Authentication:
 
@@ -2501,6 +2509,384 @@ Delete a project
   "statusCode": 401,
   "error": "Unauthorized",
   "message": "You must be a professor"
+}
+```
+
+## Meeting
+
+<a name="createmeeting"></a>
+
+### **POST** /courses/{code}/units/{unit_code}/projects/{academic_year}/{project_number}/teams/{team_number}/meetings/
+
+Create a meeting
+
+#### Body:
+
+```JSON
+{
+  "meeting": {
+    "topic": "Como ter o 19,9 em menos de 24h",
+    "beings_at": "02-03-2019 16:30",
+    "ends_at": "02-03-2019 17:00",
+    }
+  }
+}
+```
+
+#### Success: 201 Created
+
+```JSON
+{
+  "meeting": {
+    "topic": "Como ter o 19,9 em menos de 24h",
+    "beings_at": "02-03-2019 16:30",
+    "ends_at": "02-03-2019 17:00",
+    }
+  }
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The projects with the academic year example were not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
+}
+```
+
+#### Failure: 400 Bad Request
+
+```JSON
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "\"meeting.topic\" is required",
+  "validation": {
+    "source": "body",
+    "keys": [
+      "meeting.topic"
+    ]
+  }
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+<a name="teammeeting"></a>
+
+### **GET** /courses/{code}/units/{unit_code}/projects/{academic_year}/{project_number}/teams/{team_number}/meetings/
+
+Get all meetings from a team
+
+#### Success: 200 OK
+
+```JSON
+[
+  {
+  "meeting_number": 1,
+  "topic": "Como ter o 19,9 em menos de 24h",
+  "beings_at": "02-03-2019 16:30",
+  "ends_at": "02-03-2019 17:00",
+  }
+]
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The team with the number example were not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
+}
+```
+
+<a name="meetingbyid"></a>
+
+### **GET** /courses/{code}/units/{unit_code}/projects/{academic_year}/{project_number}/teams/{team_number}/meetings/{meeting_number}
+
+Get a meeting by its number
+
+#### Success: 200 OK
+
+```JSON
+{
+  "meeting_number": 1,
+  "topic": "Como ter o 19,9 em menos de 24h",
+  "beings_at": "02-03-2019 16:30",
+  "ends_at": "02-03-2019 17:00",
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The meeting with the number example were not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+<a name="updatemeeting"></a>
+
+### **PUT** /courses/{code}/units/{unit_code}/projects/{academic_year}/{project_number}/teams/{team_number}/meetings/{meeting_number}
+
+Edit a meeting
+
+#### Body:
+
+```JSON
+{
+  "meeting": {
+    "topic": "Como ter o 19,9 em menos de 48h",
+    "beings_at": "02-03-2019 16:00",
+    "ends_at": "02-03-2019 17:30",
+  },
+}
+```
+
+#### Success: 200 OK
+
+```JSON
+{
+  "meeting": {
+    "topic": "Como ter o 19,9 em menos de 48h",
+    "beings_at": "02-03-2019 16:00",
+    "ends_at": "02-03-2019 17:30",
+  },
+}
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The meeting with the number example were not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+<a name="deletemeeting"></a>
+
+### **DELETE** /courses/{code}/units/{unit_code}/projects/{academic_year}/{project_number}/teams/{team_number}/meetings/{meeting_number}
+
+Remove a meeting
+
+#### Success: No Content
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The meeting with the number example were not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+<a name="addstudenttomeeting"></a>
+
+### **POST** /courses/{code}/units/{unit_code}/projects/{academic_year}/{project_number}/teams/{team_number}/meetings/{meeting_number}/members
+
+Add a student to a meeting
+
+#### Body:
+
+```JSON
+{ 
+  "username": "fc00001" 
+}
+```
+
+#### Success: 201 Created
+
+```JSON
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The meeting with the number example were not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+<a name="allstudentsfrommeeting"></a>
+
+### **GET** /courses/{code}/units/{unit_code}/projects/{academic_year}/{project_number}/teams/{team_number}/meetings/{meeting_number}/members
+
+Get all students from a meeting 
+
+#### Success: 200 OK
+
+```JSON
+[
+  { 
+  "username": "fc00001" 
+  },
+  { 
+  "username": "fc00002" 
+	}
+]
+```
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The meeting with the number example were not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
+}
+```
+
+<a name="removestudentfrommeeting"></a>
+
+### **DELETE** /courses/{code}/units/{unit_code}/projects/{academic_year}/{project_number}/teams/{team_number}/meetings/members/{username}
+
+Remove a student from a meeting 
+
+#### Success: 204 No Content
+
+#### Failure: 404 Not Found
+
+```JSON
+{
+  "statusCode": 404,
+  "error": "Not Found",
+  "message": "The student with the username example were not found",
+  "validation": {
+    "source": "params",
+    "values": [
+      "example"
+    ]
+  }
+}
+```
+
+#### Failure: 401 Unauthorized
+
+```JSON
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "message": "You must be logged in"
 }
 ```
 
