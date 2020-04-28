@@ -43,6 +43,7 @@ classes.delete(
 );
 
 classes.get('/', loginRequired, ClassController.index);
+classes.get('/:year', loginRequired, ClassController.findClassByYear);
 classes.get(
 	'/:year/:class_number',
 	loginRequired,

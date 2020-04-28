@@ -6,6 +6,7 @@ const errors = require('../utils/errors');
 class ClassController {
 	constructor() {
 		this.index = this.index.bind(this);
+		this.findClassByYear = this.findClassByYear.bind(this);
 		this.find = this.find.bind(this);
 		this.store = this.store.bind(this);
 		this.modify = this.modify.bind(this);
@@ -28,6 +29,16 @@ class ClassController {
 		const classes = await connection('Class')
 			.select('number', 'begins_at', 'ends_at', 'week_day', 'academic_year')
 			.where('unit_id', unit.id);
+		return response.json(classes);
+	}
+
+	async findClassByYear(request, response, next) {
+		const unit = await this.findUnit(request, response, next);
+		if (!unit) return next();
+		const { year: academic_year } = request.params;
+		const classes = await connection('Class')
+			.select('number', 'begins_at', 'ends_at', 'week_day', 'academic_year')
+			.where({ unit_id: unit.id, academic_year });
 		return response.json(classes);
 	}
 

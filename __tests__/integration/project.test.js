@@ -1,7 +1,7 @@
 const request = require('supertest');
 const app = require('../../API/app');
 const connection = require('../../API/db/config/connection');
-const { LTI, Project } = require('../factory');
+const { LTI, Project, Class } = require('../factory');
 
 describe('Project', () => {
 	let adminToken;
@@ -24,6 +24,22 @@ describe('Project', () => {
 			.post('/courses')
 			.send({
 				courses: [LTI],
+			})
+			.set('Authorization', `Bearer ${adminToken}`);
+
+		await request(app)
+			.post('/courses/L079/units/26719/classes')
+			.send({ classes: [Class] })
+			.set('Authorization', `Bearer ${adminToken}`);
+
+		await request(app)
+			.post('/courses/L079/units/26719/classes/2019-2020/T1/professors')
+			.send({
+				professors: [
+					{
+						username: 'fc00002',
+					},
+				],
 			})
 			.set('Authorization', `Bearer ${adminToken}`);
 		({
