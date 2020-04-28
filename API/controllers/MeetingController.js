@@ -23,7 +23,7 @@ class MeetingController {
     const team = await this.findTeam(request, response, next);
     if (!team) return next();
     const meetings = await connection("Meeting")
-      .select(["meeting_number", "topic", "beings_at", "ends_at"])
+      .select(["meeting_number", "topic", "begins_at", "ends_at"])
       .where({ team_id: team.id });
     return response.json(meetings);
   }
@@ -33,7 +33,7 @@ class MeetingController {
     if (!team) return next();
     const { meeting_number } = request.params;
     const [meeting] = await connection("Meeting")
-      .select(["meeting_number", "topic", "beings_at", "ends_at"])
+      .select(["meeting_number", "topic", "begins_at", "ends_at"])
       .where({ meeting_number, team_id: team.id });
     if (!meeting)
       return next(errors.MEETING_NOT_FOUND(meeting_number, "params"));
@@ -55,7 +55,7 @@ class MeetingController {
     if (!belongsToTeam) return next(errors.INVALID_IDENTITY());
 
     let meeting_number = 1;
-    const { topic, beings_at, ends_at } = request.body.meeting;
+    const { topic, begins_at, ends_at } = request.body.meeting;
     const id = uuidv4();
     const { id: team_id } = team;
     const [existentMeeting] = await connection("Meeting")
@@ -68,12 +68,13 @@ class MeetingController {
       const [meeting] = await connection("Meeting").insert(
         {
           id,
+          team_id,
           meeting_number,
           topic,
-          beings_at,
+          begins_at,
           ends_at,
         },
-        ["meeting_number", "topic", "beings_at", "ends_at"]
+        ["meeting_number", "topic", "begins_at", "ends_at"]
       );
       return response.status(201).json(meeting);
     } catch (error) {
@@ -87,12 +88,7 @@ class MeetingController {
     const { topic, begins_at, ends_at } = request.body.team;
     const [updatedMeeting] = await connection("Meeting")
       .where(meeting)
-      .update({ topic, begins_at, ends_at }, [
-        "meeting_number",
-        "topic",
-        "begins_at",
-        "ends_at",
-      ]);
+      .update({ topic, begins_at, ends_at }, ["topic", "begins_at", "ends_at"]);
     return response.json(updatedMeeting);
   }
 

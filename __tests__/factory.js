@@ -121,4 +121,11 @@ module.exports = {
     beings_at: "02-03-2019 16:30",
     ends_at: "02-03-2019 17:00",
   },
+
+  Task: {
+    title: "Nadinha",
+    description: "O projeto é fazer nada então não fazemos nada",
+    start_date: "01-03-2019",
+    end_date: "02-04-2019",
+  },
 };

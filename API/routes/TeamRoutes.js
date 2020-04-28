@@ -4,10 +4,12 @@ const teams = express.Router({ mergeParams: true });
 const TeamController = require("../controllers/TeamController");
 const TeamValidator = require("../validators/TeamValidator");
 const MeetingRoutes = require("./MeetingRoutes");
+const TaskRoutes = require("./TaskRoutes");
 
 const { loginRequired } = require("../middleware/permissions");
 
 teams.use("/:team_number/meetings", MeetingRoutes);
+teams.use("/:team_number/tasks", TaskRoutes);
 
 // GET /courses/L079/units/26719/projects/2019-2020/1/teams
 teams.get("/", loginRequired, TeamController.index);
