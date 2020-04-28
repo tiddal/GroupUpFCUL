@@ -1,7 +1,7 @@
 const request = require('supertest');
 const app = require('../../API/app');
 const connection = require('../../API/db/config/connection');
-const { LTI, Project, Team, Student } = require('../factory');
+const { LTI, Project, Class, Team, Student } = require('../factory');
 
 describe('Team', () => {
 	let adminToken;
@@ -25,6 +25,22 @@ describe('Team', () => {
 			.post('/courses')
 			.send({
 				courses: [LTI],
+			})
+			.set('Authorization', `Bearer ${adminToken}`);
+
+		await request(app)
+			.post('/courses/L079/units/26719/classes')
+			.send({ classes: [Class] })
+			.set('Authorization', `Bearer ${adminToken}`);
+
+		await request(app)
+			.post('/courses/L079/units/26719/classes/2019-2020/T1/students')
+			.send({
+				students: [
+					{
+						username: 'fc00001',
+					},
+				],
 			})
 			.set('Authorization', `Bearer ${adminToken}`);
 
@@ -74,21 +90,22 @@ describe('Team', () => {
 	it('should be able to create a new team', async () => {
 		const response = await request(app)
 			.post('/courses/L079/units/26719/projects/2019-2020/1/teams')
-			.send({ team: Team });
+			.send({ team: Team })
+			.set('Authorization', `Bearer ${studentToken}`);
 		expect(response.status).toBe(201);
 	});
 
 	it('should be able to get all teams from a project', async () => {
-		const response = await request(app).get(
-			'/courses/L079/units/26719/projects/2019-2020/1/teams'
-		);
+		const response = await request(app)
+			.get('/courses/L079/units/26719/projects/2019-2020/1/teams')
+			.set('Authorization', `Bearer ${studentToken}`);
 		expect(response.status).toBe(200);
 	});
 
 	it('should be able to get a team by its number', async () => {
-		const response = await request(app).get(
-			'/courses/L079/units/26719/projects/2019-2020/1/teams/T001'
-		);
+		const response = await request(app)
+			.get('/courses/L079/units/26719/projects/2019-2020/1/teams/T001')
+			.set('Authorization', `Bearer ${studentToken}`);
 		expect(response.status).toBe(200);
 	});
 
@@ -97,18 +114,19 @@ describe('Team', () => {
 			.put('/courses/L079/units/26719/projects/2019-2020/1/teams/T001')
 			.send({
 				team: {
-					name: '20 é vitoria',
+					name: '20Evitoria',
 					description: 'Afinal queremos 20',
 					logo_url: '20virgula0.png',
 				},
-			});
+			})
+			.set('Authorization', `Bearer ${studentToken}`);
 		expect(response.status).toBe(200);
 	});
 
 	it('should be able to delete a team', async () => {
-		const response = await request(app).delete(
-			'/courses/L079/units/26719/projects/2019-2020/1/teams/T001'
-		);
+		const response = await request(app)
+			.delete('/courses/L079/units/26719/projects/2019-2020/1/teams/T001')
+			.set('Authorization', `Bearer ${studentToken}`);
 		expect(response.status).toBe(204);
 	});
 

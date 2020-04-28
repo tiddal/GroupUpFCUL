@@ -111,7 +111,7 @@ module.exports = {
 	},
 
 	Team: {
-		name: '20 é derrota',
+		name: '20Ederrota',
 		description: 'Queremos 19,9',
 		logo_url: 'atoa.png',
 	},

@@ -12,7 +12,7 @@ module.exports = {
 		const [scheme, token] = parts;
 		if (scheme !== 'Bearer') return next();
 
-		jwt.verify(token, process.env.APP_SECRET, async (err, decoded) => {
+		jwt.verify(token, process.env.APP_SECRET, (err, decoded) => {
 			if (err) return next();
 			request.user = {
 				id: decoded.id,

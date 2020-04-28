@@ -12,18 +12,14 @@ class TeamController {
 
 		this.findTeam = this.findTeam.bind(this);
 		this.findProject = this.findProject.bind(this);
-		this.findUnit = this.findUnit.bind(this);
 	}
 
 	async index(request, response, next) {
 		const project = await this.findProject(request, response, next);
 		if (!project) return next();
-		const teams = await connection('Team').select([
-			'team_number',
-			'name',
-			'description',
-			'academic_year',
-		]);
+		const teams = await connection('Team')
+			.select(['team_number', 'name', 'description', 'academic_year'])
+			.where({ project_id: project.id });
 		return response.json(teams);
 	}
 
@@ -39,8 +35,27 @@ class TeamController {
 	}
 
 	async store(request, response, next) {
+		const { id: user_id, role } = request.user;
+		if (role === 'admin') return next(errors.NOT_FOUND());
 		const project = await this.findProject(request, response, next);
 		if (!project) return next();
+
+		const [class_] = await connection('Class')
+			.leftJoin('class_student', 'class_student.class_id', '=', 'Class.id')
+			.leftJoin('class_professor', 'class_professor.class_id', '=', 'Class.id')
+			.select('Class.id')
+			.where({
+				student_id: user_id,
+				unit_id: project.unit_id,
+				academic_year: project.academic_year,
+			})
+			.orWhere({
+				professor_id: user_id,
+				unit_id: project.unit_id,
+				academic_year: project.academic_year,
+			});
+		if (!class_) return next(errors.INVALID_IDENTITY());
+
 		let team_number = 'T001';
 		const { name, description, logo_url } = request.body.team;
 		const id = uuidv4();
@@ -96,16 +111,10 @@ class TeamController {
 		return response.status(204).send();
 	}
 
-	async findCourse(request, response, next) {
+	async findProject(request, response, next) {
 		const { code } = request.params;
 		const [course] = await connection('Course').select('id').where({ code });
 		if (!course) return next(errors.COURSE_NOT_FOUND(code, 'params'));
-		return course;
-	}
-
-	async findUnit(request, response, next) {
-		const course = await this.findCourse(request, response, next);
-		if (!course) return next();
 		const { unit_code } = request.params;
 		const [unit] = await connection('course_unit')
 			.join('Unit', 'Unit.id', '=', 'course_unit.unit_id')
@@ -115,18 +124,12 @@ class TeamController {
 				'Unit.code': unit_code,
 			});
 		if (!unit) return next(errors.UNIT_NOT_FOUND(unit_code, 'params'));
-		return unit;
-	}
-
-	async findProject(request, response, next) {
-		const unit = await this.findUnit(request, response, next);
-		if (!unit) return next();
 		const {
 			project_year: academic_year,
 			project_number: number,
 		} = request.params;
 		const [project] = await connection('Project')
-			.select('id', 'academic_year')
+			.select('id', 'academic_year', 'unit_id')
 			.where({ academic_year, number, unit_id: unit.id });
 		if (!project)
 			return next(errors.PROJECT_NOT_FOUND(academic_year, number, 'params'));
