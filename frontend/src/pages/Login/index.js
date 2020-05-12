@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
 import logo from '../../assets/logo.svg';
-import authService from '../../services/auth';
-
+import { useAuth } from '../../contexts/auth';
 import {
 	Background,
 	Container,
@@ -15,17 +14,15 @@ import {
 } from './styles';
 
 function Login() {
-	const [inputs, setInputs] = useState({ email: '', password: '' });
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(false);
+	const { login, loading, error } = useAuth();
 
-	const loginHandler = async (event) => {
+	const [email, setEmail] = useState();
+	const [password, setPassword] = useState();
+
+	function handleLogin(event) {
 		event.preventDefault();
-		setLoading(true);
-		await authService.authenticate(inputs.email, inputs.password);
-		// setError(true);
-		setLoading(false);
-	};
+		login({ email, password });
+	}
 
 	return (
 		<Background>
@@ -33,19 +30,15 @@ function Login() {
 				<Logo>
 					<img src={logo} alt="Group Up logo" />
 				</Logo>
-				<Form onSubmit={(event) => loginHandler(event)}>
+				<Form onSubmit={handleLogin}>
 					<Input
 						placeholder="Email"
-						onChange={(event) =>
-							setInputs({ ...inputs, email: event.target.value })
-						}
+						onChange={({ target }) => setEmail(target.value)}
 					/>
 					<Input
 						placeholder="Password"
 						type="password"
-						onChange={(event) =>
-							setInputs({ ...inputs, password: event.target.value })
-						}
+						onChange={({ target }) => setPassword(target.value)}
 					/>
 					{error && <Error>Falha na autenticação</Error>}
 					<Button type="submit">{loading ? <Spinner /> : 'Entrar'}</Button>
