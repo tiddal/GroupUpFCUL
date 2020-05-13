@@ -7,7 +7,8 @@ const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
+	const [starting, setStarting] = useState(true);
 	const [error, setError] = useState(false);
 
 	useEffect(() => {
@@ -18,7 +19,7 @@ export const AuthProvider = ({ children }) => {
 				setUser(JSON.parse(localUser));
 				API.defaults.headers.Authorization = `Bearer ${localToken}`;
 			}
-			setLoading(false);
+			setStarting(false);
 		}
 		loadToken();
 	}, []);
@@ -49,7 +50,15 @@ export const AuthProvider = ({ children }) => {
 
 	return (
 		<AuthContext.Provider
-			value={{ loggedIn: !!user, user, loading, error, login, logout }}
+			value={{
+				loggedIn: !!user,
+				user,
+				loading,
+				starting,
+				error,
+				login,
+				logout,
+			}}
 		>
 			{children}
 		</AuthContext.Provider>
