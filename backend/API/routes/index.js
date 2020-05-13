@@ -16,6 +16,7 @@ router.use(
 router.use('/users', UserRoutes);
 router.use('/authenticate', AuthRoutes);
 router.use('/courses', CourseRoutes);
+router.use('/', (request, response) => response.json({ status: 'healthy' }));
 
 router.use(PageNotFound);
 
