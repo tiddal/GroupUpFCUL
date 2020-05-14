@@ -8,7 +8,16 @@ class AuthController {
 	async login(request, response, next) {
 		const { email, password } = request.body.user;
 		const [user] = await connection('User')
-			.select('id', 'username', 'password')
+			.select(
+				'id',
+				'username',
+				'password',
+				'first_name',
+				'last_name',
+				'avatar_url',
+				'status',
+				'email'
+			)
 			.where({ email });
 		if (!user) return next(errors.LOGIN_FAILED());
 		if (!bcrypt.compareSync(password, user.password))
@@ -27,7 +36,16 @@ class AuthController {
 		if (student) user.role = 'student';
 		if (!user.role) return next(errors.LOGIN_FAILED());
 		const token = jwt.sign(
-			{ id: user.id, username: user.username, role: user.role },
+			{
+				id: user.id,
+				username: user.username,
+				role: user.role,
+				first_name: user.first_name,
+				last_name: user.last_name,
+				avatar: user.avatar_url,
+				status: user.status,
+				email: user.email,
+			},
 			process.env.APP_SECRET,
 			{
 				expiresIn: '1d',

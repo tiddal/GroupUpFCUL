@@ -15,7 +15,7 @@ describe('User', () => {
 			.post('/authenticate')
 			.send({
 				user: {
-					email: 'fc00000@test.com',
+					email: 'admin@test.com',
 					password: 'password',
 				},
 			}));

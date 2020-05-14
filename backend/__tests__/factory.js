@@ -3,7 +3,7 @@ module.exports = {
 		username: 'student',
 		first_name: 'Student',
 		last_name: 'Test',
-		email: 'student@test.com',
+		email: 'student2@test.com',
 		password: 'password',
 		role: {
 			type: 'student',
@@ -14,7 +14,7 @@ module.exports = {
 		username: 'professor',
 		first_name: 'Professor',
 		last_name: 'Test',
-		email: 'professor@test.com',
+		email: 'professor2@test.com',
 		password: 'password',
 		role: {
 			type: 'professor',
@@ -28,7 +28,7 @@ module.exports = {
 		username: 'admin',
 		first_name: 'Admin',
 		last_name: 'Test',
-		email: 'admin@test.com',
+		email: 'admin2@test.com',
 		password: 'password',
 		role: {
 			type: 'admin',

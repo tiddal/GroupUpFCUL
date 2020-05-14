@@ -17,7 +17,7 @@ describe('Team', () => {
 			.post('/authenticate')
 			.send({
 				user: {
-					email: 'fc00000@test.com',
+					email: 'admin@test.com',
 					password: 'password',
 				},
 			}));
@@ -79,7 +79,7 @@ describe('Team', () => {
 			.post('/authenticate')
 			.send({
 				user: {
-					email: 'fc00002@test.com',
+					email: 'professor@test.com',
 					password: 'password',
 				},
 			}));
@@ -94,7 +94,7 @@ describe('Team', () => {
 			.post('/authenticate')
 			.send({
 				user: {
-					email: 'fc00001@test.com',
+					email: 'student@test.com',
 					password: 'password',
 				},
 			}));
@@ -116,7 +116,7 @@ describe('Team', () => {
 			.post('/authenticate')
 			.send({
 				user: {
-					email: 'student@test.com',
+					email: 'student2@test.com',
 					password: 'password',
 				},
 			}));
@@ -193,7 +193,7 @@ describe('Team', () => {
 			.post('/authenticate')
 			.send({
 				user: {
-					email: 'student@test.com',
+					email: 'student2@test.com',
 					password: 'password',
 				},
 			}));
