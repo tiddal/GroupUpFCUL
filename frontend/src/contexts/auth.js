@@ -1,9 +1,9 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import jwt from 'jsonwebtoken';
 import API from '../services/api';
 import authService from '../services/auth';
 
-const AuthContext = createContext({});
+export const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
@@ -15,9 +15,16 @@ export const AuthProvider = ({ children }) => {
 		async function loadToken() {
 			const localToken = localStorage.getItem('@GroupUpAuth:token');
 			const localUser = localStorage.getItem('@GroupUpAuth:user');
-			if (localToken && localUser) {
+
+			if (
+				localToken &&
+				localUser &&
+				Date.now() <= jwt.decode(localToken).exp * 1000
+			) {
 				setUser(JSON.parse(localUser));
 				API.defaults.headers.Authorization = `Bearer ${localToken}`;
+			} else {
+				localStorage.clear();
 			}
 			setStarting(false);
 		}
@@ -64,8 +71,3 @@ export const AuthProvider = ({ children }) => {
 		</AuthContext.Provider>
 	);
 };
-
-export function useAuth() {
-	const context = useContext(AuthContext);
-	return context;
-}

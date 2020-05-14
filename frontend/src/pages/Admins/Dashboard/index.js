@@ -1,14 +1,23 @@
 import React from 'react';
 
-// import { Container } from './styles';
+import { useAuth } from '../../../hooks';
+
+import { Container } from './styles';
+import { useTheme } from '../../../hooks';
+
+import Navbar from '../../../components/Navbar';
 
 function Dashboard() {
+	const { logout } = useAuth();
+	const { toggleTheme } = useTheme();
+
 	return (
-		<div>
+		<Container>
+			<Navbar />
 			<h1>Dashboard</h1>
-			<button>Logout</button>
-			<button>Mudar tema</button>
-		</div>
+			<button onClick={logout}>Logout</button>
+			<button onClick={toggleTheme}>Mudar tema</button>
+		</Container>
 	);
 }
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import logo from '../../assets/logo.svg';
-import { useAuth } from '../../contexts/auth';
+import { useAuth } from '../../hooks';
 import {
 	Background,
 	Container,
