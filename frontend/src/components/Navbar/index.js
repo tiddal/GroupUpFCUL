@@ -1,31 +1,35 @@
 import React from 'react';
 import { useAuth } from '../../hooks';
 
-import { Container, Menu, Logo, Avatar } from './styles';
+import { Container, Menu, Logo, User, UserAvatar, UserName } from './styles';
 
-import professor from '../../assets/professor.jpeg';
 import logo from '../../assets/logo_icon_white.svg';
 
 import { FaBars } from 'react-icons/fa';
 
-function Navbar() {
+function Navbar({ toggleSidebar }) {
 	const { user } = useAuth();
 
 	return (
 		<Container>
-			<Menu>
+			<Menu onClick={toggleSidebar}>
 				<FaBars />
 			</Menu>
 			<Logo>
-				<img src={logo} />
+				<img src={logo} alt="Group Up Logo" />
 			</Logo>
-			<Avatar>
-				{user.avatar ? (
-					<img src={user.avatar} alt="foto de perfil" />
-				) : (
-					<div>{user.username.charAt(0)}</div>
-				)}
-			</Avatar>
+			<User>
+				<UserName>{user.first_name}</UserName>
+				<UserAvatar>
+					{user.avatar ? (
+						<img src={user.avatar} alt="foto de perfil" />
+					) : (
+						<div>
+							<span>{user.first_name.charAt(0)}</span>
+						</div>
+					)}
+				</UserAvatar>
+			</User>
 		</Container>
 	);
 }

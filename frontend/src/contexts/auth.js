@@ -38,13 +38,20 @@ export const AuthProvider = ({ children }) => {
 			setError(true);
 		} else {
 			API.defaults.headers.Authorization = `Bearer ${token}`;
-			const { username, role } = jwt.decode(token);
+			const {
+				username,
+				role,
+				first_name,
+				last_name,
+				avatar,
+				email,
+			} = jwt.decode(token);
 			localStorage.setItem('@GroupUpAuth:token', token);
 			localStorage.setItem(
 				'@GroupUpAuth:user',
-				JSON.stringify({ username, role })
+				JSON.stringify({ username, role, first_name, last_name, avatar, email })
 			);
-			setUser({ username, role });
+			setUser({ username, role, first_name, last_name, avatar, email });
 			setError(false);
 		}
 		setLoading(false);

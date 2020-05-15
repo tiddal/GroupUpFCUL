@@ -16,4 +16,10 @@ body{
 	background: ${({ theme }) => theme.colors.surface};
 }
 
+button {
+	border: none;
+	font-family: inherit;
+	background: none;
+}
+
 `;
