@@ -12,9 +12,10 @@ export default {
 		danger: '#F77268',
 		warning: '#FFE484',
 		success: '#00C767',
+		base: '#333333',
 	},
 	box_shadow: {
-		primary: 'box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3)',
-		secondary: 'box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3)',
+		primary: '0px 2px 10px rgba(0, 0, 0, 0.3)',
+		secondary: '0px 2px 10px rgba(0, 0, 0, 0.3)',
 	},
 };
