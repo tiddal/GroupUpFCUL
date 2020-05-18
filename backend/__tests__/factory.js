@@ -47,7 +47,7 @@ module.exports = {
 			{
 				code: 26719,
 				name: 'Projeto de Tecnologias de Informação',
-				semester: 6,
+				semester: 2,
 				initials: 'PTI',
 				ects: 6,
 			},
