@@ -1,18 +1,29 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-	display: inline-block;
-	margin-top: 3px;
+	display: block;
 	&::after {
 		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		top: 0;
+		margin: auto;
 		display: block;
-		width: ${({ size }) => size}px;
-		height: ${({ size }) => size}px;
+		width: 100px;
+		height: 100px;
 		border-radius: 50%;
 		border: 2px solid ${({ color }) => color};
-		border-color: ${({ color }) => color} transparent ${({ color }) => color}
-			transparent;
+		border-color: ${({ theme }) => theme.colors.primary_variant} transparent
+			${({ theme }) => theme.colors.primary_variant} transparent;
 		animation: lds-dual-ring 1.2s linear infinite;
+		@media (min-width: 768px) {
+			left: 75px;
+		}
+		@media (min-width: 1200px) {
+			left: 250px;
+		}
 	}
 	@keyframes lds-dual-ring {
 		0% {

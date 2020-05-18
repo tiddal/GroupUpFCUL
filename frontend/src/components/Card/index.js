@@ -1,21 +1,33 @@
 import React from 'react';
 
-import { Container, Title, Link } from './styles';
+import { SmallContainer, BigContainer, Title, Link, Info } from './styles';
 
-import { FaUserGraduate } from 'react-icons/fa';
-
-function Card() {
+export function SmallCard({ title, icon, path, label, data }) {
 	return (
-		<Container>
+		<SmallContainer>
 			<Title>
-				<FaUserGraduate />
-				<span>Alunos</span>
+				{icon}
+				<span>{title}</span>
 			</Title>
-			<Link to="/students">
-				<span>Gerir Alunos</span>
+			<Info>{data}</Info>
+			<Link to={path}>
+				<span>{label}</span>
 			</Link>
-		</Container>
+		</SmallContainer>
 	);
 }
 
-export default Card;
+export function BigCard({ title, icon, path, label, data }) {
+	return (
+		<BigContainer>
+			<Title>
+				{icon}
+				<span>{title}</span>
+			</Title>
+			<Info>{data}</Info>
+			<Link to={path}>
+				<span>{label}</span>
+			</Link>
+		</BigContainer>
+	);
+}

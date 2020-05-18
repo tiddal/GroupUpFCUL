@@ -46,7 +46,6 @@ function Profilebar({ profilebarState, sidebarState, toggleProfilebar }) {
 				<ItemButton
 					onClick={() => {
 						toggleTheme();
-						toggleProfilebar();
 					}}
 				>
 					<FaMoon />

@@ -15,6 +15,8 @@ class AdminController {
 				'User.first_name',
 				'User.last_name',
 				'User.email',
+				'User.status',
+				'User.avatar_url',
 				'Admin.previleges',
 			]);
 		return response.json(admins);

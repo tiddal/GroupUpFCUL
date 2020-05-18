@@ -15,11 +15,11 @@ export const Container = styled.div`
 		if (sidebarState && !profilebarState) return 'translateX(0)';
 		return 'translateX(-100%)';
 	}};
-	box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.25);
 
 	/* Medium devices (tablets, 768px and up) */
 	@media (min-width: 768px) {
 		width: 250px;
+		box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.25);
 	}
 	/* Large devices (desktops, 1200px and up) */
 	@media (min-width: 1200px) {

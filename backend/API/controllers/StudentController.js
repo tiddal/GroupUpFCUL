@@ -15,6 +15,8 @@ class StudentController {
 				'User.first_name',
 				'User.last_name',
 				'User.email',
+				'User.avatar_url',
+				'User.status',
 				'Student.working_student',
 				'Student.github_url',
 				'Student.facebook_url',
