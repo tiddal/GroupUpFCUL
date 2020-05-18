@@ -1,7 +1,9 @@
 import styled from 'styled-components';
+import { NavLink } from 'react-router-dom';
 
 export const Container = styled.nav`
 	position: fixed;
+	top: 0;
 	box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.25);
 	padding: 0 14px 0 10px;
 	width: 100%;
@@ -10,7 +12,7 @@ export const Container = styled.nav`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	z-index: 4;
+	z-index: 100;
 
 	/* Medium devices (tablets, 768px and up) */
 	@media (min-width: 768px) {
@@ -19,8 +21,11 @@ export const Container = styled.nav`
 	}
 `;
 
-export const Logo = styled.div`
+export const Logo = styled(NavLink)`
 	height: 30px;
+	@media (min-width: 1200px) {
+		padding-left: 25px;
+	}
 `;
 
 export const Menu = styled.button`
@@ -51,9 +56,13 @@ export const Menu = styled.button`
 		width: 39px;
 		margin: 0 18px 0 18px;
 	}
+
+	@media (min-width: 1200px) {
+		display: none;
+	}
 `;
 
-export const User = styled.div`
+export const User = styled.button`
 	display: flex;
 	align-items: center;
 
@@ -63,13 +72,14 @@ export const User = styled.div`
 	}
 `;
 
-export const UserAvatar = styled.button`
+export const UserAvatar = styled.div`
 	height: 40px;
 	width: 40px;
 	background: transparent;
 	border-radius: 50%;
 	display: flex;
 	justify-content: center;
+	align-items: center;
 	&:hover {
 		cursor: pointer;
 	}
@@ -104,11 +114,12 @@ export const UserAvatar = styled.button`
 	}
 `;
 
-export const UserName = styled.button`
+export const UserName = styled.div`
 	display: none;
 	/* Medium devices (tablets, 768px and up) */
 	@media (min-width: 768px) {
-		display: block;
+		display: flex;
+		align-items: center;
 		height: 25px;
 		width: auto;
 		background: ${({ theme: { colors } }) => colors.primary_variant_two};

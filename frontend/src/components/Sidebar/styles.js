@@ -3,37 +3,49 @@ import { NavLink } from 'react-router-dom';
 
 export const Container = styled.div`
 	position: fixed;
+	top: 0;
+	left: 0;
 	width: 100%;
 	height: 100%;
 	background: #232740;
 	z-index: 2;
 	padding-top: 55px;
 	transition: transform 0.3s ease;
-	transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(-100%)')};
-	box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.25);
+	transform: ${({ profilebarState, sidebarState }) => {
+		if (sidebarState && !profilebarState) return 'translateX(0)';
+		return 'translateX(-100%)';
+	}};
 
 	/* Medium devices (tablets, 768px and up) */
 	@media (min-width: 768px) {
 		width: 250px;
+		box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.25);
 	}
 	/* Large devices (desktops, 1200px and up) */
 	@media (min-width: 1200px) {
 		width: 250px;
-		transform: ${({ open }) => (!open ? 'translateX(0)' : 'translateX(-100%)')};
+		transform: ${({ sidebarState }) =>
+			!sidebarState ? 'translateX(0)' : 'translateX(-100%)'};
 	}
 `;
 
 export const StaticContainer = styled.div`
 	display: none;
 	position: fixed;
+	top: 0;
+	left: 0;
 	width: 75px;
 	height: 100%;
 	background: #232740;
-	z-index: 3;
+	z-index: 99;
 	padding-top: 55px;
 	/* Medium devices (tablets, 768px and up) */
 	@media (min-width: 768px) {
 		display: block;
+	}
+	/* Medium devices (tablets, 768px and up) */
+	@media (min-width: 1200px) {
+		display: none;
 	}
 `;
 

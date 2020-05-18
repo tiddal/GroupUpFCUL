@@ -6,7 +6,7 @@ import Spinner from '../../components/Spinner';
 function Loading() {
 	return (
 		<Container>
-			<Spinner size={100} color={'#0c4da2'} />
+			<Spinner />
 		</Container>
 	);
 }

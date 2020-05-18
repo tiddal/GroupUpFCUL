@@ -7,7 +7,7 @@ import logo from '../../assets/logo_icon_white.svg';
 
 import { FaBars } from 'react-icons/fa';
 
-function Navbar({ toggleSidebar }) {
+function Navbar({ toggleSidebar, toggleProfilebar }) {
 	const { user } = useAuth();
 
 	return (
@@ -15,10 +15,10 @@ function Navbar({ toggleSidebar }) {
 			<Menu onClick={toggleSidebar}>
 				<FaBars />
 			</Menu>
-			<Logo>
+			<Logo to="/">
 				<img src={logo} alt="Group Up Logo" />
 			</Logo>
-			<User>
+			<User onClick={toggleProfilebar}>
 				<UserName>{user.first_name}</UserName>
 				<UserAvatar>
 					{user.avatar ? (
