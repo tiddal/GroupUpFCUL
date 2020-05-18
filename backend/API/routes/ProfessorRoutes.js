@@ -1,26 +1,33 @@
-const express = require('express');
+const express = require("express");
 const professors = express.Router();
 
-const { loginRequired, selfRequired } = require('../middleware/permissions');
+const { loginRequired, selfRequired } = require("../middleware/permissions");
 
-const ProfessorController = require('../controllers/ProfessorController');
+const ProfessorController = require("../controllers/ProfessorController");
 
-const UserValidator = require('../validators/UserValidator');
-const ProfessorValidator = require('../validators/ProfessorValidator');
+const UserValidator = require("../validators/UserValidator");
+const ProfessorValidator = require("../validators/ProfessorValidator");
 
-professors.get('/', loginRequired, ProfessorController.index);
+professors.get("/", loginRequired, ProfessorController.index);
 professors.get(
-	'/:username',
-	loginRequired,
-	UserValidator.find,
-	ProfessorController.find
+  "/:username",
+  loginRequired,
+  UserValidator.find,
+  ProfessorController.find
 );
 professors.put(
-	'/:username',
-	selfRequired,
-	UserValidator.find,
-	ProfessorValidator.edit,
-	ProfessorController.modify
+  "/:username",
+  selfRequired,
+  UserValidator.find,
+  ProfessorValidator.edit,
+  ProfessorController.modify
+);
+
+professors.get(
+  "/:username/units",
+  loginRequired,
+  UserValidator.find,
+  ProfessorController.findUnits
 );
 
 module.exports = professors;
