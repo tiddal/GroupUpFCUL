@@ -18,7 +18,7 @@ export const Background = styled.div`
 	}
 
 	/* Large devices (desktops, 992px and up) */
-	@media (min-width: 1200px) {
+	@media (min-width: 1450px) {
 		background-position: center center;
 		background-size: cover;
 	}
@@ -36,7 +36,7 @@ export const Container = styled.div`
 	}
 
 	/* Large devices (desktops, 992px and up) */
-	@media (min-width: 1200px) {
+	@media (min-width: 1450px) {
 		width: 35vw;
 		height: 100vh;
 		background-color: #fff;

@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import adminService from '../../../services/admin';
 
-import {
-	Container,
-	Cards,
-	SmallCardData,
-	BigCardData,
-	Spinner,
-} from './styles';
+import { Container, Cards, SmallCardData, BigCardData } from './styles';
+
+import Spinner from '../../../components/Spinner';
 
 import Navigation from '../../../components/Navigation';
 import { SmallCard, BigCard } from '../../../components/Card';
@@ -70,7 +66,7 @@ function Dashboard() {
 							title={'alunos'}
 							icon={<FaUserGraduate />}
 							path={'/students'}
-							label={'gerir alunos'}
+							label={'Gerir Alunos'}
 							data={
 								<>
 									<SmallCardData status={'online'}>
@@ -86,7 +82,7 @@ function Dashboard() {
 							title={'professores'}
 							icon={<FaUserTie />}
 							path={'/professors'}
-							label={'gerir professores'}
+							label={'Gerir Professores'}
 							data={
 								<>
 									<SmallCardData status={'online'}>
@@ -102,7 +98,7 @@ function Dashboard() {
 							title={'admins'}
 							icon={<FaUserTie />}
 							path={'/admins'}
-							label={'gerir admins'}
+							label={'Gerir Admins'}
 							data={
 								<>
 									<SmallCardData status={'online'}>
@@ -118,7 +114,7 @@ function Dashboard() {
 							title={'cursos'}
 							icon={<FaUserTie />}
 							path={'/courses'}
-							label={'gerir cursos'}
+							label={'Gerir Cursos'}
 							data={
 								<BigCardData>
 									<span>{coursesData.courses.length} cursos</span>

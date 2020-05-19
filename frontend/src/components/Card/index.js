@@ -1,6 +1,20 @@
 import React from 'react';
 
-import { SmallContainer, BigContainer, Title, Link, Info } from './styles';
+import {
+	XSmallContainer,
+	SmallContainer,
+	BigContainer,
+	StatusContainer,
+	SearchCardContainer,
+	Title,
+	SmallTitle,
+	Link,
+	Info,
+	SearchBar,
+	Icon,
+} from './styles';
+
+import { FaSearch } from 'react-icons/fa';
 
 export function SmallCard({ title, icon, path, label, data }) {
 	return (
@@ -29,5 +43,36 @@ export function BigCard({ title, icon, path, label, data }) {
 				<span>{label}</span>
 			</Link>
 		</BigContainer>
+	);
+}
+
+export function StatusCard({ data }) {
+	return <StatusContainer>{data}</StatusContainer>;
+}
+
+export function SearchCard({ placeholder, info }) {
+	return (
+		<SearchCardContainer>
+			<SmallTitle>
+				<FaSearch />
+				<span>Procurar</span>
+			</SmallTitle>
+			<SearchBar>
+				<input type="text" placeholder={placeholder} />
+				<button>
+					<FaSearch />
+				</button>
+				<span>{info}</span>
+			</SearchBar>
+		</SearchCardContainer>
+	);
+}
+
+export function XSmallCard({ icon, path, label }) {
+	return (
+		<XSmallContainer>
+			<Icon>{icon}</Icon>
+			<Link to={path}>{label}</Link>
+		</XSmallContainer>
 	);
 }

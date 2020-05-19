@@ -23,7 +23,7 @@ export const Container = styled.nav`
 
 export const Logo = styled(NavLink)`
 	height: 30px;
-	@media (min-width: 1200px) {
+	@media (min-width: 1450px) {
 		padding-left: 25px;
 	}
 `;
@@ -57,7 +57,7 @@ export const Menu = styled.button`
 		margin: 0 18px 0 18px;
 	}
 
-	@media (min-width: 1200px) {
+	@media (min-width: 1450px) {
 		display: none;
 	}
 `;

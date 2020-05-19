@@ -21,8 +21,8 @@ export const Container = styled.div`
 		width: 250px;
 		box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.25);
 	}
-	/* Large devices (desktops, 1200px and up) */
-	@media (min-width: 1200px) {
+	/* Large devices (desktops, 1450px and up) */
+	@media (min-width: 1450px) {
 		width: 250px;
 		transform: ${({ sidebarState }) =>
 			!sidebarState ? 'translateX(0)' : 'translateX(-100%)'};
@@ -44,7 +44,7 @@ export const StaticContainer = styled.div`
 		display: block;
 	}
 	/* Medium devices (tablets, 768px and up) */
-	@media (min-width: 1200px) {
+	@media (min-width: 1450px) {
 		display: none;
 	}
 `;

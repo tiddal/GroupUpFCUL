@@ -21,7 +21,7 @@ export const Container = styled.div`
 		@media (min-width: 768px) {
 			left: 75px;
 		}
-		@media (min-width: 1200px) {
+		@media (min-width: 1450px) {
 			left: 250px;
 		}
 	}

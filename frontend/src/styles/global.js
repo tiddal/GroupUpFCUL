@@ -25,4 +25,9 @@ button {
 	background: none;
 }
 
+input{
+	font-family: inherit;
+	border: none;
+}
+
 `;
