@@ -1,16 +1,15 @@
 import styled from 'styled-components';
+import { Wrapper } from '../../../components/Wrapper';
 
-export const Container = styled.div`
+export const Container = styled(Wrapper)`
 	display: grid;
-	margin-top: 135px;
+	margin-top: 80px;
 	width: 100%;
-	padding-top: 5px;
 	gap: 25px;
 	justify-items: center;
 	margin-bottom: 45px;
 	@media (min-width: 768px) {
-		padding-left: 75px;
-		margin-top: 200px;
+		margin-top: 145px;
 		gap: 53px;
 		grid-template-columns: 184px 184px 184px;
 		justify-content: center;
@@ -18,7 +17,6 @@ export const Container = styled.div`
 	}
 	@media (min-width: 1450px) {
 		grid-template-columns: 285px 285px 285px;
-		padding-left: 250px;
 	}
 `;
 

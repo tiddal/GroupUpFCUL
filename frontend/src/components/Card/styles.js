@@ -14,7 +14,7 @@ export const SmallContainer = styled.div`
 `;
 
 export const XSmallContainer = styled(SmallContainer)`
-	width: 350px;
+	width: 285px;
 	height: 135px;
 	border-radius: 0;
 	border-radius: 10px;
@@ -34,7 +34,7 @@ export const BigContainer = styled(SmallContainer)`
 `;
 
 export const StatusContainer = styled(SmallContainer)`
-	width: 350px;
+	width: 285px;
 	height: 40px;
 	flex-direction: row;
 	justify-content: space-around;
@@ -58,8 +58,8 @@ export const StatusContainer = styled(SmallContainer)`
 `;
 
 export const SearchCardContainer = styled(SmallContainer)`
-	width: 350px;
-	height: 150px;
+	width: 285px;
+	height: 175px;
 	border-radius: 0;
 	align-items: center;
 	border-radius: 10px;
@@ -72,6 +72,9 @@ export const SearchCardContainer = styled(SmallContainer)`
 	}
 	@media (min-width: 1450px) {
 		width: 960px;
+	}
+	@media (min-width: 1450px) {
+		height: 250px;
 	}
 `;
 
@@ -119,8 +122,8 @@ export const Info = styled.div`
 `;
 
 export const SearchBar = styled.form`
-	margin-top: 25px;
-	width: 320px;
+	margin-top: 30px;
+	width: 250px;
 	height: 40px;
 	display: flex;
 	flex-wrap: wrap;
@@ -128,15 +131,15 @@ export const SearchBar = styled.form`
 	@media (min-width: 768px) {
 		width: 550px;
 		height: 60px;
-		margin-top: 30px;
 	}
 	@media (min-width: 1450px) {
+		margin-top: 50px;
 		width: 800px;
 	}
 
 	& > input {
 		background: ${({ theme }) => theme.colors.placeholder};
-		width: 90%;
+		width: 80%;
 		height: 24px;
 		border-radius: 12px;
 		font-size: 10px;
@@ -145,12 +148,14 @@ export const SearchBar = styled.form`
 		color: ${({ theme }) => theme.colors.text};
 		line-height: 25px;
 		@media (min-width: 768px) {
+			width: 90%;
 			height: 40px;
 			border-radius: 20px;
 			font-size: 16px;
 			padding-left: 20px;
 			padding-right: 20px;
 		}
+
 		&::placeholder {
 			color: ${({ theme }) => theme.colors.secondary_text};
 		}

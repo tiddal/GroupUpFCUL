@@ -4,6 +4,8 @@ import AdminPanel from '../pages/Admins/Panels/Admin';
 import ProfessorPanel from '../pages/Admins/Panels/Professor';
 import StudentPanel from '../pages/Admins/Panels/Student';
 import CoursesPanel from '../pages/Admins/Panels/Courses';
+import NewAdmin from '../pages/Admins/NewEntries/NewAdmin';
+import ListAdmins from '../pages/Admins/Lists/ListAdmins';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
@@ -15,6 +17,8 @@ const AdminRoutes = () => (
 			<Route path="/professors" exact component={ProfessorPanel} />
 			<Route path="/students" exact component={StudentPanel} />
 			<Route path="/courses" exact component={CoursesPanel} />
+			<Route path="/admins/new" component={NewAdmin} />
+			<Route path="/admins/list" component={ListAdmins} />
 		</Switch>
 	</BrowserRouter>
 );

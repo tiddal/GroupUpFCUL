@@ -1,26 +1,22 @@
 import styled from 'styled-components';
+import { Wrapper } from '../../../components/Wrapper';
 
-export const Container = styled.div``;
-
-export const Cards = styled.div`
-	padding-top: 120px;
+export const Container = styled(Wrapper)`
+	margin-top: 65px;
 	display: grid;
 	gap: 45px;
 	justify-items: center;
 	margin-bottom: 45px;
 	@media (min-width: 768px) {
-		padding-left: 75px;
+		margin: 0;
+		height: 100vh;
 		grid-template-columns: 285px 285px;
 		grid-template-rows: 250px;
 		justify-content: center;
 		align-content: center;
-		padding-top: 55px;
 		gap: 55px;
-		height: 100vh;
-		margin-bottom: 0;
 	}
 	@media (min-width: 1450px) {
-		padding-left: 250px;
 		grid-template-columns: repeat(3, 285px);
 		grid-template-rows: 250px;
 	}

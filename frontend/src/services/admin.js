@@ -33,4 +33,12 @@ export default {
 			return error;
 		}
 	},
+	createAdmin: async (admin) => {
+		try {
+			const response = await API.post('users', { users: [admin] });
+			return [response.data, response.status];
+		} catch ({ response }) {
+			return [response.data, response.status];
+		}
+	},
 };

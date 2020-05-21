@@ -7,8 +7,10 @@ function Context({ path }) {
 		<Container>
 			{path.map((route) => (
 				<span key={route.tier}>
-					<Link to={`/${route.tier}`}>{route.title}</Link>
-					<span> /</span>
+					<Link to={`/${route.tier}`} exact>
+						{route.title}
+					</Link>
+					<span> / </span>
 				</span>
 			))}
 		</Container>

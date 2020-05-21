@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import adminService from '../../../services/admin';
 
-import { Container, Cards, SmallCardData, BigCardData } from './styles';
+import { Container, SmallCardData, BigCardData } from './styles';
 
 import Spinner from '../../../components/Spinner';
 
@@ -57,75 +57,74 @@ function Dashboard() {
 					{ icon: <FaUniversity />, name: 'Cursos', path: '/courses' },
 				]}
 			/>
-			<Container>
-				{loading ? (
-					<Spinner />
-				) : (
-					<Cards>
-						<SmallCard
-							title={'alunos'}
-							icon={<FaUserGraduate />}
-							path={'/students'}
-							label={'Gerir Alunos'}
-							data={
-								<>
-									<SmallCardData status={'online'}>
-										{students.online.length} online <span></span>
-									</SmallCardData>
-									<SmallCardData status={'offline'}>
-										{students.offline.length} offline <span></span>
-									</SmallCardData>
-								</>
-							}
-						/>
-						<SmallCard
-							title={'professores'}
-							icon={<FaUserTie />}
-							path={'/professors'}
-							label={'Gerir Professores'}
-							data={
-								<>
-									<SmallCardData status={'online'}>
-										{professors.online.length} online <span></span>
-									</SmallCardData>
-									<SmallCardData status={'offline'}>
-										{professors.offline.length} offline <span></span>
-									</SmallCardData>
-								</>
-							}
-						/>
-						<SmallCard
-							title={'admins'}
-							icon={<FaUserTie />}
-							path={'/admins'}
-							label={'Gerir Admins'}
-							data={
-								<>
-									<SmallCardData status={'online'}>
-										{admins.online.length} online <span></span>
-									</SmallCardData>
-									<SmallCardData status={'offline'}>
-										{admins.offline.length} offline <span></span>
-									</SmallCardData>
-								</>
-							}
-						/>
-						<BigCard
-							title={'cursos'}
-							icon={<FaUserTie />}
-							path={'/courses'}
-							label={'Gerir Cursos'}
-							data={
-								<BigCardData>
-									<span>{coursesData.courses.length} cursos</span>
-									<span>{coursesData.units.length} cadeiras</span>
-									<span>{coursesData.classes.length} turmas</span>
-								</BigCardData>
-							}
-						/>
-					</Cards>
-				)}
-			</Container>
+
+			{loading ? (
+				<Spinner />
+			) : (
+				<Container>
+					<SmallCard
+						title={'alunos'}
+						icon={<FaUserGraduate />}
+						path={'/students'}
+						label={'Gerir Alunos'}
+						data={
+							<>
+								<SmallCardData status={'online'}>
+									{students.online.length} online <span></span>
+								</SmallCardData>
+								<SmallCardData status={'offline'}>
+									{students.offline.length} offline <span></span>
+								</SmallCardData>
+							</>
+						}
+					/>
+					<SmallCard
+						title={'professores'}
+						icon={<FaUserTie />}
+						path={'/professors'}
+						label={'Gerir Professores'}
+						data={
+							<>
+								<SmallCardData status={'online'}>
+									{professors.online.length} online <span></span>
+								</SmallCardData>
+								<SmallCardData status={'offline'}>
+									{professors.offline.length} offline <span></span>
+								</SmallCardData>
+							</>
+						}
+					/>
+					<SmallCard
+						title={'admins'}
+						icon={<FaUserTie />}
+						path={'/admins'}
+						label={'Gerir Admins'}
+						data={
+							<>
+								<SmallCardData status={'online'}>
+									{admins.online.length} online <span></span>
+								</SmallCardData>
+								<SmallCardData status={'offline'}>
+									{admins.offline.length} offline <span></span>
+								</SmallCardData>
+							</>
+						}
+					/>
+					<BigCard
+						title={'cursos'}
+						icon={<FaUserTie />}
+						path={'/courses'}
+						label={'Gerir Cursos'}
+						data={
+							<BigCardData>
+								<span>{coursesData.courses.length} cursos</span>
+								<span>{coursesData.units.length} cadeiras</span>
+								<span>{coursesData.classes.length} turmas</span>
+							</BigCardData>
+						}
+					/>
+				</Container>
+			)}
 		</>
 	);
 }

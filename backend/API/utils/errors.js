@@ -230,6 +230,7 @@ module.exports = {
 		error.error = 'Conflict';
 		error.message = 'This field(s) must be unique in the database.';
 		error.detail = detail;
+		error.key = detail.split('=')[0].split('(')[1].slice(0, -1);
 		return error;
 	},
 

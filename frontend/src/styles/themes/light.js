@@ -13,6 +13,8 @@ export default {
 		warning: '#FFE484',
 		success: '#00C767',
 		base: '#FFFFFF',
+		disabled_background: '#CCCCCC',
+		disabled_text: '#EBEBEB',
 	},
 	box_shadow: {
 		primary: '0px 2px 10px rgba(0, 0, 0, 0.25)',

@@ -1,9 +1,13 @@
 import React from 'react';
 
-import { Container } from './styles';
+import { Container, MiniContainer } from './styles';
 
-function Spinner({ size, color }) {
+function Spinner() {
 	return <Container />;
 }
 
 export default Spinner;
+
+export function ButtonSpinner() {
+	return <MiniContainer />;
+}

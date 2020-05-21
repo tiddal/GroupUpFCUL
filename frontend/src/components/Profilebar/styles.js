@@ -110,6 +110,7 @@ export const ItemButton = styled.button`
 	& > svg {
 		margin: 0 29.5px;
 		&:last-child {
+			font-size: 24px;
 			margin-left: auto;
 		}
 	}
