@@ -112,7 +112,7 @@ function Dashboard() {
 					/>
 					<BigCard
 						title={'cursos'}
-						icon={<FaUserTie />}
+						icon={<FaUniversity />}
 						path={'/courses'}
 						label={'Gerir Cursos'}
 						data={
