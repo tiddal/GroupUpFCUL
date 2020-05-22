@@ -25,6 +25,14 @@ export default {
 			return error;
 		}
 	},
+	getAdminByUsername: async (username) => {
+		try {
+			const response = await API.get(`users/admins/${username}`);
+			return [response.data, response.status];
+		} catch ({ response }) {
+			return [response.data, response.status];
+		}
+	},
 	getCourses: async () => {
 		try {
 			const response = await API.get('courses');

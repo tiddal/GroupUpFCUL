@@ -115,6 +115,7 @@ export const Button = styled.button`
 	background: ${({ theme }) => theme.colors.primary};
 	border-radius: 10px;
 	font-size: 10px;
+	line-height: 12px;
 	@media (min-width: 768px) {
 		height: 40px;
 		width: 40px;

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import adminService from '../../../services/admin';
 
 import Navigation from '../../../components/Navigation';
 import Table from '../../../components/Table';
 import Context from '../../../components/Context';
+import { ButtonSpinner } from '../../../components/Spinner';
 import {
 	FaUserGraduate,
 	FaUniversity,
@@ -27,6 +29,50 @@ import {
 } from './styles';
 
 function ListAdmins() {
+	const [list, setList] = useState();
+	const [searchInput, setSearchInput] = useState('');
+	const [loading, setLoading] = useState(false);
+
+	useEffect(() => {
+		async function getAdmins() {
+			const response = await adminService.getAdmins();
+			const rows = response.map((user) => createTableRow(user));
+			setList(rows);
+		}
+		if (searchInput === '') getAdmins();
+	}, [searchInput]);
+
+	async function handleSearch(event) {
+		event.preventDefault();
+		setLoading(true);
+		const [admin, status] = await adminService.getAdminByUsername(searchInput);
+		status === 200 ? setList([createTableRow(admin)]) : setList();
+		setLoading(false);
+	}
+
+	const createTableRow = (user) => [
+		{
+			data: user.avatar_url ? (
+				<Avatar>
+					<img src={user.avatar_url} alt={`${user.username} profile`} />
+				</Avatar>
+			) : (
+				<Avatar>
+					<span>{user.first_name.charAt(0)}</span>
+				</Avatar>
+			),
+		},
+		{ data: user.username },
+		{ data: `${user.first_name} ${user.last_name}`, align: 'left' },
+		{
+			data: (
+				<Link to={`/admins/${user.username}/edit`} target="_blank">
+					<FaExternalLinkAlt />
+				</Link>
+			),
+		},
+	];
+
 	return (
 		<>
 			<Navigation
@@ -49,11 +95,12 @@ function ListAdmins() {
 						<FaListAlt />
 						<span>Admins</span>
 					</Title>
-					<SearchSection>
-						<SearchBar placeholder={'Procurar administrador...'} />
-						<Button>
-							<FaSearch />
-						</Button>
+					<SearchSection onSubmit={handleSearch}>
+						<SearchBar
+							placeholder={'Procurar administrador...'}
+							onChange={({ target }) => setSearchInput(target.value)}
+						/>
+						<Button>{loading ? <ButtonSpinner /> : <FaSearch />}</Button>
 						<span>Procurar por número de administrador</span>
 					</SearchSection>
 					<TableSection>
@@ -64,58 +111,7 @@ function ListAdmins() {
 								{ name: 'Número' },
 								{ name: 'Nome', align: 'left' },
 							]}
-							rows={[
-								{
-									cells: [
-										{
-											data: (
-												<Avatar>
-													<span>Z</span>
-												</Avatar>
-											),
-										},
-										{
-											data: 'fc49049',
-										},
-										{
-											data: 'Zé Pedro Resende',
-											align: 'left',
-										},
-										{
-											data: (
-												<Link to="/">
-													<FaExternalLinkAlt />
-												</Link>
-											),
-										},
-									],
-								},
-								{
-									cells: [
-										{
-											data: (
-												<Avatar>
-													<span>Z</span>
-												</Avatar>
-											),
-										},
-										{
-											data: 'fc49049',
-										},
-										{
-											data: 'Zé Pedro Resende',
-											align: 'left',
-										},
-										{
-											data: (
-												<Link to="/">
-													<FaExternalLinkAlt />
-												</Link>
-											),
-										},
-									],
-								},
-							]}
+							rows={list}
 						/>
 					</TableSection>
 				</Sheet>

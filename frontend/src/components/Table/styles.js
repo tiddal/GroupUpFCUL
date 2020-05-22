@@ -57,6 +57,11 @@ export const TableLine = styled.div`
 	}
 `;
 
+export const TableLineInfo = styled(TableLine)`
+	grid-template-columns: 100% !important;
+	color: ${({ theme }) => theme.colors.secondary_text};
+`;
+
 export const TableCell = styled.span`
 	padding: 0 5px;
 	width: 100%;

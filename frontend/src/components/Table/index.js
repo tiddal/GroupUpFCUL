@@ -1,6 +1,12 @@
 import React from 'react';
 
-import { Container, TableHeader, TableLine, TableCell } from './styles';
+import {
+	Container,
+	TableHeader,
+	TableLine,
+	TableLineInfo,
+	TableCell,
+} from './styles';
 
 function Table({ columns_width, columns, rows }) {
 	return (
@@ -12,15 +18,21 @@ function Table({ columns_width, columns, rows }) {
 					</TableCell>
 				))}
 			</TableHeader>
-			{rows.map((row, i) => (
-				<TableLine key={`row${i}`}>
-					{row.cells.map((cell, e) => (
-						<TableCell key={`cell${i}${e}`} align={cell.align}>
-							{cell.data}
-						</TableCell>
-					))}
-				</TableLine>
-			))}
+			{!rows ? (
+				<TableLineInfo>
+					<TableCell>Sem Resultados</TableCell>
+				</TableLineInfo>
+			) : (
+				rows.map((row, i) => (
+					<TableLine key={`row${i}`}>
+						{row.map((cell, e) => (
+							<TableCell key={`cell${i}${e}`} align={cell.align}>
+								{cell.data}
+							</TableCell>
+						))}
+					</TableLine>
+				))
+			)}
 		</Container>
 	);
 }
