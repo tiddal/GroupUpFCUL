@@ -10,7 +10,6 @@ import {
 	SmallTitle,
 	Link,
 	Info,
-	SearchBar,
 	Icon,
 } from './styles';
 
@@ -50,20 +49,14 @@ export function StatusCard({ data }) {
 	return <StatusContainer>{data}</StatusContainer>;
 }
 
-export function SearchCard({ placeholder, info }) {
+export function SearchCard({ children }) {
 	return (
 		<SearchCardContainer>
 			<SmallTitle>
 				<FaSearch />
 				<span>Procurar</span>
 			</SmallTitle>
-			<SearchBar>
-				<input type="text" placeholder={placeholder} />
-				<button>
-					<FaSearch />
-				</button>
-				<span>{info}</span>
-			</SearchBar>
+			{children}
 		</SearchCardContainer>
 	);
 }

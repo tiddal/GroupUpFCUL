@@ -14,13 +14,21 @@ import {
 	FaListUl,
 	FaUserPlus,
 	FaFileUpload,
+	FaSearch,
 } from 'react-icons/fa';
 
-import { Container, StatusCardData } from './styles';
+import {
+	Container,
+	SearchSection,
+	SearchBar,
+	Button,
+	StatusCardData,
+} from './styles';
 
-function ProfessorPanel() {
+function AdminPanel({ history }) {
 	const [loading, setLoading] = useState(true);
-	const [professors, setProfessors] = useState({ online: [], offline: [] });
+	const [admins, setAdmins] = useState({ online: [], offline: [] });
+	const [searchInput, setSearchInput] = useState('');
 
 	async function setUsersStatus(setUsersState, service) {
 		const users = await service();
@@ -31,11 +39,16 @@ function ProfessorPanel() {
 
 	useEffect(() => {
 		async function setState() {
-			await setUsersStatus(setProfessors, adminService.getProfessors);
+			await setUsersStatus(setAdmins, adminService.getAdmins);
 			setLoading(false);
 		}
 		setState();
 	}, []);
+
+	function handleSearch(event) {
+		event.preventDefault();
+		history.push({ pathname: '/admins/list', panelSearchInput: searchInput });
+	}
 
 	return (
 		<>
@@ -47,7 +60,7 @@ function ProfessorPanel() {
 					{ icon: <FaUniversity />, name: 'Cursos', path: '/courses' },
 				]}
 			/>
-			<Context path={[{ tier: 'professors', title: 'professores' }]} />
+			<Context path={[{ tier: 'admins', title: 'admins' }]} />
 			{loading ? (
 				<Spinner />
 			) : (
@@ -56,30 +69,39 @@ function ProfessorPanel() {
 						data={
 							<>
 								<StatusCardData status="online">
-									{professors.online.length} online <span></span>
+									{admins.online.length} Online <span></span>
 								</StatusCardData>
 								<StatusCardData status="offline">
-									{professors.offline.length} offline <span></span>
+									{admins.offline.length} offline <span></span>
 								</StatusCardData>
 							</>
 						}
 					/>
-					<SearchCard
-						placeholder={'Procurar professor...'}
-						info={'Procure por número de professor'}
-					/>
+					<SearchCard>
+						<SearchSection onSubmit={handleSearch}>
+							<SearchBar
+								placeholder={'Procurar administrador...'}
+								onChange={({ target }) => setSearchInput(target.value)}
+							/>
+							<Button>
+								<FaSearch />
+							</Button>
+							<span>Procurar por número de administrador</span>
+						</SearchSection>
+					</SearchCard>
+
 					<XSmallCard
-						path={'professors/list'}
-						label={'Ver lista de Professores'}
+						path={'admins/list'}
+						label={'Ver lista de Admins'}
 						icon={<FaListUl />}
 					/>
 					<XSmallCard
-						path={'professors/new'}
-						label={'Adicionar Professor'}
+						path={'admins/new'}
+						label={'Adicionar Admin'}
 						icon={<FaUserPlus />}
 					/>
 					<XSmallCard
-						path={'professors/file'}
+						path={'admins/file'}
 						label={'Carregar ficheiro'}
 						icon={<FaFileUpload />}
 					/>
@@ -89,4 +111,4 @@ function ProfessorPanel() {
 	);
 }
 
-export default ProfessorPanel;
+export default AdminPanel;

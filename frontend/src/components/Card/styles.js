@@ -67,13 +67,11 @@ export const SearchCardContainer = styled(SmallContainer)`
 	justify-content: flex-start;
 	@media (min-width: 768px) {
 		width: 660px;
-		height: 205px;
+		height: 250px;
 		grid-column: 1 / span 3;
 	}
 	@media (min-width: 1450px) {
 		width: 960px;
-	}
-	@media (min-width: 1450px) {
 		height: 250px;
 	}
 `;
@@ -82,7 +80,8 @@ export const Title = styled.div`
 	color: ${({ theme: { colors } }) => colors.text};
 	display: flex;
 	align-items: center;
-	margin: 20px 30px;
+	padding-top: 20px;
+	padding-left: 30px;
 	margin-bottom: 0;
 	& > span {
 		font-size: 20px;

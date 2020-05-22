@@ -28,26 +28,45 @@ import {
 	TableSection,
 } from './styles';
 
-function ListAdmins() {
+function ListAdmins({ location: { panelSearchInput } }) {
 	const [list, setList] = useState();
-	const [searchInput, setSearchInput] = useState('');
+	const [searchInput, setSearchInput] = useState({
+		initial: panelSearchInput ? panelSearchInput : '',
+		value: '',
+	});
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
-		async function getAdmins() {
-			const response = await adminService.getAdmins();
-			const rows = response.map((user) => createTableRow(user));
-			setList(rows);
+		async function getAdmins(username = '') {
+			if (username === '') {
+				const response = await adminService.getAdmins();
+				const rows = response.map((user) => createTableRow(user));
+				setList(rows);
+			} else {
+				const [admin, status] = await adminService.getAdminByUsername(username);
+				status === 200 ? setList([createTableRow(admin)]) : setList();
+			}
 		}
-		if (searchInput === '') getAdmins();
+
+		if (searchInput.initial !== '') {
+			getAdmins(searchInput.initial);
+		} else {
+			getAdmins();
+		}
 	}, [searchInput]);
 
-	async function handleSearch(event) {
-		event.preventDefault();
+	async function getAdminByUsername() {
 		setLoading(true);
-		const [admin, status] = await adminService.getAdminByUsername(searchInput);
+		const [admin, status] = await adminService.getAdminByUsername(
+			searchInput.value
+		);
 		status === 200 ? setList([createTableRow(admin)]) : setList();
 		setLoading(false);
+	}
+
+	function handleSearch(event) {
+		event.preventDefault();
+		getAdminByUsername();
 	}
 
 	const createTableRow = (user) => [
@@ -98,7 +117,14 @@ function ListAdmins() {
 					<SearchSection onSubmit={handleSearch}>
 						<SearchBar
 							placeholder={'Procurar administrador...'}
-							onChange={({ target }) => setSearchInput(target.value)}
+							onChange={({ target }) =>
+								setSearchInput({ initial: '', value: target.value })
+							}
+							value={
+								searchInput.initial === ''
+									? searchInput.value
+									: searchInput.initial
+							}
 						/>
 						<Button>{loading ? <ButtonSpinner /> : <FaSearch />}</Button>
 						<span>Procurar por número de administrador</span>

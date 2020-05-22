@@ -1,9 +1,7 @@
 import React from 'react';
 import Dashboard from '../pages/Admins/Dashboard';
-import AdminPanel from '../pages/Admins/Panels/Admin';
-import ProfessorPanel from '../pages/Admins/Panels/Professor';
-import StudentPanel from '../pages/Admins/Panels/Student';
-import CoursesPanel from '../pages/Admins/Panels/Courses';
+import AdminPanel from '../pages/Admins/Panels/AdminPanel';
+
 import NewAdmin from '../pages/Admins/NewEntries/NewAdmin';
 import ListAdmins from '../pages/Admins/Lists/ListAdmins';
 
@@ -14,9 +12,6 @@ const AdminRoutes = () => (
 		<Switch>
 			<Route path="/" exact component={Dashboard} />
 			<Route path="/admins" exact component={AdminPanel} />
-			<Route path="/professors" exact component={ProfessorPanel} />
-			<Route path="/students" exact component={StudentPanel} />
-			<Route path="/courses" exact component={CoursesPanel} />
 			<Route path="/admins/new" component={NewAdmin} />
 			<Route path="/admins/list" component={ListAdmins} />
 		</Switch>

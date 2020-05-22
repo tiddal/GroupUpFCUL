@@ -20,6 +20,73 @@ export const Container = styled(Wrapper)`
 	}
 `;
 
+export const SearchSection = styled.form`
+	width: 80%;
+	height: 40px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	margin: 30px 0;
+	& > span {
+		width: 100%;
+		font-size: 10px;
+		color: ${({ theme }) => theme.colors.secondary_text};
+		padding-left: 12px;
+		margin-top: 5px;
+	}
+	@media (min-width: 768px) {
+		justify-content: space-evenly;
+		height: 60px;
+		margin: 50px 0;
+		& > span {
+			width: 94%;
+			font-size: 12px;
+			padding-left: 20px;
+		}
+	}
+`;
+
+export const SearchBar = styled.input`
+	width: 85%;
+	height: 24px;
+	border-radius: 12px;
+	font-size: 10px;
+	background: ${({ theme }) => theme.colors.surface};
+	color: ${({ theme }) => theme.colors.text};
+	padding: 0 12px;
+	@media (min-width: 768px) {
+		height: 40px;
+		border-radius: 20px;
+		padding: 0 20px;
+		font-size: 16px;
+	}
+`;
+
+export const Button = styled.button`
+	width: 24px;
+	height: 24px;
+	color: white;
+	background: ${({ theme }) => theme.colors.primary};
+	border-radius: 10px;
+	font-size: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	@media (min-width: 768px) {
+		height: 40px;
+		width: 40px;
+		border-radius: 15px;
+		font-size: 14px;
+	}
+	@media (min-width: 1450px) {
+		transition: background 0.25s;
+		&:hover {
+			cursor: pointer;
+			background: ${({ theme: { colors } }) => colors.primary_variant};
+		}
+	}
+`;
+
 export const StatusCardData = styled.div`
 	display: flex;
 	align-items: center;
