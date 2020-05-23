@@ -10,8 +10,6 @@ export const Container = styled(Wrapper)`
 		display: flex;
 		justify-content: center;
 	}
-	@media (min-width: 1450px) {
-	}
 `;
 
 export const Sheet = styled.div`

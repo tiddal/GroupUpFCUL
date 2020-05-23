@@ -2,18 +2,21 @@ import styled from 'styled-components';
 import { Wrapper } from '../../../components/Wrapper';
 
 export const Container = styled(Wrapper)`
+	padding-top: 150px;
+	margin-bottom: 100px;
 	display: grid;
-	margin-top: 80px;
 	width: 100%;
+	height: 100%;
 	gap: 25px;
 	justify-items: center;
-	margin-bottom: 45px;
 	@media (min-width: 768px) {
-		margin-top: 145px;
+		padding-top: 0;
+		margin-bottom: 0;
 		gap: 53px;
 		grid-template-columns: 184px 184px 184px;
 		justify-content: center;
 		align-content: center;
+		align-items: center;
 	}
 	@media (min-width: 1450px) {
 		grid-template-columns: 285px 285px 285px;
