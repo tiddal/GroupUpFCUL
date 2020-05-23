@@ -5,6 +5,9 @@
 	"repository": "git@github.com:tiddal/pti-server.git",
 	"author": "tiddal <tiddal@sapo.pt>",
 	"license": "MIT",
+	"scripts": {
+		"start": "cd backend && yarn dev && cd ../frontend && yarn start"
+	},
 	"devDependencies": {
 		"@commitlint/cli": "^8.3.5",
 		"@commitlint/config-conventional": "^8.3.4",
