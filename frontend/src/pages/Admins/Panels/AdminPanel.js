@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import adminService from '../../../services/admin';
 
 import Navigation from '../../../components/Navigation';
-import Spinner from '../../../components/Spinner';
+import { CardSpinner } from '../../../components/Spinner';
 import Context from '../../../components/Context';
 import { StatusCard, SearchCard, XSmallCard } from '../../../components/Card';
 
@@ -61,12 +61,12 @@ function AdminPanel({ history }) {
 				]}
 			/>
 			<Context path={[{ tier: 'admins', title: 'admins' }]} />
-			{loading ? (
-				<Spinner />
-			) : (
-				<Container>
-					<StatusCard
-						data={
+			<Container>
+				<StatusCard
+					data={
+						loading ? (
+							<CardSpinner />
+						) : (
 							<>
 								<StatusCardData status="online">
 									{admins.online.length} Online <span></span>
@@ -75,38 +75,38 @@ function AdminPanel({ history }) {
 									{admins.offline.length} offline <span></span>
 								</StatusCardData>
 							</>
-						}
-					/>
-					<SearchCard>
-						<SearchSection onSubmit={handleSearch}>
-							<SearchBar
-								placeholder={'Procurar administrador...'}
-								onChange={({ target }) => setSearchInput(target.value)}
-							/>
-							<Button>
-								<FaSearch />
-							</Button>
-							<span>Procurar por número de administrador</span>
-						</SearchSection>
-					</SearchCard>
+						)
+					}
+				/>
+				<SearchCard>
+					<SearchSection onSubmit={handleSearch}>
+						<SearchBar
+							placeholder={'Procurar administrador...'}
+							onChange={({ target }) => setSearchInput(target.value)}
+						/>
+						<Button>
+							<FaSearch />
+						</Button>
+						<span>Procurar por número de administrador</span>
+					</SearchSection>
+				</SearchCard>
 
-					<XSmallCard
-						path={'admins/list'}
-						label={'Ver lista de Admins'}
-						icon={<FaListUl />}
-					/>
-					<XSmallCard
-						path={'admins/new'}
-						label={'Adicionar Admin'}
-						icon={<FaUserPlus />}
-					/>
-					<XSmallCard
-						path={'admins/file'}
-						label={'Carregar ficheiro'}
-						icon={<FaFileUpload />}
-					/>
-				</Container>
-			)}
+				<XSmallCard
+					path={'admins/list'}
+					label={'Ver lista de Admins'}
+					icon={<FaListUl />}
+				/>
+				<XSmallCard
+					path={'admins/new'}
+					label={'Adicionar Admin'}
+					icon={<FaUserPlus />}
+				/>
+				<XSmallCard
+					path={'admins/file'}
+					label={'Carregar ficheiro'}
+					icon={<FaFileUpload />}
+				/>
+			</Container>
 		</>
 	);
 }

@@ -56,3 +56,11 @@ export const MiniContainer = styled.div`
 		}
 	}
 `;
+
+export const CardContainer = styled(MiniContainer)`
+	&::after {
+		border: 2px solid ${({ color }) => color};
+		border-color: ${({ theme }) => theme.colors.primary_variant} transparent
+			${({ theme }) => theme.colors.primary_variant} transparent;
+	}
+`;
