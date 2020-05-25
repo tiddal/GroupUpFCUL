@@ -61,4 +61,13 @@ export default {
 			return [response.data, response.status];
 		}
 	},
+
+	editAdmin: async (user) => {
+		try {
+			const response = await API.put('users', user);
+			return [response.data, response.status];
+		} catch ({ response }) {
+			return [response.data, response.status];
+		}
+	},
 };

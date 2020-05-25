@@ -85,7 +85,7 @@ function ListAdmins({ location: { panelSearchInput } }) {
 		{ data: `${user.first_name} ${user.last_name}`, align: 'left' },
 		{
 			data: (
-				<Link to={`/admins/${user.username}/edit`} target="_blank">
+				<Link to={`/admins/${user.username}/edit`}>
 					<FaExternalLinkAlt />
 				</Link>
 			),
