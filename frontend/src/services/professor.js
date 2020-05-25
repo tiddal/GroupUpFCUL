@@ -1,17 +1,11 @@
 import API from "./api";
 
 export default {
-  professorUnits: async (professor) => {
+  professorClasses: async (professor, year, semester) => {
     try {
-      const response = await API.get(`/users/professors/${professor}/units`);
-      return response.data;
-    } catch (error) {
-      return error;
-    }
-  },
-  professorClasses: async (professor) => {
-    try {
-      const response = await API.get(`/users/professors/${professor}/classes`);
+      const response = await API.get(
+        `/${professor}/classes/${year}/${semester}`
+      );
       return response.data;
     } catch (error) {
       return error;
