@@ -1,5 +1,5 @@
 const express = require("express");
-const nuclasses = express.Router({ mergeParams: true });
+const nuclass = express.Router({ mergeParams: true });
 
 const { adminRequired } = require("../middleware/permissions");
 
