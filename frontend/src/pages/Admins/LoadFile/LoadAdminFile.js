@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Dropzone from 'react-dropzone';
+import adminService from '../../../services/admin';
 
 import {
 	Container,
@@ -14,6 +15,7 @@ import {
 } from './styles';
 import Navigation from '../../../components/Navigation';
 import Context from '../../../components/Context';
+import { ButtonSpinner } from '../../../components/Spinner';
 
 import {
 	FaUserGraduate,
@@ -24,18 +26,63 @@ import {
 	FaUpload,
 	FaInfoCircle,
 	FaCheckCircle,
+	FaTimesCircle,
 } from 'react-icons/fa';
 
 function LoadAdminFile() {
 	const [adminFile, setAdminFile] = useState();
+	const [loading, setLoading] = useState(false);
+	const [uploadMessage, setUploadMessage] = useState({
+		msg: '',
+		createdUsers: [],
+		type: '',
+	});
 
-	function handleUpload(event) {
+	async function handleUpload(event) {
 		event.preventDefault();
-		console.log(adminFile);
-	}
+		setLoading(true);
+		const [response, status] = await adminService.loadAdminFile(adminFile);
+		const createdUsers = [];
+		let msg = '';
+		let type = 'error';
 
-	function onDrop(file) {
-		setAdminFile(file[0]);
+		switch (status) {
+			case 409:
+				Object.keys(response.created).map((key) =>
+					createdUsers.push(...response.created[key])
+				);
+				if (response.error.key === 'email') {
+					msg = `O email ${response.error.instance} já se encontra registado. ${
+						createdUsers.length
+					} utilizador${createdUsers.length !== 1 ? 'es criados' : ' criado'}${
+						createdUsers.length ? ':' : '.'
+					}`;
+					break;
+				}
+				msg = `O utilizador ${
+					response.error.instance
+				} já se encontra registado. ${createdUsers.length} utilizador${
+					createdUsers.length !== 1 ? 'es criados' : ' criado'
+				}${createdUsers.length ? ':' : '.'}`;
+				break;
+			case 400:
+				msg =
+					'Garanta que todos os campos referidos abaixo estão presentes e são válidos. 0 utilizadores criados.';
+				break;
+			case 0:
+				msg = response;
+				break;
+			default:
+				Object.keys(response).map((key) => createdUsers.push(...response[key]));
+				msg = `Sucesso! ${createdUsers.length} utilizador${
+					createdUsers.length > 1 ? 'es criados' : ' criado'
+				}:`;
+				type = 'success';
+				break;
+		}
+		setUploadMessage({ msg, createdUsers, type });
+		setLoading(false);
+		setAdminFile();
 	}
 
 	function onDrag(isDragActive, isDragReject) {
@@ -79,7 +126,10 @@ function LoadAdminFile() {
 						<span>Carregar Ficheiro</span>
 					</Title>
 					<UploadSection onSubmit={handleUpload}>
-						<Dropzone accept="application/json" onDropAccepted={onDrop}>
+						<Dropzone
+							accept="application/json"
+							onDropAccepted={(file) => setAdminFile(file[0])}
+						>
 							{({
 								getRootProps,
 								getInputProps,
@@ -99,21 +149,38 @@ function LoadAdminFile() {
 						</Dropzone>
 						<label>Ficheiros suportados: JSON</label>
 						<Button disabled={!adminFile}>
-							<span>Carregar</span>
-							<FaUpload />
+							{loading ? (
+								<ButtonSpinner />
+							) : (
+								<>
+									<span>Carregar</span>
+									<FaUpload />
+								</>
+							)}
 						</Button>
 					</UploadSection>
-					<NotificationSection type="success">
-						<span>
-							<FaCheckCircle />
-						</span>
-						<div>
-							<p>Sucesso! 2 utilizadores criados:</p>
-							<ul>
-								<li>fc49049</li>
-							</ul>
-						</div>
-					</NotificationSection>
+					{uploadMessage.msg && (
+						<NotificationSection type={uploadMessage.type}>
+							<span>
+								{uploadMessage.type !== 'error' ? (
+									<FaCheckCircle />
+								) : (
+									<FaTimesCircle />
+								)}
+							</span>
+							<div>
+								<p>{uploadMessage.msg}</p>
+								{uploadMessage.createdUsers.length > 0 && (
+									<ul>
+										{uploadMessage.createdUsers.map((user) => (
+											<li key={user.username}>{user.username}</li>
+										))}
+									</ul>
+								)}
+							</div>
+						</NotificationSection>
+					)}
+
 					<InfoSection>
 						<span>
 							<FaInfoCircle />

@@ -220,6 +220,9 @@ export const NotificationSection = styled(InfoSection)`
 		width: 550px;
 		border: none;
 		padding: 0 0 20px 0;
+		div {
+			padding-top: 2px;
+		}
 	}
 	@media (min-width: 1450px) {
 		width: 760px;

@@ -49,4 +49,16 @@ export default {
 			return [response.data, response.status];
 		}
 	},
+
+	loadAdminFile: async (file) => {
+		try {
+			const response = await API.post('users', file, {
+				headers: { 'Content-Type': 'application/json' },
+			});
+			return [response.data, response.status];
+		} catch ({ response }) {
+			if (!response) return ['Ficheiro alterado, faça o upload novamente.', 0];
+			return [response.data, response.status];
+		}
+	},
 };

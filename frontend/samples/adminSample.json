@@ -1,0 +1,56 @@
+{
+	"users": [
+		{
+			"username": "fc00003",
+			"first_name": "Luís Filipe",
+			"last_name": "Vieira",
+			"email": "fc00003@test.com",
+			"password": "password",
+			"role": {
+				"type": "admin",
+				"data": {
+					"previleges": 1
+				}
+			}
+		},
+		{
+			"username": "fc00004",
+			"first_name": "Frederico",
+			"last_name": "Varandas",
+			"email": "fc00004@test.com",
+			"password": "password",
+			"role": {
+				"type": "admin",
+				"data": {
+					"previleges": 1
+				}
+			}
+		},
+		{
+			"username": "fc00005",
+			"first_name": "Jorge Nuno",
+			"last_name": "Pinto da Costa",
+			"email": "fc00005@test.com",
+			"password": "password",
+			"role": {
+				"type": "admin",
+				"data": {
+					"previleges": 1
+				}
+			}
+		},
+		{
+			"username": "fc00006",
+			"first_name": "António",
+			"last_name": "Salvador",
+			"email": "fc00006@test.com",
+			"password": "password",
+			"role": {
+				"type": "admin",
+				"data": {
+					"previleges": 1
+				}
+			}
+		}
+	]
+}

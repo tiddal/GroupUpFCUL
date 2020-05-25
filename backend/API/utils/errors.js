@@ -231,6 +231,7 @@ module.exports = {
 		error.message = 'This field(s) must be unique in the database.';
 		error.detail = detail;
 		error.key = detail.split('=')[0].split('(')[1].slice(0, -1);
+		error.instance = detail.split('=')[1].split(')')[0].substr(1);
 		return error;
 	},
 
