@@ -208,3 +208,20 @@ export const Button = styled.button`
 		}
 	}
 `;
+
+export const NotificationSection = styled(InfoSection)`
+	background: ${({ theme }) => theme.colors.background};
+	margin-top: 0;
+	border: 1px solid ${({ type }) => messageColors[type]};
+	span {
+		color: ${({ type }) => messageColors[type]};
+	}
+	@media (min-width: 768px) {
+		width: 550px;
+		border: none;
+		padding: 0 0 20px 0;
+	}
+	@media (min-width: 1450px) {
+		width: 760px;
+	}
+`;

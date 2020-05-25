@@ -9,6 +9,7 @@ import {
 	UploadMessage,
 	UploadSection,
 	Button,
+	NotificationSection,
 	InfoSection,
 } from './styles';
 import Navigation from '../../../components/Navigation';
@@ -22,6 +23,7 @@ import {
 	FaFileUpload,
 	FaUpload,
 	FaInfoCircle,
+	FaCheckCircle,
 } from 'react-icons/fa';
 
 function LoadAdminFile() {
@@ -101,6 +103,17 @@ function LoadAdminFile() {
 							<FaUpload />
 						</Button>
 					</UploadSection>
+					<NotificationSection type="success">
+						<span>
+							<FaCheckCircle />
+						</span>
+						<div>
+							<p>Sucesso! 2 utilizadores criados:</p>
+							<ul>
+								<li>fc49049</li>
+							</ul>
+						</div>
+					</NotificationSection>
 					<InfoSection>
 						<span>
 							<FaInfoCircle />
