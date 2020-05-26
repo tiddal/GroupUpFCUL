@@ -21,40 +21,30 @@ import {
 } from "react-icons/fa";
 import { useAuth } from "../../../hooks";
 
-function EditAdmin({
+function EditCourse({
   match: {
-    params: { user },
+    params: { course },
   },
   history,
 }) {
   const initialState = {
-    first_name: {
-      id: "first_name",
+    name: {
+      id: "name",
       type: "text",
-      label: "Nomes próprios",
+      label: "Nome",
       value: "",
-      validation: { name: true },
-      valid: true,
+      validation: { required: true, name: true },
+      valid: false,
       error: false,
       info: "",
     },
-    last_name: {
-      id: "last_name",
+    initials: {
+      id: "initials",
       type: "text",
-      label: "Apelidos",
+      label: "Sigla",
       value: "",
-      validation: { name: true },
-      valid: true,
-      error: false,
-      info: "",
-    },
-    email: {
-      id: "email",
-      type: "text",
-      label: "Email",
-      value: "",
-      validation: { email: true },
-      valid: true,
+      validation: { required: true, max: 3 },
+      valid: false,
       error: false,
       info: "",
     },
@@ -65,20 +55,20 @@ function EditAdmin({
   const [edited, setEdited] = useState(false);
   const [loadingEdit, setLoadingEdit] = useState(false);
   const [loadingRemove, setLoadingRemove] = useState(false);
-  const [editAdminForm, setEditAdminForm] = useState(initialState);
-  const [removeAdminForm, setRemoveAdminForm] = useState({
-    username: {
-      id: "username",
+  const [editCourseForm, setEditCourseForm] = useState(initialState);
+  const [removeCourseForm, setRemoveCourseForm] = useState({
+    code: {
+      id: "code",
       type: "text",
-      label: "Número de administrador",
+      label: "Código do curso",
       value: "",
-      validation: { match: user },
+      validation: { match: course },
       valid: false,
       error: false,
       info: (
         <div>
-          Escreva <strong>{user}</strong> para confirmar que quer remover este
-          utilizador
+          Escreva <strong>{course}</strong> para confirmar que quer remover este
+          curso
         </div>
       ),
     },
@@ -86,14 +76,14 @@ function EditAdmin({
 
   useEffect(() => {
     let isCancelled = false;
-    async function getAdmin() {
-      const [response, status] = await adminService.getAdminByUsername(user);
+    async function getCourse() {
+      const [response, status] = await adminService.getCourseByCode(course);
       if (!isCancelled) {
         if (status !== 200) {
-          return history.push("/admins/list");
+          return history.push("/courses/list");
         }
         Object.keys(response).map((key) =>
-          setEditAdminForm((prevState) => {
+          setEditCourseForm((prevState) => {
             if (key in prevState)
               return {
                 ...prevState,
@@ -104,26 +94,26 @@ function EditAdmin({
         );
       }
     }
-    getAdmin();
+    getCourse();
     return () => (isCancelled = true);
-  }, [user, history]);
+  }, [course, history]);
 
   function handleEditInputs(target, inputKey) {
     const [valid, info] = validate(
       target.value,
-      editAdminForm[inputKey].validation
+      editCourseForm[inputKey].validation
     );
     const updatedForm = {
-      ...editAdminForm,
+      ...editCourseForm,
       [inputKey]: {
-        ...editAdminForm[inputKey],
+        ...editCourseForm[inputKey],
         value: target.value,
         valid,
         error: !valid,
         info,
       },
     };
-    setEditAdminForm(updatedForm);
+    setEditCourseForm(updatedForm);
     let validForm = true;
     for (let key in updatedForm) {
       validForm = updatedForm[key].valid && validForm;
@@ -132,35 +122,38 @@ function EditAdmin({
   }
 
   function handleRemoveInput(target) {
-    const [valid] = validate(target.value, removeAdminForm.username.validation);
+    const [valid] = validate(target.value, removeCourseForm.code.validation);
     const updatedForm = {
-      ...removeAdminForm,
-      username: {
-        ...removeAdminForm.username,
+      ...removeCourseForm,
+      code: {
+        ...removeCourseForm.code,
         value: target.value,
         valid,
         error: !valid,
       },
     };
-    setRemoveAdminForm(updatedForm);
-    setRemoveValid(updatedForm.username.valid);
+    setRemoveCourseForm(updatedForm);
+    setRemoveValid(updatedForm.code.valid);
   }
 
   async function handleEditSubmission(event) {
     event.preventDefault();
     if (!editValid) return;
     setLoadingEdit(true);
-    const adminData = {};
-    Object.keys(editAdminForm).map(
-      (key) => (adminData[key] = editAdminForm[key].value)
+    const courseData = {};
+    Object.keys(editCourseForm).map(
+      (key) => (courseData[key] = editCourseForm[key].value)
     );
-    const [response, status] = await adminService.editAdmin(adminData, user);
+    const [response, status] = await adminService.editCourse(
+      courseData,
+      course
+    );
     const error = {};
 
     switch (status) {
       case 409:
-        error.key = "email";
-        error.msg = "Este email já se encontra registado.";
+        error.key = "code";
+        error.msg = "Já existe um curso com este código.";
         break;
 
       case 400:
@@ -176,10 +169,10 @@ function EditAdmin({
         break;
     }
     if (Object.keys(error).length > 0) {
-      setEditAdminForm({
-        ...editAdminForm,
+      setEditCourseForm({
+        ...editCourseForm,
         [error.key]: {
-          ...editAdminForm[error.key],
+          ...editCourseForm[error.key],
           error: true,
           valid: false,
           info: error.msg,
@@ -197,10 +190,10 @@ function EditAdmin({
     event.preventDefault();
     if (!removeValid) return;
     setLoadingRemove(true);
-    const [, status] = await adminService.removeAdmin(user);
+    const [, status] = await adminService.removeCourse(course);
     if (status !== 204) logout();
     setLoadingEdit(false);
-    history.push("/admins/list");
+    history.push("/courses/list");
   }
 
   return (
@@ -215,29 +208,32 @@ function EditAdmin({
       />
       <Context
         path={[
-          { tier: "admins", title: "admins" },
-          { tier: `admins/${user}/edit`, title: `editar ${user}` },
+          { tier: "courses", title: "cursos" },
+          {
+            tier: `courses/${course}/edit`,
+            title: `editar ${editCourseForm.initials.value}`,
+          },
         ]}
       />
       <Container>
         <Sheet>
           <Title>
             <FaEdit />
-            <span>{user}</span>
+            <span>{editCourseForm.initials.value}</span>
           </Title>
           <Form autoComplete="off" onSubmit={handleEditSubmission}>
-            {Object.keys(editAdminForm).map((key) => (
+            {Object.keys(editCourseForm).map((key) => (
               <Input
-                key={editAdminForm[key].id}
-                id={editAdminForm[key].id}
-                type={editAdminForm[key].type}
-                label={editAdminForm[key].label}
-                validation={editAdminForm[key].validation}
-                error={editAdminForm[key].error}
-                info={editAdminForm[key].info}
-                value={editAdminForm[key].value}
+                key={editCourseForm[key].id}
+                id={editCourseForm[key].id}
+                type={editCourseForm[key].type}
+                label={editCourseForm[key].label}
+                validation={editCourseForm[key].validation}
+                error={editCourseForm[key].error}
+                info={editCourseForm[key].info}
+                value={editCourseForm[key].value}
                 change={({ target }) =>
-                  handleEditInputs(target, editAdminForm[key].id)
+                  handleEditInputs(target, editCourseForm[key].id)
                 }
               />
             ))}
@@ -247,20 +243,20 @@ function EditAdmin({
           </Form>
           <Title danger>
             <FaTrash />
-            <span>Remover administrador</span>
+            <span>Remover curso</span>
           </Title>
           <Form autoComplete="off" onSubmit={handleRemoveSubmission}>
             <Input
-              key={removeAdminForm.username.id}
-              id={removeAdminForm.username.id}
-              type={removeAdminForm.username.type}
-              label={removeAdminForm.username.label}
-              validation={removeAdminForm.username.validation}
-              value={removeAdminForm.username.value}
-              error={removeAdminForm.username.error}
-              info={removeAdminForm.username.info}
+              key={removeCourseForm.code.id}
+              id={removeCourseForm.code.id}
+              type={removeCourseForm.code.type}
+              label={removeCourseForm.code.label}
+              validation={removeCourseForm.code.validation}
+              value={removeCourseForm.code.value}
+              error={removeCourseForm.code.error}
+              info={removeCourseForm.code.info}
               change={({ target }) =>
-                handleRemoveInput(target, removeAdminForm.username.id)
+                handleRemoveInput(target, removeCourseForm.code.id)
               }
               danger
             />
@@ -275,4 +271,4 @@ function EditAdmin({
   );
 }
 
-export default EditAdmin;
+export default EditCourse;

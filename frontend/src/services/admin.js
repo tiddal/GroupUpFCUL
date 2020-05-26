@@ -41,6 +41,56 @@ export default {
       return error;
     }
   },
+
+  createCourse: async (course) => {
+    try {
+      const response = await API.post("courses", { courses: [course] });
+      console.log(response.data);
+      return [response.data, response.status];
+    } catch ({ response }) {
+      return [response.data, response.status];
+    }
+  },
+
+  loadCourseFile: async (file) => {
+    try {
+      const response = await API.post("courses", file, {
+        headers: { "Content-Type": "application/json" },
+      });
+      return [response.data, response.status];
+    } catch ({ response }) {
+      if (!response) return ["Ficheiro alterado, faça o upload novamente.", 0];
+      return [response.data, response.status];
+    }
+  },
+
+  editCourse: async (course, code) => {
+    try {
+      const response = await API.put(`courses/${code}`, { course });
+      return [response.data, response.status];
+    } catch ({ response }) {
+      return [response.data, response.status];
+    }
+  },
+
+  removeCourse: async (code) => {
+    try {
+      const response = await API.delete(`courses/${code}`);
+      return [response.data, response.status];
+    } catch ({ response }) {
+      return [response.data, response.status];
+    }
+  },
+
+  getCourseByCode: async (code) => {
+    try {
+      const response = await API.get(`courses/${code}`);
+      return [response.data, response.status];
+    } catch ({ response }) {
+      return [response.data, response.status];
+    }
+  },
+
   createAdmin: async (admin) => {
     try {
       const response = await API.post("users", { users: [admin] });
@@ -92,7 +142,6 @@ export default {
   createProfessor: async (admin) => {
     try {
       const response = await API.post("users", { users: [admin] });
-      console.log(response.data);
       return [response.data, response.status];
     } catch ({ response }) {
       return [response.data, response.status];
@@ -104,7 +153,6 @@ export default {
       const response = await API.post("users", file, {
         headers: { "Content-Type": "application/json" },
       });
-      console.log(response.data);
       return [response.data, response.status];
     } catch ({ response }) {
       if (!response) return ["Ficheiro alterado, faça o upload novamente.", 0];
@@ -136,6 +184,22 @@ export default {
       return [response.data, response.status];
     } catch ({ response }) {
       return [response.data, response.status];
+    }
+  },
+  getUnits: async () => {
+    try {
+      const response = await API.get("units");
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  },
+  getClasses: async () => {
+    try {
+      const response = await API.get("classes/2019-2020");
+      return response.data;
+    } catch (error) {
+      return error;
     }
   },
 };

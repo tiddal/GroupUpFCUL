@@ -28,7 +28,7 @@ import {
   TableSection,
 } from "./styles";
 
-function ListProfessors({ location: { panelSearchInput } }) {
+function ListCourses({ location: { panelSearchInput } }) {
   const [list, setList] = useState();
   const [searchInput, setSearchInput] = useState({
     initial: panelSearchInput ? panelSearchInput : "",
@@ -37,57 +37,46 @@ function ListProfessors({ location: { panelSearchInput } }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    async function getProfessors(username = "") {
-      if (username === "") {
-        const response = await adminService.getProfessors();
-        const rows = response.map((user) => createTableRow(user));
+    async function getCourses(code = "") {
+      if (code === "") {
+        const response = await adminService.getCourses();
+        const rows = response.map((course) => createTableRow(course));
         setList(rows);
       } else {
-        const [professor, status] = await adminService.getProfessorByUsername(
-          username
-        );
-        status === 200 ? setList([createTableRow(professor)]) : setList();
+        const [course, status] = await adminService.getCourseByCode(code);
+        status === 200 ? setList([createTableRow(course)]) : setList();
       }
     }
 
     if (searchInput.initial !== "") {
-      getProfessors(searchInput.initial);
+      getCourses(searchInput.initial);
     } else {
-      getProfessors();
+      getCourses();
     }
   }, [searchInput]);
 
-  async function getProfessorByUsername() {
+  async function getCourseByCode() {
     setLoading(true);
-    const [professor, status] = await adminService.getProfessorByUsername(
+    const [course, status] = await adminService.getCourseByCode(
       searchInput.value
     );
-    status === 200 ? setList([createTableRow(professor)]) : setList();
+    status === 200 ? setList([createTableRow(course)]) : setList();
     setLoading(false);
   }
 
   function handleSearch(event) {
     event.preventDefault();
-    getProfessorByUsername();
+    getCourseByCode();
   }
 
-  const createTableRow = (user) => [
-    {
-      data: user.avatar_url ? (
-        <Avatar>
-          <img src={user.avatar_url} alt={`${user.username} profile`} />
-        </Avatar>
-      ) : (
-        <Avatar>
-          <span>{user.first_name.charAt(0)}</span>
-        </Avatar>
-      ),
-    },
-    { data: user.username },
-    { data: `${user.first_name} ${user.last_name}`, align: "left" },
+  const createTableRow = (course) => [
+    { data: course.code },
+    { data: course.initials },
+    { data: course.cycle },
+    { data: course.name, align: "left" },
     {
       data: (
-        <Link to={`/professors/${user.username}/edit`}>
+        <Link to={`/courses/${course.code}/`}>
           <FaExternalLinkAlt />
         </Link>
       ),
@@ -106,19 +95,19 @@ function ListProfessors({ location: { panelSearchInput } }) {
       />
       <Context
         path={[
-          { tier: "professors", title: "professores" },
-          { tier: "professors/list", title: "listar" },
+          { tier: "courses", title: "cursos" },
+          { tier: "courses/list", title: "listar" },
         ]}
       />
       <Container>
         <Sheet>
           <Title>
-            <FaListAlt />
-            <span>Professores</span>
+            <FaUniversity />
+            <span>Cursos</span>
           </Title>
           <SearchSection onSubmit={handleSearch}>
             <SearchBar
-              placeholder={"Procurar professor..."}
+              placeholder={"Procurar curso..."}
               onChange={({ target }) =>
                 setSearchInput({ initial: "", value: target.value })
               }
@@ -129,14 +118,15 @@ function ListProfessors({ location: { panelSearchInput } }) {
               }
             />
             <Button>{loading ? <ButtonSpinner /> : <FaSearch />}</Button>
-            <span>Procurar por número de professor</span>
+            <span>Procurar por código de curso</span>
           </SearchSection>
           <TableSection>
             <Table
-              columns_width={[9, 15, 67, 9]}
+              columns_width={[11, 10, 10, 60, 9]}
               columns={[
-                { name: <FaPortrait /> },
-                { name: "Número" },
+                { name: "Código" },
+                { name: "Sigla" },
+                { name: "Cíclo" },
                 { name: "Nome", align: "left" },
               ]}
               rows={list}
@@ -148,4 +138,4 @@ function ListProfessors({ location: { panelSearchInput } }) {
   );
 }
 
-export default ListProfessors;
+export default ListCourses;

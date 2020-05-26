@@ -1,0 +1,56 @@
+{
+  "courses": [
+    {
+      "code": "L111",
+      "name": "Course One",
+      "cycle": 1,
+      "initials": "C1",
+      "units": []
+    },
+    {
+      "code": "L112",
+      "name": "Course Two",
+      "cycle": 2,
+      "initials": "C2",
+      "units": [
+        {
+          "code": 11112,
+          "name": "Unit Two",
+          "semester": 2,
+          "initials": "U2",
+          "ects": 6
+        }
+      ]
+    },
+    {
+      "code": "L113",
+      "name": "Course Three",
+      "cycle": 1,
+      "initials": "C3",
+      "units": [
+        {
+          "code": 11113,
+          "name": "Unit Three",
+          "semester": 1,
+          "initials": "U3",
+          "ects": 6
+        }
+      ]
+    },
+    {
+      "code": "L114",
+      "name": "Course Four",
+      "cycle": 1,
+      "initials": "C4",
+      "units": [
+        {
+          "code": 11111,
+          "name": "Unit Four",
+          "semester": 1,
+          "initials": "U4",
+          "ects": 6
+        }
+      ]
+    }
+  ]
+}
