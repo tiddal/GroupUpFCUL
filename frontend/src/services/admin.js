@@ -26,14 +26,6 @@ export default {
       return error;
     }
   },
-  getUnits: async () => {
-    try {
-      const response = await API.get("users/classes");
-      return response.data;
-    } catch (error) {
-      return error;
-    }
-  },
   getAdminByUsername: async (username) => {
     try {
       const response = await API.get(`users/admins/${username}`);

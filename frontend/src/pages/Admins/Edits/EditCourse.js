@@ -26,6 +26,7 @@ function EditCourse({
     params: { course },
   },
   history,
+  location,
 }) {
   const initialState = {
     name: {
@@ -209,10 +210,12 @@ function EditCourse({
       <Context
         path={[
           { tier: "courses", title: "cursos" },
+          { tier: "courses/list", title: "listar" },
           {
-            tier: `courses/${course}/edit`,
-            title: `editar ${editCourseForm.initials.value}`,
+            tier: `courses/${course}`,
+            title: `${editCourseForm.initials.value}`,
           },
+          { tier: `courses/${course}/edit`, title: `editar` },
         ]}
       />
       <Container>

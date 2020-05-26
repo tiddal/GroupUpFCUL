@@ -76,7 +76,12 @@ function ListCourses({ location: { panelSearchInput } }) {
     { data: course.name, align: "left" },
     {
       data: (
-        <Link to={`/courses/${course.code}/`}>
+        <Link
+          to={{
+            pathname: `/courses/${course.code}/`,
+            initials: course.initials,
+          }}
+        >
           <FaExternalLinkAlt />
         </Link>
       ),

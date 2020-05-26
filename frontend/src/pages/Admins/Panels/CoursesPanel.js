@@ -12,10 +12,9 @@ import {
   FaUserShield,
   FaUserTie,
   FaListUl,
-  FaEdit,
+  FaUserPlus,
   FaFileUpload,
   FaSearch,
-  FaBook,
 } from "react-icons/fa";
 
 import {
@@ -26,15 +25,10 @@ import {
   StatusCardData,
 } from "./styles";
 
-function CoursePanel({
-  match: {
-    params: { course },
-  },
-  history,
-  location,
-}) {
+function CoursesPanel({ history }) {
   const [loading, setLoading] = useState(true);
-  const [courseData, setCourseData] = useState({
+  const [coursesData, setCoursesData] = useState({
+    courses: [],
     units: [],
     classes: [],
   });
@@ -42,9 +36,10 @@ function CoursePanel({
 
   useEffect(() => {
     async function setState() {
+      const courses = await adminService.getCourses();
       const units = await adminService.getUnits();
       const classes = await adminService.getClasses();
-      setCourseData({ units, classes });
+      setCoursesData({ courses, units, classes });
       setLoading(false);
     }
     setState();
@@ -52,10 +47,7 @@ function CoursePanel({
 
   function handleSearch(event) {
     event.preventDefault();
-    history.push({
-      pathname: "/courses/:code/list",
-      panelSearchInput: searchInput,
-    });
+    history.push({ pathname: "/courses/list", panelSearchInput: searchInput });
   }
 
   return (
@@ -68,14 +60,7 @@ function CoursePanel({
           { icon: <FaUniversity />, name: "Cursos", path: "/courses" },
         ]}
       />
-      *
-      <Context
-        path={[
-          { tier: "courses", title: "cursos" },
-          { tier: "courses/list", title: "listar" },
-          { tier: `courses/${course}`, title: `${location.initials}` },
-        ]}
-      />
+      <Context path={[{ tier: "courses", title: "cursos" }]} />
       <Container>
         <StatusCard
           data={
@@ -84,10 +69,13 @@ function CoursePanel({
             ) : (
               <>
                 <StatusCardData>
-                  {courseData.units.length} Cadeiras
+                  {coursesData.courses.length} Cursos
                 </StatusCardData>
                 <StatusCardData>
-                  {courseData.classes.length} Turmas
+                  {coursesData.units.length} Cadeiras
+                </StatusCardData>
+                <StatusCardData>
+                  {coursesData.classes.length} Turmas
                 </StatusCardData>
               </>
             )
@@ -96,37 +84,34 @@ function CoursePanel({
         <SearchCard>
           <SearchSection onSubmit={handleSearch}>
             <SearchBar
-              placeholder={"Procurar cadeira..."}
+              placeholder={"Procurar curso..."}
               onChange={({ target }) => setSearchInput(target.value)}
             />
             <Button>
               <FaSearch />
             </Button>
-            <span>Procurar por código de cadeira</span>
+            <span>Procurar por código de curso</span>
           </SearchSection>
         </SearchCard>
 
         <XSmallCard
-          path={`/courses/${course}/list`}
-          label={"Ver lista de Cadeiras"}
+          path={"courses/list"}
+          label={"Ver lista de Cursos"}
           icon={<FaListUl />}
         />
         <XSmallCard
-          path={`/courses/${course}/new`}
-          label={"Adicionar Cadeira"}
-          icon={<FaBook />}
+          path={"courses/new"}
+          label={"Adicionar Curso"}
+          icon={<FaUserPlus />}
         />
         <XSmallCard
-          path={{
-            pathname: `/courses/${course}/edit`,
-            initials: location.initials,
-          }}
-          label={"Editar Cadeira"}
-          icon={<FaEdit />}
+          path={"courses/file"}
+          label={"Carregar ficheiro"}
+          icon={<FaFileUpload />}
         />
       </Container>
     </>
   );
 }
 
-export default CoursePanel;
+export default CoursesPanel;
