@@ -41,9 +41,7 @@ function LoadprofessorFile() {
   async function handleUpload(event) {
     event.preventDefault();
     setLoading(true);
-    const [response, status] = await adminService.loadProfessorFile(
-      professorFile
-    );
+    const [response, status] = await adminService.loadUserFile(professorFile);
     const createdUsers = [];
     let msg = "";
     let type = "error";
@@ -191,7 +189,7 @@ function LoadprofessorFile() {
 
             <div>
               Para evitar problemas no processamento do ficheiro garanta que os
-              seguintes campos estão presentes em todos os administradores que
+              seguintes campos estão presentes em todos os professores que
               pretende registar:
               <ul>
                 <li> - Número de professor</li>

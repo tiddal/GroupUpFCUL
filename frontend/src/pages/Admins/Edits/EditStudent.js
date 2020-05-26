@@ -201,7 +201,7 @@ function EditStudent({
     event.preventDefault();
     if (!removeValid) return;
     setLoadingRemove(true);
-    const [, status] = await adminService.removeStudent(user);
+    const [, status] = await adminService.removeUser(user);
     if (status !== 204) logout();
     setLoadingEdit(false);
     history.push("/students/list");

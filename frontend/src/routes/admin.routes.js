@@ -10,7 +10,6 @@ import LoadAdminFile from "../pages/Admins/LoadFile/LoadAdminFile";
 import EditAdmin from "../pages/Admins/Edits/EditAdmin";
 
 import ListStudents from "../pages/Admins/Lists/ListStudents";
-import EditStudents from "../pages/Admins/Edits/EditStudent";
 import NewStudent from "../pages/Admins/NewEntries/NewStudent";
 import LoadStudentFile from "../pages/Admins/LoadFile/LoadStudentFile";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
@@ -20,8 +19,6 @@ import NewProfessor from "../pages/Admins/NewEntries/NewProfessor";
 import ListProfessors from "../pages/Admins/Lists/ListProfessors";
 import LoadProfessorFile from "../pages/Admins/LoadFile/LoadProfessorFile";
 import EditProfessor from "../pages/Admins/Edits/EditProfessor";
-
-import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 const AdminRoutes = () => (
   <BrowserRouter>

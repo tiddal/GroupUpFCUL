@@ -9,6 +9,7 @@ export default {
       return error;
     }
   },
+
   getProfessors: async () => {
     try {
       const response = await API.get("users/professors");
@@ -25,15 +26,6 @@ export default {
       return error;
     }
   },
-  getStudents: async () => {
-    try {
-      const response = await API.get("users/students");
-      return response.data;
-    } catch (error) {
-      return error;
-    }
-  },
-
   getUnits: async () => {
     try {
       const response = await API.get("users/classes");
@@ -58,6 +50,7 @@ export default {
       return error;
     }
   },
+
   createAdmin: async (admin) => {
     try {
       const response = await API.post("users", { users: [admin] });
@@ -66,31 +59,9 @@ export default {
       return [response.data, response.status];
     }
   },
-
-  loadAdminFile: async (file) => {
-    try {
-      const response = await API.post("users", file, {
-        headers: { "Content-Type": "application/json" },
-      });
-      return [response.data, response.status];
-    } catch ({ response }) {
-      if (!response) return ["Ficheiro alterado, faça o upload novamente.", 0];
-      return [response.data, response.status];
-    }
-  },
-
   editAdmin: async (user, username) => {
     try {
       const response = await API.put(`users/${username}`, { user });
-      return [response.data, response.status];
-    } catch ({ response }) {
-      return [response.data, response.status];
-    }
-  },
-
-  removeAdmin: async (username) => {
-    try {
-      const response = await API.delete(`users/${username}`);
       return [response.data, response.status];
     } catch ({ response }) {
       return [response.data, response.status];
@@ -101,21 +72,6 @@ export default {
     try {
       const response = await API.get(`users/students/${username}`);
       return [response.data, response.status];
-    } catch ({ response }) {
-      return [response.data, response.status];
-    }
-  },
-  getCourses: async () => {
-    try {
-      const response = await API.get("courses");
-      return response.data;
-    } catch (error) {
-      return error;
-    }
-  },
-  createAdmin: async (admin) => {
-    try {
-      const response = await API.post("users", { users: [admin] });
     } catch ({ response }) {
       return [response.data, response.status];
     }
@@ -131,6 +87,7 @@ export default {
   createStudent: async (student) => {
     try {
       const response = await API.post("users", { users: [student] });
+      return [response.data, response.status];
     } catch ({ response }) {
       return [response.data, response.status];
     }
@@ -152,15 +109,6 @@ export default {
       return [response.data, response.status];
     } catch ({ response }) {
       if (!response) return ["Ficheiro alterado, faça o upload novamente.", 0];
-      return [response.data, response.status];
-    }
-  },
-
-  editAdmin: async (user, username) => {
-    try {
-      const response = await API.put(`users/${username}`, { user });
-      return [response.data, response.status];
-    } catch ({ response }) {
       return [response.data, response.status];
     }
   },

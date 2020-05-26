@@ -30,7 +30,7 @@ import {
 } from "react-icons/fa";
 
 function LoadStudentFile() {
-  const [adminFile, setAdminFile] = useState();
+  const [studentFile, setStudentFile] = useState();
   const [loading, setLoading] = useState(false);
   const [uploadMessage, setUploadMessage] = useState({
     msg: "",
@@ -41,7 +41,7 @@ function LoadStudentFile() {
   async function handleUpload(event) {
     event.preventDefault();
     setLoading(true);
-    const [response, status] = await adminService.loadStudentFile(adminFile);
+    const [response, status] = await adminService.loadUserFile(studentFile);
     const createdUsers = [];
     let msg = "";
     let type = "error";
@@ -82,13 +82,13 @@ function LoadStudentFile() {
     }
     setUploadMessage({ msg, createdUsers, type });
     setLoading(false);
-    setAdminFile();
+    setStudentFile();
   }
 
   function onDrag(isDragActive, isDragReject) {
     if (!isDragActive)
-      return adminFile ? (
-        <UploadMessage type="filled">{adminFile.name}</UploadMessage>
+      return studentFile ? (
+        <UploadMessage type="filled">{studentFile.name}</UploadMessage>
       ) : (
         <UploadMessage>
           Arraste ou clique para selecionar um ficheiro
@@ -115,8 +115,8 @@ function LoadStudentFile() {
       />
       <Context
         path={[
-          { tier: "admins", title: "admins" },
-          { tier: "admins/file", title: "carregar ficheiro" },
+          { tier: "students", title: "alunos" },
+          { tier: "students/file", title: "carregar ficheiro" },
         ]}
       />
       <Container>
@@ -128,7 +128,7 @@ function LoadStudentFile() {
           <UploadSection onSubmit={handleUpload}>
             <Dropzone
               accept="application/json"
-              onDropAccepted={(file) => setAdminFile(file[0])}
+              onDropAccepted={(file) => setStudentFile(file[0])}
             >
               {({
                 getRootProps,
@@ -148,7 +148,7 @@ function LoadStudentFile() {
               )}
             </Dropzone>
             <label>Ficheiros suportados: JSON</label>
-            <Button disabled={!adminFile}>
+            <Button disabled={!studentFile}>
               {loading ? (
                 <ButtonSpinner />
               ) : (
@@ -188,8 +188,8 @@ function LoadStudentFile() {
 
             <div>
               Para evitar problemas no processamento do ficheiro garanta que os
-              seguintes campos estão presentes em todos os administradores que
-              pretende registar:
+              seguintes campos estão presentes em todos os alunos que pretende
+              registar:
               <ul>
                 <li> - Número de aluno</li>
                 <li> - Nome próprio</li>
