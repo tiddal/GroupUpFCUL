@@ -1,0 +1,57 @@
+{
+  "users": [
+    {
+      "username": "fc00007",
+      "first_name": "Zinedine",
+      "last_name": "Zidane",
+      "email": "fc00007@test.com",
+      "password": "password",
+      "role": {
+        "type": "professor",
+        "data": {}
+      }
+    },
+    {
+      "username": "fc00008",
+      "first_name": "José",
+      "last_name": "Mourinho",
+      "email": "fc00008@test.com",
+      "password": "password",
+      "role": {
+        "type": "professor",
+        "data": {
+          "department": "DI",
+          "room": "1.4.5"
+        }
+      }
+    },
+    {
+      "username": "fc00009",
+      "first_name": "Bruno",
+      "last_name": "Lage",
+      "email": "fc00009@test.com",
+      "password": "password",
+      "role": {
+        "type": "professor",
+        "data": {
+          "department": "DI",
+          "room": "1.4.5"
+        }
+      }
+    },
+    {
+      "username": "fc00010",
+      "first_name": "Jorge",
+      "last_name": "Lopetegi",
+      "email": "fc00010@test.com",
+      "password": "password",
+      "role": {
+        "type": "professor",
+        "data": {
+          "department": "DI",
+          "room": "1.4.5"
+        }
+      }
+    }
+  ]
+}
