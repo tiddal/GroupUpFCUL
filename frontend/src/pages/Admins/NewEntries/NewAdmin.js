@@ -29,7 +29,8 @@ function NewAdmin() {
 			value: '',
 			validation: { required: true, username: true },
 			valid: false,
-			error: '',
+			error: false,
+			info: '',
 		},
 		first_name: {
 			id: 'first_name',
@@ -38,7 +39,8 @@ function NewAdmin() {
 			value: '',
 			validation: { required: true, name: true },
 			valid: false,
-			error: '',
+			error: false,
+			info: '',
 		},
 		last_name: {
 			id: 'last_name',
@@ -47,7 +49,8 @@ function NewAdmin() {
 			value: '',
 			validation: { required: true, name: true },
 			valid: false,
-			error: '',
+			error: false,
+			info: '',
 		},
 		email: {
 			id: 'email',
@@ -56,7 +59,8 @@ function NewAdmin() {
 			value: '',
 			validation: { required: true, email: true },
 			valid: false,
-			error: '',
+			error: false,
+			info: '',
 		},
 	};
 	const { logout } = useAuth();
@@ -66,7 +70,7 @@ function NewAdmin() {
 	const [newAdminForm, setNewAdminForm] = useState(initialState);
 
 	function handleInput(target, inputKey) {
-		const [valid, error] = validate(
+		const [valid, info] = validate(
 			target.value,
 			newAdminForm[inputKey].validation
 		);
@@ -76,7 +80,8 @@ function NewAdmin() {
 				...newAdminForm[inputKey],
 				value: target.value,
 				valid,
-				error,
+				error: !valid,
+				info,
 			},
 		};
 		setNewAdminForm(updatedForm);
@@ -89,6 +94,7 @@ function NewAdmin() {
 
 	async function handleSubmission(event) {
 		event.preventDefault();
+		if (!valid) return;
 		setLoading(true);
 		const adminData = {};
 		Object.keys(newAdminForm).map(
@@ -126,8 +132,9 @@ function NewAdmin() {
 				...newAdminForm,
 				[error.key]: {
 					...newAdminForm[error.key],
-					error: error.msg,
+					info: error.msg,
 					valid: false,
+					error: true,
 				},
 			});
 			setValid(false);
@@ -170,6 +177,7 @@ function NewAdmin() {
 								label={newAdminForm[key].label}
 								validation={newAdminForm[key].validation}
 								error={newAdminForm[key].error}
+								info={newAdminForm[key].info}
 								value={newAdminForm[key].value}
 								change={({ target }) =>
 									handleInput(target, newAdminForm[key].id)

@@ -111,18 +111,29 @@ class UserController {
 
 		//	Updating the User
 		let { password } = request.body.user;
-		const { status } = request.body.user;
+		const { first_name, last_name, email, status } = request.body.user;
 		if (password) password = bcrypt.hashSync(password, 10);
-		const [updatedUser] = await connection('User').where(user).update(
-			{
-				password,
-				status,
-				avatar_url,
-			},
-			['username', 'first_name', 'last_name', 'email', 'avatar_url', 'status']
-		);
+		try {
+			const [updatedUser] = await connection('User')
+				.where(user)
+				.update(
+					{ first_name, last_name, email, password, status, avatar_url },
+					[
+						'username',
+						'first_name',
+						'last_name',
+						'email',
+						'avatar_url',
+						'status',
+					]
+				);
 
-		return response.json(updatedUser);
+			return response.json(updatedUser);
+		} catch (error) {
+			return response.status(409).json({
+				error: errors.UNIQUE_CONSTRAIN(error.detail),
+			});
+		}
 	}
 
 	async remove(request, response, next) {

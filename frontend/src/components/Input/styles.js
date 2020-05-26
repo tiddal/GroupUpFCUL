@@ -9,12 +9,12 @@ export const Container = styled.div`
 	color: ${({ theme, error }) =>
 		error ? theme.colors.danger : theme.colors.secondary_text};
 	&:focus-within label {
-		color: ${({ theme, error }) =>
-			error ? theme.colors.danger : theme.colors.primary_variant};
+		color: ${({ theme, error, danger }) =>
+			error || danger ? theme.colors.danger : theme.colors.primary_variant};
 	}
 	&:focus-within input {
-		border-color: ${({ theme, error }) =>
-			error ? theme.colors.danger : theme.colors.primary_variant};
+		border-color: ${({ theme, error, danger }) =>
+			error || danger ? theme.colors.danger : theme.colors.primary_variant};
 	}
 	border-color: ${({ theme, error }) =>
 		error ? theme.colors.danger : theme.colors.secondary_text};
@@ -30,7 +30,7 @@ export const Label = styled.label`
 	display: flex;
 	transition: color 0.5s;
 	margin-top: -60px;
-	line-height: 20px;
+	line-height: 18px;
 `;
 
 export const InputField = styled.input`
@@ -46,10 +46,12 @@ export const InputField = styled.input`
 	font-size: 16px;
 `;
 
-export const Error = styled.div`
+export const Info = styled.div`
 	height: 15px;
 	font-size: 12px;
-	color: ${({ theme }) => theme.colors.danger};
+	transition: color 0.5s;
+	color: ${({ theme, error }) =>
+		error ? theme.colors.danger : theme.colors.secondary_text};
 	margin-top: 2px;
 	width: 100%;
 	padding-left: 10px;

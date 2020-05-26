@@ -42,6 +42,9 @@ module.exports = {
 	edit: celebrate({
 		[Segments.BODY]: Joi.object().keys({
 			user: Joi.object({
+				first_name: Joi.string().pattern(/^[a-zA-Z\u00C0-\u017F ]+$/i),
+				last_name: Joi.string().pattern(/^[a-zA-Z\u00C0-\u017F ]+$/i),
+				email: Joi.string().email(),
 				status: Joi.string().valid('online', 'offline'),
 				password: Joi.string(),
 			}).required(),

@@ -62,9 +62,18 @@ export default {
 		}
 	},
 
-	editAdmin: async (user) => {
+	editAdmin: async (user, username) => {
 		try {
-			const response = await API.put('users', user);
+			const response = await API.put(`users/${username}`, { user });
+			return [response.data, response.status];
+		} catch ({ response }) {
+			return [response.data, response.status];
+		}
+	},
+
+	removeAdmin: async (username) => {
+		try {
+			const response = await API.delete(`users/${username}`);
 			return [response.data, response.status];
 		} catch ({ response }) {
 			return [response.data, response.status];

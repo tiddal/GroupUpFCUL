@@ -25,5 +25,9 @@ export const validate = (value, rules) => {
 		if (!valid && !msg) msg = 'Insira um nome válido.';
 	}
 
+	if (rules.match) {
+		valid = value === rules.match;
+	}
+
 	return [valid, msg];
 };

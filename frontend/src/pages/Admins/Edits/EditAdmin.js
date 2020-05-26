@@ -35,7 +35,8 @@ function EditAdmin({
 			value: '',
 			validation: { name: true },
 			valid: true,
-			error: '',
+			error: false,
+			info: '',
 		},
 		last_name: {
 			id: 'last_name',
@@ -44,7 +45,8 @@ function EditAdmin({
 			value: '',
 			validation: { name: true },
 			valid: true,
-			error: '',
+			error: false,
+			info: '',
 		},
 		email: {
 			id: 'email',
@@ -53,15 +55,16 @@ function EditAdmin({
 			value: '',
 			validation: { email: true },
 			valid: true,
-			error: '',
+			error: false,
+			info: '',
 		},
 	};
 	const { logout } = useAuth();
-	const [initializing, setInitializing] = useState(true);
 	const [editValid, setEditValid] = useState(false);
 	const [removeValid, setRemoveValid] = useState(false);
-	const [created, setCreated] = useState(false);
-	const [loading, setLoading] = useState(false);
+	const [edited, setEdited] = useState(false);
+	const [loadingEdit, setLoadingEdit] = useState(false);
+	const [loadingRemove, setLoadingRemove] = useState(false);
 	const [editAdminForm, setEditAdminForm] = useState(initialState);
 	const [removeAdminForm, setRemoveAdminForm] = useState({
 		username: {
@@ -69,9 +72,15 @@ function EditAdmin({
 			type: 'text',
 			label: 'Número de administrador',
 			value: '',
-			validation: { username: true },
+			validation: { match: user },
 			valid: false,
-			error: '',
+			error: false,
+			info: (
+				<div>
+					Escreva <strong>{user}</strong> para confirmar que quer remover este
+					utilizador
+				</div>
+			),
 		},
 	});
 
@@ -80,7 +89,6 @@ function EditAdmin({
 		async function getAdmin() {
 			const [response, status] = await adminService.getAdminByUsername(user);
 			if (!isCancelled) {
-				setInitializing(false);
 				if (status !== 200) {
 					return history.push('/admins/list');
 				}
@@ -101,7 +109,7 @@ function EditAdmin({
 	}, [user, history]);
 
 	function handleEditInputs(target, inputKey) {
-		const [valid, error] = validate(
+		const [valid, info] = validate(
 			target.value,
 			editAdminForm[inputKey].validation
 		);
@@ -111,7 +119,8 @@ function EditAdmin({
 				...editAdminForm[inputKey],
 				value: target.value,
 				valid,
-				error,
+				error: !valid,
+				info,
 			},
 		};
 		setEditAdminForm(updatedForm);
@@ -122,46 +131,38 @@ function EditAdmin({
 		setEditValid(validForm);
 	}
 
-	async function handleRemoveInput(target) {
-		const [valid, error] = validate(
-			target.value,
-			removeAdminForm.username.validation
-		);
+	function handleRemoveInput(target) {
+		const [valid] = validate(target.value, removeAdminForm.username.validation);
 		const updatedForm = {
 			...removeAdminForm,
 			username: {
 				...removeAdminForm.username,
 				value: target.value,
 				valid,
-				error,
+				error: !valid,
 			},
 		};
 		setRemoveAdminForm(updatedForm);
 		setRemoveValid(updatedForm.username.valid);
 	}
 
-	async function handleSubmission(event) {
+	async function handleEditSubmission(event) {
 		event.preventDefault();
-		setLoading(true);
+		if (!editValid) return;
+		setLoadingEdit(true);
 		const adminData = {};
 		Object.keys(editAdminForm).map(
 			(key) => (adminData[key] = editAdminForm[key].value)
 		);
-		adminData.password = 'password';
-		adminData.role = { type: 'admin', data: { previleges: 1 } };
-		const [response, status] = await adminService.createAdmin(adminData);
+		const [response, status] = await adminService.editAdmin(adminData, user);
 		const error = {};
 
 		switch (status) {
 			case 409:
-				if (response.error.key === 'email') {
-					error.key = 'email';
-					error.msg = 'Este email já se encontra registado.';
-					break;
-				}
-				error.key = 'username';
-				error.msg = 'Este número de utilizador já se encontra registado.';
+				error.key = 'email';
+				error.msg = 'Este email já se encontra registado.';
 				break;
+
 			case 400:
 				const field = response.validation.keys[0].split('.').pop();
 				const [, msg] = validate(field, { [field]: true });
@@ -179,17 +180,27 @@ function EditAdmin({
 				...editAdminForm,
 				[error.key]: {
 					...editAdminForm[error.key],
-					error: error.msg,
+					error: true,
 					valid: false,
+					info: error.msg,
 				},
 			});
 			setEditValid(false);
 		} else {
-			setEditAdminForm(initialState);
-			setCreated(true);
-			setTimeout(() => setCreated(false), 2000);
+			setEdited(true);
+			setTimeout(() => setEdited(false), 2000);
 		}
-		setLoading(false);
+		setLoadingEdit(false);
+	}
+
+	async function handleRemoveSubmission(event) {
+		event.preventDefault();
+		if (!removeValid) return;
+		setLoadingRemove(true);
+		const [, status] = await adminService.removeAdmin(user);
+		if (status !== 204) logout();
+		setLoadingEdit(false);
+		history.push('/admins/list');
 	}
 
 	return (
@@ -205,7 +216,7 @@ function EditAdmin({
 			<Context
 				path={[
 					{ tier: 'admins', title: 'admins' },
-					{ tier: 'admins/new', title: 'novo' },
+					{ tier: `admins/${user}/edit`, title: `editar ${user}` },
 				]}
 			/>
 			<Container>
@@ -214,7 +225,7 @@ function EditAdmin({
 						<FaEdit />
 						<span>{user}</span>
 					</Title>
-					<Form autoComplete="off" onSubmit={handleSubmission}>
+					<Form autoComplete="off" onSubmit={handleEditSubmission}>
 						{Object.keys(editAdminForm).map((key) => (
 							<Input
 								key={editAdminForm[key].id}
@@ -223,6 +234,7 @@ function EditAdmin({
 								label={editAdminForm[key].label}
 								validation={editAdminForm[key].validation}
 								error={editAdminForm[key].error}
+								info={editAdminForm[key].info}
 								value={editAdminForm[key].value}
 								change={({ target }) =>
 									handleEditInputs(target, editAdminForm[key].id)
@@ -230,14 +242,14 @@ function EditAdmin({
 							/>
 						))}
 						<Button disabled={!editValid}>
-							{loading ? <ButtonSpinner /> : 'Guardar'}
+							{loadingEdit ? <ButtonSpinner /> : 'Guardar'}
 						</Button>
 					</Form>
 					<Title danger>
 						<FaTrash />
-						<span>Remover</span>
+						<span>Remover administrador</span>
 					</Title>
-					<Form autoComplete="off">
+					<Form autoComplete="off" onSubmit={handleRemoveSubmission}>
 						<Input
 							key={removeAdminForm.username.id}
 							id={removeAdminForm.username.id}
@@ -245,18 +257,20 @@ function EditAdmin({
 							label={removeAdminForm.username.label}
 							validation={removeAdminForm.username.validation}
 							value={removeAdminForm.username.value}
+							error={removeAdminForm.username.error}
+							info={removeAdminForm.username.info}
 							change={({ target }) =>
 								handleRemoveInput(target, removeAdminForm.username.id)
 							}
+							danger
 						/>
-
-						<Button disabled={!removeValid}>
-							{loading ? <ButtonSpinner /> : 'Remover'}
+						<Button disabled={!removeValid} danger>
+							{loadingRemove ? <ButtonSpinner /> : 'Remover'}
 						</Button>
 					</Form>
 				</Sheet>
 			</Container>
-			<Notification popup={created} text={'Utilizador criado com sucesso.'} />
+			<Notification popup={edited} text={'Alterações guardadas.'} />
 		</>
 	);
 }
