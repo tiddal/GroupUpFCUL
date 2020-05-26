@@ -20,12 +20,12 @@ import {
 } from "react-icons/fa";
 import { useAuth } from "../../../hooks";
 
-function NewAdmin() {
+function NewStudent() {
   const initialState = {
     username: {
       id: "username",
       type: "text",
-      label: "Número de administrador",
+      label: "Número de aluno",
       value: "",
       validation: { required: true, username: true },
       valid: false,
@@ -67,24 +67,24 @@ function NewAdmin() {
   const [valid, setValid] = useState(false);
   const [created, setCreated] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [newAdminForm, setNewAdminForm] = useState(initialState);
+  const [newStudentForm, setNewStudentForm] = useState(initialState);
 
   function handleInput(target, inputKey) {
     const [valid, info] = validate(
       target.value,
-      newAdminForm[inputKey].validation
+      newStudentForm[inputKey].validation
     );
     const updatedForm = {
-      ...newAdminForm,
+      ...newStudentForm,
       [inputKey]: {
-        ...newAdminForm[inputKey],
+        ...newStudentForm[inputKey],
         value: target.value,
         valid,
         error: !valid,
         info,
       },
     };
-    setNewAdminForm(updatedForm);
+    setNewStudentForm(updatedForm);
     let validForm = true;
     for (let key in updatedForm) {
       validForm = updatedForm[key].valid && validForm;
@@ -96,13 +96,14 @@ function NewAdmin() {
     event.preventDefault();
     if (!valid) return;
     setLoading(true);
-    const adminData = {};
-    Object.keys(newAdminForm).map(
-      (key) => (adminData[key] = newAdminForm[key].value)
+    const studentData = {};
+    Object.keys(newStudentForm).map(
+      (key) => (studentData[key] = newStudentForm[key].value)
     );
-    adminData.password = "password";
-    adminData.role = { type: "admin", data: { previleges: 1 } };
-    const [response, status] = await adminService.createAdmin(adminData);
+    studentData.password = "password";
+    studentData.role = { type: "admin", data: { previleges: 1 } };
+    studentData.role = { type: "student", data: { previleges: 1 } };
+    const [response, status] = await adminService.createStudent(studentData);
     const error = {};
 
     switch (status) {
@@ -128,10 +129,10 @@ function NewAdmin() {
         break;
     }
     if (Object.keys(error).length > 0) {
-      setNewAdminForm({
-        ...newAdminForm,
+      setNewStudentForm({
+        ...newStudentForm,
         [error.key]: {
-          ...newAdminForm[error.key],
+          ...newStudentForm[error.key],
           info: error.msg,
           valid: false,
           error: true,
@@ -139,7 +140,7 @@ function NewAdmin() {
       });
       setValid(false);
     } else {
-      setNewAdminForm(initialState);
+      setNewStudentForm(initialState);
       setCreated(true);
       setTimeout(() => setCreated(false), 2000);
     }
@@ -158,29 +159,29 @@ function NewAdmin() {
       />
       <Context
         path={[
-          { tier: "admins", title: "admins" },
-          { tier: "admins/new", title: "novo" },
+          { tier: "students", title: "alunos" },
+          { tier: "students/new", title: "novo" },
         ]}
       />
       <Container>
         <Sheet>
           <Title>
             <FaAddressCard />
-            <span>Novo Administrador</span>
+            <span>Novo Aluno</span>
           </Title>
           <Form autoComplete="off" onSubmit={handleSubmission}>
-            {Object.keys(newAdminForm).map((key) => (
+            {Object.keys(newStudentForm).map((key) => (
               <Input
-                key={newAdminForm[key].id}
-                id={newAdminForm[key].id}
-                type={newAdminForm[key].type}
-                label={newAdminForm[key].label}
-                validation={newAdminForm[key].validation}
-                error={newAdminForm[key].error}
-                info={newAdminForm[key].info}
-                value={newAdminForm[key].value}
+                key={newStudentForm[key].id}
+                id={newStudentForm[key].id}
+                type={newStudentForm[key].type}
+                label={newStudentForm[key].label}
+                validation={newStudentForm[key].validation}
+                error={newStudentForm[key].error}
+                info={newStudentForm[key].info}
+                value={newStudentForm[key].value}
                 change={({ target }) =>
-                  handleInput(target, newAdminForm[key].id)
+                  handleInput(target, newStudentForm[key].id)
                 }
               />
             ))}
@@ -195,4 +196,4 @@ function NewAdmin() {
   );
 }
 
-export default NewAdmin;
+export default NewStudent;

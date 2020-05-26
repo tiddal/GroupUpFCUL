@@ -9,6 +9,7 @@ export default {
       return error;
     }
   },
+
   getProfessors: async () => {
     try {
       const response = await API.get("users/professors");
@@ -20,6 +21,14 @@ export default {
   getAdmins: async () => {
     try {
       const response = await API.get("users/admins");
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  },
+  getUnits: async () => {
+    try {
+      const response = await API.get("users/classes");
       return response.data;
     } catch (error) {
       return error;
@@ -99,19 +108,6 @@ export default {
       return [response.data, response.status];
     }
   },
-
-  loadAdminFile: async (file) => {
-    try {
-      const response = await API.post("users", file, {
-        headers: { "Content-Type": "application/json" },
-      });
-      return [response.data, response.status];
-    } catch ({ response }) {
-      if (!response) return ["Ficheiro alterado, faça o upload novamente.", 0];
-      return [response.data, response.status];
-    }
-  },
-
   editAdmin: async (user, username) => {
     try {
       const response = await API.put(`users/${username}`, { user });
@@ -121,15 +117,14 @@ export default {
     }
   },
 
-  removeAdmin: async (username) => {
+  getStudentByUsername: async (username) => {
     try {
-      const response = await API.delete(`users/${username}`);
+      const response = await API.get(`users/students/${username}`);
       return [response.data, response.status];
     } catch ({ response }) {
       return [response.data, response.status];
     }
   },
-
   getProfessorByUsername: async (username) => {
     try {
       const response = await API.get(`users/professors/${username}`);
@@ -138,7 +133,14 @@ export default {
       return [response.data, response.status];
     }
   },
-
+  createStudent: async (student) => {
+    try {
+      const response = await API.post("users", { users: [student] });
+      return [response.data, response.status];
+    } catch ({ response }) {
+      return [response.data, response.status];
+    }
+  },
   createProfessor: async (admin) => {
     try {
       const response = await API.post("users", { users: [admin] });
@@ -148,7 +150,7 @@ export default {
     }
   },
 
-  loadProfessorFile: async (file) => {
+  loadUserFile: async (file) => {
     try {
       const response = await API.post("users", file, {
         headers: { "Content-Type": "application/json" },
@@ -156,6 +158,15 @@ export default {
       return [response.data, response.status];
     } catch ({ response }) {
       if (!response) return ["Ficheiro alterado, faça o upload novamente.", 0];
+      return [response.data, response.status];
+    }
+  },
+
+  editStudent: async (user, username) => {
+    try {
+      const response = await API.put(`users/${username}`, { user });
+      return [response.data, response.status];
+    } catch ({ response }) {
       return [response.data, response.status];
     }
   },
@@ -171,14 +182,14 @@ export default {
       const response = await API.put(`users/professors/${username}`, {
         professor: { department, room },
       });
-      console.log(response.data);
+
       return [response.data, response.status];
     } catch ({ response }) {
       return [response.data, response.status];
     }
   },
 
-  removeProfessor: async (username) => {
+  removeUser: async (username) => {
     try {
       const response = await API.delete(`users/${username}`);
       return [response.data, response.status];

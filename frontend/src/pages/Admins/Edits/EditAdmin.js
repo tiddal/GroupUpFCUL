@@ -197,7 +197,7 @@ function EditAdmin({
     event.preventDefault();
     if (!removeValid) return;
     setLoadingRemove(true);
-    const [, status] = await adminService.removeAdmin(user);
+    const [, status] = await adminService.removeUser(user);
     if (status !== 204) logout();
     setLoadingEdit(false);
     history.push("/admins/list");

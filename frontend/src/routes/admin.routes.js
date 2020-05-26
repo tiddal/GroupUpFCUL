@@ -3,6 +3,7 @@ import Dashboard from "../pages/Admins/Dashboard";
 import AdminPanel from "../pages/Admins/Panels/AdminPanel";
 import ProfessorPanel from "../pages/Admins/Panels/ProfessorPanel";
 import CoursePanel from "../pages/Admins/Panels/CoursePanel";
+import StudentPanel from "../pages/Admins/Panels/StudentPanel";
 
 import NewAdmin from "../pages/Admins/NewEntries/NewAdmin";
 import ListAdmins from "../pages/Admins/Lists/ListAdmins";
@@ -18,6 +19,11 @@ import NewCourse from "../pages/Admins/NewEntries/NewCourse";
 import ListCourses from "../pages/Admins/Lists/ListCourses";
 import LoadCourseFile from "../pages/Admins/LoadFile/LoadCourseFile";
 import EditCourse from "../pages/Admins/Edits/EditCourse";
+
+import ListStudents from "../pages/Admins/Lists/ListStudents";
+import NewStudent from "../pages/Admins/NewEntries/NewStudent";
+import LoadStudentFile from "../pages/Admins/LoadFile/LoadStudentFile";
+import EditStudent from "../pages/Admins/Edits/EditStudent";
 
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
@@ -40,6 +46,11 @@ const AdminRoutes = () => (
       <Route path="/courses/list" component={ListCourses} />
       <Route path="/courses/file" component={LoadCourseFile} />
       <Route path="/courses/:course/edit" component={EditCourse} />
+      <Route path="/students" exact component={StudentPanel} />
+      <Route path="/students/list" exact component={ListStudents} />
+      <Route path="/students/:user/edit" exact component={EditStudent} />
+      <Route path="/students/new" exact component={NewStudent} />
+      <Route path="/students/file" exact component={LoadStudentFile} />
     </Switch>
   </BrowserRouter>
 );
