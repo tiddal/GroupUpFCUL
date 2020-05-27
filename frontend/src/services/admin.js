@@ -191,6 +191,18 @@ export default {
 				return [response.data, response.status];
 			}
 		},
+
+		unit: async (unit, course_code, unit_code) => {
+			try {
+				const response = await API.put(
+					`courses/${course_code}/units/${unit_code}`,
+					{ unit }
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
 	},
 
 	remove: {
@@ -205,6 +217,17 @@ export default {
 		course: async (code) => {
 			try {
 				const response = await API.delete(`courses/${code}`);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
+
+		unit: async (course_code, unit_code) => {
+			try {
+				const response = await API.delete(
+					`courses/${course_code}/units/${unit_code}`
+				);
 				return [response.data, response.status];
 			} catch ({ response }) {
 				return [response.data, response.status];

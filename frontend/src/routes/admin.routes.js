@@ -37,6 +37,7 @@ import EditAdmin from '../pages/Admins/Edits/EditAdmin';
 import EditProfessor from '../pages/Admins/Edits/EditProfessor';
 import EditStudent from '../pages/Admins/Edits/EditStudent';
 import EditCourse from '../pages/Admins/Edits/EditCourse';
+import EditUnit from '../pages/Admins/Edits/EditUnit';
 
 const AdminRoutes = () => (
 	<BrowserRouter>
@@ -71,6 +72,7 @@ const AdminRoutes = () => (
 			<Route exact path="/courses/:course/units" component={ListUnits} />
 			<Route path="/courses/:course/units/new" component={NewUnit} />
 			<Route exact path="/courses/:course/units/:unit" component={UnitPanel} />
+			<Route path="/courses/:course/units/:unit/edit" component={EditUnit} />
 		</Switch>
 	</BrowserRouter>
 );
