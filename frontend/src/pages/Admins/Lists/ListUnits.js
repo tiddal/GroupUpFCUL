@@ -30,7 +30,7 @@ import {
 function ListUnits({ location: { panelSearchInput } }) {
 	const {
 		params: { course },
-	} = useRouteMatch('/courses/:course/units/list');
+	} = useRouteMatch('/courses/:course/units');
 	const [initializing, setInitializing] = useState(true);
 	const [courseData, setCourseData] = useState({ initials: '', code: '' });
 	const [list, setList] = useState();
@@ -114,7 +114,7 @@ function ListUnits({ location: { panelSearchInput } }) {
 					path={[
 						{ tier: 'courses', title: 'cursos' },
 						{ tier: `courses/${course}`, title: courseData.initials },
-						{ tier: `courses/${course}/units/list`, title: 'cadeiras' },
+						{ tier: `courses/${course}/units`, title: 'cadeiras' },
 					]}
 				/>
 			)}
