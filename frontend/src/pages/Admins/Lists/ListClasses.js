@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useRouteMatch } from "react-router-dom";
 import adminService from "../../../services/admin";
 
 import Navigation from "../../../components/Navigation";
@@ -6,6 +7,7 @@ import Table from "../../../components/Table";
 import Context from "../../../components/Context";
 import { ButtonSpinner } from "../../../components/Spinner";
 import {
+  FaUsers,
   FaUserGraduate,
   FaUniversity,
   FaUserShield,
@@ -27,6 +29,15 @@ import {
 
 function ListClasses({ location: { panelSearchInput } }) {
   const [list, setList] = useState();
+  const [unitData, setUnitData] = useState({
+    course_initials: "",
+    course_code: "",
+    unit_initials: "",
+    unit_code: "",
+  });
+  const {
+    params: { course, unit },
+  } = useRouteMatch("/courses/:course/units/:unit");
   const [searchInput, setSearchInput] = useState({
     initial: panelSearchInput ? panelSearchInput : "",
     value: "",
@@ -34,13 +45,36 @@ function ListClasses({ location: { panelSearchInput } }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    async function setState() {
+      const [
+        { initials: course_initials, code: course_code },
+      ] = await adminService.get.courseByCode(course);
+      const [
+        { initials: unit_initials, code: unit_code },
+      ] = await adminService.get.unitByCode(course, unit);
+      console.log(unit_initials);
+      setUnitData({
+        course_initials,
+        course_code,
+        unit_initials,
+        unit_code,
+      });
+      setLoading(false);
+    }
+    setState();
+
     async function getClasses(code = "") {
       if (code === "") {
-        const response = await adminService.get.unit_classes();
+        const response = await adminService.get.classesFromUnit(course, unit);
+        console.log(response);
         const rows = response.map((class_) => createTableRow(class_));
         setList(rows);
       } else {
-        const [class_, status] = await adminService.get.class_(code);
+        const [class_, status] = await adminService.get.class_(
+          code,
+          course,
+          unit
+        );
         status === 200 ? setList([createTableRow(class_)]) : setList();
       }
     }
@@ -50,11 +84,15 @@ function ListClasses({ location: { panelSearchInput } }) {
     } else {
       getClasses();
     }
-  }, [searchInput]);
+  }, [searchInput, course, unit]);
 
   async function getClassByCode() {
     setLoading(true);
-    const [class_, status] = await adminService.get.class_(searchInput.value);
+    const [class_, status] = await adminService.get.class_(
+      searchInput.value,
+      course,
+      unit
+    );
     status === 200 ? setList([createTableRow(class_)]) : setList();
     setLoading(false);
   }
@@ -74,8 +112,7 @@ function ListClasses({ location: { panelSearchInput } }) {
       data: (
         <Link
           to={{
-            pathname: `courses/${course}/units/${unit}/classes/2019-2020/${class_.number}`,
-            initials: course.initials,
+            pathname: `/courses/${course}/units/${unit}/classes/2019-2020/${class_.number}`,
           }}
         >
           <FaExternalLinkAlt />
@@ -97,18 +134,28 @@ function ListClasses({ location: { panelSearchInput } }) {
       <Context
         path={[
           { tier: "courses", title: "cursos" },
-          { tier: `courses/${course}`, title: courseData.initials },
-          { tier: `courses/${course}/units/${unit}`, title: unitData.initials },
           {
-            tier: `courses/${course}/units/${unit}/list`,
-            title: "listar turmas",
+            tier: `courses/${unitData.course_code}`,
+            title: unitData.course_initials,
+          },
+          {
+            tier: `courses/${unitData.course_code}/units`,
+            title: "cadeiras",
+          },
+          {
+            tier: `courses/${unitData.course_code}/units/${unitData.unit_code}`,
+            title: unitData.unit_initials,
+          },
+          {
+            tier: `courses/${unitData.course_code}/units/${unitData.unit_code}/classes`,
+            title: "turmas",
           },
         ]}
       />
       <Container>
         <Sheet>
           <Title>
-            <FaUniversity />
+            <FaUsers />
             <span>Turmas</span>
           </Title>
           <SearchSection onSubmit={handleSearch}>
@@ -128,7 +175,7 @@ function ListClasses({ location: { panelSearchInput } }) {
           </SearchSection>
           <TableSection>
             <Table
-              columns_width={[11, 17, 22, 17, 17, 16]}
+              columns_width={[12, 17, 22, 20, 20, 9]}
               columns={[
                 { name: "Código" },
                 { name: "Ano Lectivo" },
