@@ -43,7 +43,7 @@ function CoursePanel() {
 	useEffect(() => {
 		async function setState() {
 			const [{ initials, code }] = await adminService.get.courseByCode(course);
-			const units = await adminService.get.units();
+			const units = await adminService.get.unitsFromCourse(course);
 			const classes = await adminService.get.classes();
 			setCourseData({ initials, code, units, classes });
 			setLoading(false);

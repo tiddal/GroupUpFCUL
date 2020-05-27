@@ -38,6 +38,22 @@ export default {
 			}
 		},
 
+		professorsFromClass: async (
+			number,
+			academic_year,
+			course_code,
+			unit_code
+		) => {
+			try {
+				const response = await API.get(
+					`courses/${course_code}/units/${unit_code}/classes/${academic_year}/${number}/professors`
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
+
 		students: async () => {
 			try {
 				const response = await API.get('users/students');
@@ -50,6 +66,22 @@ export default {
 		studentByUsername: async (username) => {
 			try {
 				const response = await API.get(`users/students/${username}`);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
+
+		studentsFromClass: async (
+			number,
+			academic_year,
+			course_code,
+			unit_code
+		) => {
+			try {
+				const response = await API.get(
+					`courses/${course_code}/units/${unit_code}/classes/${academic_year}/${number}/students`
+				);
 				return [response.data, response.status];
 			} catch ({ response }) {
 				return [response.data, response.status];
@@ -122,6 +154,17 @@ export default {
 				return error;
 			}
 		},
+
+		classByNumber: async (number, academic_year, course_code, unit_code) => {
+			try {
+				const response = await API.get(
+					`courses/${course_code}/units/${unit_code}/classes/${academic_year}/${number}`
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
 	},
 
 	create: {
@@ -137,7 +180,6 @@ export default {
 		course: async (course) => {
 			try {
 				const response = await API.post('courses', { courses: [course] });
-				console.log(response.data);
 				return [response.data, response.status];
 			} catch ({ response }) {
 				return [response.data, response.status];

@@ -129,7 +129,6 @@ function NewAdmin() {
 		professorData.room = undefined;
 		const [response, status] = await adminService.create.user(professorData);
 		const error = {};
-		console.log(response);
 		switch (status) {
 			case 409:
 				if (response.error.key === 'email') {

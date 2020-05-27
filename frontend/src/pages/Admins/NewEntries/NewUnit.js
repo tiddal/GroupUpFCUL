@@ -130,7 +130,6 @@ function NewUnit() {
 			courseData.code
 		);
 		const error = {};
-		console.log(response);
 		switch (status) {
 			case 409:
 				error.key = 'code';

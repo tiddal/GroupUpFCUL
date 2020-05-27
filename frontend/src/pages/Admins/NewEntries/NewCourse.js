@@ -102,7 +102,6 @@ function NewCourse() {
 		courseData.units = [];
 		const [response, status] = await adminService.create.course(courseData);
 		const error = {};
-		console.log(response);
 		switch (status) {
 			case 409:
 				error.key = 'code';

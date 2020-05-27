@@ -11,6 +11,7 @@ import CoursesPanel from '../pages/Admins/Panels/CoursesPanel';
 import StudentPanel from '../pages/Admins/Panels/StudentPanel';
 import CoursePanel from '../pages/Admins/Panels/CoursePanel';
 import UnitPanel from '../pages/Admins/Panels/UnitPanel';
+import ClassPanel from '../pages/Admins/Panels/ClassPanel';
 
 // New Entries
 import NewAdmin from '../pages/Admins/NewEntries/NewAdmin';
@@ -84,6 +85,10 @@ const AdminRoutes = () => (
 			<Route
 				path="/courses/:course/units/:unit/classes/new"
 				component={NewClass}
+			/>
+			<Route
+				path="/courses/:course/units/:unit/classes/:class_number"
+				component={ClassPanel}
 			/>
 		</Switch>
 	</BrowserRouter>

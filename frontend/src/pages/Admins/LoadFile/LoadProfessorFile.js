@@ -66,7 +66,6 @@ function LoadprofessorFile() {
 				}${createdUsers.length ? ':' : '.'}`;
 				break;
 			case 400:
-				console.log(response);
 				msg =
 					'Garanta que todos os campos referidos abaixo estão presentes e são válidos. 0 utilizadores criados.';
 				break;
