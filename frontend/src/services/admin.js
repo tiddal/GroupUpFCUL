@@ -115,7 +115,7 @@ export default {
 		classesFromUnit: async (course_code, unit_code) => {
 			try {
 				const response = await API.get(
-					`courses/${course_code}/units/${unit_code}/classes`
+					`courses/${course_code}/units/${unit_code}/classes/2019-2020`
 				);
 				return response.data;
 			} catch (error) {
@@ -148,6 +148,20 @@ export default {
 				const response = await API.post(`courses/${course}/units`, {
 					units: [unit],
 				});
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
+
+		class_: async (unit, course, class_) => {
+			try {
+				const response = await API.post(
+					`courses/${course}/units/${unit}/classes/`,
+					{
+						classes: [class_],
+					}
+				);
 				return [response.data, response.status];
 			} catch ({ response }) {
 				return [response.data, response.status];

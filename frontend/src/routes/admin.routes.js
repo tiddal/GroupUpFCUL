@@ -18,6 +18,7 @@ import NewProfessor from '../pages/Admins/NewEntries/NewProfessor';
 import NewStudent from '../pages/Admins/NewEntries/NewStudent';
 import NewCourse from '../pages/Admins/NewEntries/NewCourse';
 import NewUnit from '../pages/Admins/NewEntries/NewUnit';
+import NewClass from '../pages/Admins/NewEntries/NewClass';
 
 // Lists
 import ListAdmins from '../pages/Admins/Lists/ListAdmins';
@@ -25,6 +26,7 @@ import ListProfessors from '../pages/Admins/Lists/ListProfessors';
 import ListStudents from '../pages/Admins/Lists/ListStudents';
 import ListCourses from '../pages/Admins/Lists/ListCourses';
 import ListUnits from '../pages/Admins/Lists/ListUnits';
+import ListClasses from '../pages/Admins/Lists/ListClasses';
 
 // Load Files
 import LoadAdminFile from '../pages/Admins/LoadFile/LoadAdminFile';
@@ -73,6 +75,16 @@ const AdminRoutes = () => (
 			<Route path="/courses/:course/units/new" component={NewUnit} />
 			<Route exact path="/courses/:course/units/:unit" component={UnitPanel} />
 			<Route path="/courses/:course/units/:unit/edit" component={EditUnit} />
+			{/* Classes */}
+			<Route
+				exact
+				path="/courses/:course/units/:unit/classes/"
+				component={ListClasses}
+			/>
+			<Route
+				path="/courses/:course/units/:unit/classes/new"
+				component={NewClass}
+			/>
 		</Switch>
 	</BrowserRouter>
 );
