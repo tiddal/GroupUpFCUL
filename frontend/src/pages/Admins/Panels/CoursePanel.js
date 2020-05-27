@@ -35,26 +35,26 @@ function CoursePanel() {
 		classes: [],
 	});
 	const [searchInput, setSearchInput] = useState('');
-	const match = useRouteMatch('/courses/:course');
+	const {
+		params: { course },
+	} = useRouteMatch('/courses/:course');
 	const history = useHistory();
 
 	useEffect(() => {
 		async function setState() {
-			const [{ initials, code }] = await adminService.get.courseByCode(
-				match.params.course
-			);
+			const [{ initials, code }] = await adminService.get.courseByCode(course);
 			const units = await adminService.get.units();
 			const classes = await adminService.get.classes();
 			setCourseData({ initials, code, units, classes });
 			setLoading(false);
 		}
 		setState();
-	}, [match.params.course]);
+	}, [course]);
 
 	function handleSearch(event) {
 		event.preventDefault();
 		history.push({
-			pathname: '/courses/:code/list',
+			pathname: `/courses/${course}/units/list`,
 			panelSearchInput: searchInput,
 		});
 	}
@@ -73,7 +73,6 @@ function CoursePanel() {
 				<Context
 					path={[
 						{ tier: 'courses', title: 'cursos' },
-						{ tier: 'courses/list', title: 'listar' },
 						{ tier: `courses/${courseData.code}`, title: courseData.initials },
 					]}
 				/>
@@ -110,12 +109,12 @@ function CoursePanel() {
 				</SearchCard>
 
 				<XSmallCard
-					path={`/courses/${courseData.code}/list`}
+					path={`/courses/${courseData.code}/units/list`}
 					label={'Ver lista de Cadeiras'}
 					icon={<FaListUl />}
 				/>
 				<XSmallCard
-					path={`/courses/${courseData.code}/new`}
+					path={`/courses/${courseData.code}/units/new`}
 					label={'Adicionar Cadeira'}
 					icon={<FaBook />}
 				/>

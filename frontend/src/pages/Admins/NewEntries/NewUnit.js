@@ -74,7 +74,7 @@ function NewUnit() {
 			info: '',
 		},
 	};
-	const match = useRouteMatch('/courses/:course/new');
+	const match = useRouteMatch('/courses/:course/units/new');
 	const [initializng, setInitializing] = useState(true);
 	const [courseData, setCourseData] = useState({ initials: '', code: '' });
 	const { logout } = useAuth();
@@ -184,7 +184,10 @@ function NewUnit() {
 							tier: `courses/${courseData.code}`,
 							title: `${courseData.initials}`,
 						},
-						{ tier: `courses/${courseData.code}/new`, title: `nova cadeira` },
+						{
+							tier: `courses/${courseData.code}/units/new`,
+							title: `nova cadeira`,
+						},
 					]}
 				/>
 			)}

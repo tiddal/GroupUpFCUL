@@ -23,6 +23,7 @@ import ListAdmins from '../pages/Admins/Lists/ListAdmins';
 import ListProfessors from '../pages/Admins/Lists/ListProfessors';
 import ListStudents from '../pages/Admins/Lists/ListStudents';
 import ListCourses from '../pages/Admins/Lists/ListCourses';
+import ListUnits from '../pages/Admins/Lists/ListUnits';
 
 // Load Files
 import LoadAdminFile from '../pages/Admins/LoadFile/LoadAdminFile';
@@ -65,8 +66,9 @@ const AdminRoutes = () => (
 			<Route path="/courses/file" component={LoadCourseFile} />
 			<Route exact path="/courses/:course" component={CoursePanel} />
 			<Route path="/courses/:course/edit" component={EditCourse} />
-			<Route path="/courses/:course/new" component={NewUnit} />
 			{/* Units */}
+			<Route path="/courses/:course/units/new" component={NewUnit} />
+			<Route path="/courses/:course/units/list" component={ListUnits} />
 		</Switch>
 	</BrowserRouter>
 );

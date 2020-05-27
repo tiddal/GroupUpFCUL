@@ -83,6 +83,26 @@ export default {
 			}
 		},
 
+		unitsFromCourse: async (code) => {
+			try {
+				const response = await API.get(`courses/${code}/units`);
+				return response.data;
+			} catch (error) {
+				return error;
+			}
+		},
+
+		unitByCode: async (course_code, unit_code) => {
+			try {
+				const response = await API.get(
+					`courses/${course_code}/units/${unit_code}`
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
+
 		classes: async () => {
 			try {
 				const response = await API.get('classes/2019-2020');
