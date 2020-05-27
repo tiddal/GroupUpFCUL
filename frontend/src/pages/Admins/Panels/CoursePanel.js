@@ -40,11 +40,11 @@ function CoursePanel() {
 
 	useEffect(() => {
 		async function setState() {
-			const [{ initials, code }] = await adminService.getCourseByCode(
+			const [{ initials, code }] = await adminService.get.courseByCode(
 				match.params.course
 			);
-			const units = await adminService.getUnits();
-			const classes = await adminService.getClasses();
+			const units = await adminService.get.units();
+			const classes = await adminService.get.classes();
 			setCourseData({ initials, code, units, classes });
 			setLoading(false);
 		}
