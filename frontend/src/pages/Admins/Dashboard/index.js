@@ -35,12 +35,12 @@ function Dashboard() {
 
 	useEffect(() => {
 		async function setState() {
-			await setUsersStatus(setStudents, adminService.getStudents);
-			await setUsersStatus(setProfessors, adminService.getProfessors);
-			await setUsersStatus(setAdmins, adminService.getAdmins);
-			const courses = await adminService.getCourses();
-			const units = [];
-			const classes = [];
+			await setUsersStatus(setStudents, adminService.get.students);
+			await setUsersStatus(setProfessors, adminService.get.professors);
+			await setUsersStatus(setAdmins, adminService.get.admins);
+			const courses = await adminService.get.courses();
+			const units = await adminService.get.units();
+			const classes = await adminService.get.classes();
 			setCoursesData({ courses, units, classes });
 			setLoading(false);
 		}

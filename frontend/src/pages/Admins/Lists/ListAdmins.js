@@ -12,8 +12,8 @@ import {
 	FaUserTie,
 	FaListAlt,
 	FaSearch,
-	FaExternalLinkAlt,
 	FaPortrait,
+	FaEdit,
 } from 'react-icons/fa';
 
 import {
@@ -39,11 +39,13 @@ function ListAdmins({ location: { panelSearchInput } }) {
 	useEffect(() => {
 		async function getAdmins(username = '') {
 			if (username === '') {
-				const response = await adminService.getAdmins();
+				const response = await adminService.get.admins();
 				const rows = response.map((user) => createTableRow(user));
 				setList(rows);
 			} else {
-				const [admin, status] = await adminService.getAdminByUsername(username);
+				const [admin, status] = await adminService.get.adminByUsername(
+					username
+				);
 				status === 200 ? setList([createTableRow(admin)]) : setList();
 			}
 		}
@@ -57,7 +59,7 @@ function ListAdmins({ location: { panelSearchInput } }) {
 
 	async function getAdminByUsername() {
 		setLoading(true);
-		const [admin, status] = await adminService.getAdminByUsername(
+		const [admin, status] = await adminService.get.adminByUsername(
 			searchInput.value
 		);
 		status === 200 ? setList([createTableRow(admin)]) : setList();
@@ -86,7 +88,7 @@ function ListAdmins({ location: { panelSearchInput } }) {
 		{
 			data: (
 				<Link to={`/admins/${user.username}/edit`}>
-					<FaExternalLinkAlt />
+					<FaEdit />
 				</Link>
 			),
 		},

@@ -24,14 +24,14 @@ export const Sheet = styled.div`
 	flex-direction: column;
 	align-items: center;
 	@media (min-width: 768px) {
-		padding: 30px 40px 40px 40px;
+		padding: 30px 40px 20px 40px;
 		width: 660px;
 		border-radius: 10px;
 		box-shadow: ${({ theme }) => theme.box_shadow.primary};
 	}
 	@media (min-width: 1450px) {
 		width: 960px;
-		padding: 30px 40px 60px 40px;
+		padding: 30px 40px 20px 40px;
 	}
 `;
 

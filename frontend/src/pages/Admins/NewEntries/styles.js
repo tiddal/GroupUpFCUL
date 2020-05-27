@@ -6,6 +6,7 @@ export const Container = styled(Wrapper)`
 	height: 100vh;
 	@media (min-width: 768px) {
 		padding-top: 200px;
+		padding-bottom: 100px;
 		height: auto;
 		display: flex;
 		justify-content: center;

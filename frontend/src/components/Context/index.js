@@ -17,4 +17,4 @@ function Context({ path }) {
 	);
 }
 
-export default Context;
+export default React.memo(Context);

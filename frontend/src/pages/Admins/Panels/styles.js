@@ -19,7 +19,12 @@ export const Container = styled(Wrapper)`
 		align-items: center;
 	}
 	@media (min-width: 1450px) {
+		padding-top: 200px;
+		padding-bottom: 100px;
 		grid-template-columns: 285px 285px 285px;
+		grid-template-rows: 75px 250px 135px;
+		align-content: unset;
+		align-items: unset;
 	}
 `;
 

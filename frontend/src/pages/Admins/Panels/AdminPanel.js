@@ -39,7 +39,7 @@ function AdminPanel({ history }) {
 
 	useEffect(() => {
 		async function setState() {
-			await setUsersStatus(setAdmins, adminService.getAdmins);
+			await setUsersStatus(setAdmins, adminService.get.admins);
 			setLoading(false);
 		}
 		setState();

@@ -9,6 +9,7 @@ export const Container = styled(Wrapper)`
 		height: auto;
 		display: flex;
 		justify-content: center;
+		padding-bottom: 100px;
 	}
 `;
 

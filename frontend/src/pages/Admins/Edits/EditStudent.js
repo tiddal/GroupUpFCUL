@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useRouteMatch, useHistory } from 'react-router-dom';
+
 import adminService from '../../../services/admin';
 import { Container, Sheet, Title, Form, Button } from './styles';
 import Navigation from '../../../components/Navigation';
 import Context from '../../../components/Context';
 import Notification from '../../../components/Notification';
-import { ButtonSpinner } from '../../../components/Spinner';
+import Spinner, { ButtonSpinner } from '../../../components/Spinner';
 import Input from '../../../components/Input';
 import { validate } from '../../../validators';
 
@@ -18,12 +20,7 @@ import {
 } from 'react-icons/fa';
 import { useAuth } from '../../../hooks';
 
-function EditStudent({
-	match: {
-		params: { user },
-	},
-	history,
-}) {
+function EditStudent() {
 	const initialState = {
 		first_name: {
 			id: 'first_name',
@@ -56,7 +53,12 @@ function EditStudent({
 			info: '',
 		},
 	};
+	const {
+		params: { user },
+	} = useRouteMatch('/admins/:user');
+	const history = useHistory();
 	const { logout } = useAuth();
+	const [initializing, setInitializing] = useState(true);
 	const [editValid, setEditValid] = useState(false);
 	const [removeValid, setRemoveValid] = useState(false);
 	const [edited, setEdited] = useState(false);
@@ -84,7 +86,8 @@ function EditStudent({
 	useEffect(() => {
 		let isCancelled = false;
 		async function getStudent() {
-			const [response, status] = await adminService.getStudentByUsername(user);
+			const [response, status] = await adminService.get.studentByUsername(user);
+			setInitializing(false);
 			if (!isCancelled) {
 				if (status !== 200) {
 					return history.push('/students/list');
@@ -154,10 +157,7 @@ function EditStudent({
 		Object.keys(editStudentForm).map(
 			(key) => (studentData[key] = editStudentForm[key].value)
 		);
-		const [response, status] = await adminService.editStudent(
-			studentData,
-			user
-		);
+		const [response, status] = await adminService.edit.user(studentData, user);
 		const error = {};
 
 		switch (status) {
@@ -200,7 +200,7 @@ function EditStudent({
 		event.preventDefault();
 		if (!removeValid) return;
 		setLoadingRemove(true);
-		const [, status] = await adminService.removeUser(user);
+		const [, status] = await adminService.remove.user(user);
 		if (status !== 204) logout();
 		setLoadingEdit(false);
 		history.push('/students/list');
@@ -218,60 +218,64 @@ function EditStudent({
 			/>
 			<Context
 				path={[
-					{ tier: 'students', title: 'students' },
+					{ tier: 'students', title: 'Alunos' },
 					{ tier: `students/${user}/edit`, title: `editar ${user}` },
 				]}
 			/>
 			<Container>
-				<Sheet>
-					<Title>
-						<FaEdit />
-						<span>{user}</span>
-					</Title>
-					<Form autoComplete="off" onSubmit={handleEditSubmission}>
-						{Object.keys(editStudentForm).map((key) => (
+				{initializing ? (
+					<Spinner />
+				) : (
+					<Sheet>
+						<Title>
+							<FaEdit />
+							<span>{user}</span>
+						</Title>
+						<Form autoComplete="off" onSubmit={handleEditSubmission}>
+							{Object.keys(editStudentForm).map((key) => (
+								<Input
+									key={editStudentForm[key].id}
+									id={editStudentForm[key].id}
+									type={editStudentForm[key].type}
+									label={editStudentForm[key].label}
+									validation={editStudentForm[key].validation}
+									error={editStudentForm[key].error}
+									info={editStudentForm[key].info}
+									value={editStudentForm[key].value}
+									change={({ target }) =>
+										handleEditInputs(target, editStudentForm[key].id)
+									}
+								/>
+							))}
+							<Button disabled={!editValid}>
+								{loadingEdit ? <ButtonSpinner /> : 'Guardar'}
+							</Button>
+						</Form>
+						<Title danger>
+							<FaTrash />
+							<span>Remover Aluno</span>
+						</Title>
+						<Form autoComplete="off" onSubmit={handleRemoveSubmission}>
 							<Input
-								key={editStudentForm[key].id}
-								id={editStudentForm[key].id}
-								type={editStudentForm[key].type}
-								label={editStudentForm[key].label}
-								validation={editStudentForm[key].validation}
-								error={editStudentForm[key].error}
-								info={editStudentForm[key].info}
-								value={editStudentForm[key].value}
+								key={removeStudentForm.username.id}
+								id={removeStudentForm.username.id}
+								type={removeStudentForm.username.type}
+								label={removeStudentForm.username.label}
+								validation={removeStudentForm.username.validation}
+								value={removeStudentForm.username.value}
+								error={removeStudentForm.username.error}
+								info={removeStudentForm.username.info}
 								change={({ target }) =>
-									handleEditInputs(target, editStudentForm[key].id)
+									handleRemoveInput(target, removeStudentForm.username.id)
 								}
+								danger
 							/>
-						))}
-						<Button disabled={!editValid}>
-							{loadingEdit ? <ButtonSpinner /> : 'Guardar'}
-						</Button>
-					</Form>
-					<Title danger>
-						<FaTrash />
-						<span>Remover Aluno</span>
-					</Title>
-					<Form autoComplete="off" onSubmit={handleRemoveSubmission}>
-						<Input
-							key={removeStudentForm.username.id}
-							id={removeStudentForm.username.id}
-							type={removeStudentForm.username.type}
-							label={removeStudentForm.username.label}
-							validation={removeStudentForm.username.validation}
-							value={removeStudentForm.username.value}
-							error={removeStudentForm.username.error}
-							info={removeStudentForm.username.info}
-							change={({ target }) =>
-								handleRemoveInput(target, removeStudentForm.username.id)
-							}
-							danger
-						/>
-						<Button disabled={!removeValid} danger>
-							{loadingRemove ? <ButtonSpinner /> : 'Remover'}
-						</Button>
-					</Form>
-				</Sheet>
+							<Button disabled={!removeValid} danger>
+								{loadingRemove ? <ButtonSpinner /> : 'Remover'}
+							</Button>
+						</Form>
+					</Sheet>
+				)}
 			</Container>
 			<Notification popup={edited} text={'Alterações guardadas.'} />
 		</>

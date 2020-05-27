@@ -10,8 +10,7 @@ export const Container = styled(Wrapper)`
 		height: auto;
 		display: flex;
 		justify-content: center;
-	}
-	@media (min-width: 1450px) {
+		padding-bottom: 100px;
 	}
 `;
 
@@ -161,7 +160,9 @@ export const TableSection = styled.div`
 `;
 
 export const Avatar = styled.span`
-	display: block;
+	display: grid;
+	justify-content: center;
+	align-content: center;
 	margin: auto;
 	height: 15px;
 	width: 15px;
@@ -169,11 +170,9 @@ export const Avatar = styled.span`
 	border-radius: 50%;
 	overflow: hidden;
 	& > span {
-		display: inline-block;
-		line-height: -1%;
-		text-align: center;
 		color: #fff;
 		font-size: 9px;
+		line-height: 10px;
 		font-weight: 700;
 		text-transform: capitalize;
 	}
@@ -186,7 +185,12 @@ export const Avatar = styled.span`
 		height: 20px;
 		width: 20px;
 		& > span {
+			line-height: 15px;
 			font-size: 13px;
+		}
+		& > img {
+			height: 20px;
+			width: 20px;
 		}
 	}
 
@@ -194,7 +198,12 @@ export const Avatar = styled.span`
 		height: 25px;
 		width: 25px;
 		& > span {
+			line-height: 18px;
 			font-size: 16px;
+		}
+		& > img {
+			height: 25px;
+			width: 25px;
 		}
 	}
 `;
