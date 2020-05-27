@@ -22,54 +22,78 @@ import {
 } from "react-icons/fa";
 import { useAuth } from "../../../hooks";
 
-function EditCourse() {
+function EditClass() {
   const initialState = {
-    name: {
-      id: "name",
+    number: {
+      id: "number",
       type: "text",
-      label: "Nome",
+      label: "Número",
       value: "",
-      validation: { required: true, name: true },
+      validation: { required: true },
       valid: true,
       error: false,
       info: "",
     },
-    initials: {
-      id: "initials",
+    begins_at: {
+      id: "begins_at",
       type: "text",
-      label: "Sigla",
+      label: "Hora de inicio",
       value: "",
-      validation: { required: true, max: 3 },
+      validation: { required: true },
+      valid: true,
+      error: false,
+      info: "",
+    },
+    ends_at: {
+      id: "ends_at",
+      type: "text",
+      label: "Hora de fim",
+      value: "",
+      validation: { required: true },
+      valid: true,
+      error: false,
+      info: "",
+    },
+    week_day: {
+      id: "week_day",
+      type: "text",
+      label: "Dia da semana",
+      value: "",
+      validation: { required: true },
       valid: true,
       error: false,
       info: "",
     },
   };
   const {
-    params: { course },
-  } = useRouteMatch("/courses/:course/edit");
+    params: { course, unit, class_number },
+  } = useRouteMatch("/courses/:course/units/:unit/classes/:class_number");
   const history = useHistory();
   const { logout } = useAuth();
   const [initializing, setInitializing] = useState(true);
+  const [unitData, setUnitData] = useState({
+    course_initials: "",
+    unit_initials: "",
+  });
   const [editValid, setEditValid] = useState(false);
   const [removeValid, setRemoveValid] = useState(false);
   const [edited, setEdited] = useState(false);
   const [loadingEdit, setLoadingEdit] = useState(false);
   const [loadingRemove, setLoadingRemove] = useState(false);
-  const [editCourseForm, setEditCourseForm] = useState(initialState);
-  const [removeCourseForm, setRemoveCourseForm] = useState({
-    code: {
-      id: "code",
+  const [editForm, setEditForm] = useState(initialState);
+  const [removeForm, setRemoveForm] = useState({
+    number: {
+      id: "number",
       type: "text",
-      label: "Código do curso",
+      label: "Número da turma",
       value: "",
-      validation: { match: course },
+      validation: { match: class_number },
       valid: false,
       error: false,
       info: (
         <div>
-          Escreva <strong>{course}</strong> para confirmar que quer remover este
-          curso
+          Escreva <strong>{class_number}</strong> para confirmar que quer
+          remover esta turma.
         </div>
       ),
     },
@@ -77,15 +101,29 @@ function EditCourse() {
 
   useEffect(() => {
     let isCancelled = false;
-    async function getCourse() {
-      const [response, status] = await adminService.get.courseByCode(course);
+    async function getClass() {
+      const [
+        { initials: course_initials },
+      ] = await adminService.get.courseByCode(course);
+      const [{ initials: unit_initials }] = await adminService.get.unitByCode(
+        course,
+        unit
+      );
+      setUnitData({ course_initials, unit_initials });
+      const [response, status] = await adminService.get.classByNumber(
+        class_number,
+        "2019-2020",
+        course,
+        unit
+      );
       setInitializing(false);
       if (!isCancelled) {
         if (status !== 200) {
-          return history.push("/courses/list");
+          return history.push(`/courses/${course}/units/${unit}/classes`);
         }
+        response.academic_year = undefined;
         Object.keys(response).map((key) =>
-          setEditCourseForm((prevState) => {
+          setEditForm((prevState) => {
             if (key in prevState)
               return {
                 ...prevState,
@@ -96,26 +134,23 @@ function EditCourse() {
         );
       }
     }
-    getCourse();
+    getClass();
     return () => (isCancelled = true);
-  }, [course, history]);
+  }, [course, history, unit, class_number]);
 
   function handleEditInputs(target, inputKey) {
-    const [valid, info] = validate(
-      target.value,
-      editCourseForm[inputKey].validation
-    );
+    const [valid, info] = validate(target.value, editForm[inputKey].validation);
     const updatedForm = {
-      ...editCourseForm,
+      ...editForm,
       [inputKey]: {
-        ...editCourseForm[inputKey],
+        ...editForm[inputKey],
         value: target.value,
         valid,
         error: !valid,
         info,
       },
     };
-    setEditCourseForm(updatedForm);
+    setEditForm(updatedForm);
     let validForm = true;
     for (let key in updatedForm) {
       validForm = updatedForm[key].valid && validForm;
@@ -124,38 +159,38 @@ function EditCourse() {
   }
 
   function handleRemoveInput(target) {
-    const [valid] = validate(target.value, removeCourseForm.code.validation);
+    const [valid] = validate(target.value, removeForm.number.validation);
     const updatedForm = {
-      ...removeCourseForm,
-      code: {
-        ...removeCourseForm.code,
+      ...removeForm,
+      number: {
+        ...removeForm.number,
         value: target.value,
         valid,
         error: !valid,
       },
     };
-    setRemoveCourseForm(updatedForm);
-    setRemoveValid(updatedForm.code.valid);
+    setRemoveForm(updatedForm);
+    setRemoveValid(updatedForm.number.valid);
   }
 
   async function handleEditSubmission(event) {
     event.preventDefault();
     if (!editValid) return;
     setLoadingEdit(true);
-    const courseData = {};
-    Object.keys(editCourseForm).map(
-      (key) => (courseData[key] = editCourseForm[key].value)
-    );
-    const [response, status] = await adminService.edit.course(
-      courseData,
-      course
+    const classData = {};
+    Object.keys(editForm).map((key) => (classData[key] = editForm[key].value));
+    const [response, status] = await adminService.edit.class_(
+      classData,
+      class_number,
+      course,
+      unit
     );
     const error = {};
 
     switch (status) {
       case 409:
-        error.key = "code";
-        error.msg = "Já existe um curso com este código.";
+        error.key = "number";
+        error.msg = "Já existe uma turma com este número.";
         break;
 
       case 400:
@@ -171,10 +206,10 @@ function EditCourse() {
         break;
     }
     if (Object.keys(error).length > 0) {
-      setEditCourseForm({
-        ...editCourseForm,
+      setEditForm({
+        ...editForm,
         [error.key]: {
-          ...editCourseForm[error.key],
+          ...editForm[error.key],
           error: true,
           valid: false,
           info: error.msg,
@@ -192,10 +227,14 @@ function EditCourse() {
     event.preventDefault();
     if (!removeValid) return;
     setLoadingRemove(true);
-    const [, status] = await adminService.remove.course(course);
+    const [, status] = await adminService.remove.class_(
+      class_number,
+      course,
+      unit
+    );
     if (status !== 204) logout();
     setLoadingEdit(false);
-    history.push("/courses/");
+    history.push(`/courses/${course}/units/${unit}/`);
   }
 
   return (
@@ -214,9 +253,28 @@ function EditCourse() {
             { tier: "courses", title: "cursos" },
             {
               tier: `courses/${course}`,
-              title: `${editCourseForm.initials.value}`,
+              title: unitData.course_initials,
             },
-            { tier: `courses/${course}/edit`, title: `editar` },
+            {
+              tier: `courses/${course}/units`,
+              title: "cadeiras",
+            },
+            {
+              tier: `courses/${course}/units/${unit}`,
+              title: unitData.unit_initials,
+            },
+            {
+              tier: `courses/${course}/units/${unit}/classes`,
+              title: "turmas",
+            },
+            {
+              tier: `courses/${course}/units/${unit}/classes/${class_number}`,
+              title: class_number,
+            },
+            {
+              tier: `courses/${course}/units/${unit}/classes/${class_number}/edit`,
+              title: "editar",
+            },
           ]}
         />
       )}
@@ -228,21 +286,21 @@ function EditCourse() {
           <Sheet>
             <Title>
               <FaEdit />
-              <span>{editCourseForm.initials.value}</span>
+              <span>{editForm.number.value}</span>
             </Title>
             <Form autoComplete="off" onSubmit={handleEditSubmission}>
-              {Object.keys(editCourseForm).map((key) => (
+              {Object.keys(editForm).map((key) => (
                 <Input
-                  key={editCourseForm[key].id}
-                  id={editCourseForm[key].id}
-                  type={editCourseForm[key].type}
-                  label={editCourseForm[key].label}
-                  validation={editCourseForm[key].validation}
-                  error={editCourseForm[key].error}
-                  info={editCourseForm[key].info}
-                  value={editCourseForm[key].value}
+                  key={editForm[key].id}
+                  id={editForm[key].id}
+                  type={editForm[key].type}
+                  label={editForm[key].label}
+                  validation={editForm[key].validation}
+                  error={editForm[key].error}
+                  info={editForm[key].info}
+                  value={editForm[key].value}
                   change={({ target }) =>
-                    handleEditInputs(target, editCourseForm[key].id)
+                    handleEditInputs(target, editForm[key].id)
                   }
                 />
               ))}
@@ -252,20 +310,20 @@ function EditCourse() {
             </Form>
             <Title danger>
               <FaTrash />
-              <span>Remover curso</span>
+              <span>Remover turma</span>
             </Title>
             <Form autoComplete="off" onSubmit={handleRemoveSubmission}>
               <Input
-                key={removeCourseForm.code.id}
-                id={removeCourseForm.code.id}
-                type={removeCourseForm.code.type}
-                label={removeCourseForm.code.label}
-                validation={removeCourseForm.code.validation}
-                value={removeCourseForm.code.value}
-                error={removeCourseForm.code.error}
-                info={removeCourseForm.code.info}
+                key={removeForm.number.id}
+                id={removeForm.number.id}
+                type={removeForm.number.type}
+                label={removeForm.number.label}
+                validation={removeForm.number.validation}
+                value={removeForm.number.value}
+                error={removeForm.number.error}
+                info={removeForm.number.info}
                 change={({ target }) =>
-                  handleRemoveInput(target, removeCourseForm.code.id)
+                  handleRemoveInput(target, removeForm.number.id)
                 }
                 danger
               />
@@ -281,4 +339,4 @@ function EditCourse() {
   );
 }
 
-export default EditCourse;
+export default EditClass;
