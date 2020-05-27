@@ -132,6 +132,16 @@ export default {
 				return [response.data, response.status];
 			}
 		},
+		unit: async (unit, course) => {
+			try {
+				const response = await API.post(`courses/${course}/units`, {
+					units: [unit],
+				});
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
 	},
 
 	edit: {

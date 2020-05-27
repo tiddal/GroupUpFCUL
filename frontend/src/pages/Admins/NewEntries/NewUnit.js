@@ -125,8 +125,10 @@ function NewUnit() {
 		Object.keys(newUnitForm).map(
 			(key) => (unitData[key] = newUnitForm[key].value)
 		);
-		unitData.units = [];
-		const [response, status] = await adminService.create.unit(unitData);
+		const [response, status] = await adminService.create.unit(
+			unitData,
+			courseData.code
+		);
 		const error = {};
 		console.log(response);
 		switch (status) {
