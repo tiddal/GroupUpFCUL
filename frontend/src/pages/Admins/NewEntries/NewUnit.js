@@ -85,7 +85,7 @@ function NewUnit() {
 
 	useEffect(() => {
 		async function getCourse() {
-			const [{ initials, code }] = await adminService.getCourseByCode(
+			const [{ initials, code }] = await adminService.get.courseByCode(
 				match.params.course
 			);
 			setInitializing(false);
@@ -126,7 +126,7 @@ function NewUnit() {
 			(key) => (unitData[key] = newUnitForm[key].value)
 		);
 		unitData.units = [];
-		const [response, status] = await adminService.createUnit(unitData);
+		const [response, status] = await adminService.create.unit(unitData);
 		const error = {};
 		console.log(response);
 		switch (status) {
