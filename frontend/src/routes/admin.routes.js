@@ -20,6 +20,7 @@ import NewStudent from '../pages/Admins/NewEntries/NewStudent';
 import NewCourse from '../pages/Admins/NewEntries/NewCourse';
 import NewUnit from '../pages/Admins/NewEntries/NewUnit';
 import NewClass from '../pages/Admins/NewEntries/NewClass';
+import NewUserToClass from '../pages/Admins/NewEntries/NewUserToClass';
 
 // Lists
 import ListAdmins from '../pages/Admins/Lists/ListAdmins';
@@ -42,6 +43,7 @@ import EditProfessor from '../pages/Admins/Edits/EditProfessor';
 import EditStudent from '../pages/Admins/Edits/EditStudent';
 import EditCourse from '../pages/Admins/Edits/EditCourse';
 import EditUnit from '../pages/Admins/Edits/EditUnit';
+import EditClass from '../pages/Admins/Edits/EditClass';
 
 const AdminRoutes = () => (
 	<BrowserRouter>
@@ -93,8 +95,17 @@ const AdminRoutes = () => (
 				component={ClassPanel}
 			/>
 			<Route
+				exact
 				path="/courses/:course/units/:unit/classes/:class_number/members"
 				component={ListClassMembers}
+			/>
+			<Route
+				path="/courses/:course/units/:unit/classes/:class_number/edit"
+				component={EditClass}
+			/>
+			<Route
+				path="/courses/:course/units/:unit/classes/:class_number/members/new"
+				component={NewUserToClass}
 			/>
 		</Switch>
 	</BrowserRouter>

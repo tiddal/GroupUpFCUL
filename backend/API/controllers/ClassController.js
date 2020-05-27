@@ -104,16 +104,23 @@ class ClassController {
       week_day,
       academic_year,
     } = request.body.class;
-    const [updatedClass] = await connection("Class")
-      .where(class_)
-      .update({ number, begins_at, ends_at, week_day, academic_year }, [
-        "number",
-        "begins_at",
-        "ends_at",
-        "week_day",
-        "academic_year",
-      ]);
-    return response.json(updatedClass);
+    try {
+      const [updatedClass] = await connection("Class")
+        .where(class_)
+        .update({ number, begins_at, ends_at, week_day, academic_year }, [
+          "number",
+          "begins_at",
+          "ends_at",
+          "week_day",
+          "academic_year",
+        ]);
+
+      return response.json(updatedClass);
+    } catch (error) {
+      return response.status(409).json({
+        error: errors.UNIQUE_CONSTRAIN(error.detail),
+      });
+    }
   }
 
   async remove(request, response, next) {
