@@ -111,6 +111,17 @@ export default {
 				return error;
 			}
 		},
+
+		classesFromUnit: async (course_code, unit_code) => {
+			try {
+				const response = await API.get(
+					`courses/${course_code}/units/${unit_code}/classes`
+				);
+				return response.data;
+			} catch (error) {
+				return error;
+			}
+		},
 	},
 
 	create: {

@@ -10,6 +10,7 @@ import ProfessorPanel from '../pages/Admins/Panels/ProfessorPanel';
 import CoursesPanel from '../pages/Admins/Panels/CoursesPanel';
 import StudentPanel from '../pages/Admins/Panels/StudentPanel';
 import CoursePanel from '../pages/Admins/Panels/CoursePanel';
+import UnitPanel from '../pages/Admins/Panels/UnitPanel';
 
 // New Entries
 import NewAdmin from '../pages/Admins/NewEntries/NewAdmin';
@@ -67,8 +68,9 @@ const AdminRoutes = () => (
 			<Route exact path="/courses/:course" component={CoursePanel} />
 			<Route path="/courses/:course/edit" component={EditCourse} />
 			{/* Units */}
+			<Route exact path="/courses/:course/units" component={ListUnits} />
 			<Route path="/courses/:course/units/new" component={NewUnit} />
-			<Route path="/courses/:course/units/list" component={ListUnits} />
+			<Route exact path="/courses/:course/units/:unit" component={UnitPanel} />
 		</Switch>
 	</BrowserRouter>
 );
