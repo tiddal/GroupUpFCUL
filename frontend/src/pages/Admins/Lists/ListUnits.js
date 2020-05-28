@@ -141,7 +141,7 @@ function ListUnits({ location: { panelSearchInput } }) {
 					</SearchSection>
 					<TableSection>
 						<Table
-							columns_width={[11, 10, 12, 58, 9]}
+							columns_width={[11, 10, 20, 50, 9]}
 							columns={[
 								{ name: 'Código' },
 								{ name: 'Sigla' },

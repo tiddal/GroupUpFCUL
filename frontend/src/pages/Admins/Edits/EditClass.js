@@ -29,40 +29,89 @@ function EditClass() {
 			type: 'text',
 			label: 'Número',
 			value: '',
-			validation: { required: true },
+			validation: { required: true, class: true },
 			valid: true,
 			error: false,
 			info: '',
 		},
 		begins_at: {
 			id: 'begins_at',
-			type: 'text',
+			type: 'select',
 			label: 'Hora de inicio',
 			value: '',
 			validation: { required: true },
 			valid: true,
 			error: false,
 			info: '',
+			options: [
+				{ value: '9:00', text: '9:00' },
+				{ value: '9:30', text: '9:30' },
+				{ value: '10:00', text: '10:00' },
+				{ value: '10:30', text: '10:30' },
+				{ value: '11:00', text: '11:00' },
+				{ value: '11:30', text: '11:30' },
+				{ value: '12:00', text: '12:00' },
+				{ value: '12:30', text: '12:30' },
+				{ value: '13:00', text: '13:00' },
+				{ value: '13:30', text: '13:30' },
+				{ value: '14:30', text: '14:30' },
+				{ value: '15:00', text: '15:00' },
+				{ value: '15:30', text: '15:30' },
+				{ value: '16:00', text: '16:00' },
+				{ value: '16:30', text: '16:30' },
+				{ value: '17:00', text: '17:00' },
+				{ value: '17:30', text: '17:30' },
+				{ value: '18:00', text: '18:00' },
+				{ value: '18:30', text: '18:30' },
+			],
 		},
 		ends_at: {
 			id: 'ends_at',
-			type: 'text',
+			type: 'select',
 			label: 'Hora de fim',
 			value: '',
 			validation: { required: true },
 			valid: true,
 			error: false,
 			info: '',
+			options: [
+				{ value: '9:00', text: '9:00' },
+				{ value: '9:30', text: '9:30' },
+				{ value: '10:00', text: '10:00' },
+				{ value: '10:30', text: '10:30' },
+				{ value: '11:00', text: '11:00' },
+				{ value: '11:30', text: '11:30' },
+				{ value: '12:00', text: '12:00' },
+				{ value: '12:30', text: '12:30' },
+				{ value: '13:00', text: '13:00' },
+				{ value: '13:30', text: '13:30' },
+				{ value: '14:30', text: '14:30' },
+				{ value: '15:00', text: '15:00' },
+				{ value: '15:30', text: '15:30' },
+				{ value: '16:00', text: '16:00' },
+				{ value: '16:30', text: '16:30' },
+				{ value: '17:00', text: '17:00' },
+				{ value: '17:30', text: '17:30' },
+				{ value: '18:00', text: '18:00' },
+				{ value: '18:30', text: '18:30' },
+			],
 		},
 		week_day: {
 			id: 'week_day',
-			type: 'text',
+			type: 'select',
 			label: 'Dia da semana',
 			value: '',
 			validation: { required: true },
 			valid: true,
 			error: false,
 			info: '',
+			options: [
+				{ value: 1, text: 'Segunda-feira' },
+				{ value: 2, text: 'Terça-feira' },
+				{ value: 3, text: 'Quarta-feira' },
+				{ value: 4, text: 'Quinta-feira' },
+				{ value: 5, text: 'Sexta-feira' },
+			],
 		},
 	};
 	const {
@@ -124,11 +173,17 @@ function EditClass() {
 				response.academic_year = undefined;
 				Object.keys(response).map((key) =>
 					setEditForm((prevState) => {
-						if (key in prevState)
+						if (key in prevState) {
+							let value = response[key];
+							if (key === 'begins_at' || key === 'ends_at') {
+								value = response[key].slice(0, -3);
+							}
 							return {
 								...prevState,
-								[key]: { ...prevState[key], value: response[key] },
+								[key]: { ...prevState[key], value },
 							};
+						}
+
 						return prevState;
 					})
 				);
@@ -300,6 +355,7 @@ function EditClass() {
 									error={editForm[key].error}
 									info={editForm[key].info}
 									value={editForm[key].value}
+									options={editForm[key].options}
 									change={({ target }) =>
 										handleEditInputs(target, editForm[key].id)
 									}

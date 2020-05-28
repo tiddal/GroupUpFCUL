@@ -78,7 +78,7 @@ function EditProfessor() {
 	};
 	const {
 		params: { user },
-	} = useRouteMatch('/admins/:user');
+	} = useRouteMatch('/professors/:user');
 	const history = useHistory();
 	const [initializing, setInitializing] = useState(true);
 	const { logout } = useAuth();

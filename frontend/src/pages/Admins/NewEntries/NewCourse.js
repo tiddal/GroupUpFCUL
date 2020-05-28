@@ -53,13 +53,18 @@ function NewCourse() {
 		},
 		cycle: {
 			id: 'cycle',
-			type: 'text',
+			type: 'select',
 			label: 'Ciclo',
-			value: '',
-			validation: { required: true },
+			value: 1,
+			validation: { required: true, cycle: true },
 			valid: false,
 			error: false,
 			info: '',
+			options: [
+				{ value: 1, text: 'Licenciatura' },
+				{ value: 2, text: 'Mestrado' },
+				{ value: 3, text: 'Doutoramento' },
+			],
 		},
 	};
 	const { logout } = useAuth();
@@ -83,6 +88,7 @@ function NewCourse() {
 				info,
 			},
 		};
+		console.log(updatedForm);
 		setNewCourseForm(updatedForm);
 		let validForm = true;
 		for (let key in updatedForm) {
@@ -171,6 +177,7 @@ function NewCourse() {
 								error={newCourseForm[key].error}
 								info={newCourseForm[key].info}
 								value={newCourseForm[key].value}
+								options={newCourseForm[key].options}
 								change={({ target }) =>
 									handleInput(target, newCourseForm[key].id)
 								}

@@ -45,13 +45,17 @@ function NewUnit() {
 		},
 		semester: {
 			id: 'semester',
-			type: 'text',
+			type: 'select',
 			label: 'Semestre',
-			value: '',
-			validation: { required: true },
+			value: 1,
+			validation: { required: true, semester: true },
 			valid: false,
 			error: false,
 			info: '',
+			options: [
+				{ value: 1, text: '1º Semestre' },
+				{ value: 2, text: '2º Semestre' },
+			],
 		},
 		initials: {
 			id: 'initials',
@@ -209,6 +213,7 @@ function NewUnit() {
 								error={newUnitForm[key].error}
 								info={newUnitForm[key].info}
 								value={newUnitForm[key].value}
+								options={newUnitForm[key].options}
 								change={({ target }) =>
 									handleInput(target, newUnitForm[key].id)
 								}

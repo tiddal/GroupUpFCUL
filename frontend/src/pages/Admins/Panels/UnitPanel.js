@@ -30,9 +30,7 @@ function UnitPanel() {
 	const [loading, setLoading] = useState(true);
 	const [unitData, setUnitData] = useState({
 		course_initials: '',
-		course_code: '',
 		unit_initials: '',
-		unit_code: '',
 		classes: [],
 	});
 	const [searchInput, setSearchInput] = useState('');
@@ -44,17 +42,20 @@ function UnitPanel() {
 	useEffect(() => {
 		async function setState() {
 			const [
-				{ initials: course_initials, code: course_code },
+				{ initials: course_initials },
 			] = await adminService.get.courseByCode(course);
-			const [
-				{ initials: unit_initials, code: unit_code },
-			] = await adminService.get.unitByCode(course, unit);
-			const classes = await adminService.get.classesFromUnit(course, unit);
+			const [{ initials: unit_initials }] = await adminService.get.unitByCode(
+				course,
+				unit
+			);
+			const classes = await adminService.get.classesFromUnit(
+				course,
+				unit,
+				'2019-2020'
+			);
 			setUnitData({
 				course_initials,
-				course_code,
 				unit_initials,
-				unit_code,
 				classes,
 			});
 			setLoading(false);
@@ -85,15 +86,15 @@ function UnitPanel() {
 					path={[
 						{ tier: 'courses', title: 'cursos' },
 						{
-							tier: `courses/${unitData.course_code}`,
+							tier: `courses/${course}`,
 							title: unitData.course_initials,
 						},
 						{
-							tier: `courses/${unitData.course_code}/units`,
+							tier: `courses/${course}/units`,
 							title: 'cadeiras',
 						},
 						{
-							tier: `courses/${unitData.course_code}/units/${unitData.unit_code}`,
+							tier: `courses/${course}/units/${unit}`,
 							title: unitData.unit_initials,
 						},
 					]}
@@ -128,17 +129,17 @@ function UnitPanel() {
 				</SearchCard>
 
 				<XSmallCard
-					path={`/courses/${unitData.course_code}/units/${unitData.unit_code}/classes`}
+					path={`/courses/${course}/units/${unit}/classes`}
 					label={'Ver Turmas'}
 					icon={<FaListUl />}
 				/>
 				<XSmallCard
-					path={`/courses/${unitData.course_code}/units/${unitData.unit_code}/classes/new`}
+					path={`/courses/${course}/units/${unit}/classes/new`}
 					label={'Adicionar Turma'}
 					icon={<FaUsers />}
 				/>
 				<XSmallCard
-					path={`/courses/${unitData.course_code}/units/${unitData.unit_code}/edit`}
+					path={`/courses/${course}/units/${unit}/edit`}
 					label={'Editar Cadeira'}
 					icon={<FaEdit />}
 				/>

@@ -49,20 +49,24 @@ function EditUnit() {
 			type: 'text',
 			label: 'ECTSs',
 			value: '',
-			validation: { required: true, max: 3 },
+			validation: { required: true },
 			valid: true,
 			error: false,
 			info: '',
 		},
 		semester: {
 			id: 'semester',
-			type: 'text',
+			type: 'select',
 			label: 'Semestre',
 			value: '',
-			validation: { required: true, max: 3 },
+			validation: { required: true, semester: true },
 			valid: true,
 			error: false,
 			info: '',
+			options: [
+				{ value: 1, text: '1º Semestre' },
+				{ value: 2, text: '2º Semestre' },
+			],
 		},
 	};
 	const {
@@ -271,6 +275,7 @@ function EditUnit() {
 									error={editForm[key].error}
 									info={editForm[key].info}
 									value={editForm[key].value}
+									options={editForm[key].options}
 									change={({ target }) =>
 										handleEditInputs(target, editForm[key].id)
 									}

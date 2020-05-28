@@ -31,6 +31,7 @@ export const Label = styled.label`
 	transition: color 0.5s;
 	margin-top: -60px;
 	line-height: 18px;
+	position: relative;
 `;
 
 export const InputField = styled.input`
@@ -44,6 +45,53 @@ export const InputField = styled.input`
 	color: ${({ theme }) => theme.colors.text};
 	transition: border-color 0.5s;
 	font-size: 16px;
+`;
+
+export const Select = styled.div`
+	height: 50px;
+	width: 100%;
+	border-color: inherit;
+	position: relative;
+	select {
+		position: relative;
+		border: 1px solid;
+		border-color: inherit;
+		background: ${({ theme }) => theme.colors.background};
+		transition: border-color 0.5s;
+		appearance: none;
+		border-radius: 5px;
+		height: 100%;
+		width: 100%;
+		background: transparent;
+		padding: 0 20px;
+		color: ${({ theme }) => theme.colors.text};
+		font-size: 16px;
+		cursor: pointer;
+		&:focus {
+			border-color: ${({ theme, danger }) =>
+				danger ? theme.colors.danger : theme.colors.primary_variant};
+		}
+		&:active {
+			border-color: ${({ theme, danger }) =>
+				danger ? theme.colors.danger : theme.colors.primary_variant};
+		}
+
+		option {
+			background: ${({ theme }) => theme.colors.background};
+			color: ${({ theme }) => theme.colors.text};
+		}
+	}
+	span {
+		position: absolute;
+		height: 100%;
+		right: 15px;
+		top: 16px;
+		z-index: 0;
+		svg {
+			font-size: 18px;
+			color: ${({ theme }) => theme.colors.primary_variant};
+		}
+	}
 `;
 
 export const Info = styled.div`

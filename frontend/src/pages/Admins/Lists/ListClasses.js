@@ -44,14 +44,20 @@ function ListClasses({ location: { panelSearchInput } }) {
 		value: '',
 	});
 	const [loading, setLoading] = useState(true);
+	const weekDays = {
+		1: 'Segunda-feira',
+		2: 'Terça-feira',
+		3: 'Quarta-feira',
+		4: 'Quinta-feira',
+		5: 'Sexta-feira',
+	};
 
 	const createTableRow = useCallback(
 		(class_) => [
 			{ data: class_.number },
-			{ data: class_.academic_year },
-			{ data: class_.week_day },
-			{ data: class_.begins_at },
-			{ data: class_.ends_at },
+			{ data: weekDays[class_.week_day] },
+			{ data: class_.begins_at.slice(0, -3) },
+			{ data: class_.ends_at.slice(0, -3) },
 			{
 				data: (
 					<Link
@@ -64,7 +70,7 @@ function ListClasses({ location: { panelSearchInput } }) {
 				),
 			},
 		],
-		[course, unit]
+		[course, unit, weekDays]
 	);
 
 	useEffect(() => {
@@ -176,13 +182,12 @@ function ListClasses({ location: { panelSearchInput } }) {
 					</SearchSection>
 					<TableSection>
 						<Table
-							columns_width={[12, 17, 22, 20, 20, 9]}
+							columns_width={[13, 26, 26, 26, 9]}
 							columns={[
 								{ name: 'Código' },
-								{ name: 'Ano Lectivo' },
 								{ name: 'Dia da Semana' },
-								{ name: 'Hora Inicio' },
-								{ name: 'Hora Fim' },
+								{ name: 'Hora de Inicio' },
+								{ name: 'Hora de Fim' },
 							]}
 							rows={list}
 						/>

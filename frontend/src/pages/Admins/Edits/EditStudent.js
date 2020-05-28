@@ -55,7 +55,7 @@ function EditStudent() {
 	};
 	const {
 		params: { user },
-	} = useRouteMatch('/admins/:user');
+	} = useRouteMatch('/students/:user');
 	const history = useHistory();
 	const { logout } = useAuth();
 	const [initializing, setInitializing] = useState(true);
