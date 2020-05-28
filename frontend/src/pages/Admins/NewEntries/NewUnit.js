@@ -180,7 +180,6 @@ function NewUnit() {
 				<Context
 					path={[
 						{ tier: 'courses', title: 'cursos' },
-						{ tier: 'courses/list', title: 'listar' },
 						{
 							tier: `courses/${courseData.code}`,
 							title: `${courseData.initials}`,

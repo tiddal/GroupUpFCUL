@@ -152,6 +152,16 @@ export const Link = styled(NavLink)`
 	}
 `;
 
+export const RemoveButton = styled(Link).attrs({ as: 'button' })`
+	background: ${({ theme }) => theme.colors.danger};
+	@media (min-width: 1450px) {
+		&:hover {
+			cursor: pointer;
+			background: red;
+		}
+	}
+`;
+
 export const TableSection = styled.div`
 	width: 100%;
 	display: flex;

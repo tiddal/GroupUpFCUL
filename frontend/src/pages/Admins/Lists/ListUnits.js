@@ -32,13 +32,15 @@ function ListUnits({ location: { panelSearchInput } }) {
 		params: { course },
 	} = useRouteMatch('/courses/:course/units');
 	const [initializing, setInitializing] = useState(true);
-	const [courseData, setCourseData] = useState({ initials: '', code: '' });
+	const [courseData, setCourseData] = useState({ initials: '' });
+	const [units, setUnits] = useState();
 	const [list, setList] = useState();
+	const [update, setUpdate] = useState(true);
 	const [searchInput, setSearchInput] = useState({
 		initial: panelSearchInput ? panelSearchInput : '',
 		value: '',
 	});
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	const createTableRow = useCallback(
 		(unit) => [
@@ -59,44 +61,41 @@ function ListUnits({ location: { panelSearchInput } }) {
 
 	useEffect(() => {
 		async function getCourse() {
-			const [{ initials, code }] = await adminService.get.courseByCode(course);
-			setCourseData({ initials, code });
+			const [{ initials }] = await adminService.get.courseByCode(course);
+			setCourseData({ initials });
 			setInitializing(false);
 		}
-		async function getUnits(unitCode = '') {
-			if (unitCode === '') {
-				const units = await adminService.get.unitsFromCourse(course);
-				const rows = units.map((unit) => createTableRow(unit));
-				setList(rows);
-			} else {
-				const [unit, status] = await adminService.get.unitByCode(
-					course,
-					unitCode
-				);
-				status === 200 ? setList([createTableRow(unit)]) : setList();
-			}
-		}
-		getCourse();
-		if (searchInput.initial !== '') {
-			getUnits(searchInput.initial);
-		} else {
-			getUnits();
-		}
-	}, [searchInput, course, createTableRow]);
 
-	async function getUnitByCode() {
-		setLoading(true);
-		const [unit, status] = await adminService.get.unitByCode(
-			course,
-			searchInput.value
-		);
-		status === 200 ? setList([createTableRow(unit)]) : setList();
-		setLoading(false);
-	}
+		async function getUnits(code = '') {
+			let units = await adminService.get.unitsFromCourse(course);
+			setLoading(false);
+			setUnits(units);
+			if (code !== '')
+				units = units.filter((unit) => unit.code.toString() === code);
+			const rows = units.map((unit) => createTableRow(unit));
+			setList(!!rows.length ? rows : undefined);
+		}
+		if (update) {
+			getCourse();
+			if (searchInput.initial !== '') {
+				getUnits(searchInput.initial);
+			} else {
+				getUnits();
+			}
+			setUpdate(false);
+		}
+	}, [searchInput, course, createTableRow, update]);
 
 	function handleSearch(event) {
 		event.preventDefault();
-		getUnitByCode();
+		let rows = undefined;
+		const [unit] = units.filter(
+			(unit) => unit.code.toString() === searchInput.value
+		);
+		if (unit) rows = [createTableRow(unit)];
+		if (searchInput.value === '')
+			rows = units.map((unit) => createTableRow(unit));
+		setList(rows);
 	}
 
 	return (

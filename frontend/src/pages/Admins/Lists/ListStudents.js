@@ -28,46 +28,46 @@ import {
 } from './styles';
 
 function ListStudents({ location: { panelSearchInput } }) {
+	const [students, setStudents] = useState();
 	const [list, setList] = useState();
+	const [update, setUpdate] = useState(true);
 	const [searchInput, setSearchInput] = useState({
 		initial: panelSearchInput ? panelSearchInput : '',
 		value: '',
 	});
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		async function getStudents(username = '') {
-			if (username === '') {
-				const response = await adminService.get.students();
-				const rows = response.map((user) => createTableRow(user));
-				setList(rows);
+			let users = await adminService.get.students();
+			setLoading(false);
+			setStudents(users);
+			if (username !== '')
+				users = users.filter((user) => user.username === username);
+			const rows = users.map((user) => createTableRow(user));
+			setList(!!rows.length ? rows : undefined);
+		}
+
+		if (update) {
+			if (searchInput.initial !== '') {
+				getStudents(searchInput.initial);
 			} else {
-				const [student, status] = await adminService.get.studentByUsername(
-					username
-				);
-				status === 200 ? setList([createTableRow(student)]) : setList();
+				getStudents();
 			}
+			setUpdate(false);
 		}
-
-		if (searchInput.initial !== '') {
-			getStudents(searchInput.initial);
-		} else {
-			getStudents();
-		}
-	}, [searchInput]);
-
-	async function getStudentByUsername() {
-		setLoading(true);
-		const [student, status] = await adminService.get.studentByUsername(
-			searchInput.value
-		);
-		status === 200 ? setList([createTableRow(student)]) : setList();
-		setLoading(false);
-	}
+	}, [searchInput, update]);
 
 	function handleSearch(event) {
 		event.preventDefault();
-		getStudentByUsername();
+		let rows = undefined;
+		const [user] = students.filter(
+			(user) => user.username === searchInput.value
+		);
+		if (user) rows = [createTableRow(user)];
+		if (searchInput.value === '')
+			rows = students.map((user) => createTableRow(user));
+		setList(rows);
 	}
 
 	const createTableRow = (user) => [

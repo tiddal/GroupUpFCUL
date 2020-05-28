@@ -5,7 +5,6 @@ import adminService from '../../../services/admin';
 import Navigation from '../../../components/Navigation';
 import Table from '../../../components/Table';
 import Context from '../../../components/Context';
-import { ButtonSpinner } from '../../../components/Spinner';
 import {
 	FaUsers,
 	FaUserGraduate,
@@ -13,8 +12,8 @@ import {
 	FaUserShield,
 	FaUserTie,
 	FaSearch,
-	FaEdit,
 	FaPortrait,
+	FaMinus,
 } from 'react-icons/fa';
 
 import {
@@ -25,13 +24,15 @@ import {
 	SearchSection,
 	SearchBar,
 	Button,
-	Link,
+	RemoveButton,
 	TableSection,
 } from './styles';
 
+import { ButtonSpinner } from '../../../components/Spinner';
+
 function ListClassMembers({ location: { panelSearchInput } }) {
 	const [list, setList] = useState();
-	const [members, setMembers] = useState([]);
+	const [members, setMembers] = useState();
 	const [initializing, setInitializing] = useState(true);
 	const [unitData, setUnitData] = useState({
 		course_initials: '',
@@ -46,7 +47,34 @@ function ListClassMembers({ location: { panelSearchInput } }) {
 		initial: panelSearchInput ? panelSearchInput : '',
 		value: '',
 	});
-	const [loading, setLoading] = useState(false);
+	const [update, setUpdate] = useState(true);
+	const [loading, setLoading] = useState(true);
+
+	const removeFromClass = useCallback(
+		async (username, role) => {
+			if (role === 'Aluno') {
+				const [, status] = await adminService.remove.studentFromClass(
+					course,
+					unit,
+					'2019-2020',
+					class_number,
+					username
+				);
+				if (status === 204) setUpdate(true);
+			}
+			if (role === 'Professor') {
+				const [, status] = await adminService.remove.professorFromClass(
+					course,
+					unit,
+					'2019-2020',
+					class_number,
+					username
+				);
+				if (status === 204) setUpdate(true);
+			}
+		},
+		[class_number, course, unit]
+	);
 
 	const createTableRow = useCallback(
 		(user) => [
@@ -66,13 +94,15 @@ function ListClassMembers({ location: { panelSearchInput } }) {
 			{ data: `${user.first_name} ${user.last_name}`, align: 'left' },
 			{
 				data: (
-					<Link to={`/`}>
-						<FaEdit />
-					</Link>
+					<RemoveButton
+						onClick={() => removeFromClass(user.username, user.role)}
+					>
+						<FaMinus />
+					</RemoveButton>
 				),
 			},
 		],
-		[course, unit]
+		[removeFromClass]
 	);
 
 	useEffect(() => {
@@ -86,7 +116,6 @@ function ListClassMembers({ location: { panelSearchInput } }) {
 			);
 			setUnitData({ course_initials, unit_initials });
 			setInitializing(false);
-			setLoading(false);
 		}
 		setState();
 		async function getMembers(username = '') {
@@ -107,28 +136,34 @@ function ListClassMembers({ location: { panelSearchInput } }) {
 				...professor,
 				role: 'Professor',
 			}));
-			const users = students.concat(professors);
+			let users = professors.concat(students);
+			setLoading(false);
 			setMembers(users);
-			if (username === '') {
-				!!users.length ? setList([createTableRow(users)]) : setList();
+			if (username !== '')
+				users = users.filter((user) => user.username === username);
+			const rows = users.map((user) => createTableRow(user));
+			setList(!!rows.length ? rows : undefined);
+		}
+		if (update) {
+			if (searchInput.initial !== '') {
+				getMembers(searchInput.initial);
 			} else {
-				let member = members.filter(
-					(user) => user.username === searchInput.value
-				);
-				!!member.length ? setList([createTableRow(member)]) : setList();
+				getMembers();
 			}
+			setUpdate(false);
 		}
-		if (searchInput.initial !== '') {
-			getMembers(searchInput.initial);
-		} else {
-			getMembers();
-		}
-	}, [searchInput, course, unit, createTableRow]);
+	}, [searchInput, course, unit, class_number, createTableRow, update]);
 
 	function handleSearch(event) {
 		event.preventDefault();
-		let member = members.filter((user) => user.username === searchInput.value);
-		!!member.length ? setList([createTableRow(member)]) : setList();
+		let rows = undefined;
+		const [user] = members.filter(
+			(user) => user.username === searchInput.value
+		);
+		if (user) rows = [createTableRow(user)];
+		if (searchInput.value === '')
+			rows = members.map((user) => createTableRow(user));
+		setList(rows);
 	}
 
 	return (
@@ -167,7 +202,7 @@ function ListClassMembers({ location: { panelSearchInput } }) {
 						},
 						{
 							tier: `courses/${course}/units/${unit}/classes/${class_number}/members`,
-							title: 'elementos',
+							title: 'membros',
 						},
 					]}
 				/>
@@ -192,6 +227,7 @@ function ListClassMembers({ location: { panelSearchInput } }) {
 							}
 						/>
 						<Button>{loading ? <ButtonSpinner /> : <FaSearch />}</Button>
+
 						<span>Procurar por número de utilizador</span>
 					</SearchSection>
 					<TableSection>

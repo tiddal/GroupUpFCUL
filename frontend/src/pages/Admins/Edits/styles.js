@@ -106,7 +106,7 @@ export const Button = styled.button`
 		&:hover:enabled {
 			cursor: pointer;
 			background: ${({ theme: { colors }, danger }) =>
-				danger ? colors.danger : colors.primary_variant};
+				danger ? 'red' : colors.primary_variant};
 		}
 	}
 `;

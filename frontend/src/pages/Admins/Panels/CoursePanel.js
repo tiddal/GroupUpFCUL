@@ -54,7 +54,7 @@ function CoursePanel() {
 	function handleSearch(event) {
 		event.preventDefault();
 		history.push({
-			pathname: `/courses/${course}/units/list`,
+			pathname: `/courses/${course}/units`,
 			panelSearchInput: searchInput,
 		});
 	}

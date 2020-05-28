@@ -28,13 +28,13 @@ import {
 } from './styles';
 
 function ListClasses({ location: { panelSearchInput } }) {
+	const [classes, setClasses] = useState();
 	const [list, setList] = useState();
+	const [update, setUpdate] = useState(true);
 	const [initializing, setInitializing] = useState(true);
 	const [unitData, setUnitData] = useState({
 		course_initials: '',
-		course_code: '',
 		unit_initials: '',
-		unit_code: '',
 	});
 	const {
 		params: { course, unit },
@@ -43,7 +43,7 @@ function ListClasses({ location: { panelSearchInput } }) {
 		initial: panelSearchInput ? panelSearchInput : '',
 		value: '',
 	});
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	const createTableRow = useCallback(
 		(class_) => [
@@ -68,64 +68,57 @@ function ListClasses({ location: { panelSearchInput } }) {
 	);
 
 	useEffect(() => {
-		async function setState() {
+		async function getUnit() {
 			const [
-				{ initials: course_initials, code: course_code },
+				{ initials: course_initials },
 			] = await adminService.get.courseByCode(course);
-			const [
-				{ initials: unit_initials, code: unit_code },
-			] = await adminService.get.unitByCode(course, unit);
-			setUnitData({
-				course_initials,
-				course_code,
-				unit_initials,
-				unit_code,
-			});
+			const [{ initials: unit_initials }] = await adminService.get.unitByCode(
+				course,
+				unit
+			);
+			setUnitData({ course_initials, unit_initials });
 			setInitializing(false);
+		}
+
+		async function getClasses(number = '') {
+			let classes = await adminService.get.classesFromUnit(
+				course,
+				unit,
+				'2019-2020'
+			);
 			setLoading(false);
-		}
-		setState();
+			setClasses(classes);
 
-		async function getClasses(code = '') {
-			if (code === '') {
-				const classes = await adminService.get.classesFromUnit(course, unit);
-				const rows = classes.map((class_) => createTableRow(class_));
-				setList(rows);
-			} else {
-				const [class_, status] = await adminService.get.classByNumber(
-					code,
-					'2019-2020',
-					course,
-					unit
+			if (number !== '')
+				classes = classes.filter(
+					(class_) => class_.number.toString() === number
 				);
-				status === 200 ? setList([createTableRow(class_)]) : setList();
+			const rows = classes.map((class_) => createTableRow(class_));
+			setList(!!rows.length ? rows : undefined);
+		}
+
+		if (update) {
+			getUnit();
+			if (searchInput.initial !== '') {
+				getClasses(searchInput.initial);
+			} else {
+				getClasses();
 			}
+			setUpdate(false);
 		}
-
-		if (searchInput.initial !== '') {
-			getClasses(searchInput.initial);
-		} else {
-			getClasses();
-		}
-	}, [searchInput, course, unit, createTableRow]);
-
-	async function getClass() {
-		setLoading(true);
-		const [class_, status] = await adminService.get.classByNumber(
-			searchInput.value,
-			'2019-2020',
-			course,
-			unit
-		);
-		status === 200 ? setList([createTableRow(class_)]) : setList();
-		setLoading(false);
-	}
+	}, [searchInput, course, unit, createTableRow, update]);
 
 	function handleSearch(event) {
 		event.preventDefault();
-		getClass();
+		let rows = undefined;
+		const [class_] = classes.filter(
+			(class_) => class_.number.toString() === searchInput.value
+		);
+		if (class_) rows = [createTableRow(class_)];
+		if (searchInput.value === '')
+			rows = classes.map((class_) => createTableRow(class_));
+		setList(rows);
 	}
-
 	return (
 		<>
 			<Navigation
@@ -141,19 +134,19 @@ function ListClasses({ location: { panelSearchInput } }) {
 					path={[
 						{ tier: 'courses', title: 'cursos' },
 						{
-							tier: `courses/${unitData.course_code}`,
+							tier: `courses/${course}`,
 							title: unitData.course_initials,
 						},
 						{
-							tier: `courses/${unitData.course_code}/units`,
+							tier: `courses/${course}/units`,
 							title: 'cadeiras',
 						},
 						{
-							tier: `courses/${unitData.course_code}/units/${unitData.unit_code}`,
+							tier: `courses/${course}/units/${unit}`,
 							title: unitData.unit_initials,
 						},
 						{
-							tier: `courses/${unitData.course_code}/units/${unitData.unit_code}/classes`,
+							tier: `courses/${course}/units/${unit}/classes`,
 							title: 'turmas',
 						},
 					]}

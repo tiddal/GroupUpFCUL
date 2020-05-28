@@ -26,44 +26,46 @@ import {
 } from './styles';
 
 function ListCourses({ location: { panelSearchInput } }) {
+	const [courses, setCourses] = useState();
 	const [list, setList] = useState();
+	const [update, setUpdate] = useState(true);
 	const [searchInput, setSearchInput] = useState({
 		initial: panelSearchInput ? panelSearchInput : '',
 		value: '',
 	});
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		async function getCourses(code = '') {
-			if (code === '') {
-				const response = await adminService.get.courses();
-				const rows = response.map((course) => createTableRow(course));
-				setList(rows);
+			let courses = await adminService.get.courses();
+			setLoading(false);
+			setCourses(courses);
+			if (code !== '')
+				courses = courses.filter((course) => course.code.toString() === code);
+			const rows = courses.map((course) => createTableRow(course));
+			setList(!!rows.length ? rows : undefined);
+		}
+
+		if (update) {
+			if (searchInput.initial !== '') {
+				getCourses(searchInput.initial);
 			} else {
-				const [course, status] = await adminService.get.courseByCode(code);
-				status === 200 ? setList([createTableRow(course)]) : setList();
+				getCourses();
 			}
+			setUpdate(false);
 		}
-
-		if (searchInput.initial !== '') {
-			getCourses(searchInput.initial);
-		} else {
-			getCourses();
-		}
-	}, [searchInput]);
-
-	async function getCourseByCode() {
-		setLoading(true);
-		const [course, status] = await adminService.get.courseByCode(
-			searchInput.value
-		);
-		status === 200 ? setList([createTableRow(course)]) : setList();
-		setLoading(false);
-	}
+	}, [searchInput, update]);
 
 	function handleSearch(event) {
 		event.preventDefault();
-		getCourseByCode();
+		let rows = undefined;
+		const [course] = courses.filter(
+			(course) => course.code.toString() === searchInput.value
+		);
+		if (course) rows = [createTableRow(course)];
+		if (searchInput.value === '')
+			rows = courses.map((course) => createTableRow(course));
+		setList(rows);
 	}
 
 	const createTableRow = (course) => [

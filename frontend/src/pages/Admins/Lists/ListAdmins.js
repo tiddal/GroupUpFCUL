@@ -29,46 +29,44 @@ import {
 } from './styles';
 
 function ListAdmins({ location: { panelSearchInput } }) {
+	const [admins, setAdmins] = useState();
 	const [list, setList] = useState();
+	const [update, setUpdate] = useState(true);
 	const [searchInput, setSearchInput] = useState({
 		initial: panelSearchInput ? panelSearchInput : '',
 		value: '',
 	});
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		async function getAdmins(username = '') {
-			if (username === '') {
-				const response = await adminService.get.admins();
-				const rows = response.map((user) => createTableRow(user));
-				setList(rows);
+			let users = await adminService.get.admins();
+			setLoading(false);
+			setAdmins(users);
+			if (username !== '')
+				users = users.filter((user) => user.username === username);
+			const rows = users.map((user) => createTableRow(user));
+			setList(!!rows.length ? rows : undefined);
+		}
+
+		if (update) {
+			if (searchInput.initial !== '') {
+				getAdmins(searchInput.initial);
 			} else {
-				const [admin, status] = await adminService.get.adminByUsername(
-					username
-				);
-				status === 200 ? setList([createTableRow(admin)]) : setList();
+				getAdmins();
 			}
+			setUpdate(false);
 		}
-
-		if (searchInput.initial !== '') {
-			getAdmins(searchInput.initial);
-		} else {
-			getAdmins();
-		}
-	}, [searchInput]);
-
-	async function getAdminByUsername() {
-		setLoading(true);
-		const [admin, status] = await adminService.get.adminByUsername(
-			searchInput.value
-		);
-		status === 200 ? setList([createTableRow(admin)]) : setList();
-		setLoading(false);
-	}
+	}, [searchInput, update]);
 
 	function handleSearch(event) {
 		event.preventDefault();
-		getAdminByUsername();
+		let rows = undefined;
+		const [user] = admins.filter((user) => user.username === searchInput.value);
+		if (user) rows = [createTableRow(user)];
+		if (searchInput.value === '')
+			rows = admins.map((user) => createTableRow(user));
+		setList(rows);
 	}
 
 	const createTableRow = (user) => [

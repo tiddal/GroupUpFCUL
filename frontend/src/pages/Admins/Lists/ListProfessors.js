@@ -29,46 +29,46 @@ import {
 } from './styles';
 
 function ListProfessors({ location: { panelSearchInput } }) {
+	const [professors, setProfessors] = useState();
 	const [list, setList] = useState();
+	const [update, setUpdate] = useState(true);
 	const [searchInput, setSearchInput] = useState({
 		initial: panelSearchInput ? panelSearchInput : '',
 		value: '',
 	});
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		async function getProfessors(username = '') {
-			if (username === '') {
-				const response = await adminService.get.professors();
-				const rows = response.map((user) => createTableRow(user));
-				setList(rows);
+			let users = await adminService.get.professors();
+			setLoading(false);
+			setProfessors(users);
+			if (username !== '')
+				users = users.filter((user) => user.username === username);
+			const rows = users.map((user) => createTableRow(user));
+			setList(!!rows.length ? rows : undefined);
+		}
+
+		if (update) {
+			if (searchInput.initial !== '') {
+				getProfessors(searchInput.initial);
 			} else {
-				const [professor, status] = await adminService.get.professorByUsername(
-					username
-				);
-				status === 200 ? setList([createTableRow(professor)]) : setList();
+				getProfessors();
 			}
+			setUpdate(false);
 		}
-
-		if (searchInput.initial !== '') {
-			getProfessors(searchInput.initial);
-		} else {
-			getProfessors();
-		}
-	}, [searchInput]);
-
-	async function getProfessorByUsername() {
-		setLoading(true);
-		const [professor, status] = await adminService.get.professorByUsername(
-			searchInput.value
-		);
-		status === 200 ? setList([createTableRow(professor)]) : setList();
-		setLoading(false);
-	}
+	}, [searchInput, update]);
 
 	function handleSearch(event) {
 		event.preventDefault();
-		getProfessorByUsername();
+		let rows = undefined;
+		const [user] = professors.filter(
+			(user) => user.username === searchInput.value
+		);
+		if (user) rows = [createTableRow(user)];
+		if (searchInput.value === '')
+			rows = professors.map((user) => createTableRow(user));
+		setList(rows);
 	}
 
 	const createTableRow = (user) => [
