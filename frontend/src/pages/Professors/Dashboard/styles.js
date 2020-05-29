@@ -15,8 +15,7 @@ export const Container = styled(Wrapper)`
 		align-content: center;
 	}
 	@media (min-width: 1450px) {
-		padding-top: 200px;
-		padding-bottom: 100px;
+		padding-bottom: 75px;
 		grid-template-columns: 960px;
 	}
 `;

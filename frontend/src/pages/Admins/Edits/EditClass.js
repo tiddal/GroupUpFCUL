@@ -118,7 +118,7 @@ function EditClass() {
 	};
 	const {
 		params: { course, unit, class_number },
-	} = useRouteMatch('/courses/:course/units/:unit/classes/:class_number');
+	} = useRouteMatch('/courses/:course/units/:unit/classes/:class_number/edit');
 	const history = useHistory();
 	const { logout } = useAuth();
 	const [initializing, setInitializing] = useState(true);
@@ -179,6 +179,7 @@ function EditClass() {
 							let value = response[key];
 							if (key === 'begins_at' || key === 'ends_at') {
 								value = response[key].slice(0, -3);
+								console.log(value);
 							}
 							return {
 								...prevState,
