@@ -59,7 +59,9 @@ export const SmallContainer = styled.div`
 	background: ${({ theme: { colors } }) => colors.background};
 	box-shadow: ${({ theme }) => theme.box_shadow.secondary};
 	border-radius: 10px;
-	display: flex;
+	display: grid;
+	grid-template-columns: 100%;
+	grid-template-rows: 50px 150px 50px;
 	flex-direction: column;
 	justify-content: space-between;
 	overflow: hidden;
@@ -68,6 +70,7 @@ export const SmallContainer = styled.div`
 export const XSmallContainer = styled(SmallContainer)`
 	width: 285px;
 	height: 135px;
+	grid-template-rows: 85px 50px;
 	border-radius: 10px;
 	@media (min-width: 768px) {
 		width: 184px;
@@ -85,6 +88,7 @@ export const BigContainer = styled(SmallContainer)`
 `;
 
 export const StatusContainer = styled(SmallContainer)`
+	display: flex;
 	width: 285px;
 	height: 40px;
 	flex-direction: row;
@@ -109,6 +113,7 @@ export const StatusContainer = styled(SmallContainer)`
 `;
 
 export const SearchCardContainer = styled(SmallContainer)`
+	display: flex;
 	width: 285px;
 	height: 175px;
 	border-radius: 0;
