@@ -1,6 +1,9 @@
 import React from 'react';
 
 import {
+	Container,
+	TwoThirdsContainer,
+	MiniContainer,
 	XSmallContainer,
 	SmallContainer,
 	BigContainer,
@@ -9,11 +12,53 @@ import {
 	Title,
 	SmallTitle,
 	Link,
-	Info,
+	Content,
 	Icon,
 } from './styles';
 
 import { FaSearch } from 'react-icons/fa';
+
+export function Card({ title, icon, link, content }) {
+	return (
+		<Container>
+			<Title>
+				{icon}
+				<span>{title}</span>
+			</Title>
+			<Content>{content}</Content>
+			{link && (
+				<Link to={link.path}>
+					<span>{link.label}</span>
+				</Link>
+			)}
+		</Container>
+	);
+}
+
+export function TwoThirdsCard({ title, icon, link, content }) {
+	return (
+		<TwoThirdsContainer>
+			<Title>
+				{icon}
+				<span>{title}</span>
+			</Title>
+			<Content>{content}</Content>
+			{link && (
+				<Link to={link.path}>
+					<span>{link.label}</span>
+				</Link>
+			)}
+		</TwoThirdsContainer>
+	);
+}
+
+export function MiniCard({ data }) {
+	return (
+		<MiniContainer>
+			<span>{data}</span>
+		</MiniContainer>
+	);
+}
 
 export function SmallCard({ title, icon, path, label, data }) {
 	return (
@@ -22,7 +67,7 @@ export function SmallCard({ title, icon, path, label, data }) {
 				{icon}
 				<span>{title}</span>
 			</Title>
-			<Info>{data}</Info>
+			<Content>{data}</Content>
 			<Link to={path}>
 				<span>{label}</span>
 			</Link>
@@ -37,7 +82,7 @@ export function BigCard({ title, icon, path, label, data }) {
 				{icon}
 				<span>{title}</span>
 			</Title>
-			<Info>{data}</Info>
+			<Content>{data}</Content>
 			<Link to={path}>
 				<span>{label}</span>
 			</Link>

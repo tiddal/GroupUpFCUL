@@ -1,17 +1,15 @@
-import React from "react";
+import React from 'react';
 
-import { Container, Text, InvisibleRect, Line } from "./styles";
+import { Container } from './styles';
 
-function Separator({ text }) {
-  return (
-    <Container>
-      <Line>
-        <InvisibleRect>
-          <Text>{text}</Text>
-        </InvisibleRect>
-      </Line>
-    </Container>
-  );
+function Separator({ children }) {
+	return (
+		<Container>
+			<div>
+				<span>{children}</span>
+			</div>
+		</Container>
+	);
 }
 
 export default Separator;

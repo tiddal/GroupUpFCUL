@@ -9,18 +9,24 @@ function Sidebar({ items, sidebarState, profilebarState, toggleSidebar }) {
 			<Container sidebarState={sidebarState} profilebarState={profilebarState}>
 				<ItemGroup>
 					<Item exact to="/" onClick={() => sidebarState && toggleSidebar()}>
-						<FaColumns />
+						<div>
+							<FaColumns />
+						</div>
 						<span>Dashboard</span>
 					</Item>
 					<Item
 						to="/notifications"
 						onClick={() => sidebarState && toggleSidebar()}
 					>
-						<FaBell />
+						<div>
+							<FaBell />
+						</div>
 						<span>Notificações</span>
 					</Item>
 					<Item to="/messages" onClick={() => sidebarState && toggleSidebar()}>
-						<FaEnvelope />
+						<div>
+							<FaEnvelope />
+						</div>
 						<span>Mensagens</span>
 					</Item>
 				</ItemGroup>
@@ -31,7 +37,7 @@ function Sidebar({ items, sidebarState, profilebarState, toggleSidebar }) {
 							to={item.path}
 							onClick={() => sidebarState && toggleSidebar()}
 						>
-							{item.icon}
+							<div>{item.icon}</div>
 							<span>{item.name}</span>
 						</Item>
 					))}
@@ -40,16 +46,22 @@ function Sidebar({ items, sidebarState, profilebarState, toggleSidebar }) {
 			<StaticContainer>
 				<ItemGroup>
 					<Item exact to="/" onClick={() => sidebarState && toggleSidebar()}>
-						<FaColumns />
+						<div>
+							<FaColumns />
+						</div>
 					</Item>
 					<Item
 						to="/notifications"
 						onClick={() => sidebarState && toggleSidebar()}
 					>
-						<FaBell />
+						<div>
+							<FaBell />
+						</div>
 					</Item>
 					<Item to="/messages" onClick={() => sidebarState && toggleSidebar()}>
-						<FaEnvelope />
+						<div>
+							<FaEnvelope />
+						</div>
 					</Item>
 				</ItemGroup>
 				<ItemGroup>
@@ -59,7 +71,7 @@ function Sidebar({ items, sidebarState, profilebarState, toggleSidebar }) {
 							to={item.path}
 							onClick={() => sidebarState && toggleSidebar()}
 						>
-							{item.icon}
+							<div>{item.icon}</div>
 						</Item>
 					))}
 				</ItemGroup>
@@ -68,4 +80,4 @@ function Sidebar({ items, sidebarState, profilebarState, toggleSidebar }) {
 	);
 }
 
-export default Sidebar;
+export default React.memo(Sidebar);

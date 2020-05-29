@@ -1,6 +1,58 @@
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
+export const Container = styled.div`
+	background: ${({ theme: { colors } }) => colors.background};
+	box-shadow: ${({ theme }) => theme.box_shadow.secondary};
+	border-radius: 10px;
+	display: grid;
+	grid-template-columns: 100%;
+	grid-template-rows: 50px 150px 50px;
+	overflow: hidden;
+	@media (min-width: 768px) {
+		grid-template-columns: 100%;
+		grid-template-rows: 50px 100px 50px;
+	}
+	@media (min-width: 1450px) {
+		grid-template-columns: 100%;
+		grid-template-rows: 50px 100px 50px;
+	}
+`;
+
+export const TwoThirdsContainer = styled(Container)`
+	grid-column: 1 / -1;
+
+	@media (min-width: 768px) {
+		grid-column: 1 / span 2;
+		grid-row: 1 / -1;
+	}
+	@media (min-width: 1450px) {
+		grid-column: 1 / span 2;
+		grid-row: 1 / -1;
+	}
+`;
+
+export const MiniContainer = styled(Container)`
+	grid-column: unset;
+	justify-content: space-around;
+	border-radius: 5px;
+	display: flex;
+	align-items: center;
+	span {
+		font-size: 12px;
+		font-weight: 700;
+		color: ${({ theme: { colors } }) => colors.text};
+		text-transform: uppercase;
+		text-align: center;
+	}
+	@media (min-width: 768px) {
+		border-radius: 10px;
+		span {
+			font-size: 20px;
+		}
+	}
+`;
+
 export const SmallContainer = styled.div`
 	width: 285px;
 	height: 250px;
@@ -16,7 +68,6 @@ export const SmallContainer = styled.div`
 export const XSmallContainer = styled(SmallContainer)`
 	width: 285px;
 	height: 135px;
-	border-radius: 0;
 	border-radius: 10px;
 	@media (min-width: 768px) {
 		width: 184px;
@@ -80,8 +131,7 @@ export const Title = styled.div`
 	color: ${({ theme: { colors } }) => colors.text};
 	display: flex;
 	align-items: center;
-	padding-top: 20px;
-	padding-left: 30px;
+	padding: 20px 30px 0 30px;
 	margin-bottom: 0;
 	& > span {
 		font-size: 20px;
@@ -113,11 +163,16 @@ export const SmallTitle = styled(Title)`
 	}
 `;
 
-export const Info = styled.div`
+export const Content = styled.div`
+	padding: 30px;
 	display: flex;
 	justify-content: center;
 	flex-direction: column;
 	align-items: center;
+	& > * {
+		margin: 5px 0;
+		text-align: center;
+	}
 `;
 
 export const SearchBar = styled.form`
@@ -201,8 +256,6 @@ export const SearchBar = styled.form`
 `;
 
 export const Link = styled(NavLink)`
-	width: 100%;
-	height: 47px;
 	border-top: 1px solid ${({ theme: { colors } }) => colors.surface};
 	display: flex;
 	align-items: center;

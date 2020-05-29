@@ -23,7 +23,6 @@ export const Container = styled.div`
 	}
 	/* Large devices (desktops, 1450px and up) */
 	@media (min-width: 1450px) {
-		width: 250px;
 		transform: ${({ sidebarState }) =>
 			!sidebarState ? 'translateX(0)' : 'translateX(-100%)'};
 	}
@@ -61,18 +60,39 @@ export const Item = styled(NavLink)`
 	color: white;
 	height: 45px;
 	display: flex;
+	justify-content: flex-start;
 	align-items: center;
-	font-size: 16px;
 	text-decoration: none;
-	& > svg {
-		margin: 0 29.5px;
+	div {
+		height: 100%;
+		width: 75px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		svg {
+			font-size: 16px;
+		}
+		div {
+			width: 32px;
+			height: 16px;
+			background: #fff;
+			font-size: 10px;
+			font-weight: 700;
+			color: #232740;
+			border-radius: 4px;
+		}
 	}
 
-	& > span {
+	span {
+		display: inline-block;
 		padding-left: 25px;
+		padding-right: 20px;
 		font-weight: 700;
-		/* Medium devices (tablets, 768px and up) */
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
 		@media (min-width: 768px) {
+			width: 175px;
 			padding-left: 0;
 		}
 	}
@@ -83,15 +103,13 @@ export const Item = styled(NavLink)`
 
 	&.active {
 		background: #191a21;
-		& > svg {
-			margin: 0 29.5px 0 24.5px;
-		}
 		&::before {
 			content: '';
 			width: 5px;
 			height: 25px;
 			background: #e99c28;
 			border-radius: 0px 5px 5px 0px;
+			position: absolute;
 		}
 	}
 `;
