@@ -42,13 +42,16 @@ function Dashboard() {
 			}, []);
 			setUnitsData(units);
 			setClassesData(classes);
-			let { initials, number, begins_at, week_day } = findNextClass(
-				classes,
-				new Date().getDay()
-			);
-			begins_at = getBeginningDate(week_day, begins_at);
+			if (classes.length) {
+				let { initials, number, begins_at, week_day } = findNextClass(
+					classes,
+					new Date().getDay()
+				);
+				begins_at = getBeginningDate(week_day, begins_at);
 
-			setNextClass({ initials, number, begins_at, week_day });
+				setNextClass({ initials, number, begins_at, week_day });
+			}
+
 			setInitializing(false);
 		}
 		getInitialState();
@@ -121,12 +124,14 @@ function Dashboard() {
 							title={'Próxima Aula'}
 							icon={<FaCalendarDay />}
 							content={
-								<>
-									<NextClassName>
-										{nextClass.initials} - {nextClass.number}
-									</NextClassName>
-									<NextClassDate>{nextClass.begins_at}</NextClassDate>
-								</>
+								nextClass && (
+									<>
+										<NextClassName>
+											{nextClass.initials} - {nextClass.number}
+										</NextClassName>
+										<NextClassDate>{nextClass.begins_at}</NextClassDate>
+									</>
+								)
 							}
 							link={{ path: '/projects', label: 'Ver Horário' }}
 						/>
