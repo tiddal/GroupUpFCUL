@@ -287,7 +287,7 @@ function EditUnit() {
 						</Form>
 						<Title danger>
 							<FaTrash />
-							<span>Remover curso</span>
+							<span>Remover cadeira</span>
 						</Title>
 						<Form autoComplete="off" onSubmit={handleRemoveSubmission}>
 							<Input

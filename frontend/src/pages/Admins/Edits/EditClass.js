@@ -54,6 +54,7 @@ function EditClass() {
 				{ value: '12:30', text: '12:30' },
 				{ value: '13:00', text: '13:00' },
 				{ value: '13:30', text: '13:30' },
+				{ value: '14:00', text: '14:00' },
 				{ value: '14:30', text: '14:30' },
 				{ value: '15:00', text: '15:00' },
 				{ value: '15:30', text: '15:30' },
@@ -85,6 +86,7 @@ function EditClass() {
 				{ value: '12:30', text: '12:30' },
 				{ value: '13:00', text: '13:00' },
 				{ value: '13:30', text: '13:30' },
+				{ value: '14:00', text: '14:00' },
 				{ value: '14:30', text: '14:30' },
 				{ value: '15:00', text: '15:00' },
 				{ value: '15:30', text: '15:30' },
@@ -290,7 +292,7 @@ function EditClass() {
 		);
 		if (status !== 204) logout();
 		setLoadingEdit(false);
-		history.push(`/courses/${course}/units/${unit}/`);
+		history.push(`/courses/${course}/units/${unit}`);
 	}
 
 	return (

@@ -45,6 +45,7 @@ function LoadAdminFile() {
 		const createdCourses = [];
 		let msg = '';
 		let type = 'error';
+		console.log(response);
 		switch (status) {
 			case 409:
 				Object.keys(response.created).map((key) =>

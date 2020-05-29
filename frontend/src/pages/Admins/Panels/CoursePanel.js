@@ -32,7 +32,6 @@ function CoursePanel() {
 		initials: '',
 		code: '',
 		units: [],
-		classes: [],
 	});
 	const [searchInput, setSearchInput] = useState('');
 	const {
@@ -44,8 +43,7 @@ function CoursePanel() {
 		async function setState() {
 			const [{ initials, code }] = await adminService.get.courseByCode(course);
 			const units = await adminService.get.unitsFromCourse(course);
-			const classes = await adminService.get.classes();
-			setCourseData({ initials, code, units, classes });
+			setCourseData({ initials, code, units });
 			setLoading(false);
 		}
 		setState();
@@ -87,9 +85,6 @@ function CoursePanel() {
 							<>
 								<StatusCardData>
 									{courseData.units.length} Cadeiras
-								</StatusCardData>
-								<StatusCardData>
-									{courseData.classes.length} Turmas
 								</StatusCardData>
 							</>
 						)

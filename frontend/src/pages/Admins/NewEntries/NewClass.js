@@ -39,7 +39,7 @@ function NewClass() {
 			label: 'Hora de inicio',
 			value: '8:00',
 			validation: { required: true },
-			valid: false,
+			valid: true,
 			error: false,
 			info: '',
 			options: [
@@ -55,6 +55,7 @@ function NewClass() {
 				{ value: '12:30', text: '12:30' },
 				{ value: '13:00', text: '13:00' },
 				{ value: '13:30', text: '13:30' },
+				{ value: '14:00', text: '14:00' },
 				{ value: '14:30', text: '14:30' },
 				{ value: '15:00', text: '15:00' },
 				{ value: '15:30', text: '15:30' },
@@ -70,7 +71,7 @@ function NewClass() {
 			label: 'Hora de fim',
 			value: '9:00',
 			validation: { required: true },
-			valid: false,
+			valid: true,
 			error: false,
 			info: '',
 			options: [
@@ -84,6 +85,7 @@ function NewClass() {
 				{ value: '12:30', text: '12:30' },
 				{ value: '13:00', text: '13:00' },
 				{ value: '13:30', text: '13:30' },
+				{ value: '14:00', text: '14:00' },
 				{ value: '14:30', text: '14:30' },
 				{ value: '15:00', text: '15:00' },
 				{ value: '15:30', text: '15:30' },
@@ -101,7 +103,7 @@ function NewClass() {
 			label: 'Dia da Semana',
 			value: 1,
 			validation: { required: true },
-			valid: false,
+			valid: true,
 			error: false,
 			info: '',
 			options: [

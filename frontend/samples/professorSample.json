@@ -1,57 +1,71 @@
 {
-  "users": [
-    {
-      "username": "fc00007",
-      "first_name": "Zinedine",
-      "last_name": "Zidane",
-      "email": "fc00007@test.com",
-      "password": "password",
-      "role": {
-        "type": "professor",
-        "data": {}
-      }
-    },
-    {
-      "username": "fc00008",
-      "first_name": "José",
-      "last_name": "Mourinho",
-      "email": "fc00008@test.com",
-      "password": "password",
-      "role": {
-        "type": "professor",
-        "data": {
-          "department": "DI",
-          "room": "1.4.5"
-        }
-      }
-    },
-    {
-      "username": "fc00009",
-      "first_name": "Bruno",
-      "last_name": "Lage",
-      "email": "fc00009@test.com",
-      "password": "password",
-      "role": {
-        "type": "professor",
-        "data": {
-          "department": "DI",
-          "room": "1.4.5"
-        }
-      }
-    },
-    {
-      "username": "fc00010",
-      "first_name": "Jorge",
-      "last_name": "Lopetegi",
-      "email": "fc00010@test.com",
-      "password": "password",
-      "role": {
-        "type": "professor",
-        "data": {
-          "department": "DI",
-          "room": "1.4.5"
-        }
-      }
-    }
-  ]
+	"users": [
+		{
+			"username": "fc10000",
+			"first_name": "Zinedine",
+			"last_name": "Zidane",
+			"email": "fc10000@test.com",
+			"password": "password",
+			"role": {
+				"type": "professor",
+				"data": {}
+			}
+		},
+		{
+			"username": "fc10001",
+			"first_name": "José",
+			"last_name": "Mourinho",
+			"email": "fc10001@test.com",
+			"password": "password",
+			"role": {
+				"type": "professor",
+				"data": {
+					"department": "Informática",
+					"room": "1.4.5"
+				}
+			}
+		},
+		{
+			"username": "fc10002",
+			"first_name": "Bruno",
+			"last_name": "Lage",
+			"email": "fc10002@test.com",
+			"password": "password",
+			"role": {
+				"type": "professor",
+				"data": {
+					"department": "Engenharia Geográfica, Geofísica e Energia",
+					"room": "1.4.6"
+				}
+			}
+		},
+		{
+			"username": "fc10003",
+			"first_name": "Julen",
+			"last_name": "Lopetegi",
+			"email": "fc10003@test.com",
+			"password": "password",
+			"role": {
+				"type": "professor",
+				"data": {
+					"department": "Biologia Animal",
+					"room": "1.4.7"
+				}
+			}
+		},
+		{
+			"username": "fc10004",
+			"first_name": "Ruben",
+			"last_name": "Amorim",
+			"email": "fc10004@test.com",
+			"password": "password",
+			"role": {
+				"type": "professor",
+				"data": {
+					"department": "Biologia Vegetal",
+					"room": "1.4.8"
+				}
+			}
+		}
+	]
 }

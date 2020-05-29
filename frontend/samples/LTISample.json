@@ -1,0 +1,173 @@
+{
+	"courses": [
+		{
+			"code": "L079",
+			"name": "Tecnologias de Informação",
+			"cycle": 1,
+			"initials": "LTI",
+			"units": [
+				{
+					"code": 26719,
+					"name": "Projeto de Tecnologias de Informação",
+					"semester": 2,
+					"initials": "PTI",
+					"ects": 6
+				},
+				{
+					"code": 26718,
+					"name": "Projeto de Tecnologias de Redes",
+					"semester": 2,
+					"initials": "PTR",
+					"ects": 6
+				},
+				{
+					"code": 26716,
+					"name": "Planeamento e Gestão de Projeto",
+					"semester": 1,
+					"initials": "PGP",
+					"ects": 6
+				},
+				{
+					"code": 22701,
+					"name": "Introdução às Probabilidades e Estatística",
+					"semester": 2,
+					"initials": "IPE",
+					"ects": 6
+				},
+				{
+					"code": 26702,
+					"name": "Arquiteturas de Computadores",
+					"semester": 1,
+					"initials": "AC",
+					"ects": 6
+				},
+				{
+					"code": 13565,
+					"name": "Elementos de Matemática I",
+					"semester": 1,
+					"initials": "EM1",
+					"ects": 6
+				},
+				{
+					"code": 26759,
+					"name": "Produção de Documentos Técnicos",
+					"semester": 1,
+					"initials": "PDT",
+					"ects": 6
+				},
+				{
+					"code": 26756,
+					"name": "Programação I LTI",
+					"semester": 1,
+					"initials": "P1",
+					"ects": 6
+				},
+				{
+					"code": 13566,
+					"name": "Elementos de Matemática II",
+					"semester": 2,
+					"initials": "EM2",
+					"ects": 6
+				},
+				{
+					"code": 26751,
+					"name": "Introdução às Tecnologias Web",
+					"semester": 2,
+					"initials": "ITW",
+					"ects": 6
+				},
+				{
+					"code": 26757,
+					"name": "Programação II LTI",
+					"semester": 2,
+					"initials": "P2",
+					"ects": 6
+				},
+				{
+					"code": 26755,
+					"name": "Redes de Computadores LTI",
+					"semester": 2,
+					"initials": "RC",
+					"ects": 6
+				},
+				{
+					"code": 26707,
+					"name": "Bases de Dados",
+					"semester": 1,
+					"initials": "BD",
+					"ects": 6
+				},
+				{
+					"code": 26710,
+					"name": "Fundamentos e Técnicas de Visualização",
+					"semester": 1,
+					"initials": "FTV",
+					"ects": 6
+				},
+				{
+					"code": 26708,
+					"name": "Interação com Computadores",
+					"semester": 1,
+					"initials": "IC",
+					"ects": 6
+				},
+				{
+					"code": 26706,
+					"name": "Programação Centrada em Objetos",
+					"semester": 1,
+					"initials": "PCO",
+					"ects": 6
+				},
+				{
+					"code": 26754,
+					"name": "Sistemas Operativos LTI",
+					"semester": 1,
+					"initials": "SO",
+					"ects": 6
+				},
+				{
+					"code": 26711,
+					"name": "Análise e Desenho de Software",
+					"semester": 2,
+					"initials": "ADS",
+					"ects": 6
+				},
+				{
+					"code": 26709,
+					"name": "Aplicações Distribuídas",
+					"semester": 2,
+					"initials": "AD",
+					"ects": 6
+				},
+				{
+					"code": 26712,
+					"name": "Aplicações e Serviços na Web",
+					"semester": 2,
+					"initials": "ASW",
+					"ects": 6
+				},
+				{
+					"code": 26713,
+					"name": "Conceção de Produto",
+					"semester": 2,
+					"initials": "CP",
+					"ects": 6
+				},
+				{
+					"code": 26752,
+					"name": "Sistemas Inteligentes",
+					"semester": 2,
+					"initials": "SI",
+					"ects": 6
+				},
+				{
+					"code": 26758,
+					"name": "Construção de Sistemas de Software LTI",
+					"semester": 1,
+					"initials": "CSS",
+					"ects": 6
+				}
+			]
+		}
+	]
+}

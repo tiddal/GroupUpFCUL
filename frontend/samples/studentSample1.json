@@ -1,0 +1,114 @@
+{
+	"users": [
+		{
+			"username": "fc50000",
+			"first_name": "Cristiano",
+			"last_name": "Ronaldo",
+			"email": "fc50000@test.com",
+			"password": "sim",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		},
+		{
+			"username": "fc50001",
+			"first_name": "Luís",
+			"last_name": "Figo",
+			"email": "fc50001@test.com",
+			"password": "password",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		},
+		{
+			"username": "fc50002",
+			"first_name": "Simão",
+			"last_name": "Sabrosa",
+			"email": "fc50002@test.com",
+			"password": "password",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		},
+		{
+			"username": "fc50003",
+			"first_name": "Fábio",
+			"last_name": "Paim",
+			"email": "fc50003@test.com",
+			"password": "password",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		},
+		{
+			"username": "fc50004",
+			"first_name": "Fernando",
+			"last_name": "Peyroteo",
+			"email": "fc50004@test.com",
+			"password": "password",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		},
+		{
+			"username": "fc50005",
+			"first_name": "Eusébio",
+			"last_name": "Ferreira",
+			"email": "fc50005@test.com",
+			"password": "password",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		},
+		{
+			"username": "fc50006",
+			"first_name": "Pedro",
+			"last_name": "Pauleta",
+			"email": "fc50006@test.com",
+			"password": "password",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		},
+		{
+			"username": "fc50007",
+			"first_name": "Paulo",
+			"last_name": "Futre",
+			"email": "fc50007@test.com",
+			"password": "password",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		},
+		{
+			"username": "fc50008",
+			"first_name": "Rui",
+			"last_name": "Costa",
+			"email": "fc50008@test.com",
+			"password": "password",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		},
+		{
+			"username": "fc50009",
+			"first_name": "Bruno",
+			"last_name": "Fernandes",
+			"email": "fc50009@test.com",
+			"password": "password",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		}
+	]
+}

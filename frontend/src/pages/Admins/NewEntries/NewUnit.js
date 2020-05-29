@@ -49,7 +49,7 @@ function NewUnit() {
 			label: 'Semestre',
 			value: 1,
 			validation: { required: true, semester: true },
-			valid: false,
+			valid: true,
 			error: false,
 			info: '',
 			options: [
@@ -62,7 +62,7 @@ function NewUnit() {
 			type: 'text',
 			label: 'Iniciais',
 			value: '',
-			validation: { required: true },
+			validation: { required: true, max: 3 },
 			valid: false,
 			error: false,
 			info: '',

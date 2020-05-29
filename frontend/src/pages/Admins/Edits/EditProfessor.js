@@ -57,13 +57,35 @@ function EditProfessor() {
 		},
 		department: {
 			id: 'department',
-			type: 'text',
+			type: 'select',
 			label: 'Departamento',
 			value: '',
 			validation: {},
 			valid: true,
 			error: false,
 			info: '',
+			options: [
+				{ value: '', text: 'Selecionar opção...' },
+				{ value: 'Biologia Animal', text: 'Biologia Animal' },
+				{ value: 'Biologia Vegetal', text: 'Biologia Vegetal' },
+				{
+					value: 'Engenharia Geográfica, Geofísica e Energia',
+					text: 'Engenharia Geográfica, Geofísica e Energia',
+				},
+				{
+					value: 'Estatística e Investigação Operacional ',
+					text: 'Estatística e Investigação Operacional',
+				},
+				{ value: 'Física', text: 'Física' },
+				{ value: 'Geologia', text: 'Geologia' },
+				{
+					value: 'História e Filosofia das Ciências',
+					text: 'História e Filosofia das Ciências',
+				},
+				{ value: 'Informática', text: 'Informática' },
+				{ value: 'Matemática', text: 'Matemática' },
+				{ value: 'Química e Bioquímica', text: 'Química e Bioquímica' },
+			],
 		},
 		room: {
 			id: 'room',
@@ -270,6 +292,7 @@ function EditProfessor() {
 									error={editProfessorForm[key].error}
 									info={editProfessorForm[key].info}
 									value={editProfessorForm[key].value}
+									options={editProfessorForm[key].options}
 									change={({ target }) =>
 										handleEditInputs(target, editProfessorForm[key].id)
 									}
