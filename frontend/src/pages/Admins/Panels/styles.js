@@ -3,6 +3,7 @@ import { Wrapper } from '../../../components/Wrapper';
 
 export const Container = styled(Wrapper)`
 	padding-top: 150px;
+	padding-bottom: 50px;
 	margin-bottom: 100px;
 	display: grid;
 	width: 100%;
