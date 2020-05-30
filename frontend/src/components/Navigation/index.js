@@ -38,4 +38,4 @@ function Navigation({ items }) {
 	);
 }
 
-export default Navigation;
+export default React.memo(Navigation);

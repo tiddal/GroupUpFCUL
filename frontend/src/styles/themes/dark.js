@@ -15,6 +15,11 @@ export default {
 		base: '#333333',
 		disabled_background: '#4C4E5A',
 		disabled_text: '#70717B',
+		hover: {
+			primary: '#8BAFDE',
+			success: 'lightseagreen',
+			danger: 'red',
+		},
 	},
 	box_shadow: {
 		primary: '0px 2px 10px rgba(0, 0, 0, 0.3)',

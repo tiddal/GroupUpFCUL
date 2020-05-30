@@ -2,9 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../../../hooks';
 import professorService from '../../../services/professor';
 
-import Navigation from '../../../components/Navigation';
 import { FaCalendarDay, FaBook, FaQuestionCircle } from 'react-icons/fa';
-
 import {
 	Container,
 	InfoSection,
@@ -45,14 +43,14 @@ function Dashboard() {
 		if (currentTime > '17:30')
 			return findNextClass(classes, ++currentWeekDay, '07:00');
 
-		// Get the classes from the day of the week
+		// Classes from the day of the week
 		let filteredClasses = sortedClasses.filter(
 			(class_) => class_.week_day === currentWeekDay
 		);
 		if (filteredClasses.length === 0)
 			return findNextClass(classes, ++currentWeekDay, '07:00');
 
-		// 	Get the classes after the current time from that day
+		// 	Classes after the current time
 		filteredClasses = filteredClasses.filter(
 			(class_) => class_.begins_at > currentTime
 		);
@@ -61,6 +59,19 @@ function Dashboard() {
 
 		return filteredClasses[0];
 	}, []);
+
+	function getBeginningDate(week_day, begins_at) {
+		let date = new Date();
+		let currentWeekDay = date.getDay();
+		let distance = (week_day + 7 - currentWeekDay) % 7;
+		date.setDate(date.getDate() + distance);
+		const begginingDate = date
+			.toLocaleDateString('pt-BR', { dateStyle: 'full' })
+			.slice(0, -8);
+		let [beggining_hours, begging_minutes] = begins_at.split(':');
+		beggining_hours = parseInt(beggining_hours);
+		return `${begginingDate}, ${beggining_hours}h${begging_minutes}`;
+	}
 
 	useEffect(() => {
 		async function getInitialState() {
@@ -86,39 +97,15 @@ function Dashboard() {
 					currentTime
 				);
 				begins_at = getBeginningDate(week_day, begins_at);
-
 				setNextClass({ initials, number, begins_at });
 			}
-
 			setInitializing(false);
 		}
 		getInitialState();
 	}, [user, findNextClass]);
 
-	function getBeginningDate(week_day, begins_at) {
-		let date = new Date();
-		let currentWeekDay = date.getDay();
-		let distance = week_day + 7 - currentWeekDay;
-		date.setDate(date.getDate() + distance);
-		const begginingDate = date
-			.toLocaleDateString('pt-BR', { dateStyle: 'full' })
-			.slice(0, -8);
-		let [beggining_hours, begging_minutes] = begins_at.split(':');
-		beggining_hours = parseInt(beggining_hours);
-		return `${begginingDate}, ${beggining_hours}h${begging_minutes}`;
-	}
-
 	return (
 		<>
-			{!initializing && (
-				<Navigation
-					items={unitsData.map((unit) => ({
-						icon: <div>{unit.initials}</div>,
-						name: unit.name,
-						path: `/units/${unit.code}`,
-					}))}
-				/>
-			)}
 			{initializing ? (
 				<Spinner />
 			) : (
@@ -137,7 +124,7 @@ function Dashboard() {
 									</>
 								)
 							}
-							link={{ path: '/projects', label: 'Ver Horário' }}
+							link={{ path: '/', label: 'Ver Horário' }}
 						/>
 						<MiniCard data={`${unitsData.length} cadeiras`} />
 						<MiniCard data={`${classesData.length} turmas`} />
@@ -155,7 +142,10 @@ function Dashboard() {
 										<UnitInfo>0 Projetos</UnitInfo>
 									</>
 								}
-								link={{ path: `/units/${unit.code}`, label: 'Gerir Projetos' }}
+								link={{
+									path: `/projects/${unit.code}`,
+									label: 'Gerir Projetos',
+								}}
 							/>
 						))}
 					</UnitsSection>
@@ -164,7 +154,7 @@ function Dashboard() {
 						<Card
 							title={'p1 - projeto 1'}
 							icon={<FaQuestionCircle />}
-							link={{ path: '/projects', label: 'Responder' }}
+							link={{ path: '/', label: 'Responder' }}
 							content={
 								<>
 									<ProjectQuestion>

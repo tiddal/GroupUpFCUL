@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import logo from '../../assets/logo.svg';
 import { useAuth } from '../../hooks';
@@ -13,11 +13,15 @@ import {
 	Spinner,
 } from './styles';
 
-function Login() {
+function Login({ history }) {
 	const { login, loading, error } = useAuth();
 
 	const [email, setEmail] = useState();
 	const [password, setPassword] = useState();
+
+	useEffect(() => {
+		history.push('/');
+	}, [history]);
 
 	function handleLogin(event) {
 		event.preventDefault();
