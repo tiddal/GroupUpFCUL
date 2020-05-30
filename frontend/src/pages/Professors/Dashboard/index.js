@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../../../hooks';
 import professorService from '../../../services/professor';
 
@@ -28,6 +28,40 @@ function Dashboard() {
 	const [initializing, setInitializing] = useState(true);
 	const [nextClass, setNextClass] = useState();
 
+	const findNextClass = useCallback((classes, currentWeekDay, currentTime) => {
+		//	Sort classes by week_day and begining time
+		const sortedClasses = classes.sort((a, b) => {
+			if (a.week_day > b.week_day) return 1;
+			if (a.week_day < b.week_day) return -1;
+			if (a.begins_at > b.begins_at) return 1;
+			if (a.begins_at < b.begins_at) return -1;
+			return 0;
+		});
+
+		//	Sunday or Saturday
+		if (currentWeekDay > 5) return sortedClasses[0];
+
+		// Any day after 17:30
+		if (currentTime > '17:30')
+			return findNextClass(classes, ++currentWeekDay, '07:00');
+
+		// Get the classes from the day of the week
+		let filteredClasses = sortedClasses.filter(
+			(class_) => class_.week_day === currentWeekDay
+		);
+		if (filteredClasses.length === 0)
+			return findNextClass(classes, ++currentWeekDay, '07:00');
+
+		// 	Get the classes after the current time from that day
+		filteredClasses = filteredClasses.filter(
+			(class_) => class_.begins_at > currentTime
+		);
+		if (filteredClasses.length === 0)
+			return findNextClass(classes, ++currentWeekDay, '07:00');
+
+		return filteredClasses[0];
+	}, []);
+
 	useEffect(() => {
 		async function getInitialState() {
 			const classes = await professorService.get.classes(
@@ -43,19 +77,23 @@ function Dashboard() {
 			setUnitsData(units);
 			setClassesData(classes);
 			if (classes.length) {
+				const date = new Date();
+				let currentTime = `${date.getHours()}:${date.getMinutes()}`;
+				let currentWeekDay = date.getDay();
 				let { initials, number, begins_at, week_day } = findNextClass(
 					classes,
-					new Date().getDay()
+					currentWeekDay,
+					currentTime
 				);
 				begins_at = getBeginningDate(week_day, begins_at);
 
-				setNextClass({ initials, number, begins_at, week_day });
+				setNextClass({ initials, number, begins_at });
 			}
 
 			setInitializing(false);
 		}
 		getInitialState();
-	}, [user]);
+	}, [user, findNextClass]);
 
 	function getBeginningDate(week_day, begins_at) {
 		let date = new Date();
@@ -68,40 +106,6 @@ function Dashboard() {
 		let [beggining_hours, begging_minutes] = begins_at.split(':');
 		beggining_hours = parseInt(beggining_hours);
 		return `${begginingDate}, ${beggining_hours}h${begging_minutes}`;
-	}
-
-	function findNextClass(classes, currentWeekDay) {
-		//	Sort classes by week_day and begining time
-		const sortedClasses = classes.sort((a, b) => {
-			if (a.week_day > b.week_day) return 1;
-			if (a.week_day < b.week_day) return -1;
-			if (a.begins_at > b.begins_at) return 1;
-			if (a.begins_at < b.begins_at) return -1;
-			return 0;
-		});
-		if (currentWeekDay > 5) return sortedClasses[0];
-
-		//	Get week day
-		const date = new Date();
-		let currentTime = `${date.getHours()}:${date.getMinutes()}`;
-		if (currentTime > '17:30') currentWeekDay++;
-
-		// Get classes from week day
-		let filteredClasses = sortedClasses.filter(
-			(class_) => class_.week_day === currentWeekDay
-		);
-
-		if (filteredClasses.length === 0)
-			return findNextClass(classes, currentWeekDay++);
-
-		//	Skip to next day
-		currentTime = '07:00';
-		filteredClasses = filteredClasses.filter(
-			(class_) => class_.begins_at > currentTime
-		);
-		if (filteredClasses.length === 0)
-			return findNextClass(classes, currentWeekDay++);
-		return filteredClasses[0];
 	}
 
 	return (
