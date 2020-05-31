@@ -1,61 +1,60 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-	margin-top: 10px;
-	display: flex;
-	height: 70px;
-	flex-wrap: wrap;
-	width: 100%;
-	color: ${({ theme, error }) =>
-		error ? theme.colors.danger : theme.colors.secondary_text};
-	&:focus-within label {
-		color: ${({ theme, error, danger }) =>
-			error || danger ? theme.colors.danger : theme.colors.primary_variant};
-	}
-	&:focus-within input {
-		border-color: ${({ theme, error, danger }) =>
-			error || danger ? theme.colors.danger : theme.colors.primary_variant};
-	}
-	border-color: ${({ theme, error }) =>
-		error ? theme.colors.danger : theme.colors.secondary_text};
+	grid-column: ${({ type }) =>
+		type === 'number' || type === 'datetime-local' ? 'unset' : '1 / -1'};
+	display: grid;
+	grid-template-columns: 100%;
+	grid-template-rows: auto 20px;
 `;
 
-export const Label = styled.label`
-	font-size: 12px;
-	margin-left: 10px;
-	height: 20px;
-	background: ${({ theme }) => theme.colors.background};
-	width: auto;
-	padding: 0 5px;
-	display: flex;
-	transition: color 0.5s;
-	margin-top: -60px;
-	line-height: 18px;
-	position: relative;
+export const Fieldset = styled.fieldset`
+	padding: 0;
+	line-height: 0;
+	border: 1px solid
+		${({ theme, error }) =>
+			error ? theme.colors.danger : theme.colors.secondary_text};
+	border-radius: 5px;
+	color: ${({ theme, error }) =>
+		error ? theme.colors.danger : theme.colors.secondary_text};
+	legend {
+		font-size: 12px;
+		font-weight: 600;
+		margin-left: 10px;
+		padding: 0 10px;
+	}
+	input[type='datetime-local']::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		display: none;
+	}
 `;
 
 export const InputField = styled.input`
 	height: 50px;
+	background: transparent;
 	width: 100%;
 	padding: 0 20px;
-	border: 1px solid;
-	border-color: inherit;
-	background: ${({ theme }) => theme.colors.background};
-	border-radius: 5px;
+	border: none;
 	color: ${({ theme }) => theme.colors.text};
 	transition: border-color 0.5s;
 	font-size: 16px;
 `;
 
+export const Textarea = styled(InputField).attrs({ as: 'textarea' })`
+	padding-top: 20px;
+	resize: vertical;
+	min-height: 50px;
+	height: 100px;
+	max-height: 500px;
+`;
+
 export const Select = styled.div`
 	height: 50px;
 	width: 100%;
-	border-color: inherit;
 	position: relative;
 	select {
 		position: relative;
-		border: 1px solid;
-		border-color: inherit;
+		border: none;
 		background: ${({ theme }) => theme.colors.background};
 		transition: border-color 0.5s;
 		appearance: none;
@@ -67,15 +66,6 @@ export const Select = styled.div`
 		color: ${({ theme }) => theme.colors.text};
 		font-size: 16px;
 		cursor: pointer;
-		&:focus {
-			border-color: ${({ theme, danger }) =>
-				danger ? theme.colors.danger : theme.colors.primary_variant};
-		}
-		&:active {
-			border-color: ${({ theme, danger }) =>
-				danger ? theme.colors.danger : theme.colors.primary_variant};
-		}
-
 		option {
 			background: ${({ theme }) => theme.colors.background};
 			color: ${({ theme }) => theme.colors.text};
@@ -95,12 +85,10 @@ export const Select = styled.div`
 `;
 
 export const Info = styled.div`
-	height: 15px;
+	align-self: end;
+	padding: 0 10px;
 	font-size: 12px;
 	transition: color 0.5s;
 	color: ${({ theme, error }) =>
 		error ? theme.colors.danger : theme.colors.secondary_text};
-	margin-top: 2px;
-	width: 100%;
-	padding-left: 10px;
 `;

@@ -71,7 +71,7 @@ export const Title = styled.button`
 	}
 `;
 
-export const ExpandButton = styled.button`
+export const ExpandButton = styled.div`
 	width: 25px;
 	height: 25px;
 	border-radius: 50%;

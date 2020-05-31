@@ -65,7 +65,7 @@ export const Form = styled.form`
 	margin: 40px 0;
 	width: 300px;
 	display: grid;
-	gap: 15px;
+	gap: 25px;
 	@media (min-width: 768px) {
 		width: 525px;
 	}

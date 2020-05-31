@@ -1,6 +1,13 @@
 import React from 'react';
 
-import { Container, InputField, Label, Info, Select } from './styles';
+import {
+	Container,
+	InputField,
+	Info,
+	Select,
+	Textarea,
+	Fieldset,
+} from './styles';
 import { FaAngleDown } from 'react-icons/fa';
 
 function Input({
@@ -34,13 +41,20 @@ function Input({
 				</select>
 			</Select>
 		),
+		textarea: <Textarea id={id} onChange={change} value={value}></Textarea>,
+		number: <InputField type={type} id={id} onChange={change} value={value} />,
+		'datetime-local': (
+			<InputField type={type} id={id} onChange={change} value={value} />
+		),
 	};
 	return (
-		<Container error={error} danger={danger}>
-			{inputs[type]}
-			<Label htmlFor={id}>
-				{label}:{validation.required && ' (*)'}
-			</Label>
+		<Container type={type}>
+			<Fieldset error={error} danger={danger}>
+				<legend>
+					{label}:{validation.required && ' (*)'}
+				</legend>
+				{inputs[type]}
+			</Fieldset>
 			<Info error={error}>{info}</Info>
 		</Container>
 	);
