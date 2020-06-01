@@ -44,6 +44,8 @@ function EditClass() {
 			error: false,
 			info: '',
 			options: [
+				{ value: '8:00', text: '8:00' },
+				{ value: '8:30', text: '8:30' },
 				{ value: '9:00', text: '9:00' },
 				{ value: '9:30', text: '9:30' },
 				{ value: '10:00', text: '10:00' },
@@ -62,8 +64,6 @@ function EditClass() {
 				{ value: '16:30', text: '16:30' },
 				{ value: '17:00', text: '17:00' },
 				{ value: '17:30', text: '17:30' },
-				{ value: '18:00', text: '18:00' },
-				{ value: '18:30', text: '18:30' },
 			],
 		},
 		ends_at: {
