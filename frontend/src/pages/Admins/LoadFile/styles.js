@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { Wrapper } from '../../../components/Wrapper';
 
 export const Container = styled(Wrapper)`
@@ -131,84 +131,12 @@ export const InfoSection = styled.div`
 	}
 `;
 
-const dragAcitve = css`
-	border-color: ${({ theme }) => theme.colors.success};
-`;
-const dragReject = css`
-	border-color: ${({ theme }) => theme.colors.danger};
-`;
-
-export const DropContainer = styled.div.attrs({
-	className: 'dropzone',
-})`
-	border: 1px dashed ${({ theme }) => theme.colors.secondary_text};
-	border-radius: 10px;
-	cursor: pointer;
-	height: 75px;
-	width: 100%;
-	transition: border-color 0.3s;
-	${({ isDragActive }) => isDragActive && dragAcitve};
-	${({ isDragReject }) => isDragReject && dragReject};
-`;
-
 const messageColors = {
 	default: ({ theme }) => theme.colors.secondary_text,
 	error: ({ theme }) => theme.colors.danger,
 	success: ({ theme }) => theme.colors.success,
 	filled: ({ theme }) => theme.colors.text,
 };
-
-export const UploadMessage = styled.span`
-	display: flex;
-	color: ${({ type }) => messageColors[type || 'default']};
-	justify-content: center;
-	align-items: center;
-	height: 100%;
-	text-align: center;
-	font-size: 14px;
-	padding: 0 10px;
-	@media (min-width: 768px) {
-		font-size: 16px;
-	}
-`;
-
-export const Button = styled.button`
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin: 25px 0;
-	height: 40px;
-	line-height: 38px;
-	font-size: 14px;
-	font-weight: 700;
-	color: #fff;
-	width: 100%;
-	border-radius: 10px;
-	box-shadow: ${({ theme }) => theme.box_shadow.secondary};
-	background: ${({ theme }) => theme.colors.primary};
-	transition: background 0.25s, color 0.25s;
-	& > * {
-		margin: 0 10px;
-	}
-	&:disabled {
-		color: ${({ theme }) => theme.colors.disabled_text};
-		background: ${({ theme }) => theme.colors.disabled_background};
-		box-shadow: none;
-		cursor: not-allowed;
-	}
-
-	@media (min-width: 768px) {
-		width: 175px;
-	}
-
-	@media (min-width: 1450px) {
-		margin: 45px 0;
-		&:hover:enabled {
-			cursor: pointer;
-			background: ${({ theme: { colors } }) => colors.primary_variant};
-		}
-	}
-`;
 
 export const NotificationSection = styled(InfoSection)`
 	background: ${({ theme }) => theme.colors.background};

@@ -29,6 +29,9 @@ export const SubmitButton = styled(Button)`
 	&:hover {
 		background: ${({ theme }) => theme.colors.hover.success};
 	}
+	& > * {
+		margin: 0 10px;
+	}
 	@media (min-width: 768px) {
 		margin-top: 15px;
 		width: 150px;

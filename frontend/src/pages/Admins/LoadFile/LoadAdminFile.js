@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
-import Dropzone from 'react-dropzone';
 import adminService from '../../../services/admin';
 
 import {
 	Container,
 	Sheet,
 	Title,
-	DropContainer,
-	UploadMessage,
 	UploadSection,
-	Button,
 	NotificationSection,
 	InfoSection,
 } from './styles';
 import Context from '../../../components/Context';
+import Dropzone from '../../../components/Dropzone';
+import { Submit } from '../../../components/Button';
 import { ButtonSpinner } from '../../../components/Spinner';
 
 import {
@@ -80,24 +78,6 @@ function LoadAdminFile() {
 		setAdminFile();
 	}
 
-	function onDrag(isDragActive, isDragReject) {
-		if (!isDragActive)
-			return adminFile ? (
-				<UploadMessage type="filled">{adminFile.name}</UploadMessage>
-			) : (
-				<UploadMessage>
-					Arraste ou clique para selecionar um ficheiro
-				</UploadMessage>
-			);
-		if (isDragReject)
-			return (
-				<UploadMessage type="error">
-					Tipo de ficheiro não suportado
-				</UploadMessage>
-			);
-		return <UploadMessage type="success">Solte o ficheiro aqui</UploadMessage>;
-	}
-
 	return (
 		<>
 			<Context
@@ -114,28 +94,12 @@ function LoadAdminFile() {
 					</Title>
 					<UploadSection onSubmit={handleUpload}>
 						<Dropzone
-							accept="application/json"
-							onDropAccepted={(file) => setAdminFile(file[0])}
-						>
-							{({
-								getRootProps,
-								getInputProps,
-								isDragActive,
-								isDragReject,
-							}) => (
-								<DropContainer
-									{...getRootProps()}
-									isDragActive={isDragActive}
-									isDragReject={isDragReject}
-								>
-									<input {...getInputProps()} />
-
-									{onDrag(isDragActive, isDragReject)}
-								</DropContainer>
-							)}
-						</Dropzone>
-						<label>Ficheiros suportados: JSON</label>
-						<Button disabled={!adminFile}>
+							setFile={setAdminFile}
+							file={adminFile}
+							mime="application/json"
+							supported="JSON"
+						/>
+						<Submit disabled={!adminFile}>
 							{loading ? (
 								<ButtonSpinner />
 							) : (
@@ -144,7 +108,7 @@ function LoadAdminFile() {
 									<FaUpload />
 								</>
 							)}
-						</Button>
+						</Submit>
 					</UploadSection>
 					{uploadMessage.msg && (
 						<NotificationSection type={uploadMessage.type}>

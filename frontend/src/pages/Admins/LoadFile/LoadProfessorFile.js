@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
-import Dropzone from 'react-dropzone';
 import adminService from '../../../services/admin';
 
 import {
 	Container,
 	Sheet,
 	Title,
-	DropContainer,
-	UploadMessage,
 	UploadSection,
-	Button,
 	NotificationSection,
 	InfoSection,
 } from './styles';
 import Context from '../../../components/Context';
+import Dropzone from '../../../components/Dropzone';
+import { Submit } from '../../../components/Button';
 import { ButtonSpinner } from '../../../components/Spinner';
 
 import {
@@ -80,24 +78,6 @@ function LoadprofessorFile() {
 		setProfessorFile();
 	}
 
-	function onDrag(isDragActive, isDragReject) {
-		if (!isDragActive)
-			return professorFile ? (
-				<UploadMessage type="filled">{professorFile.name}</UploadMessage>
-			) : (
-				<UploadMessage>
-					Arraste ou clique para selecionar um ficheiro
-				</UploadMessage>
-			);
-		if (isDragReject)
-			return (
-				<UploadMessage type="error">
-					Tipo de ficheiro não suportado
-				</UploadMessage>
-			);
-		return <UploadMessage type="success">Solte o ficheiro aqui</UploadMessage>;
-	}
-
 	return (
 		<>
 			<Context
@@ -114,28 +94,12 @@ function LoadprofessorFile() {
 					</Title>
 					<UploadSection onSubmit={handleUpload}>
 						<Dropzone
-							accept="application/json"
-							onDropAccepted={(file) => setProfessorFile(file[0])}
-						>
-							{({
-								getRootProps,
-								getInputProps,
-								isDragActive,
-								isDragReject,
-							}) => (
-								<DropContainer
-									{...getRootProps()}
-									isDragActive={isDragActive}
-									isDragReject={isDragReject}
-								>
-									<input {...getInputProps()} />
-
-									{onDrag(isDragActive, isDragReject)}
-								</DropContainer>
-							)}
-						</Dropzone>
-						<label>Ficheiros suportados: JSON</label>
-						<Button disabled={!professorFile}>
+							setFile={setProfessorFile}
+							file={professorFile}
+							mime="application/json"
+							supported="JSON"
+						/>
+						<Submit disabled={!professorFile}>
 							{loading ? (
 								<ButtonSpinner />
 							) : (
@@ -144,7 +108,7 @@ function LoadprofessorFile() {
 									<FaUpload />
 								</>
 							)}
-						</Button>
+						</Submit>
 					</UploadSection>
 					{uploadMessage.msg && (
 						<NotificationSection type={uploadMessage.type}>
