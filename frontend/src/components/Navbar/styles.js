@@ -35,6 +35,7 @@ export const Menu = styled.button`
 	border-radius: 50%;
 	display: flex;
 	justify-content: center;
+	align-items: center;
 	& > svg {
 		color: white;
 		font-size: 18px;

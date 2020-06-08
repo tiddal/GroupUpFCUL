@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { Container, StaticContainer, ItemGroup, Item } from './styles';
-import { FaColumns, FaBell, FaEnvelope } from 'react-icons/fa';
+import { FaColumns, FaBell } from 'react-icons/fa';
 
-function Sidebar({ items, sidebarState, profilebarState, toggleSidebar }) {
+function Sidebar({ items, sidebarState, toggleSidebar }) {
 	return (
 		<>
-			<Container sidebarState={sidebarState} profilebarState={profilebarState}>
+			<Container sidebarState={sidebarState}>
 				<ItemGroup>
 					<Item exact to="/" onClick={() => sidebarState && toggleSidebar()}>
 						<div>
@@ -22,12 +22,6 @@ function Sidebar({ items, sidebarState, profilebarState, toggleSidebar }) {
 							<FaBell />
 						</div>
 						<span>Notificações</span>
-					</Item>
-					<Item to="/messages" onClick={() => sidebarState && toggleSidebar()}>
-						<div>
-							<FaEnvelope />
-						</div>
-						<span>Mensagens</span>
 					</Item>
 				</ItemGroup>
 				<ItemGroup>
@@ -56,11 +50,6 @@ function Sidebar({ items, sidebarState, profilebarState, toggleSidebar }) {
 					>
 						<div>
 							<FaBell />
-						</div>
-					</Item>
-					<Item to="/messages" onClick={() => sidebarState && toggleSidebar()}>
-						<div>
-							<FaEnvelope />
 						</div>
 					</Item>
 				</ItemGroup>

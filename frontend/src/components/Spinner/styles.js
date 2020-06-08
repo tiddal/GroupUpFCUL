@@ -2,15 +2,18 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
 	display: block;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	@media (min-width: 768px) {
+		padding-left: 75px;
+	}
+	@media (min-width: 1450px) {
+		padding-left: 250px;
+	}
 	&::after {
 		content: '';
-		position: absolute;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		top: 0;
-		margin: auto;
-		display: block;
 		width: 100px;
 		height: 100px;
 		border-radius: 50%;
@@ -18,12 +21,6 @@ export const Container = styled.div`
 		border-color: ${({ theme }) => theme.colors.primary_variant} transparent
 			${({ theme }) => theme.colors.primary_variant} transparent;
 		animation: lds-dual-ring 1.2s linear infinite;
-		@media (min-width: 768px) {
-			left: 75px;
-		}
-		@media (min-width: 1450px) {
-			left: 250px;
-		}
 	}
 	@keyframes lds-dual-ring {
 		0% {

@@ -8,18 +8,18 @@ export const Container = styled.div`
 	width: 100%;
 	height: 100%;
 	background: #232740;
-	z-index: 2;
+	z-index: 51;
 	padding-top: 55px;
 	transition: transform 0.3s ease;
-	transform: ${({ profilebarState, sidebarState }) => {
-		if (!sidebarState && profilebarState) return 'translateX(0)';
+	transform: ${({ profilebarState }) => {
+		if (profilebarState) return 'translateX(0)';
 		return 'translateX(100%)';
 	}};
 
 	/* Medium devices (tablets, 768px and up) */
 	@media (min-width: 768px) {
-		transform: ${({ profilebarState, sidebarState }) => {
-			if (!sidebarState && profilebarState) return 'translateY(0)';
+		transform: ${({ profilebarState }) => {
+			if (profilebarState) return 'translateY(0)';
 			return 'translateY(-110%)';
 		}};
 		height: auto;

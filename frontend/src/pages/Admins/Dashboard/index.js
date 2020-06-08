@@ -5,15 +5,9 @@ import { Container, SmallCardData, BigCardData } from './styles';
 
 import Spinner from '../../../components/Spinner';
 
-import Navigation from '../../../components/Navigation';
 import { SmallCard, BigCard } from '../../../components/Card';
 
-import {
-	FaUserGraduate,
-	FaUniversity,
-	FaUserShield,
-	FaUserTie,
-} from 'react-icons/fa';
+import { FaUserGraduate, FaUniversity, FaUserTie } from 'react-icons/fa';
 
 function Dashboard() {
 	const [loading, setLoading] = useState(true);
@@ -49,15 +43,6 @@ function Dashboard() {
 
 	return (
 		<>
-			<Navigation
-				items={[
-					{ icon: <FaUserGraduate />, name: 'Alunos', path: '/students' },
-					{ icon: <FaUserTie />, name: 'Professores', path: '/professors' },
-					{ icon: <FaUserShield />, name: 'Admins', path: '/admins' },
-					{ icon: <FaUniversity />, name: 'Cursos', path: '/courses' },
-				]}
-			/>
-
 			{loading ? (
 				<Spinner />
 			) : (

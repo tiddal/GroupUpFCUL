@@ -45,8 +45,13 @@ import EditCourse from '../pages/Admins/Edits/EditCourse';
 import EditUnit from '../pages/Admins/Edits/EditUnit';
 import EditClass from '../pages/Admins/Edits/EditClass';
 
+import Navigation from '../components/Navigation';
+import ScrollToTop from '../components/ScrollToTop';
+
 const AdminRoutes = () => (
 	<BrowserRouter>
+		<ScrollToTop />
+		<Navigation />
 		<Switch>
 			<Route exact path="/" component={Dashboard} />
 			{/* Admins */}

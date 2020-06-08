@@ -3,7 +3,6 @@ import adminService from '../../../services/admin';
 
 import { Container, Sheet, Title, Form, Button } from './styles';
 
-import Navigation from '../../../components/Navigation';
 import Context from '../../../components/Context';
 import Notification from '../../../components/Notification';
 import { ButtonSpinner } from '../../../components/Spinner';
@@ -11,12 +10,7 @@ import Input from '../../../components/Input';
 
 import { validate } from '../../../validators';
 
-import {
-	FaUserGraduate,
-	FaUniversity,
-	FaUserShield,
-	FaUserTie,
-} from 'react-icons/fa';
+import { FaUniversity } from 'react-icons/fa';
 import { useAuth } from '../../../hooks';
 
 function NewCourse() {
@@ -146,14 +140,6 @@ function NewCourse() {
 
 	return (
 		<>
-			<Navigation
-				items={[
-					{ icon: <FaUserGraduate />, name: 'Alunos', path: '/students' },
-					{ icon: <FaUserTie />, name: 'Professores', path: '/professors' },
-					{ icon: <FaUserShield />, name: 'Admins', path: '/admins' },
-					{ icon: <FaUniversity />, name: 'Cursos', path: '/courses' },
-				]}
-			/>
 			<Context
 				path={[
 					{ tier: 'courses', title: 'cursos' },

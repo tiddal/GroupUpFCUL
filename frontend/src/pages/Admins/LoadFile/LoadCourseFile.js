@@ -13,15 +13,10 @@ import {
 	NotificationSection,
 	InfoSection,
 } from './styles';
-import Navigation from '../../../components/Navigation';
 import Context from '../../../components/Context';
 import { ButtonSpinner } from '../../../components/Spinner';
 
 import {
-	FaUserGraduate,
-	FaUserTie,
-	FaUserShield,
-	FaUniversity,
 	FaFileUpload,
 	FaUpload,
 	FaInfoCircle,
@@ -105,14 +100,6 @@ function LoadAdminFile() {
 
 	return (
 		<>
-			<Navigation
-				items={[
-					{ icon: <FaUserGraduate />, name: 'Alunos', path: '/students' },
-					{ icon: <FaUserTie />, name: 'Professores', path: '/professors' },
-					{ icon: <FaUserShield />, name: 'Admins', path: '/admins' },
-					{ icon: <FaUniversity />, name: 'Cursos', path: '/courses' },
-				]}
-			/>
 			<Context
 				path={[
 					{ tier: 'courses', title: 'cursos' },

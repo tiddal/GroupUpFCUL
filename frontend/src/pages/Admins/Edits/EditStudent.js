@@ -3,21 +3,13 @@ import { useRouteMatch, useHistory } from 'react-router-dom';
 
 import adminService from '../../../services/admin';
 import { Container, Sheet, Title, Form, Button } from './styles';
-import Navigation from '../../../components/Navigation';
 import Context from '../../../components/Context';
 import Notification from '../../../components/Notification';
 import Spinner, { ButtonSpinner } from '../../../components/Spinner';
 import Input from '../../../components/Input';
 import { validate } from '../../../validators';
 
-import {
-	FaUserGraduate,
-	FaUniversity,
-	FaUserShield,
-	FaUserTie,
-	FaEdit,
-	FaTrash,
-} from 'react-icons/fa';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 import { useAuth } from '../../../hooks';
 
 function EditStudent() {
@@ -208,14 +200,6 @@ function EditStudent() {
 
 	return (
 		<>
-			<Navigation
-				items={[
-					{ icon: <FaUserGraduate />, name: 'Alunos', path: '/students' },
-					{ icon: <FaUserTie />, name: 'Professores', path: '/professors' },
-					{ icon: <FaUserShield />, name: 'Admins', path: '/admins' },
-					{ icon: <FaUniversity />, name: 'Cursos', path: '/courses' },
-				]}
-			/>
 			<Context
 				path={[
 					{ tier: 'students', title: 'Alunos' },

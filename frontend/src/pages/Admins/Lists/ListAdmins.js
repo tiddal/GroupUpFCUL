@@ -1,20 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import adminService from '../../../services/admin';
 
-import Navigation from '../../../components/Navigation';
 import Table from '../../../components/Table';
 import Context from '../../../components/Context';
 import { ButtonSpinner } from '../../../components/Spinner';
-import {
-	FaUserGraduate,
-	FaUniversity,
-	FaUserShield,
-	FaUserTie,
-	FaListAlt,
-	FaSearch,
-	FaPortrait,
-	FaEdit,
-} from 'react-icons/fa';
+import { FaListAlt, FaSearch, FaPortrait, FaEdit } from 'react-icons/fa';
 
 import {
 	Container,
@@ -94,14 +84,6 @@ function ListAdmins({ location: { panelSearchInput } }) {
 
 	return (
 		<>
-			<Navigation
-				items={[
-					{ icon: <FaUserGraduate />, name: 'Alunos', path: '/students' },
-					{ icon: <FaUserTie />, name: 'Professores', path: '/professors' },
-					{ icon: <FaUserShield />, name: 'Admins', path: '/admins' },
-					{ icon: <FaUniversity />, name: 'Cursos', path: '/courses' },
-				]}
-			/>
 			<Context
 				path={[
 					{ tier: 'admins', title: 'admins' },

@@ -2,20 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import adminService from '../../../services/admin';
 
-import Navigation from '../../../components/Navigation';
 import { CardSpinner } from '../../../components/Spinner';
 import Context from '../../../components/Context';
 import { StatusCard, SearchCard, XSmallCard } from '../../../components/Card';
 
-import {
-	FaUserGraduate,
-	FaUniversity,
-	FaUserShield,
-	FaUserTie,
-	FaListUl,
-	FaFileUpload,
-	FaSearch,
-} from 'react-icons/fa';
+import { FaUniversity, FaListUl, FaFileUpload, FaSearch } from 'react-icons/fa';
 
 import {
 	Container,
@@ -53,14 +44,6 @@ function CoursesPanel() {
 
 	return (
 		<>
-			<Navigation
-				items={[
-					{ icon: <FaUserGraduate />, name: 'Alunos', path: '/students' },
-					{ icon: <FaUserTie />, name: 'Professores', path: '/professors' },
-					{ icon: <FaUserShield />, name: 'Admins', path: '/admins' },
-					{ icon: <FaUniversity />, name: 'Cursos', path: '/courses' },
-				]}
-			/>
 			<Context path={[{ tier: 'courses', title: 'cursos' }]} />
 			<Container>
 				<StatusCard

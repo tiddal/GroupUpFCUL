@@ -1,14 +1,17 @@
 import React from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
 import Dashboard from '../pages/Professors/Dashboard';
 import Projects from '../pages/Professors/Projects';
 import NewProject from '../pages/Professors/NewProject';
 
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import AsyncNavigation from '../components/AsyncNavigation';
+import Navigation from '../components/Navigation';
+import ScrollToTop from '../components/ScrollToTop';
 
 const ProfessorRoutes = () => (
 	<BrowserRouter>
-		<AsyncNavigation />
+		<ScrollToTop />
+		<Navigation />
 		<Switch>
 			<Route exact path="/" component={Dashboard} />
 			<Route exact path="/projects/:unit" component={Projects} />

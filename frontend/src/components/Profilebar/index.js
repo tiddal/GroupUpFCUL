@@ -18,12 +18,12 @@ import {
 	FaToggleOff,
 } from 'react-icons/fa';
 
-function Profilebar({ profilebarState, sidebarState, toggleProfilebar }) {
+function Profilebar({ profilebarState, toggleProfilebar }) {
 	const { user, logout } = useAuth();
 	const { toggleTheme, title } = useTheme();
 
 	return (
-		<Container profilebarState={profilebarState} sidebarState={sidebarState}>
+		<Container profilebarState={profilebarState}>
 			<User to={`/profile`}>
 				<UserAvatar>
 					{user.avatar ? (

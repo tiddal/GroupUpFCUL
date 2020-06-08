@@ -2,19 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import adminService from '../../../services/admin';
 
-import Navigation from '../../../components/Navigation';
 import Table from '../../../components/Table';
 import Context from '../../../components/Context';
-import {
-	FaUsers,
-	FaUserGraduate,
-	FaUniversity,
-	FaUserShield,
-	FaUserTie,
-	FaSearch,
-	FaPortrait,
-	FaMinus,
-} from 'react-icons/fa';
+import { FaUsers, FaSearch, FaPortrait, FaMinus } from 'react-icons/fa';
 
 import {
 	Container,
@@ -168,14 +158,6 @@ function ListClassMembers({ location: { panelSearchInput } }) {
 
 	return (
 		<>
-			<Navigation
-				items={[
-					{ icon: <FaUserGraduate />, name: 'Alunos', path: '/students' },
-					{ icon: <FaUserTie />, name: 'Professores', path: '/professors' },
-					{ icon: <FaUserShield />, name: 'Admins', path: '/admins' },
-					{ icon: <FaUniversity />, name: 'Cursos', path: '/courses' },
-				]}
-			/>
 			{!initializing && (
 				<Context
 					path={[

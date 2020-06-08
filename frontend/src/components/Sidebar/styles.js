@@ -11,8 +11,8 @@ export const Container = styled.div`
 	z-index: 2;
 	padding-top: 55px;
 	transition: transform 0.3s ease;
-	transform: ${({ profilebarState, sidebarState }) => {
-		if (sidebarState && !profilebarState) return 'translateX(0)';
+	transform: ${({ sidebarState }) => {
+		if (sidebarState) return 'translateX(0)';
 		return 'translateX(-100%)';
 	}};
 
@@ -20,6 +20,10 @@ export const Container = styled.div`
 	@media (min-width: 768px) {
 		width: 250px;
 		box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.25);
+		transform: ${({ sidebarState }) => {
+			if (sidebarState) return 'translateX(0)';
+			return 'translateX(-100%)';
+		}};
 	}
 	/* Large devices (desktops, 1450px and up) */
 	@media (min-width: 1450px) {
@@ -63,6 +67,7 @@ export const Item = styled(NavLink)`
 	justify-content: flex-start;
 	align-items: center;
 	text-decoration: none;
+	transition: background 0.3s ease;
 	div {
 		height: 100%;
 		width: 75px;
