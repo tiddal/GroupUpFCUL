@@ -24,14 +24,14 @@ export const Sheet = styled.div`
 	flex-direction: column;
 	align-items: center;
 	@media (min-width: 768px) {
-		padding: 30px 40px 40px 40px;
+		padding: 30px 40px 10px 40px;
 		width: 660px;
 		border-radius: 10px;
 		box-shadow: ${({ theme }) => theme.box_shadow.primary};
 	}
 	@media (min-width: 1450px) {
 		width: 960px;
-		padding: 30px 40px 60px 40px;
+		padding: 30px 40px 20px 40px;
 	}
 `;
 
@@ -64,7 +64,7 @@ export const Form = styled.form`
 	margin-top: 40px;
 	width: 300px;
 	display: grid;
-	gap: 25px;
+	gap: 10px;
 	@media (min-width: 768px) {
 		width: 525px;
 	}
@@ -76,18 +76,18 @@ export const Form = styled.form`
 export const Button = styled.button`
 	display: flex;
 	justify-content: center;
-	margin: 10px 0;
+	align-items: center;
+	margin: 50px 0;
 	height: 40px;
-	line-height: 38px;
 	font-size: 14px;
 	font-weight: 700;
 	color: #fff;
 	width: 100%;
-	border-radius: 10px;
+	border-radius: 5px;
 	box-shadow: ${({ theme }) => theme.box_shadow.secondary};
-	background: ${({ theme }) => theme.colors.primary};
-	justify-self: center;
-	transition: background 0.25s, color 0.25s;
+	background: ${({ theme }) => theme.colors.success};
+	transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+	cursor: pointer;
 	&:disabled {
 		color: ${({ theme }) => theme.colors.disabled_text};
 		background: ${({ theme }) => theme.colors.disabled_background};
@@ -96,14 +96,13 @@ export const Button = styled.button`
 	}
 
 	@media (min-width: 768px) {
-		width: 115px;
+		margin-top: 15px;
+		width: 150px;
 		justify-self: end;
 	}
 
 	@media (min-width: 1450px) {
-		&:hover:enabled {
-			cursor: pointer;
-			background: ${({ theme: { colors } }) => colors.primary_variant};
-		}
+		width: 175px;
+		justify-self: end;
 	}
 `;

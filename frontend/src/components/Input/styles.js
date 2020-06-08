@@ -5,40 +5,41 @@ export const Container = styled.div`
 		type === 'number' || type === 'datetime-local' ? 'unset' : '1 / -1'};
 	display: grid;
 	grid-template-columns: 100%;
-	grid-template-rows: auto 20px;
-`;
-
-export const Fieldset = styled.fieldset`
-	padding: 0;
-	line-height: 0;
-	border: 1px solid
-		${({ theme, error }) =>
-			error ? theme.colors.danger : theme.colors.secondary_text};
-	border-radius: 5px;
-	color: ${({ theme, error }) =>
-		error ? theme.colors.danger : theme.colors.secondary_text};
-	legend {
+	grid-template-rows: 25px 50px 20px;
+	align-items: center;
+	label {
 		font-size: 12px;
-		font-weight: 600;
-		margin-left: 10px;
 		padding: 0 10px;
+		transition: color 0.3s ease;
+		color: ${({ theme, error }) =>
+			error ? theme.colors.danger : theme.colors.text};
+		@media (min-width: 768px) {
+			font-size: 14px;
+		}
 	}
-	input[type='datetime-local']::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		display: none;
+	input[type='text'],
+	input[type='email'],
+	input[type='number'] {
+		height: 50px;
+		background: ${({ theme }) => theme.colors.inputs.background};
+		border-radius: 5px;
+		border: 0;
+		padding: 0 20px;
+		font-size: 16px;
+		transition: border 0.3s ease;
+		outline: none;
+		color: ${({ theme }) => theme.colors.inputs.text};
+		border: 1px solid
+			${({ theme, error }) =>
+				error ? theme.colors.danger : theme.colors.inputs.border};
+		:focus {
+			border-color: ${({ theme, error }) =>
+				error ? theme.colors.danger : theme.colors.primary_variant};
+		}
 	}
 `;
 
-export const InputField = styled.input`
-	height: 50px;
-	background: transparent;
-	width: 100%;
-	padding: 0 20px;
-	border: none;
-	color: ${({ theme }) => theme.colors.text};
-	transition: border-color 0.5s;
-	font-size: 16px;
-`;
+export const InputField = styled.input``;
 
 export const Textarea = styled(InputField).attrs({ as: 'textarea' })`
 	padding-top: 20px;
@@ -52,10 +53,21 @@ export const Select = styled.div`
 	height: 50px;
 	width: 100%;
 	position: relative;
+	background: ${({ theme }) => theme.colors.inputs.background};
+	border: 1px solid
+		${({ theme, error }) =>
+			error ? theme.colors.danger : theme.colors.inputs.border};
+	border-radius: 5px;
+	transition: border 0.3s ease;
+	:focus-within {
+		border-color: ${({ theme, error }) =>
+			error ? theme.colors.danger : theme.colors.primary_variant};
+	}
 	select {
+		font-family: inherit;
 		position: relative;
 		border: none;
-		background: ${({ theme }) => theme.colors.background};
+		color: ${({ theme }) => theme.colors.inputs.text};
 		transition: border-color 0.5s;
 		appearance: none;
 		border-radius: 5px;
@@ -63,12 +75,12 @@ export const Select = styled.div`
 		width: 100%;
 		background: transparent;
 		padding: 0 20px;
-		color: ${({ theme }) => theme.colors.text};
 		font-size: 16px;
 		cursor: pointer;
 		option {
-			background: ${({ theme }) => theme.colors.background};
-			color: ${({ theme }) => theme.colors.text};
+			font-family: inherit;
+			background: ${({ theme }) => theme.colors.surface};
+			color: ${({ theme }) => theme.colors.inputs.text};
 		}
 	}
 	span {
@@ -87,8 +99,11 @@ export const Select = styled.div`
 export const Info = styled.div`
 	align-self: end;
 	padding: 0 10px;
-	font-size: 12px;
+	font-size: 11px;
 	transition: color 0.5s;
 	color: ${({ theme, error }) =>
 		error ? theme.colors.danger : theme.colors.secondary_text};
+	@media (min-width: 768px) {
+		font-size: 12px;
+	}
 `;

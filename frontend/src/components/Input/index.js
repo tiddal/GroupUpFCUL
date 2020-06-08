@@ -1,13 +1,6 @@
 import React from 'react';
 
-import {
-	Container,
-	InputField,
-	Info,
-	Select,
-	Textarea,
-	Fieldset,
-} from './styles';
+import { Container, InputField, Info, Select, Textarea } from './styles';
 import { FaAngleDown } from 'react-icons/fa';
 
 function Input({
@@ -48,13 +41,11 @@ function Input({
 		),
 	};
 	return (
-		<Container type={type}>
-			<Fieldset error={error} danger={danger}>
-				<legend>
-					{label}:{validation.required && ' (*)'}
-				</legend>
-				{inputs[type]}
-			</Fieldset>
+		<Container type={type} error={error}>
+			<label htmlFor={id}>
+				{label}:{validation.required && ' *'}
+			</label>
+			{inputs[type]}
 			<Info error={error}>{info}</Info>
 		</Container>
 	);

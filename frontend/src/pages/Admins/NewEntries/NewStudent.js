@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import adminService from '../../../services/admin';
 
-import { Container, Sheet, Title, Form, Button } from './styles';
+import { Container, Sheet, Title, Form } from './styles';
 
 import Context from '../../../components/Context';
 import Notification from '../../../components/Notification';
+import { Submit } from '../../../components/Button';
 import { ButtonSpinner } from '../../../components/Spinner';
 import Input from '../../../components/Input';
 
@@ -170,9 +171,9 @@ function NewStudent() {
 								}
 							/>
 						))}
-						<Button disabled={!valid}>
+						<Submit disabled={!valid}>
 							{loading ? <ButtonSpinner /> : 'Submeter'}
-						</Button>
+						</Submit>
 					</Form>
 				</Sheet>
 			</Container>

@@ -20,6 +20,12 @@ export default {
 			success: 'lightseagreen',
 			danger: 'red',
 		},
+		inputs: {
+			text: '#FFFFFF',
+			placeholder: '#AAAAAA',
+			border: '#191A21',
+			background: '#232740',
+		},
 	},
 	box_shadow: {
 		primary: '0px 2px 10px rgba(0, 0, 0, 0.3)',
