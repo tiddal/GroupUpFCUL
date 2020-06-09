@@ -11,6 +11,9 @@ export const Container = styled.div`
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		@media (min-width: 768px) {
+			justify-content: start;
+		}
 		span {
 			background: ${({ theme }) => theme.colors.surface};
 			color: ${({ theme }) => theme.colors.secondary_text};
@@ -20,6 +23,9 @@ export const Container = styled.div`
 			font-size: 10px;
 			text-transform: uppercase;
 			padding: 3px 30px;
+			@media (min-width: 768px) {
+				margin-left: 50px;
+			}
 		}
 	}
 `;

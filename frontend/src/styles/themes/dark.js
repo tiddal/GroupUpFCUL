@@ -7,7 +7,7 @@ export default {
 		background: '#1F2231',
 		surface: '#191A21',
 		text: '#ffffff',
-		secondary_text: '#62646F',
+		secondary_text: '#979797',
 		placeholder: '#232740',
 		danger: '#F77268',
 		warning: '#FFE484',

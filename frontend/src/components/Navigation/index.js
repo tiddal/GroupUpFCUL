@@ -6,6 +6,7 @@ import Sidebar from '../Sidebar';
 import Profilebar from '../Profilebar';
 import Modal from '../Modal';
 import professorService from '../../services/professor';
+import studentService from '../../services/student';
 
 import {
 	FaUserGraduate,
@@ -22,12 +23,8 @@ function Navigation() {
 	const { user } = useAuth();
 
 	useEffect(() => {
-		async function getAsyncItems() {
-			const classes = await professorService.get.classes(
-				user.username,
-				'2019-2020',
-				2
-			);
+		async function getAsyncItems(service) {
+			const classes = await service.get.classes(user.username, '2019-2020', 2);
 			const units = classes.reduce((unique, unit) => {
 				return unique.some((item) => item.code === unit.code)
 					? unique
@@ -51,7 +48,8 @@ function Navigation() {
 				{ icon: <FaUniversity />, name: 'Cursos', path: '/courses' },
 			]);
 		}
-		if (user.role !== 'admin') getAsyncItems();
+		if (user.role === 'professor') getAsyncItems(professorService);
+		if (user.role === 'student') getAsyncItems(studentService);
 		if (user.role === 'admin') getItems();
 	}, [user]);
 
