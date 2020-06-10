@@ -104,6 +104,7 @@ export const Item = styled(NavLink)`
 
 	&:hover {
 		cursor: pointer;
+		background: #191a21;
 	}
 
 	&.active {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import {
 	Container,
@@ -23,6 +24,7 @@ import {
 } from 'react-icons/fa';
 
 function Teams() {
+	const history = useHistory();
 	const [groupsData, setGroupsData] = useState([
 		{
 			number: 1,
@@ -33,6 +35,10 @@ function Teams() {
 			expand: false,
 		},
 	]);
+
+	function handleCreateGroup() {
+		history.push('/projects/26757/1/teams/1');
+	}
 
 	function handleCardState(card) {
 		setGroupsData(
@@ -52,7 +58,7 @@ function Teams() {
 				]}
 			/>
 			<Container>
-				<MainButton onClick={() => {}}>
+				<MainButton onClick={handleCreateGroup}>
 					<FaPlus />
 					Criar Grupo
 				</MainButton>
