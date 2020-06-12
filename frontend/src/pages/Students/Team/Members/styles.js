@@ -5,6 +5,7 @@ export const Container = styled.div`
 	display: grid;
 	grid-auto-rows: min-content;
 	gap: 75px;
+	padding-bottom: 40px;
 	@media (min-width: 768px) {
 		padding: 50px;
 		grid-template-columns: repeat(2, 1fr);

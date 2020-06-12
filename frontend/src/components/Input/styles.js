@@ -2,7 +2,9 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
 	grid-column: ${({ type }) =>
-		type === 'number' || type === 'datetime-local' ? 'unset' : '1 / -1'};
+		type === 'number' || type === 'date' || type === 'time'
+			? 'unset'
+			: '1 / -1'};
 	display: grid;
 	grid-template-columns: 100%;
 	grid-template-rows: 25px 50px 20px;
@@ -63,6 +65,25 @@ export const Select = styled.div`
 		border-color: ${({ theme, error }) =>
 			error ? theme.colors.danger : theme.colors.primary_variant};
 	}
+	input[type='date'],
+	input[type='time'] {
+		font-family: inherit;
+		position: relative;
+		border: none;
+		color: ${({ theme }) => theme.colors.inputs.text};
+		transition: border-color 0.5s;
+		appearance: none;
+		border-radius: 5px;
+		height: 100%;
+		width: 100%;
+		background: transparent;
+		padding: 0 20px;
+		font-size: 16px;
+		::-webkit-calendar-picker-indicator {
+			cursor: pointer;
+			background: transparent;
+		}
+	}
 	select {
 		font-family: inherit;
 		position: relative;
@@ -86,7 +107,7 @@ export const Select = styled.div`
 	span {
 		position: absolute;
 		height: 100%;
-		right: 15px;
+		right: 25px;
 		top: 16px;
 		z-index: 0;
 		svg {

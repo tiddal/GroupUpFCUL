@@ -4,29 +4,31 @@ import { NavLink } from 'react-router-dom';
 
 export const Container = styled(Wrapper)`
 	padding-top: 150px;
-	height: 100%;
 	width: 100%;
 	display: grid;
-
+	grid-template-rows: minmax(662px, max-content);
 	@media (min-width: 768px) {
+		padding-bottom: 40px;
 		padding-top: 200px;
 		justify-content: center;
+		grid-template-rows: minmax(755px, max-content);
 	}
 `;
 
 export const Content = styled.div`
 	background: ${({ theme }) => theme.colors.background};
-	border-radius: 20px 20px 0 0;
 	box-shadow: ${({ theme }) => theme.box_shadow.primary};
+	border-radius: 20px 20px 0 0;
 	display: grid;
 	grid-template-columns: 100%;
 	grid-template-rows: 75px 45px auto;
+	overflow: hidden;
 	@media (min-width: 768px) {
-		border-radius: 10px 10px 0 0;
+		padding-bottom: 0;
+		border-radius: 10px;
 		grid-template-columns: 660px;
 	}
 	@media (min-width: 1450px) {
-		border-radius: 10px 10px 0 0;
 		grid-template-columns: 960px;
 	}
 `;

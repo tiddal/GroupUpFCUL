@@ -14,6 +14,9 @@ import { Switch, Route, useRouteMatch } from 'react-router-dom';
 
 import Members from './Members';
 import Stages from './Stages';
+import Tasks from './Tasks';
+import Meetings from './Meetings';
+import Schedules from './Schedules';
 
 function Team() {
 	const { path, url } = useRouteMatch();
@@ -38,19 +41,22 @@ function Team() {
 						<Link exact to={`${url}/stages`}>
 							<FaArchive /> Etapas
 						</Link>
-						<Link exact to="/">
+						<Link exact to={`${url}/tasks`}>
 							<FaClipboardList /> Tarefas
 						</Link>
-						<Link exact to="/">
+						<Link exact to={`${url}/meetings`}>
 							<FaHandshake /> Reuniões
 						</Link>
-						<Link exact to="/">
+						<Link exact to={`${url}/schedules`}>
 							<FaCalendarWeek /> Horários
 						</Link>
 					</Navigation>
 					<Switch>
 						<Route exact path={`${path}`} component={Members} />
 						<Route path={`${path}/stages`} component={Stages} />
+						<Route path={`${path}/tasks`} component={Tasks} />
+						<Route path={`${path}/meetings`} component={Meetings} />
+						<Route path={`${path}/schedules`} component={Schedules} />
 					</Switch>
 				</Content>
 			</Container>

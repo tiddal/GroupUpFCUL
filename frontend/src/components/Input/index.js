@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Container, InputField, Info, Select, Textarea } from './styles';
-import { FaAngleDown } from 'react-icons/fa';
+import { FaAngleDown, FaCalendarDay, FaClock } from 'react-icons/fa';
 
 function Input({
 	id,
@@ -17,6 +17,22 @@ function Input({
 }) {
 	const inputs = {
 		text: <InputField type={type} id={id} onChange={change} value={value} />,
+		date: (
+			<Select>
+				<span>
+					<FaCalendarDay />
+				</span>
+				<InputField type={type} id={id} onChange={change} value={value} />
+			</Select>
+		),
+		time: (
+			<Select>
+				<span>
+					<FaClock />
+				</span>
+				<InputField type={type} id={id} onChange={change} value={value} />
+			</Select>
+		),
 		select: options && (
 			<Select>
 				<span>
