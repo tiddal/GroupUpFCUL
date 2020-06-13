@@ -86,8 +86,24 @@ class ProjectController {
 				},
 				['number', 'name', 'academic_year']
 			);
+			let stage_number = 1;
+			for (let stage of request.body.project.stages) {
+				const { description, start_date, end_date, weight } = stage;
+				const stage_id = uuidv4();
+				await connection('Stage').insert({
+					id: stage_id,
+					project_id: id,
+					stage_number,
+					description,
+					start_date,
+					end_date,
+					weight,
+				});
+				stage_number++;
+			}
 			return response.status(201).json(project);
 		} catch (error) {
+			console.log(error);
 			return next(errors.UNIQUE_CONSTRAIN(error.detail));
 		}
 	}
@@ -122,6 +138,7 @@ class ProjectController {
 		const { project_year: academic_year } = request.params;
 		const projects = await connection('Project')
 			.select([
+				'number',
 				'name',
 				'min_students',
 				'max_students',

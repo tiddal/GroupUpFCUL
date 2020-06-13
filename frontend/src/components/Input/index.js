@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container, InputField, Info, Select, Textarea } from './styles';
+import { Container, InputField, Info, Select } from './styles';
 import { FaAngleDown, FaCalendarDay, FaClock } from 'react-icons/fa';
 
 function Input({
@@ -17,6 +17,8 @@ function Input({
 }) {
 	const inputs = {
 		text: <InputField type={type} id={id} onChange={change} value={value} />,
+		number: <InputField type={type} id={id} onChange={change} value={value} />,
+
 		date: (
 			<Select>
 				<span>
@@ -50,10 +52,14 @@ function Input({
 				</select>
 			</Select>
 		),
-		textarea: <Textarea id={id} onChange={change} value={value}></Textarea>,
-		number: <InputField type={type} id={id} onChange={change} value={value} />,
+		textarea: <textarea id={id} onChange={change} value={value}></textarea>,
 		'datetime-local': (
-			<InputField type={type} id={id} onChange={change} value={value} />
+			<Select>
+				<span>
+					<FaCalendarDay />
+				</span>
+				<InputField type={type} id={id} onChange={change} value={value} />
+			</Select>
 		),
 	};
 	return (

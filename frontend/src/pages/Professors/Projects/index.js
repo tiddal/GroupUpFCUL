@@ -34,32 +34,7 @@ function Projects() {
 	} = useRouteMatch('/projects/:unit');
 	const [unitData, setUnitData] = useState();
 	const [initializing, setInitializing] = useState(true);
-	const [projectsData, setProjectsData] = useState([
-		{
-			expand: false,
-			number: 1,
-			name: 'hi',
-			min_students: 1,
-			max_students: 2,
-			description: 'hello',
-		},
-		{
-			expand: false,
-			number: 2,
-			name: 'hi',
-			min_students: 1,
-			max_students: 2,
-			description: 'hello',
-		},
-		{
-			expand: false,
-			number: 3,
-			name: 'hi',
-			min_students: 1,
-			max_students: 2,
-			description: 'hello',
-		},
-	]);
+	const [projectsData, setProjectsData] = useState([]);
 
 	useEffect(() => {
 		async function getInitialState() {
@@ -72,6 +47,20 @@ function Projects() {
 				(class_) => class_.code.toString() === unit
 			);
 			setUnitData(unitData);
+			const projects = await professorService.get.projects(
+				unitData.course_code,
+				unitData.code,
+				'2019-2020'
+			);
+			const projectsData = projects.map((project) => ({
+				expand: false,
+				number: project.number,
+				name: project.name,
+				min_students: project.min_students,
+				max_students: project.max_students,
+				description: project.description,
+			}));
+			setProjectsData(projectsData);
 			setInitializing(false);
 		}
 		getInitialState();
@@ -88,12 +77,7 @@ function Projects() {
 	return (
 		<>
 			{!initializing && (
-				<Context
-					path={[
-						{ tier: '', title: 'projetos' },
-						{ tier: `projects/${unit}`, title: unitData.name },
-					]}
-				/>
+				<Context path={[{ tier: `projects/${unit}`, title: unitData.name }]} />
 			)}
 			{initializing ? (
 				<Spinner />
@@ -117,14 +101,10 @@ function Projects() {
 							<Content expand={project.expand}>
 								<Info>
 									<InfoTitle>
-										<FaInfoCircle /> Projeto {project.number}
+										<FaInfoCircle /> Projeto {project.number} - {project.name}
 									</InfoTitle>
 									<p>
 										Descrição: {project.description}
-										<br />
-										Etapa: 2/4
-										<br />
-										Grupos: 12
 										<br />
 										Alunos por grupo: {project.min_students} a{' '}
 										{project.max_students}

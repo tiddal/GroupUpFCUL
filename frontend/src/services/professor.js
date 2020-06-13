@@ -12,6 +12,30 @@ export default {
 				return error;
 			}
 		},
+		projects: async (course, unit, year) => {
+			try {
+				const response = await API.get(
+					`courses/${course}/units/${unit}/projects/${year}`
+				);
+				return response.data;
+			} catch (error) {
+				return error;
+			}
+		},
+	},
+
+	create: {
+		project: async (course, unit, project) => {
+			try {
+				const response = await API.post(
+					`courses/${course}/units/${unit}/projects`,
+					project
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
 	},
 
 	professorClasses: async (professor, year, semester) => {

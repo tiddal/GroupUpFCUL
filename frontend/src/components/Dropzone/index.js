@@ -3,13 +3,17 @@ import { useDropzone } from 'react-dropzone';
 
 import { Container, UploadMessage, Zone } from './styles';
 
-function Dropzone({ setFile, file, mime, supported }) {
+function Dropzone({ setFile, file, mime, supported, index }) {
 	const onDrop = useCallback(
 		(acceptedFiles) => {
 			const droppedFile = acceptedFiles[0];
-			setFile(droppedFile);
+			if (index !== undefined) {
+				setFile(droppedFile, index);
+			} else {
+				setFile(droppedFile);
+			}
 		},
-		[setFile]
+		[setFile, index]
 	);
 	const {
 		getRootProps,

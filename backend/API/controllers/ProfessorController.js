@@ -77,6 +77,8 @@ class ProfessorController {
 		const classes = await connection('Unit')
 			.leftJoin('Class', 'Class.unit_id', '=', 'Unit.id')
 			.leftJoin('class_professor', 'class_professor.class_id', '=', 'Class.id')
+			.leftJoin('course_unit', 'course_unit.unit_id', '=', 'Unit.id')
+			.leftJoin('Course', 'Course.id', '=', 'course_unit.course_id')
 			.select(
 				'Class.number',
 				'Class.begins_at',
@@ -87,7 +89,10 @@ class ProfessorController {
 				'Unit.name',
 				'Unit.initials',
 				'Unit.semester',
-				'Unit.ects'
+				'Unit.ects',
+				'Course.code as course_code',
+				'Course.name as course_name',
+				'Course.initials as course_initials'
 			)
 			.where({ professor_id: professor.user_id, academic_year, semester });
 		return response.json(classes);

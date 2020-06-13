@@ -7,8 +7,9 @@ export const Container = styled.div`
 			: '1 / -1'};
 	display: grid;
 	grid-template-columns: 100%;
-	grid-template-rows: 25px 50px 20px;
+	grid-template-rows: 25px auto 20px;
 	align-items: center;
+
 	label {
 		font-size: 12px;
 		padding: 0 10px;
@@ -21,11 +22,11 @@ export const Container = styled.div`
 	}
 	input[type='text'],
 	input[type='email'],
-	input[type='number'] {
+	input[type='number'],
+	textarea {
 		height: 50px;
 		background: ${({ theme }) => theme.colors.inputs.background};
 		border-radius: 5px;
-		border: 0;
 		padding: 0 20px;
 		font-size: 16px;
 		transition: border 0.3s ease;
@@ -39,17 +40,17 @@ export const Container = styled.div`
 				error ? theme.colors.danger : theme.colors.primary_variant};
 		}
 	}
+	textarea {
+		font-family: inherit;
+		height: 100px;
+		padding: 12px 20px 0 20px;
+		resize: vertical;
+		min-height: 50px;
+		max-height: 420px;
+	}
 `;
 
 export const InputField = styled.input``;
-
-export const Textarea = styled(InputField).attrs({ as: 'textarea' })`
-	padding-top: 20px;
-	resize: vertical;
-	min-height: 50px;
-	height: 100px;
-	max-height: 500px;
-`;
 
 export const Select = styled.div`
 	height: 50px;
@@ -66,7 +67,8 @@ export const Select = styled.div`
 			error ? theme.colors.danger : theme.colors.primary_variant};
 	}
 	input[type='date'],
-	input[type='time'] {
+	input[type='time'],
+	input[type='datetime-local'] {
 		font-family: inherit;
 		position: relative;
 		border: none;

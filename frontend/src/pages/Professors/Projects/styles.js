@@ -167,13 +167,11 @@ export const Button = styled(NavLink)`
 	}
 	@media (min-width: 768px) {
 		box-shadow: ${({ theme }) => theme.box_shadow.secondary};
-		border-radius: 10px;
 	}
 `;
 
 export const MainButton = styled(Button)`
 	background: ${({ theme }) => theme.colors.success};
-	border-radius: 10px;
 	font-weight: 700;
 	box-shadow: ${({ theme }) => theme.box_shadow.secondary};
 	transition: background 0.3s;
