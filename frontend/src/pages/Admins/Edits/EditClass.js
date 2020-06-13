@@ -171,7 +171,6 @@ function EditClass() {
 							let value = response[key];
 							if (key === 'begins_at' || key === 'ends_at') {
 								value = response[key].slice(0, -3);
-								console.log(value);
 							}
 							return {
 								...prevState,

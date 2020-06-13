@@ -167,6 +167,7 @@ function NewProject() {
 			for (let key in stage.inputs) {
 				validForm = stage.inputs[key].valid && validForm;
 			}
+			validForm = stage.file && validForm;
 			return stage;
 		});
 		return validForm;
@@ -249,8 +250,8 @@ function NewProject() {
 	function setStageFile(file, index) {
 		const updatedForm = [...stagesForm];
 		updatedForm[index].file = file;
-		console.log(updatedForm);
 		setStagesForm(updatedForm);
+		setFormValidity(evaluateForm(projectForm, updatedForm));
 	}
 
 	return (

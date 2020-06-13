@@ -157,7 +157,6 @@ export default {
 
 		classByNumber: async (number, academic_year, course_code, unit_code) => {
 			try {
-				console.log(unit_code);
 				const response = await API.get(
 					`courses/${course_code}/units/${unit_code}/classes/${academic_year}/${number}`
 				);

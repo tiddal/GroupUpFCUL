@@ -82,7 +82,6 @@ function NewCourse() {
 				info,
 			},
 		};
-		console.log(updatedForm);
 		setNewCourseForm(updatedForm);
 		let validForm = true;
 		for (let key in updatedForm) {
