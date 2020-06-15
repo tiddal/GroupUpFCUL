@@ -276,4 +276,9 @@ export const MainButton = styled(Button).attrs({ as: 'button' })`
 	}
 `;
 
-export const Link = styled(Button).attrs({ as: NavLink })``;
+export const Link = styled(Button).attrs({ as: NavLink })`
+	&:hover {
+		background: ${({ theme }) => theme.colors.hover['primary']};
+		cursor: pointer;
+	}
+`;
