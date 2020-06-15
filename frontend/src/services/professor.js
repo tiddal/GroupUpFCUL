@@ -22,6 +22,36 @@ export default {
 				return error;
 			}
 		},
+		stages: async (course, unit, year, project) => {
+			try {
+				const response = await API.get(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/stages`
+				);
+				return response.data;
+			} catch (error) {
+				return error;
+			}
+		},
+		submissions: async (course, unit, year, project, stage) => {
+			try {
+				const response = await API.get(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/stages/${stage}/teams`
+				);
+				return response.data;
+			} catch (error) {
+				return error;
+			}
+		},
+		teams: async (course, unit, year, project) => {
+			try {
+				const response = await API.get(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/teams`
+				);
+				return response.data;
+			} catch (error) {
+				return error;
+			}
+		},
 	},
 
 	create: {

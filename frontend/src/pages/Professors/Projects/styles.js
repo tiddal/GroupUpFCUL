@@ -151,6 +151,7 @@ export const InfoTitle = styled.div`
 `;
 
 export const Button = styled(NavLink)`
+	grid-column: 1 / -1;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -160,12 +161,17 @@ export const Button = styled(NavLink)`
 	color: #fff;
 	font-size: 14px;
 	font-weight: 600;
+	transition: background 0.3s ease;
 	svg {
 		margin-right: 15px;
 		font-size: 12px;
 		margin-top: 2px;
 	}
+	&:hover {
+		background: ${({ theme }) => theme.colors.hover.primary};
+	}
 	@media (min-width: 768px) {
+		grid-column: unset;
 		box-shadow: ${({ theme }) => theme.box_shadow.secondary};
 	}
 `;
@@ -178,7 +184,7 @@ export const MainButton = styled(Button)`
 	&:hover {
 		background: ${({ theme }) => theme.colors.hover.success};
 	}
-	@media (min-width: 1450px) {
+	@media (min-width: 768px) {
 		grid-column: 3;
 	}
 `;
