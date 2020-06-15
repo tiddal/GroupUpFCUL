@@ -114,7 +114,7 @@ function Projects() {
 									<FaArchive />
 									Ver Etapas
 								</Button>
-								<Button to={`/projects/${unit}/${project.number}/groups`}>
+								<Button to={`/projects/${unit}/${project.number}/teams`}>
 									<FaUsers />
 									Ver Grupos
 								</Button>

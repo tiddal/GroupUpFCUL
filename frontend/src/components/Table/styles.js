@@ -63,7 +63,11 @@ export const TableLineInfo = styled(TableLine)`
 `;
 
 export const TableCell = styled.span`
+	display: flex;
+	align-content: center;
+	justify-content: center;
 	padding: 0 5px;
 	width: 100%;
-	text-align: ${({ align }) => (align ? align : 'center')};
+	justify-content: ${({ align }) => (align ? align : 'center')};
+	${({ align }) => align === 'left' && 'padding-left: 20px;'}
 `;
