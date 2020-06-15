@@ -88,7 +88,16 @@ function Dashboard() {
 					? unique
 					: [...unique, unit];
 			}, []);
-			setUnitsData(units);
+			const unitsData = [];
+			for (let unit of units) {
+				const unitProjects = await studentService.get.projects(
+					unit.course_code,
+					unit.code,
+					'2019-2020'
+				);
+				unitsData.push({ ...unit, projects: unitProjects.length });
+			}
+			setUnitsData(unitsData);
 			setClassesData(classes);
 			if (classes.length) {
 				const date = new Date();
@@ -156,7 +165,11 @@ function Dashboard() {
 								key={unit.code}
 								title={unit.initials}
 								icon={<FaBook />}
-								content={<UnitInfo>1 Projetos</UnitInfo>}
+								content={
+									<UnitInfo>
+										{unit.projects} Projeto{unit.projects !== 1 && 's'}
+									</UnitInfo>
+								}
 								link={{
 									path: `/projects/${unit.code}`,
 									label: 'Ver Projetos',

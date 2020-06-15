@@ -27,7 +27,7 @@ teams.get(
 );
 
 // POST /courses/L079/units/26719/projects/2019-2020/1/teams
-teams.post('/', loginRequired, TeamValidator.create, TeamController.store);
+teams.post('/', loginRequired, TeamController.store);
 
 // PUT /courses/L079/units/26719/projects/2019-2020/1/teams/T001
 teams.put(

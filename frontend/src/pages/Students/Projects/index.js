@@ -25,22 +25,13 @@ import Spinner from '../../../components/Spinner';
 import Context from '../../../components/Context';
 
 function Projects() {
-	const { user } = useAuth();
 	const {
 		params: { unit },
 	} = useRouteMatch('/projects/:unit');
+	const { user } = useAuth();
 	const [unitData, setUnitData] = useState();
 	const [initializing, setInitializing] = useState(true);
-	const [projectsData, setProjectsData] = useState([
-		{
-			expand: true,
-			number: 1,
-			name: 'hi',
-			min_students: 1,
-			max_students: 2,
-			assignment_url: 'https://www.google.com/',
-		},
-	]);
+	const [projectsData, setProjectsData] = useState([]);
 
 	useEffect(() => {
 		async function getInitialState() {
@@ -53,6 +44,20 @@ function Projects() {
 				(class_) => class_.code.toString() === unit
 			);
 			setUnitData(unitData);
+			const projects = await studentService.get.projects(
+				unitData.course_code,
+				unitData.code,
+				'2019-2020'
+			);
+			const projectsData = projects.map((project) => ({
+				expand: false,
+				number: project.number,
+				name: project.name,
+				min_students: project.min_students,
+				max_students: project.max_students,
+				description: project.description,
+			}));
+			setProjectsData(projectsData);
 			setInitializing(false);
 		}
 		getInitialState();
@@ -69,12 +74,7 @@ function Projects() {
 	return (
 		<>
 			{!initializing && (
-				<Context
-					path={[
-						{ tier: '', title: 'projetos' },
-						{ tier: `projects/${unit}`, title: unitData.name },
-					]}
-				/>
+				<Context path={[{ tier: `projects/${unit}`, title: unitData.name }]} />
 			)}
 			{initializing ? (
 				<Spinner />
@@ -101,8 +101,9 @@ function Projects() {
 										<br />
 										Grupos: 12
 										<br />
-										Alunos por grupo: {project.min_students} a{' '}
-										{project.max_students}
+										Alunos por grupo: {project.min_students}{' '}
+										{project.min_students !== project.max_students &&
+											`a ${project.max_students}`}
 										<br />
 										<a
 											href={project.assignment_url}

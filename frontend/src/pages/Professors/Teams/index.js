@@ -32,9 +32,9 @@ function Teams() {
 
 	const createTableRow = useCallback(
 		(team) => [
-			{ data: team.number },
-			{ data: team.name },
-			{ data: '0', align: 'left' },
+			{ data: team.team_number },
+			{ data: team.name, align: 'left' },
+			{ data: '0' },
 			{
 				data: (
 					<Link to={`${url}/${team.number}`}>

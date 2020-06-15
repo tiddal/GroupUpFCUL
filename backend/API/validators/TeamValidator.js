@@ -1,16 +1,6 @@
 const { celebrate, Segments, Joi } = require('celebrate');
 
 module.exports = {
-	create: celebrate({
-		[Segments.BODY]: Joi.object().keys({
-			team: Joi.object().required().keys({
-				name: Joi.string().alphanum(),
-				description: Joi.string(),
-				logo_url: Joi.string(),
-			}),
-		}),
-	}),
-
 	find: celebrate({
 		[Segments.PARAMS]: Joi.object().keys({
 			code: Joi.string().required(),

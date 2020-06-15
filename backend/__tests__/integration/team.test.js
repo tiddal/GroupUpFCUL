@@ -100,7 +100,6 @@ describe('Team', () => {
 			}));
 		await request(app)
 			.post('/courses/L079/units/26719/projects/2019-2020/1/teams')
-			.send({ team: Team })
 			.set('Authorization', `Bearer ${studentToken}`);
 	});
 
@@ -122,7 +121,6 @@ describe('Team', () => {
 			}));
 		const response = await request(app)
 			.post('/courses/L079/units/26719/projects/2019-2020/1/teams')
-			.send({ team: Team })
 			.set('Authorization', `Bearer ${localToken}`);
 		expect(response.status).toBe(201);
 	});

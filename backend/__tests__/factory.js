@@ -110,12 +110,6 @@ module.exports = {
 		weight: 1,
 	},
 
-	Team: {
-		name: '20Ederrota',
-		description: 'Queremos 19,9',
-		logo_url: 'atoa.png',
-	},
-
 	Meeting: {
 		topic: 'Como ter o 19,9 em menos de 24h',
 		begins_at: '02-03-2019 16:30',

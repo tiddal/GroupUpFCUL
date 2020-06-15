@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Wrapper } from '../../../components/Wrapper';
+import { NavLink } from 'react-router-dom';
 
 export const Container = styled(Wrapper)`
 	padding-top: 150px;
@@ -235,7 +236,7 @@ export const Button = styled.button`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background: ${({ theme }) => theme.colors.primary};
+	background: ${({ theme, type }) => theme.colors[type || 'primary']};
 	border-radius: 5px;
 	text-decoration: none;
 	color: #fff;
@@ -247,9 +248,13 @@ export const Button = styled.button`
 		font-size: 12px;
 		margin-top: 2px;
 	}
-	&:hover {
-		background: ${({ theme }) => theme.colors.primary_variant};
+	&:hover:enabled {
+		background: ${({ theme, type }) => theme.colors.hover[type || 'primary']};
 	}
+	&:not(:enabled) {
+		cursor: default;
+	}
+
 	@media (min-width: 768px) {
 		box-shadow: ${({ theme }) => theme.box_shadow.secondary};
 		grid-column: 3;
@@ -270,3 +275,5 @@ export const MainButton = styled(Button).attrs({ as: 'button' })`
 		grid-column: 3;
 	}
 `;
+
+export const Link = styled(Button).attrs({ as: NavLink })``;
