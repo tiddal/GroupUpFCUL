@@ -36,7 +36,7 @@ function Teams() {
 	const history = useHistory();
 	const { user } = useAuth();
 	const [unitData, setUnitData] = useState();
-	const [projectData, setPtojectData] = useState();
+	const [projectData, setProjectData] = useState();
 	const [teamsData, setTeamsData] = useState();
 	const [initializing, setInitializing] = useState(true);
 	const [teamStatus, setTeamStatus] = useState();
@@ -98,7 +98,7 @@ function Teams() {
 				}
 			}
 			setTeamsData(teamsData);
-			setPtojectData(projectData);
+			setProjectData(projectData);
 			setInitializing(false);
 		}
 		getInitialState();
@@ -149,6 +149,15 @@ function Teams() {
 			team_number,
 			user.username
 		);
+		if (status === 404) {
+			const updatedTeams = teamsData.filter(
+				(team) => team.team_number !== team_number
+			);
+			setTeamsData(updatedTeams);
+			setTeamStatus();
+			setLoading(false);
+			return;
+		}
 		if (status !== 204) return;
 		setTeamStatus();
 		setLoading(false);

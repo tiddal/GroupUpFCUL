@@ -37,7 +37,7 @@ class TeamController {
 			.select(['team_number', 'name', 'description', 'academic_year'])
 			.where({ team_number, project_id: project.id });
 		if (!team) return next(errors.TEAM_NOT_FOUND(team_number, 'params'));
-		return response.json(team_number);
+		return response.json(team);
 	}
 
 	async store(request, response, next) {

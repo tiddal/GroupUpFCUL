@@ -62,6 +62,16 @@ export default {
 				return error;
 			}
 		},
+		team: async (course, unit, year, project, team) => {
+			try {
+				const response = await API.get(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}`
+				);
+				return response.data;
+			} catch (error) {
+				return error;
+			}
+		},
 		teamMembers: async (course, unit, year, project, team) => {
 			try {
 				const response = await API.get(
@@ -96,11 +106,35 @@ export default {
 		},
 	},
 
+	update: {
+		teamMember: async (course, unit, year, project, team, user, role) => {
+			try {
+				const response = await API.put(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/members/${user}`,
+					role
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
+	},
+
 	remove: {
 		teamMember: async (course, unit, year, project, team, user) => {
 			try {
 				const response = await API.delete(
 					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/members/${user}`
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
+		team: async (course, unit, year, project, team) => {
+			try {
+				const response = await API.delete(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}`
 				);
 				return [response.data, response.status];
 			} catch ({ response }) {

@@ -148,7 +148,7 @@ export const LeaveButton = styled.button`
 	box-shadow: ${({ theme }) => theme.box_shadow.secondary};
 	background: ${({ theme }) => theme.colors.danger};
 	height: 40px;
-	&:hover {
+	&:hover:enabled {
 		background: ${({ theme }) => theme.colors.hover.danger};
 	}
 	& > * {
