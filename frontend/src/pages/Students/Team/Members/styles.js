@@ -117,6 +117,12 @@ export const PendingUsersOptions = styled(MembersOptions)`
 `;
 
 export const RateMember = styled(MemberInfo)`
+	p {
+		max-width: 100%;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 	span {
 		all: unset;
 		color: ${({ theme }) => theme.colors.secondary_text};

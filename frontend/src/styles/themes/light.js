@@ -12,6 +12,7 @@ export default {
 		danger: '#F77268',
 		warning: '#FFE484',
 		success: '#00C767',
+		info: '#9AFFCF',
 		base: '#FFFFFF',
 		disabled_background: '#CCCCCC',
 		disabled_text: '#EBEBEB',

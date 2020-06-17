@@ -85,8 +85,7 @@ function Members({ team, handlers }) {
 									)}
 									<RateMember>
 										<p>
-											{member.first_name} {member.last_name.split(' ').pop()}{' '}
-											<span>{member.username}</span>
+											{member.first_name} {member.last_name.split(' ').pop()}
 										</p>
 										<div>
 											<StarRatingComponent
