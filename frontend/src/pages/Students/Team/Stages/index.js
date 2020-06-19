@@ -26,6 +26,21 @@ import {
 	FaFileUpload,
 } from 'react-icons/fa';
 
+const initialState = {
+	stage1: {
+		number: 1,
+		due_date: '26/06/2020',
+		due_Time: '10h00',
+		weight: 25,
+		assignment_url: '/',
+		description:
+			'Não façam nada por favor ou serão severamente penalizados. Estão avisados.',
+		artifacts: [{ filename: 'pti_grupo_05.pdf', type: '.pdf', url: '/' }],
+		feedback: 'Fizeram demasiado...',
+		grade: '13',
+	},
+};
+
 function Members() {
 	return (
 		<Container>
