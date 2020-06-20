@@ -207,24 +207,46 @@ function NewProject() {
 		if (!formValidity) return;
 		setLoading(true);
 		const projectData = {
-			project: { stages: [] },
+			project: {},
 		};
 
 		projectForm.map((field) => (projectData.project[field.id] = field.value));
-		projectData.project.assignment_url = 'test.pdf';
 
-		stagesForm.map((stage) => {
-			const stageData = {};
-			stage.inputs.map((field) => (stageData[field.id] = field.value));
-			projectData.project.stages.push(stageData);
-			return stage;
-		});
-		const [, status] = await professorService.create.project(
+		const [response, status] = await professorService.create.project(
 			unitData.course_code,
 			unitData.code,
 			projectData
 		);
-		if (status !== 201) return logout();
+		if (status !== 201) return;
+		const projectNumber = response.number;
+		for (let stage of stagesForm) {
+			const stageData = new FormData();
+			stage.inputs.map((field) => stageData.append(field.id, field.value));
+			stageData.append('file', stage.file);
+			const [, status] = await professorService.create.stage(
+				unitData.course_code,
+				unitData.code,
+				'2019-2020',
+				projectNumber,
+				stageData
+			);
+			if (status !== 201) return;
+		}
+
+		// stagesForm.map((stage) => {
+		// 	const stageData = {};
+		// 	stage.inputs.map((field) => (stageData[field.id] = field.value));
+		// 	stageData.assignment_url = stage.file.name;
+		// 	projectData.project.stages.push(stageData);
+		// 	return stage;
+		// });
+
+		// const [, status] = await professorService.create.project(
+		// 	unitData.course_code,
+		// 	unitData.code,
+		// 	projectData
+		// );
+		// if (status !== 201) return logout();
 		setProjectForm(initialProject);
 		setStagesForm([initialStage]);
 		setLoading(false);

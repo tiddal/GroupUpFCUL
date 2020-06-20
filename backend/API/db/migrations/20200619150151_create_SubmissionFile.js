@@ -1,10 +1,11 @@
 exports.up = function (knex) {
-	return knex.schema.createTable('team_stage', function (table) {
+	return knex.schema.createTable('SubmissionFile', function (table) {
+		table.uuid('id').primary();
 		table.uuid('stage_id');
 		table.uuid('team_id');
-		table.decimal('stage_grade');
-		table.string('stage_feedback');
-		table.timestamp('submitted_at').notNullable();
+		table.uuid('user_id');
+		table.string('file_name').notNullable();
+		table.string('submission_url').notNullable();
 		table.timestamps(true, true);
 		table
 			.foreign('stage_id')
@@ -16,11 +17,9 @@ exports.up = function (knex) {
 			.references('id')
 			.inTable('Team')
 			.onDelete('CASCADE');
-
-		table.primary(['stage_id', 'team_id']);
 	});
 };
 
 exports.down = function (knex) {
-	return knex.schema.dropTable('team_stage');
+	return knex.schema.dropTable('SubmissionFile');
 };

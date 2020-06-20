@@ -11,8 +11,6 @@ module.exports = {
 				max_students: Joi.number().required(),
 				description: Joi.string().allow('').allow(null),
 				objectives: Joi.string().required(),
-				assignment_url: Joi.string().required(),
-				stages: Joi.array().required(),
 			}).required(),
 		}),
 	}),

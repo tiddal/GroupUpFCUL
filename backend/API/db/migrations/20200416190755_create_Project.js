@@ -9,7 +9,6 @@ exports.up = function (knex) {
 		table.integer('max_students').notNullable();
 		table.string('description');
 		table.string('objectives').notNullable();
-		table.string('assignment_url').notNullable();
 		table.timestamps(true, true);
 		table.unique(['number', 'unit_id', 'academic_year']);
 		table

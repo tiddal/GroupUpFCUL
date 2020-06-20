@@ -26,7 +26,6 @@ class ProjectController {
 				'max_students',
 				'description',
 				'objectives',
-				'assignment_url',
 				'academic_year',
 			])
 			.where('unit_id', unit.id);
@@ -53,12 +52,7 @@ class ProjectController {
 		if (!class_) return next(errors.INVALID_IDENTITY());
 
 		let { min_students, max_students } = request.body.project;
-		const {
-			name,
-			description,
-			objectives,
-			assignment_url,
-		} = request.body.project;
+		const { name, description, objectives } = request.body.project;
 		if (max_students < min_students) max_students = min_students;
 		let number = 1;
 		const unit_id = unit.id;
@@ -82,25 +76,9 @@ class ProjectController {
 					max_students,
 					description,
 					objectives,
-					assignment_url,
 				},
 				['number', 'name', 'academic_year']
 			);
-			let stage_number = 1;
-			for (let stage of request.body.project.stages) {
-				const { description, start_date, end_date, weight } = stage;
-				const stage_id = uuidv4();
-				await connection('Stage').insert({
-					id: stage_id,
-					project_id: id,
-					stage_number,
-					description,
-					start_date,
-					end_date,
-					weight,
-				});
-				stage_number++;
-			}
 			return response.status(201).json(project);
 		} catch (error) {
 			return next(errors.UNIQUE_CONSTRAIN(error.detail));
@@ -122,7 +100,6 @@ class ProjectController {
 				'max_students',
 				'description',
 				'objectives',
-				'assignment_url',
 				'academic_year',
 			])
 			.where({ academic_year, unit_id: unit.id, number });
@@ -143,7 +120,6 @@ class ProjectController {
 				'max_students',
 				'description',
 				'objectives',
-				'assignment_url',
 				'academic_year',
 			])
 			.where({ academic_year, unit_id: unit.id });
@@ -166,12 +142,7 @@ class ProjectController {
 
 		let { min_students, max_students } = request.body.project;
 		if (max_students < min_students) max_students = min_students;
-		const {
-			name,
-			description,
-			objectives,
-			assignment_url,
-		} = request.body.project;
+		const { name, description, objectives } = request.body.project;
 		const [updatedProject] = await connection('Project').where(project).update(
 			{
 				name,
@@ -179,7 +150,6 @@ class ProjectController {
 				max_students,
 				description,
 				objectives,
-				assignment_url,
 			},
 			[
 				'number',
@@ -188,7 +158,6 @@ class ProjectController {
 				'max_students',
 				'description',
 				'objectives',
-				'assignment_url',
 				'academic_year',
 			]
 		);

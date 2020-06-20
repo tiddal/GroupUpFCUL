@@ -1,6 +1,7 @@
 const connection = require('../db/config/connection');
 const errors = require('../utils/errors');
 const { v4: uuidv4 } = require('uuid');
+const aws = require('aws-sdk');
 
 class StageController {
 	constructor() {
@@ -14,6 +15,7 @@ class StageController {
 		this.findStage = this.findStage.bind(this);
 		this.findTeam = this.findTeam.bind(this);
 		this.modifyTeamStage = this.modifyTeamStage.bind(this);
+		this.removeSubmissionFile = this.removeSubmissionFile.bind(this);
 	}
 
 	async index(request, response, next) {
@@ -36,7 +38,8 @@ class StageController {
 		const project = await this.findProject(request, response, next);
 		if (!project) return next();
 		let stage_number = 1;
-		const { description, start_date, end_date, weight } = request.body.stage;
+		const { description, start_date, end_date, weight } = request.body;
+		const { originalname, key, location: assignment_url = '' } = request.file;
 		const id = uuidv4();
 		const { id: project_id } = project;
 		const [existentStage] = await connection('Stage')
@@ -45,7 +48,7 @@ class StageController {
 			.orderBy('stage_number', 'desc')
 			.limit(1);
 
-		if (existentStage) stage_number = existentStage.stage_number + 1;
+		if (existentStage) stage_number = parseInt(existentStage.stage_number) + 1;
 		try {
 			const [stage] = await connection('Stage').insert(
 				{
@@ -56,11 +59,13 @@ class StageController {
 					start_date,
 					end_date,
 					weight,
+					assignment_url,
 				},
 				['stage_number', 'description', 'start_date', 'end_date', 'weight']
 			);
 			return response.status(201).json(stage);
 		} catch (error) {
+			console.log(error);
 			return next(errors.UNIQUE_CONSTRAIN(error.detail));
 		}
 	}
@@ -76,6 +81,7 @@ class StageController {
 				'start_date',
 				'end_date',
 				'weight',
+				'assignment_url',
 			])
 			.where({ stage_number, project_id: project.id });
 		if (!stage) return next(errors.STAGE_NOT_FOUND(stage_number, 'params'));
@@ -88,12 +94,13 @@ class StageController {
 		const { description, end_date, weight } = request.body.stage;
 		const [updatedStage] = await connection('Stage')
 			.where(stage)
-			.update({ description, end_date, weight }, [
+			.update({ description, end_date, weight, assignment_url }, [
 				'stage_number',
 				'description',
 				'start_date',
 				'end_date',
 				'weight',
+				'assignment_url',
 			]);
 		return response.json(updatedStage);
 	}
@@ -102,14 +109,22 @@ class StageController {
 		const stage = await this.findStage(request, response, next);
 		if (!stage) return next();
 		await connection('Stage').where(stage).del();
+		const s3 = new aws.S3();
+		await s3
+			.deleteObject({
+				Bucket: process.env.AWS_FILES_BUCKET_NAME,
+				Key: stage.assignment_url,
+			})
+			.promise();
 		return response.status(204).send();
 	}
 
 	async storeTeam(request, response, next) {
+		const { id: user_id } = request.user;
 		const stage = await this.findStage(request, response, next);
 		if (!stage) return next();
 		const submitted_at = new Date();
-		const { team_number, submission_url } = request.body;
+		const { team_number, submission_url, file_name } = request.body;
 		const [team] = await connection('Team')
 			.select('id')
 			.where({ team_number, project_id: stage.project_id });
@@ -119,12 +134,23 @@ class StageController {
 				{
 					stage_id: stage.id,
 					team_id: team.id,
-					submission_url,
 					submitted_at,
 				},
 				['submitted_at']
 			);
-			return response.status(201).json(team_stage);
+			const id = uuidv4();
+			const [submission_file] = await connection('SubmissionFile').insert(
+				{
+					id,
+					stage_id: stage.id,
+					team_id: team.id,
+					submission_url,
+					file_name,
+					user_id,
+				},
+				['submission_url']
+			);
+			return response.status(201).json(team_stage, submission_file);
 		} catch (error) {
 			return next(errors.UNIQUE_CONSTRAIN(error.detail));
 		}
@@ -134,7 +160,9 @@ class StageController {
 		const stage = await this.findStage(request, response, next);
 		if (!stage) return next();
 		const teams = await connection('team_stage')
-			.join('Team', 'Team.id', '=', 'team_stage.team_id')
+			.leftJoin('Team', 'Team.id', '=', 'team_stage.team_id')
+			.leftJoin('SubmissionFile', 'Team.id', '=', 'SubmissionFile.team_id')
+			.leftJoin('User', 'SubmissionFile.user_id', '=', 'User.id')
 			.select([
 				'Team.team_number',
 				'Team.name',
@@ -142,10 +170,12 @@ class StageController {
 				'Team.logo_url',
 				'team_stage.stage_grade',
 				'team_stage.stage_feedback',
-				'team_stage.submission_url',
 				'team_stage.submitted_at',
+				'SubmissionFile.submission_url',
+				'SubmissionFile.file_name',
+				'User.username',
 			])
-			.where({ stage_id: stage.id });
+			.where('team_stage.stage_id', stage.id);
 
 		return response.json(teams);
 	}
@@ -159,7 +189,9 @@ class StageController {
 			.where({ team_number, project_id: stage.project_id });
 		if (!team) return next(errors.TEAM_NOT_FOUND(team_number, 'params'));
 		const [team_stage] = await connection('team_stage')
-			.join('Team', 'Team.id', '=', 'team_stage.team_id')
+			.leftJoin('Team', 'Team.id', '=', 'team_stage.team_id')
+			.leftJoin('SubmissionFile', 'Team.id', '=', 'SubmissionFile.team_id')
+			.leftJoin('User', 'SubmissionFile.user_id', '=', 'User.id')
 			.select([
 				'Team.team_number',
 				'Team.name',
@@ -167,15 +199,20 @@ class StageController {
 				'Team.logo_url',
 				'team_stage.stage_grade',
 				'team_stage.stage_feedback',
-				'team_stage.submission_url',
 				'team_stage.submitted_at',
+				'SubmissionFile.submission_url',
+				'SubmissionFile.file_name',
+				'User.username',
 			])
-			.where({ stage_id: stage.id, team_id: team.id });
+			.where('team_stage.stage_id', stage.id)
+			.where('team_stage.team_id', team.id);
+
 		if (!team_stage) return next(errors.TEAM_NOT_FOUND(team_number, 'params'));
 		return response.json(team_stage);
 	}
 
 	async modifyTeamStage(request, response, next) {
+		const { id: user_id } = request.user;
 		const stage = await this.findStage(request, response, next);
 		if (!stage) return next();
 		const { team_number } = request.params;
@@ -187,17 +224,54 @@ class StageController {
 			stage_grade,
 			stage_feedback,
 			submission_url,
+			file_name,
 			submitted_at,
 		} = request.body;
 		const [updatedStage] = await connection('team_stage')
 			.where({ team_id: team.id, stage_id: stage.id })
-			.update({ stage_grade, stage_feedback, submission_url, submitted_at }, [
+			.update({ stage_grade, stage_feedback, submitted_at }, [
 				'stage_grade',
 				'stage_feedback',
-				'submission_url',
 				'submitted_at',
 			]);
+		if (submission_url) {
+			const id = uuidv4();
+			try {
+				await connection('SubmissionFile').insert(
+					{
+						id,
+						stage_id: stage.id,
+						team_id: team.id,
+						submission_url,
+						file_name,
+						user_id,
+					},
+					['submission_url']
+				);
+			} catch (error) {
+				return next(errors.UNIQUE_CONSTRAIN(error.detail));
+			}
+		}
+
 		return response.json(updatedStage);
+	}
+
+	async removeSubmissionFile(request, response, next) {
+		const stage = await this.findStage(request, response, next);
+		if (!stage) return next();
+		const { team_number } = request.params;
+		const [team] = await connection('Team')
+			.select('id')
+			.where({ team_number, project_id: stage.project_id });
+		if (!team) return next(errors.TEAM_NOT_FOUND(team_number, 'params'));
+		const { submission_id } = request.params;
+		const { id: user_id } = request.user;
+		const [submission_file] = await connection('SubmissionFile')
+			.select('id')
+			.where({ id: submission_id, user_id });
+		if (!submission_file) return next(errors.INVALID_IDENTITY());
+		await connection('SubmissionFile').where(submission_file).del();
+		return response.status(204).send();
 	}
 
 	// GET /courses/L079/units/26719/projects/2019-2020/1/stages
@@ -231,7 +305,7 @@ class StageController {
 		if (!project) return next();
 		const { stage_number } = request.params;
 		const [stage] = await connection('Stage')
-			.select('id', 'project_id')
+			.select('id', 'project_id', 'assignment_url')
 			.where({ stage_number, project_id: project.id });
 		if (!stage) return next(errors.STAGE_NOT_FOUND(stage_number, 'params'));
 		return stage;

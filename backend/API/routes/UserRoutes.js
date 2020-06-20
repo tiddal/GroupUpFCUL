@@ -1,9 +1,7 @@
 const express = require('express');
 const users = express.Router();
-const multer = require('multer');
 
 //  Middleware
-const multerConfig = require('../middleware/multer');
 const {
 	sessionRequired,
 	loginRequired,

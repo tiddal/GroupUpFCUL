@@ -66,6 +66,17 @@ export default {
 				return [response.data, response.status];
 			}
 		},
+		stage: async (course, unit, year, project, stage) => {
+			try {
+				const response = await API.post(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/stages`,
+					stage
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
 	},
 
 	professorClasses: async (professor, year, semester) => {
