@@ -4,7 +4,8 @@ exports.up = function (knex) {
 		table.uuid('stage_id');
 		table.uuid('team_id');
 		table.uuid('user_id');
-		table.string('file_name').notNullable();
+		table.string('filename').notNullable();
+		table.string('original_filename').notNullable();
 		table.string('submission_url').notNullable();
 		table.timestamps(true, true);
 		table

@@ -28,6 +28,9 @@ class StageController {
 				'start_date',
 				'end_date',
 				'weight',
+				'assignment_url',
+				'filename',
+				'original_filename',
 			])
 			.where({ project_id: project.id });
 
@@ -39,7 +42,11 @@ class StageController {
 		if (!project) return next();
 		let stage_number = 1;
 		const { description, start_date, end_date, weight } = request.body;
-		const { originalname, key, location: assignment_url = '' } = request.file;
+		const {
+			originalname: original_filename,
+			key: filename,
+			location: assignment_url = '',
+		} = request.file;
 		const id = uuidv4();
 		const { id: project_id } = project;
 		const [existentStage] = await connection('Stage')
@@ -60,6 +67,8 @@ class StageController {
 					end_date,
 					weight,
 					assignment_url,
+					filename,
+					original_filename,
 				},
 				['stage_number', 'description', 'start_date', 'end_date', 'weight']
 			);
@@ -82,6 +91,8 @@ class StageController {
 				'end_date',
 				'weight',
 				'assignment_url',
+				'filename',
+				'original_filename',
 			])
 			.where({ stage_number, project_id: project.id });
 		if (!stage) return next(errors.STAGE_NOT_FOUND(stage_number, 'params'));
@@ -172,7 +183,7 @@ class StageController {
 				'team_stage.stage_feedback',
 				'team_stage.submitted_at',
 				'SubmissionFile.submission_url',
-				'SubmissionFile.file_name',
+				'SubmissionFile.filename',
 				'User.username',
 			])
 			.where('team_stage.stage_id', stage.id);
@@ -201,7 +212,7 @@ class StageController {
 				'team_stage.stage_feedback',
 				'team_stage.submitted_at',
 				'SubmissionFile.submission_url',
-				'SubmissionFile.file_name',
+				'SubmissionFile.filename',
 				'User.username',
 			])
 			.where('team_stage.stage_id', stage.id)

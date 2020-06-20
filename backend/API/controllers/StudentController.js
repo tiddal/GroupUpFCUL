@@ -11,7 +11,8 @@ class StudentController {
 	async index(request, response) {
 		const students = await connection('Student')
 			.join('User', 'User.id', '=', 'Student.user_id')
-			.select([
+			.leftJoin('team_ratings', 'team_ratings.member_rated_id', '=', 'User.id')
+			.select(
 				'User.username',
 				'User.first_name',
 				'User.last_name',
@@ -23,7 +24,14 @@ class StudentController {
 				'Student.facebook_url',
 				'Student.instagram_url',
 				'Student.twitter_url',
-			]);
+				connection.raw(
+					'COUNT(rate) OVER (PARTITION BY User) AS number_of_ratings'
+				),
+				connection.raw(
+					'ROUND(AVG(rate) OVER (PARTITION BY User), 2)  AS rating'
+				)
+			)
+			.orderBy('User.username');
 		return response.json(students);
 	}
 
@@ -32,17 +40,26 @@ class StudentController {
 		if (!user) return next();
 		const [student] = await connection('Student')
 			.join('User', 'User.id', '=', 'Student.user_id')
-			.select([
+			.leftJoin('team_ratings', 'team_ratings.member_rated_id', '=', 'User.id')
+			.select(
 				'User.username',
 				'User.first_name',
 				'User.last_name',
 				'User.email',
+				'User.avatar_url',
+				'User.status',
 				'Student.working_student',
 				'Student.github_url',
 				'Student.facebook_url',
 				'Student.instagram_url',
 				'Student.twitter_url',
-			])
+				connection.raw(
+					'COUNT(rate) OVER (PARTITION BY User) AS number_of_ratings'
+				),
+				connection.raw(
+					'ROUND(AVG(rate) OVER (PARTITION BY User), 2)  AS rating'
+				)
+			)
 			.where({ user_id: user.id });
 		if (!student)
 			return next(errors.STUDENT_NOT_FOUND(user.username, 'params'));

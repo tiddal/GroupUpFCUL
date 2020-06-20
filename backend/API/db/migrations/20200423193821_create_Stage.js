@@ -8,6 +8,8 @@ exports.up = function (knex) {
 		table.timestamp('end_date').notNullable();
 		table.string('weight').notNullable();
 		table.string('assignment_url').notNullable();
+		table.string('filename').notNullable();
+		table.string('original_filename').notNullable();
 		table.timestamps(true, true);
 		table.unique(['project_id', 'stage_number']);
 		table

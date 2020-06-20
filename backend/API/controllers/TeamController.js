@@ -275,6 +275,66 @@ class TeamController {
 		}
 	}
 
+	async findMembersRates(request, response, next) {
+		const team = await this.findTeam(request, response, next);
+		if (!team) return next();
+		const { id: member_id } = request.user;
+		const members = await connection('team_ratings')
+			.join('User', 'User.id', '=', 'team_ratings.member_rated_id')
+			.select([
+				'User.username',
+				'User.first_name',
+				'User.last_name',
+				'team_ratings.rate',
+			])
+			.where('team_ratings.member_id', member_id)
+			.where('team_ratings.team_id', team.id);
+		return response.json(members);
+	}
+
+	async storeMemberRate(request, response, next) {
+		const team = await this.findTeam(request, response, next);
+		if (!team) return next();
+		const { id: member_id } = request.user;
+		const { username, rate } = request.body.rate;
+		const [studentToRate] = await connection('Student')
+			.join('User', 'User.id', '=', 'Student.user_id')
+			.select('User.id')
+			.where({ username });
+		if (!studentToRate) return next(errors.STUDENT_NOT_FOUND(username, 'body'));
+
+		const [memberRate] = await connection('team_rating').insert(
+			{
+				team_id: team.id,
+				member_id,
+				member_rated_id: studentToRate.id,
+				rate,
+			},
+			['rate']
+		);
+		return response.status(201).json(memberRate);
+	}
+
+	async modifyMemberRate(request, response, next) {
+		const team = await this.findTeam(request, response, next);
+		if (!team) return next();
+		const { id: member_id } = request.user;
+		const { username, rate } = request.body.rate;
+		const [studentToRate] = await connection('Student')
+			.join('User', 'User.id', '=', 'Student.user_id')
+			.select('User.id')
+			.where({ username });
+		if (!studentToRate) return next(errors.STUDENT_NOT_FOUND(username, 'body'));
+		const [updatedMember] = await connection('team_rating')
+			.where({
+				team_id: team.id,
+				member_id,
+				member_rated_id: studentToRate.id,
+			})
+			.update({ rate });
+		return response.json(updatedMember);
+	}
+
 	async findProject(request, response, next) {
 		const { code } = request.params;
 		const [course] = await connection('Course').select('id').where({ code });

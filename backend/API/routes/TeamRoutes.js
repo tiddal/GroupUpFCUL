@@ -48,11 +48,27 @@ teams.delete(
 
 teams.get('/:team_number/members', loginRequired, TeamController.findMembers);
 teams.get(
+	'/:team_number/members/rate',
+	loginRequired,
+	TeamController.findMembersRates
+);
+teams.post(
+	'/:team_number/members/rate',
+	loginRequired,
+	TeamController.storeMemberRate
+);
+teams.put(
+	'/:team_number/members/rate',
+	loginRequired,
+	TeamController.modifyMemberRate
+);
+teams.get(
 	'/:team_number/members/:username',
 	loginRequired,
 	TeamController.findMember
 );
 teams.post('/:team_number/members', loginRequired, TeamController.storeMember);
+
 teams.put(
 	'/:team_number/members/:username',
 	loginRequired,

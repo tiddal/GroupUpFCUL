@@ -268,7 +268,7 @@ export const MainButton = styled(Button).attrs({ as: 'button' })`
 	font-weight: 700;
 	box-shadow: ${({ theme }) => theme.box_shadow.secondary};
 	transition: background 0.3s;
-	&:hover {
+	&:hover:enabled {
 		background: ${({ theme }) => theme.colors.hover.success};
 	}
 	@media (min-width: 768px) {
