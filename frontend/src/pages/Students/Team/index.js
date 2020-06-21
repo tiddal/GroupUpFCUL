@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import moment from 'moment';
 import studentService from '../../../services/student';
 
 import { Container, Content, Title, Navigation, Link } from './styles';
@@ -31,8 +32,10 @@ function Team() {
 	const { user } = useAuth();
 	const [unitData, setUnitData] = useState();
 	const [projectData, setProjectData] = useState();
+	const [stagesData, setStagesData] = useState();
 	const [teamData, setTeamData] = useState();
 	const [initializing, setInitializing] = useState(true);
+	const [selectedStage, setSelectedStage] = useState();
 
 	useEffect(() => {
 		async function getInitialState() {
@@ -46,6 +49,12 @@ function Team() {
 			);
 			setUnitData(unitData);
 			const projectData = await studentService.get.project(
+				unitData.course_code,
+				unitData.code,
+				'2019-2020',
+				project
+			);
+			const stagesData = await studentService.get.stages(
 				unitData.course_code,
 				unitData.code,
 				'2019-2020',
@@ -83,6 +92,33 @@ function Team() {
 			});
 			teamData.max_members = projectData.max_students;
 			setTeamData(teamData);
+
+			const stages = {};
+			for (let stage of stagesData) {
+				const submission = await studentService.get.submission(
+					unitData.course_code,
+					unitData.code,
+					'2019-2020',
+					project,
+					stage.stage_number,
+					team
+				);
+				stages[`stage${stage.stage_number}`] = {
+					number: stage.stage_number,
+					due_date: moment
+						.utc(stage.end_date)
+						.local()
+						.format('DD/MM/YYYY, HH[h]mm'),
+					weight: stage.weight,
+					assignment_url: stage.assignment_url,
+					description: stage.description,
+					artifacts: submission.artifacts || [],
+					feedback: submission.stage_feedback || '',
+					grade: submission.stage_grade || '--',
+				};
+			}
+			setSelectedStage(Object.keys(stages)[0]);
+			setStagesData(stages);
 			setProjectData(projectData);
 			setInitializing(false);
 		}
@@ -235,7 +271,18 @@ function Team() {
 									/>
 								)}
 							/>
-							<Route path={`${path}/stages`} component={Stages} />
+							<Route
+								path={`${path}/stages`}
+								component={() => (
+									<Stages
+										stages={stagesData}
+										setStages={setStagesData}
+										course={unitData.course_code}
+										selectedStage={selectedStage}
+										setSelectedStage={setSelectedStage}
+									/>
+								)}
+							/>
 							<Route path={`${path}/tasks`} component={Tasks} />
 							<Route path={`${path}/meetings`} component={Meetings} />
 							<Route path={`${path}/schedules`} component={Schedules} />

@@ -82,6 +82,16 @@ export default {
 				return error;
 			}
 		},
+		submission: async (course, unit, year, project, stage, team) => {
+			try {
+				const response = await API.get(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/stages/${stage}/teams/${team}`
+				);
+				return response.data;
+			} catch (error) {
+				return error;
+			}
+		},
 	},
 	create: {
 		team: async (course, unit, year, project) => {
@@ -104,6 +114,17 @@ export default {
 				return [response.data, response.status];
 			}
 		},
+		submission: async (course, unit, year, project, stage, data) => {
+			try {
+				const response = await API.post(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/stages/${stage}/teams`,
+					data
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
 	},
 
 	update: {
@@ -112,6 +133,17 @@ export default {
 				const response = await API.put(
 					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/members/${user}`,
 					role
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
+		submission: async (course, unit, year, project, stage, team, data) => {
+			try {
+				const response = await API.put(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/stages/${stage}/teams/${team}`,
+					data
 				);
 				return [response.data, response.status];
 			} catch ({ response }) {
@@ -135,6 +167,16 @@ export default {
 			try {
 				const response = await API.delete(
 					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}`
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
+		submission: async (course, unit, year, project, stage, team, id) => {
+			try {
+				const response = await API.delete(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/stages/${stage}/teams/${team}/${id}`
 				);
 				return [response.data, response.status];
 			} catch ({ response }) {

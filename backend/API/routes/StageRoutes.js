@@ -16,7 +16,12 @@ stages.post(
 stages.get('/:stage_number', loginRequired, StageController.find);
 stages.put('/:stage_number', loginRequired, StageController.modify);
 stages.delete('/:stage_number', loginRequired, StageController.remove);
-stages.post('/:stage_number/teams', loginRequired, StageController.storeTeam);
+stages.post(
+	'/:stage_number/teams',
+	loginRequired,
+	multer(multerFileConfig).single('file'),
+	StageController.storeTeam
+);
 stages.get('/:stage_number/teams', loginRequired, StageController.findTeams);
 stages.get(
 	'/:stage_number/teams/:team_number',
@@ -26,6 +31,7 @@ stages.get(
 stages.put(
 	'/:stage_number/teams/:team_number',
 	loginRequired,
+	multer(multerFileConfig).single('file'),
 	StageController.modifyTeamStage
 );
 stages.delete(

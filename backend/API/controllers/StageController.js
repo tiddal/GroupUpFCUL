@@ -74,7 +74,6 @@ class StageController {
 			);
 			return response.status(201).json(stage);
 		} catch (error) {
-			console.log(error);
 			return next(errors.UNIQUE_CONSTRAIN(error.detail));
 		}
 	}
@@ -124,7 +123,7 @@ class StageController {
 		await s3
 			.deleteObject({
 				Bucket: process.env.AWS_FILES_BUCKET_NAME,
-				Key: stage.assignment_url,
+				Key: stage.filename,
 			})
 			.promise();
 		return response.status(204).send();
@@ -135,11 +134,16 @@ class StageController {
 		const stage = await this.findStage(request, response, next);
 		if (!stage) return next();
 		const submitted_at = new Date();
-		const { team_number, submission_url, file_name } = request.body;
+		const { team_number } = request.body;
 		const [team] = await connection('Team')
 			.select('id')
 			.where({ team_number, project_id: stage.project_id });
 		if (!team) return next(errors.TEAM_NOT_FOUND(team_number, 'body'));
+		const {
+			originalname: original_filename,
+			key: filename,
+			location: submission_url = '',
+		} = request.file;
 		try {
 			const [team_stage] = await connection('team_stage').insert(
 				{
@@ -156,12 +160,15 @@ class StageController {
 					stage_id: stage.id,
 					team_id: team.id,
 					submission_url,
-					file_name,
+					filename,
 					user_id,
+					original_filename,
 				},
-				['submission_url']
+				['submission_url', 'original_filename', 'id']
 			);
-			return response.status(201).json(team_stage, submission_file);
+			submission_file.uploaded_by = request.user.username;
+			team_stage.submission_file = submission_file;
+			return response.status(201).json(team_stage);
 		} catch (error) {
 			return next(errors.UNIQUE_CONSTRAIN(error.detail));
 		}
@@ -171,9 +178,7 @@ class StageController {
 		const stage = await this.findStage(request, response, next);
 		if (!stage) return next();
 		const teams = await connection('team_stage')
-			.leftJoin('Team', 'Team.id', '=', 'team_stage.team_id')
-			.leftJoin('SubmissionFile', 'Team.id', '=', 'SubmissionFile.team_id')
-			.leftJoin('User', 'SubmissionFile.user_id', '=', 'User.id')
+			.join('Team', 'Team.id', '=', 'team_stage.team_id')
 			.select([
 				'Team.team_number',
 				'Team.name',
@@ -182,9 +187,6 @@ class StageController {
 				'team_stage.stage_grade',
 				'team_stage.stage_feedback',
 				'team_stage.submitted_at',
-				'SubmissionFile.submission_url',
-				'SubmissionFile.filename',
-				'User.username',
 			])
 			.where('team_stage.stage_id', stage.id);
 
@@ -200,9 +202,7 @@ class StageController {
 			.where({ team_number, project_id: stage.project_id });
 		if (!team) return next(errors.TEAM_NOT_FOUND(team_number, 'params'));
 		const [team_stage] = await connection('team_stage')
-			.leftJoin('Team', 'Team.id', '=', 'team_stage.team_id')
-			.leftJoin('SubmissionFile', 'Team.id', '=', 'SubmissionFile.team_id')
-			.leftJoin('User', 'SubmissionFile.user_id', '=', 'User.id')
+			.join('Team', 'Team.id', '=', 'team_stage.team_id')
 			.select([
 				'Team.team_number',
 				'Team.name',
@@ -211,14 +211,28 @@ class StageController {
 				'team_stage.stage_grade',
 				'team_stage.stage_feedback',
 				'team_stage.submitted_at',
-				'SubmissionFile.submission_url',
-				'SubmissionFile.filename',
-				'User.username',
 			])
 			.where('team_stage.stage_id', stage.id)
 			.where('team_stage.team_id', team.id);
 
-		if (!team_stage) return next(errors.TEAM_NOT_FOUND(team_number, 'params'));
+		if (!team_stage) return response.json({});
+		const artifacts = await connection('SubmissionFile')
+			.leftJoin(
+				'team_stage',
+				'team_stage.team_id',
+				'=',
+				'SubmissionFile.team_id'
+			)
+			.leftJoin('User', 'SubmissionFile.user_id', '=', 'User.id')
+			.select([
+				'SubmissionFile.id',
+				'SubmissionFile.submission_url',
+				'SubmissionFile.original_filename AS filename',
+				'User.username',
+			])
+			.where('team_stage.stage_id', stage.id)
+			.where('SubmissionFile.team_id', team.id);
+		team_stage.artifacts = artifacts;
 		return response.json(team_stage);
 	}
 
@@ -231,13 +245,12 @@ class StageController {
 			.select('id')
 			.where({ team_number, project_id: stage.project_id });
 		if (!team) return next(errors.TEAM_NOT_FOUND(team_number, 'params'));
+		const { stage_grade, stage_feedback, submitted_at } = request.body;
 		const {
-			stage_grade,
-			stage_feedback,
-			submission_url,
-			file_name,
-			submitted_at,
-		} = request.body;
+			originalname: original_filename,
+			key: filename,
+			location: submission_url = '',
+		} = request.file;
 		const [updatedStage] = await connection('team_stage')
 			.where({ team_id: team.id, stage_id: stage.id })
 			.update({ stage_grade, stage_feedback, submitted_at }, [
@@ -248,17 +261,20 @@ class StageController {
 		if (submission_url) {
 			const id = uuidv4();
 			try {
-				await connection('SubmissionFile').insert(
+				const [submission_file] = await connection('SubmissionFile').insert(
 					{
 						id,
 						stage_id: stage.id,
 						team_id: team.id,
 						submission_url,
-						file_name,
+						filename,
 						user_id,
+						original_filename,
 					},
-					['submission_url']
+					['submission_url', 'original_filename', 'id']
 				);
+				submission_file.uploaded_by = request.user.username;
+				updatedStage.submission_file = submission_file;
 			} catch (error) {
 				return next(errors.UNIQUE_CONSTRAIN(error.detail));
 			}
@@ -278,10 +294,17 @@ class StageController {
 		const { submission_id } = request.params;
 		const { id: user_id } = request.user;
 		const [submission_file] = await connection('SubmissionFile')
-			.select('id')
+			.select('id', 'filename')
 			.where({ id: submission_id, user_id });
 		if (!submission_file) return next(errors.INVALID_IDENTITY());
 		await connection('SubmissionFile').where(submission_file).del();
+		const s3 = new aws.S3();
+		await s3
+			.deleteObject({
+				Bucket: process.env.AWS_FILES_BUCKET_NAME,
+				Key: submission_file.filename,
+			})
+			.promise();
 		return response.status(204).send();
 	}
 
@@ -316,7 +339,7 @@ class StageController {
 		if (!project) return next();
 		const { stage_number } = request.params;
 		const [stage] = await connection('Stage')
-			.select('id', 'project_id', 'assignment_url')
+			.select('id', 'project_id', 'assignment_url', 'filename')
 			.where({ stage_number, project_id: project.id });
 		if (!stage) return next(errors.STAGE_NOT_FOUND(stage_number, 'params'));
 		return stage;

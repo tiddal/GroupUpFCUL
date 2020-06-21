@@ -44,6 +44,7 @@ module.exports = {
 			'application/msword',
 			'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 			'application/pdf',
+			'application/vnd.openxmlformats-officedocument.presentationml.presentation',
 			'application/vnd.ms-powerpoint',
 			'text/plain',
 			'application/vnd.ms-excel',

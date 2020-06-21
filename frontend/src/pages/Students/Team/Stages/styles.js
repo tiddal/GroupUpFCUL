@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
 
 export const Container = styled.div`
 	padding: 30px 20px;
@@ -88,7 +87,7 @@ export const Badge = styled.div`
 	font-weight: 600;
 `;
 
-export const BadgeLink = styled(Badge).attrs({ as: NavLink })`
+export const BadgeLink = styled(Badge).attrs({ as: 'a' })`
 	color: #ffffff;
 	background: ${({ theme }) => theme.colors.primary};
 	cursor: pointer;
@@ -148,51 +147,118 @@ export const Artifacts = styled.div`
 	}
 `;
 
+const fileTypes = {
+	csv: '#31c582',
+	doc: '#2160c3',
+	docx: '#2160c3',
+	pdf: '#ff0909',
+	ppt: '#ee6c45',
+	pptx: '#ee6c45',
+	txt: '#7618a9',
+	xls: '#1c8143',
+	xlsx: '#1c8143',
+	zip: '#fde695',
+	'7z': '#fde695',
+	rar: '#fde695',
+};
+
+const fileTypesContrast = {
+	zip: '#333333',
+	'7z': '#333333',
+	rar: '#333333',
+};
+
 export const Artifact = styled.div`
 	border-radius: 5px;
-	background: #ff0909;
+	background: ${({ type }) => fileTypes[type]};
 	display: grid;
 	grid-template-columns: auto 30px;
-	grid-template-rows: auto 20px;
-	color: #ffffff;
+	grid-template-rows: repeat(3, 1fr);
+	color: ${({ type }) => fileTypesContrast[type] || '#ffffff'};
 	align-items: center;
 	justify-items: center;
-	svg {
-		font-size: 32px;
-		margin-left: 30px;
+	a {
+		:first-child {
+			height: 100%;
+			width: 100%;
+			grid-row: 1 / span 2;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding-left: 30px;
+			padding-top: 10px;
+			color: inherit;
+			svg {
+				font-size: 32px;
+			}
+		}
+		:last-child {
+			color: inherit;
+			grid-row: 3;
+			align-self: center;
+			font-size: 10px;
+			font-weight: 700;
+			margin-left: 30px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			max-width: 100%;
+			text-decoration: none;
+		}
 	}
 	span {
-		align-self: start;
+		grid-row: 3;
+		align-self: center;
 		font-size: 10px;
 		font-weight: 600;
-		margin-left: 30px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		max-width: 100%;
 	}
 	button {
-		margin-top: 7px;
 		width: 15px;
 		height: 15px;
 		padding: 2px;
-		background: #ffffff;
+		background: ${({ type }) => fileTypesContrast[type] || '#ffffff'};
 		border-radius: 50%;
 		display: flex;
 		align-items: center;
 		cursor: pointer;
-		align-self: start;
 		transition: opacity 0.3s ease;
+		color: ${({ type }) => fileTypes[type]};
 		svg {
-			color: #ff0909;
 			width: 100%;
 			height: 100%;
 			margin: 0;
 			font-size: 10px;
 		}
+		div {
+			margin-left: 2px;
+			width: 7px;
+			height: 7px;
+			&::after {
+				content: '';
+				display: block;
+				width: 5px;
+				height: 5px;
+				border-radius: 50%;
+				border: 1px solid ${({ type }) => fileTypes[type]};
+				border-color: ${({ type }) => fileTypes[type]}
+					${({ type }) => fileTypes[type]} transparent transparent;
+				animation: lds-dual-ring 1.2s linear infinite;
+			}
+			@keyframes lds-dual-ring {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+		}
+		:disabled {
+			cursor: not-allowed;
+		}
 		@media (min-width: 1450px) {
 			opacity: 0.65;
-			:hover {
+			:hover:enabled {
 				opacity: 1;
 			}
 		}
@@ -204,10 +270,65 @@ export const LoadArtifact = styled(Artifact).attrs({ as: 'div' })`
 	color: ${({ theme }) => theme.colors.text};
 	grid-template-columns: auto;
 	border: 1px dashed ${({ theme }) => theme.colors.inputs.border};
+	cursor: pointer;
+	div {
+		grid-row: 1 / span 2;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding-top: 10px;
+		svg {
+			font-size: 32px;
+		}
+	}
 
 	svg,
 	span {
-		margin: 0;
+		transition: color 0.3s ease;
+		${({ isDragReject, theme }) =>
+			isDragReject && `color: ${theme.colors.danger};`}
+		${({ isDragAccept, theme }) =>
+			isDragAccept && `color: ${theme.colors.success};`}
+	}
+
+	span {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 100%;
+		padding: 0 10px;
+	}
+`;
+
+export const LoadingArtifcat = styled(LoadArtifact)`
+	border: none;
+	cursor: not-allowed;
+	background: ${({ type }) => fileTypes[type]};
+	span {
+		color: ${({ type }) => fileTypesContrast[type] || '#ffffff'};
+	}
+	div {
+		display: inline-block;
+		&::after {
+			content: '';
+			display: block;
+			width: 16px;
+			height: 16px;
+			border-radius: 50%;
+			border: 2px solid ${({ type }) => fileTypesContrast[type] || '#ffffff'};
+			border-color: ${({ type }) => fileTypesContrast[type] || '#ffffff'}
+				${({ type }) => fileTypesContrast[type] || '#ffffff'} transparent
+				transparent;
+			animation: lds-dual-ring 1.2s linear infinite;
+		}
+		@keyframes lds-dual-ring {
+			0% {
+				transform: rotate(0deg);
+			}
+			100% {
+				transform: rotate(360deg);
+			}
+		}
 	}
 `;
 
