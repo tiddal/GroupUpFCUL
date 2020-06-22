@@ -129,7 +129,7 @@ function NewProject() {
 	};
 
 	const [unitData, setUnitData] = useState();
-	const { user, logout } = useAuth();
+	const { user } = useAuth();
 	const {
 		params: { unit },
 	} = useRouteMatch('/projects/:unit/new');

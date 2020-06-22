@@ -22,11 +22,19 @@ export const Card = styled.div`
 	box-shadow: ${({ theme }) => theme.box_shadow.primary};
 	padding: 0 30px;
 	padding-bottom: 30px;
+	form {
+		display: grid;
+		grid-column: 1 / -1;
+	}
 	@media (min-width: 768px) {
 		box-shadow: none;
-		grid-template-columns: repeat(2, 1fr);
-		column-gap: 30px;
 		padding-bottom: 40px;
+		form {
+			grid-column: 1 / -1;
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			column-gap: 30px;
+		}
 	}
 `;
 

@@ -14,17 +14,40 @@ function Input({
 	value,
 	danger,
 	options,
+	disabled,
 }) {
 	const inputs = {
-		text: <InputField type={type} id={id} onChange={change} value={value} />,
-		number: <InputField type={type} id={id} onChange={change} value={value} />,
+		text: (
+			<InputField
+				type={type}
+				id={id}
+				onChange={change}
+				value={value}
+				disabled={disabled}
+			/>
+		),
+		number: (
+			<InputField
+				type={type}
+				id={id}
+				onChange={change}
+				value={value}
+				disabled={disabled}
+			/>
+		),
 
 		date: (
 			<Select>
 				<span>
 					<FaCalendarDay />
 				</span>
-				<InputField type={type} id={id} onChange={change} value={value} />
+				<InputField
+					type={type}
+					id={id}
+					onChange={change}
+					value={value}
+					disabled={disabled}
+				/>
 			</Select>
 		),
 		time: (
@@ -32,7 +55,13 @@ function Input({
 				<span>
 					<FaClock />
 				</span>
-				<InputField type={type} id={id} onChange={change} value={value} />
+				<InputField
+					type={type}
+					id={id}
+					onChange={change}
+					value={value}
+					disabled={disabled}
+				/>
 			</Select>
 		),
 		select: options && (
