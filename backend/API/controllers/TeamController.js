@@ -14,6 +14,9 @@ class TeamController {
 		this.storeMember = this.storeMember.bind(this);
 		this.updateMember = this.updateMember.bind(this);
 		this.removeMember = this.removeMember.bind(this);
+		this.findMembersRates = this.findMembersRates.bind(this);
+		this.modifyMemberRate = this.modifyMemberRate.bind(this);
+		this.storeMemberRate = this.storeMemberRate.bind(this);
 
 		this.findTeamOwner = this.findTeamOwner.bind(this);
 		this.findTeam = this.findTeam.bind(this);
@@ -127,7 +130,13 @@ class TeamController {
 		const team = await this.findTeam(request, response, next);
 		if (!team) return next();
 		const members = await connection('team_student')
-			.join('User', 'User.id', '=', 'team_student.student_id')
+			.leftJoin('User', 'User.id', '=', 'team_student.student_id')
+			.leftJoin(
+				'team_ratings',
+				'team_ratings.member_rated_id',
+				'=',
+				'team_student.student_id'
+			)
 			.select([
 				'User.username',
 				'User.first_name',
@@ -135,8 +144,15 @@ class TeamController {
 				'User.email',
 				'User.avatar_url',
 				'team_student.role',
+				connection.raw(
+					'COUNT(rate) OVER (PARTITION BY team_student) AS number_of_ratings'
+				),
+				connection.raw(
+					'ROUND(AVG(rate) OVER (PARTITION BY team_student), 2) AS rating'
+				),
 			])
-			.where('team_student.team_id', team.id);
+			.where('team_student.team_id', team.id)
+			.distinct('User.username');
 		return response.json(members);
 	}
 
@@ -303,7 +319,7 @@ class TeamController {
 			.where({ username });
 		if (!studentToRate) return next(errors.STUDENT_NOT_FOUND(username, 'body'));
 
-		const [memberRate] = await connection('team_rating').insert(
+		const [memberRate] = await connection('team_ratings').insert(
 			{
 				team_id: team.id,
 				member_id,
@@ -325,7 +341,7 @@ class TeamController {
 			.select('User.id')
 			.where({ username });
 		if (!studentToRate) return next(errors.STUDENT_NOT_FOUND(username, 'body'));
-		const [updatedMember] = await connection('team_rating')
+		const updatedMember = await connection('team_ratings')
 			.where({
 				team_id: team.id,
 				member_id,

@@ -92,6 +92,16 @@ export default {
 				return error;
 			}
 		},
+		teamRates: async (course, unit, year, project, team) => {
+			try {
+				const response = await API.get(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/members/rate`
+				);
+				return response.data;
+			} catch (error) {
+				return error;
+			}
+		},
 	},
 	create: {
 		team: async (course, unit, year, project) => {
@@ -125,6 +135,17 @@ export default {
 				return [response.data, response.status];
 			}
 		},
+		teamRate: async (course, unit, year, project, team, rate) => {
+			try {
+				const response = await API.post(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/members/rate`,
+					{ rate }
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
 	},
 
 	update: {
@@ -144,6 +165,17 @@ export default {
 				const response = await API.put(
 					`courses/${course}/units/${unit}/projects/${year}/${project}/stages/${stage}/teams/${team}`,
 					data
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
+		teamRate: async (course, unit, year, project, team, rate) => {
+			try {
+				const response = await API.put(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/members/rate`,
+					{ rate }
 				);
 				return [response.data, response.status];
 			} catch ({ response }) {

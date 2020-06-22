@@ -75,7 +75,6 @@ function Team() {
 				project,
 				team
 			);
-
 			teamData.pendingMembers = members.filter(
 				(member) => member.role === 'pending'
 			);
@@ -91,8 +90,15 @@ function Team() {
 				return 0;
 			});
 			teamData.max_members = projectData.max_students;
+			const teamRatings = await studentService.get.teamRates(
+				unitData.course_code,
+				unitData.code,
+				'2019-2020',
+				project,
+				team
+			);
+			teamData.teamRatings = teamRatings;
 			setTeamData(teamData);
-
 			const stages = {};
 			for (let stage of stagesData) {
 				const submission = await studentService.get.submission(
@@ -217,6 +223,39 @@ function Team() {
 		history.push(`/projects/${unit}/${project}/teams`);
 	}
 
+	async function handleRate(username, rate) {
+		const ratedMember = teamData.teamRatings.find(
+			(member) => member.username === username
+		);
+		if (!ratedMember) {
+			const [, status] = await studentService.create.teamRate(
+				unitData.course_code,
+				unit,
+				'2019-2020',
+				project,
+				team,
+				{
+					username,
+					rate,
+				}
+			);
+			if (status !== 201) return;
+		} else {
+			const [, status] = await studentService.update.teamRate(
+				unitData.course_code,
+				unit,
+				'2019-2020',
+				project,
+				team,
+				{
+					username,
+					rate,
+				}
+			);
+			if (status !== 200) return;
+		}
+	}
+
 	return (
 		<>
 			{!initializing && (
@@ -267,6 +306,7 @@ function Team() {
 											handleRejectRequest,
 											handleKickMember,
 											handleLeaveTeam,
+											handleRate,
 										}}
 									/>
 								)}

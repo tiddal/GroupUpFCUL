@@ -1,33 +1,40 @@
-import React, { useState } from "react";
-import { FaStar } from "react-icons/fa";
+import React, { useState } from 'react';
+import { FaStar } from 'react-icons/fa';
 
-function Rating(size) {
-  const [rating, setRating] = useState(null);
-  const [hover, setHover] = useState(null);
-  return (
-    <div>
-      {[...Array(5)].map((star, i) => {
-        const ratingValue = i + 1;
-        return (
-          <label>
-            <input
-              type="radio"
-              name="rating"
-              value={ratingValue}
-              onClick={() => setRating(ratingValue)}
-            ></input>
-            <FaStar
-              className="star"
-              color={ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"}
-              size={size}
-              onMouseEnter={() => setHover(ratingValue)}
-              onMouseLeave={() => setHover(null)}
-            ></FaStar>
-          </label>
-        );
-      })}
-    </div>
-  );
+import { Container } from './styles';
+
+function Rating({ currentRating, action, instance }) {
+	const [rating, setRating] = useState(currentRating || null);
+	const [hover, setHover] = useState(null);
+
+	function handleClick(value) {
+		setRating(value);
+		action(instance, value);
+	}
+
+	return (
+		<Container>
+			{[...Array(5)].map((star, i) => {
+				const ratingValue = i + 1;
+				return (
+					<label key={i}>
+						<input
+							type="radio"
+							name="rating"
+							value={ratingValue}
+							onClick={() => handleClick(ratingValue)}
+						></input>
+						<FaStar
+							className="star"
+							color={ratingValue <= (hover || rating) ? '#ffc107' : '#AAAAAA'}
+							onMouseEnter={() => setHover(ratingValue)}
+							onMouseLeave={() => setHover(null)}
+						></FaStar>
+					</label>
+				);
+			})}
+		</Container>
+	);
 }
 
 export default Rating;

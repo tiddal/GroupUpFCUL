@@ -78,7 +78,7 @@ export const MemberInfo = styled.div`
 		color: ${({ theme }) => theme.colors.text};
 		font-size: 12px;
 		svg {
-			color: #f2b01e;
+			color: #ffc107;
 		}
 	}
 `;
@@ -129,9 +129,7 @@ export const RateMember = styled(MemberInfo)`
 		font-weight: 600;
 	}
 	div {
-		display: inline-flex;
 		grid-row: 2 / -1;
-		font-size: 18px;
 	}
 `;
 

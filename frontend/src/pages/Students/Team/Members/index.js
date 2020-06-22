@@ -1,5 +1,5 @@
 import React from 'react';
-import StarRatingComponent from 'react-star-rating-component';
+import Rating from '../../../../components/Rating';
 
 import {
 	Container,
@@ -26,6 +26,51 @@ import { useAuth } from '../../../../hooks';
 function Members({ team, handlers }) {
 	const { user } = useAuth();
 
+	function renderRate(rate) {
+		if (!rate)
+			return [...Array(5)].map((star, i) => (
+				<FaStar key={i} color={'#AAAAAA'} />
+			));
+		const decimalPart = parseInt((rate % 1).toFixed(1).substring(2));
+		const integerPart = parseInt(rate);
+		const stars = [...Array(integerPart)];
+		if (decimalPart === 0)
+			return (
+				<React.Fragment>
+					{stars.map((star, i) => (
+						<FaStar key={i} />
+					))}
+				</React.Fragment>
+			);
+		if (decimalPart <= 5) {
+			return (
+				<React.Fragment>
+					{stars.map((star, i) => (
+						<FaStar key={i} />
+					))}
+					<FaStarHalf />
+				</React.Fragment>
+			);
+		} else {
+			return (
+				<React.Fragment>
+					{stars.map((star) => (
+						<FaStar />
+					))}
+					<FaStar />
+				</React.Fragment>
+			);
+		}
+	}
+
+	function getCurrentRate(username) {
+		const ratedMember = team.teamRatings.find(
+			(member) => member.username === username
+		);
+		if (!ratedMember) return null;
+		return ratedMember.rate;
+	}
+
 	return (
 		<Container>
 			<Section>
@@ -44,13 +89,7 @@ function Members({ team, handlers }) {
 								{member.first_name} {member.last_name.split(' ').pop()}
 							</p>
 							<p>{member.username}</p>
-							<p>
-								<FaStar />
-								<FaStar />
-								<FaStar />
-								<FaStar />
-								<FaStarHalf />
-							</p>
+							<p>{renderRate(member.rating)}</p>
 						</MemberInfo>
 
 						{index === 0 ? (
@@ -88,13 +127,10 @@ function Members({ team, handlers }) {
 											{member.first_name} {member.last_name.split(' ').pop()}
 										</p>
 										<div>
-											<StarRatingComponent
-												name="memberRating"
-												value={3}
-												starColor="#f2b01e"
-												emptyStarColor="#999"
-												renderStarIcon={() => <FaStar />}
-												editing={true}
+											<Rating
+												currentRating={getCurrentRate(member.username)}
+												action={handlers.handleRate}
+												instance={member.username}
 											/>
 										</div>
 									</RateMember>
@@ -118,13 +154,7 @@ function Members({ team, handlers }) {
 									{member.first_name} {member.last_name.split(' ').pop()}
 								</p>
 								<p>{member.username}</p>
-								<p>
-									<FaStar />
-									<FaStar />
-									<FaStar />
-									<FaStar />
-									<FaStarHalf />
-								</p>
+								<p>{renderRate(member.rating)}</p>
 							</MemberInfo>
 							{team.owner.username === user.username && (
 								<PendingUsersOptions>
