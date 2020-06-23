@@ -24,7 +24,8 @@ class MeetingController {
 		if (!team) return next();
 		const meetings = await connection('Meeting')
 			.select(['meeting_number', 'topic', 'begins_at', 'ends_at'])
-			.where({ team_id: team.id });
+			.where({ team_id: team.id })
+			.orderBy('meeting_number');
 		return response.json(meetings);
 	}
 

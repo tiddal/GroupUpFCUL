@@ -36,6 +36,7 @@ function Team() {
 	const [teamData, setTeamData] = useState();
 	const [initializing, setInitializing] = useState(true);
 	const [selectedStage, setSelectedStage] = useState();
+	const [meetingsData, setMeetingsData] = useState();
 
 	useEffect(() => {
 		async function getInitialState() {
@@ -98,7 +99,6 @@ function Team() {
 				team
 			);
 			teamData.teamRatings = teamRatings;
-			setTeamData(teamData);
 			const stages = {};
 			for (let stage of stagesData) {
 				const submission = await studentService.get.submission(
@@ -123,6 +123,65 @@ function Team() {
 					grade: submission.stage_grade || '--',
 				};
 			}
+			const meetingsData = [];
+			const meetings = await studentService.get.meetings(
+				unitData.course_code,
+				unitData.code,
+				'2019-2020',
+				project,
+				team
+			);
+			for (let meeting of meetings) {
+				const confirmed_members = await studentService.get.meetingMembers(
+					unitData.course_code,
+					unitData.code,
+					'2019-2020',
+					project,
+					team,
+					meeting.meeting_number
+				);
+				meeting.number = meeting.meeting_number;
+				meeting.confirmed_members = confirmed_members;
+				meeting.inputs = [
+					{
+						id: 'date',
+						type: 'date',
+						label: 'Data',
+						value: meeting.begins_at.split('T')[0],
+						validation: { required: false },
+						valid: false,
+						error: false,
+						info: '',
+					},
+					{
+						id: 'time',
+						type: 'time',
+						label: 'Horas',
+						value: moment(meeting.begins_at).format('HH:mm'),
+						validation: { required: false },
+						valid: false,
+						error: false,
+						info: '',
+					},
+					{
+						id: 'topic',
+						type: 'text',
+						label: 'Tópico',
+						value: meeting.topic,
+						validation: { required: false },
+						valid: false,
+						error: false,
+						info: '',
+					},
+				];
+				delete meeting.meeting_number;
+				delete meeting.topic;
+				delete meeting.begins_at;
+				delete meeting.ends_at;
+				meetingsData.push(meeting);
+			}
+			setMeetingsData(meetingsData);
+			setTeamData(teamData);
 			setSelectedStage(Object.keys(stages)[0]);
 			setStagesData(stages);
 			setProjectData(projectData);
@@ -324,7 +383,19 @@ function Team() {
 								)}
 							/>
 							<Route path={`${path}/tasks`} component={Tasks} />
-							<Route path={`${path}/meetings`} component={Meetings} />
+							<Route
+								path={`${path}/meetings`}
+								component={() => (
+									<Meetings
+										course={unitData.course_code}
+										unit={unit}
+										project={project}
+										team={team}
+										meetingsData={meetingsData}
+										user={user}
+									/>
+								)}
+							/>
 							<Route path={`${path}/schedules`} component={Schedules} />
 						</Switch>
 					</Content>

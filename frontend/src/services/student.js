@@ -102,6 +102,26 @@ export default {
 				return error;
 			}
 		},
+		meetings: async (course, unit, year, project, team) => {
+			try {
+				const response = await API.get(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/meetings`
+				);
+				return response.data;
+			} catch (error) {
+				return error;
+			}
+		},
+		meetingMembers: async (course, unit, year, project, team, meeting) => {
+			try {
+				const response = await API.get(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/meetings/${meeting}/members`
+				);
+				return response.data;
+			} catch (error) {
+				return error;
+			}
+		},
 	},
 	create: {
 		team: async (course, unit, year, project) => {
@@ -146,6 +166,27 @@ export default {
 				return [response.data, response.status];
 			}
 		},
+		meeting: async (course, unit, year, project, team, meeting) => {
+			try {
+				const response = await API.post(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/meetings`,
+					meeting
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
+		meetingMember: async (course, unit, year, project, team, meeting) => {
+			try {
+				const response = await API.post(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/meetings/${meeting}/members`
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
 	},
 
 	update: {
@@ -182,6 +223,17 @@ export default {
 				return [response.data, response.status];
 			}
 		},
+		meeting: async (course, unit, year, project, team, meeting, data) => {
+			try {
+				const response = await API.put(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/meetings/${meeting}`,
+					data
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
 	},
 
 	remove: {
@@ -209,6 +261,26 @@ export default {
 			try {
 				const response = await API.delete(
 					`courses/${course}/units/${unit}/projects/${year}/${project}/stages/${stage}/teams/${team}/${id}`
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
+		meeting: async (course, unit, year, project, team, meeting) => {
+			try {
+				const response = await API.delete(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/meetings/${meeting}`
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
+		meetingMember: async (course, unit, year, project, team, meeting) => {
+			try {
+				const response = await API.delete(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/meetings/${meeting}/members`
 				);
 				return [response.data, response.status];
 			} catch ({ response }) {

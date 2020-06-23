@@ -45,7 +45,7 @@ meetings.delete(
 	MeetingController.remove
 );
 meetings.delete(
-	'/:meeting_number/members/:username',
+	'/:meeting_number/members',
 	loginRequired,
 	MeetingValidator.removeStudents,
 	MeetingController.removeStudents

@@ -40,7 +40,6 @@ module.exports = {
 			project_number: Joi.number().required(),
 			team_number: Joi.string().alphanum().required(),
 			meeting_number: Joi.string().alphanum().required(),
-			username: Joi.string().alphanum().required(),
 		}),
 	}),
 };
