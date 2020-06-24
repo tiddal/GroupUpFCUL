@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouteMatch } from "react-router-dom";
 import Dropzone from "../../../components/Dropzone";
+import moment from "moment";
 
 import { useAuth } from "../../../hooks";
 import professorService from "../../../services/professor";
@@ -20,7 +21,7 @@ import {
 
 import Context from "../../../components/Context";
 import Notification from "../../../components/Notification";
-import { ButtonSpinner } from "../../../components/Spinner";
+import Spinner, { ButtonSpinner } from "../../../components/Spinner";
 import Input from "../../../components/Input";
 
 import { validate } from "../../../validators";
@@ -28,59 +29,6 @@ import { validate } from "../../../validators";
 import { FaProjectDiagram, FaArchive, FaMinusCircle } from "react-icons/fa";
 
 function EditProject() {
-  const initialProject = [
-    {
-      id: "name",
-      type: "text",
-      label: "Nome do projeto",
-      value: "",
-      validation: { required: true, name: true },
-      valid: false,
-      error: false,
-      info: "",
-    },
-    {
-      id: "description",
-      type: "textarea",
-      label: "Descrição",
-      value: "",
-      validation: { required: false },
-      valid: true,
-      error: false,
-      info: "",
-    },
-    {
-      id: "objectives",
-      type: "textarea",
-      label: "Objetivos",
-      value: "",
-      validation: { required: true },
-      valid: false,
-      error: false,
-      info: "",
-    },
-    {
-      id: "min_students",
-      type: "number",
-      label: "Mínimo de alunos por grupo",
-      value: "",
-      validation: { required: true },
-      valid: false,
-      error: false,
-      info: "",
-    },
-    {
-      id: "max_students",
-      type: "number",
-      label: "Máximo de alunos por grupo",
-      value: "",
-      validation: { required: true },
-      valid: false,
-      error: false,
-      info: "",
-    },
-  ];
-
   const initialStage = {
     inputs: [
       {
@@ -126,27 +74,28 @@ function EditProject() {
     ],
     number: 1,
     file: "",
+    isNew: true,
   };
 
   const [unitData, setUnitData] = useState({
-    course_initials: "",
-    unit_initials: "",
+    course_code: 0,
+    code: 0,
   });
   const { user, logout } = useAuth();
   const {
     params: { unit, project },
-    url,
   } = useRouteMatch("/projects/:unit/:project/edit");
   const [initializng, setInitializing] = useState(true);
-  const [formValidity, setFormValidity] = useState(false);
+  const [formValidity, setFormValidity] = useState(true);
   const [edited, setEdited] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [projectForm, setProjectForm] = useState(initialProject);
-  const [stagesForm, setStagesForm] = useState([initialStage]);
+  const [projectForm, setProjectForm] = useState();
+  const [stagesForm, setStagesForm] = useState();
+  const [stagesIndex, setStagesIndex] = useState();
 
   useEffect(() => {
     let isCancelled = false;
-    async function getProject() {
+    async function getInitialState() {
       const classes = await professorService.get.classes(
         user.username,
         "2019-2020",
@@ -156,32 +105,127 @@ function EditProject() {
         (class_) => class_.code.toString() === unit
       );
       setUnitData(unitData);
-      const [response, status] = await professorService.get.project(
+      const projectData = await professorService.get.project(
         unitData.course_code,
         unitData.code,
         "2019-2020",
         project
       );
+      const projectForm = [
+        {
+          id: "name",
+          type: "text",
+          label: "Nome do projeto",
+          value: projectData.name,
+          validation: { required: true, name: true },
+          valid: true,
+          error: false,
+          info: "",
+        },
+        {
+          id: "description",
+          type: "textarea",
+          label: "Descrição",
+          value: projectData.description,
+          validation: { required: false },
+          valid: true,
+          error: false,
+          info: "",
+        },
+        {
+          id: "objectives",
+          type: "textarea",
+          label: "Objetivos",
+          value: projectData.objectives,
+          validation: { required: true },
+          valid: true,
+          error: false,
+          info: "",
+        },
+        {
+          id: "min_students",
+          type: "number",
+          label: "Mínimo de alunos por grupo",
+          value: projectData.min_students,
+          validation: { required: true },
+          valid: true,
+          error: false,
+          info: "",
+        },
+        {
+          id: "max_students",
+          type: "number",
+          label: "Máximo de alunos por grupo",
+          value: projectData.max_students,
+          validation: { required: true },
+          valid: true,
+          error: false,
+          info: "",
+        },
+      ];
+      setProjectForm(projectForm);
+      const stages = await professorService.get.stages(
+        unitData.course_code,
+        unitData.code,
+        "2019-2020",
+        project
+      );
+      const stagesIndex = [];
+      const stagesForm = stages.map((stage) => {
+        stagesIndex.push(parseInt(stage.stage_number));
+        return {
+          inputs: [
+            {
+              id: "description",
+              type: "textarea",
+              label: "Descrição",
+              value: stage.description,
+              validation: { required: true },
+              valid: true,
+              error: false,
+              info: "",
+            },
+            {
+              id: "start_date",
+              type: "datetime-local",
+              label: "Data de início",
+              value: moment(stage.start_date).format("YYYY-MM-DDTHH:mm"),
+              validation: { required: true },
+              valid: true,
+              error: false,
+              info: "",
+            },
+            {
+              id: "end_date",
+              type: "datetime-local",
+              label: "Data de fim",
+              value: moment(stage.end_date).format("YYYY-MM-DDTHH:mm"),
+              validation: { required: true },
+              valid: true,
+              error: false,
+              info: "",
+            },
+            {
+              id: "weight",
+              type: "text",
+              label: "Peso (%)",
+              value: stage.weight,
+              validation: { required: true },
+              valid: true,
+              error: false,
+              info: "",
+            },
+          ],
+          number: parseInt(stage.stage_number),
+          file: { name: stage.original_filename },
+        };
+      });
+      setStagesIndex(stagesIndex);
+      setStagesForm(stagesForm);
       setInitializing(false);
-      if (!isCancelled) {
-        if (status !== 200) {
-          return;
-        }
-        Object.keys(response).map((key) =>
-          setProjectForm((prevState) => {
-            if (key in prevState)
-              return {
-                ...prevState,
-                [key]: { ...prevState[key], value: response[key] },
-              };
-            return prevState;
-          })
-        );
-      }
     }
-    getProject();
-    return () => (isCancelled = true);
-  }, [project]);
+    getInitialState();
+  }, [project, user, unit]);
 
   function evaluateForm(projectForm, stageForm) {
     let validForm = true;
@@ -231,51 +275,64 @@ function EditProject() {
 
   async function handleSubmission(event) {
     event.preventDefault();
+
     if (!formValidity) return;
     setLoading(true);
     const projectData = {
       project: {},
     };
-
     projectForm.map((field) => (projectData.project[field.id] = field.value));
-
-    const [response, status] = await professorService.create.project(
+    const [, status] = await professorService.update.project(
       unitData.course_code,
       unitData.code,
+      "2019-2020",
+      project,
       projectData
     );
-    if (status !== 201) return;
-    const projectNumber = response.number;
+    if (status !== 200) return;
     for (let stage of stagesForm) {
-      const stageData = new FormData();
-      stage.inputs.map((field) => stageData.append(field.id, field.value));
-      stageData.append("file", stage.file);
-      const [, status] = await professorService.create.stage(
-        unitData.course_code,
-        unitData.code,
-        "2019-2020",
-        projectNumber,
-        stageData
-      );
-      if (status !== 201) return;
+      if (stage.isNew) {
+        const stageData = new FormData();
+        stage.inputs.map((field) => stageData.append(field.id, field.value));
+        stageData.append("file", stage.file);
+        const [, status] = await professorService.create.stage(
+          unitData.course_code,
+          unitData.code,
+          "2019-2020",
+          project,
+          stageData
+        );
+        if (status !== 201) return;
+      } else {
+        const deletedStages = stagesIndex.filter(
+          (stageIndex) => stage.number !== stageIndex
+        );
+        for (let deletedStage of deletedStages) {
+          const [, status] = await professorService.remove.stage(
+            unitData.course_code,
+            unitData.code,
+            "2019-2020",
+            project,
+            deletedStage
+          );
+          if (status !== 204) return;
+        }
+        const stageData = new FormData();
+        if (stage.file.size) {
+          stageData.append("file", stage.file);
+        }
+        stage.inputs.map((field) => stageData.append(field.id, field.value));
+        const [, status] = await professorService.update.stage(
+          unitData.course_code,
+          unitData.code,
+          "2019-2020",
+          project,
+          stage.number,
+          stageData
+        );
+        if (status !== 200) return;
+      }
     }
-
-    // stagesForm.map((stage) => {
-    // 	const stageData = {};
-    // 	stage.inputs.map((field) => (stageData[field.id] = field.value));
-    // 	stageData.assignment_url = stage.file.name;
-    // 	projectData.project.stages.push(stageData);
-    // 	return stage;
-    // });
-
-    // const [, status] = await professorService.create.project(
-    // 	unitData.course_code,
-    // 	unitData.code,
-    // 	projectData
-    // );
-    // if (status !== 201) return logout();
-    setProjectForm(initialProject);
-    setStagesForm([initialStage]);
     setLoading(false);
     setFormValidity(false);
     setEdited(true);
@@ -290,8 +347,10 @@ function EditProject() {
   }
 
   function removeStage(index) {
-    const updatedForm = [...stagesForm];
-    updatedForm.pop(index);
+    const updatedForm = stagesForm.filter(
+      (stage) => stage.number !== index + 1
+    );
+    console.log(updatedForm);
     setStagesForm(updatedForm);
     setFormValidity(evaluateForm(projectForm, updatedForm));
   }
@@ -311,101 +370,105 @@ function EditProject() {
             { tier: `projects/${unit}`, title: unitData.name },
             {
               tier: `projects/${unit}/${project}/edit`,
-              title: "Editar Projeto",
+              title: `Editar Projeto ${project}`,
             },
           ]}
         />
       )}
-
-      <Container>
-        <Sheet>
-          <Title>
-            <span>
-              <FaProjectDiagram />
-              Editar Projeto
-            </span>
-          </Title>
-          <Form autoComplete="off" onSubmit={handleSubmission}>
-            {projectForm.map((field, index) => (
-              <Input
-                key={field.id}
-                id={field.id}
-                type={field.type}
-                label={field.label}
-                validation={field.validation}
-                error={field.error}
-                info={field.info}
-                value={field.value}
-                options={field.options}
-                change={({ target }) => handleProjectInputs(target, index)}
-              />
-            ))}
-
-            <Separator>
-              <div>
-                <span>Etapas</span>
-              </div>
-            </Separator>
-
-            <StageSection>
-              {stagesForm.map((stage, stage_index) => (
-                <React.Fragment key={stage.number}>
-                  <StageTitle>
-                    <span>
-                      <FaArchive />
-                      Etapa {stage.number} {stage.number === 1 && "*"}
-                    </span>
-                    {stage.number !== 1 && (
-                      <button
-                        type="button"
-                        onClick={() => removeStage(stage_index)}
-                      >
-                        <FaMinusCircle />
-                      </button>
-                    )}
-                  </StageTitle>
-
-                  {stage.inputs.map((key, index) => (
-                    <Input
-                      key={key.id}
-                      id={key.id}
-                      type={key.type}
-                      label={key.label}
-                      validation={key.validation}
-                      error={key.error}
-                      info={key.info}
-                      value={key.value}
-                      options={key.options}
-                      change={({ target }) =>
-                        handleStageInputs(target, stage_index, index)
-                      }
-                    />
-                  ))}
-
-                  <DropzoneContainer>
-                    <label>Enunciado: * </label>
-                    <Dropzone
-                      setFile={setStageFile}
-                      file={stage.file}
-                      mime="application/pdf"
-                      supported="PDF"
-                      index={stage_index}
-                    />
-                  </DropzoneContainer>
-                </React.Fragment>
+      {initializng ? (
+        <Spinner />
+      ) : (
+        <Container>
+          <Sheet>
+            <Title>
+              <span>
+                <FaProjectDiagram />
+                Editar Projeto
+              </span>
+            </Title>
+            <Form autoComplete="off" onSubmit={handleSubmission}>
+              {projectForm.map((field, index) => (
+                <Input
+                  key={field.id}
+                  id={field.id}
+                  type={field.type}
+                  label={field.label}
+                  validation={field.validation}
+                  error={field.error}
+                  info={field.info}
+                  value={field.value}
+                  options={field.options}
+                  change={({ target }) => handleProjectInputs(target, index)}
+                />
               ))}
 
-              <AddStageButton type="button" onClick={handleAddStage}>
-                Adicionar Etapa
-              </AddStageButton>
-            </StageSection>
+              <Separator>
+                <div>
+                  <span>Etapas</span>
+                </div>
+              </Separator>
 
-            <Button type="submit" disabled={!formValidity}>
-              {loading ? <ButtonSpinner /> : "Editar Projeto"}
-            </Button>
-          </Form>
-        </Sheet>
-      </Container>
+              <StageSection>
+                {stagesForm.map((stage, stage_index) => (
+                  <React.Fragment key={stage.number}>
+                    <StageTitle>
+                      <span>
+                        <FaArchive />
+                        Etapa {stage.number} {stage.number === 1 && "*"}
+                      </span>
+                      {stage.number !== 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeStage(stage_index)}
+                        >
+                          <FaMinusCircle />
+                        </button>
+                      )}
+                    </StageTitle>
+
+                    {stage.inputs.map((key, index) => (
+                      <Input
+                        key={key.id}
+                        id={key.id}
+                        type={key.type}
+                        label={key.label}
+                        validation={key.validation}
+                        error={key.error}
+                        info={key.info}
+                        value={key.value}
+                        options={key.options}
+                        change={({ target }) =>
+                          handleStageInputs(target, stage_index, index)
+                        }
+                      />
+                    ))}
+
+                    <DropzoneContainer>
+                      <label>Enunciado: * </label>
+                      <Dropzone
+                        setFile={setStageFile}
+                        file={stage.file}
+                        mime="application/pdf"
+                        supported="PDF"
+                        index={stage_index}
+                      />
+                    </DropzoneContainer>
+                  </React.Fragment>
+                ))}
+
+                <AddStageButton type="button" onClick={handleAddStage}>
+                  Adicionar Etapa
+                </AddStageButton>
+              </StageSection>
+
+              <Button type="submit" disabled={!formValidity}>
+                {loading ? <ButtonSpinner /> : "Guardar Alterações"}
+              </Button>
+            </Form>
+          </Sheet>
+        </Container>
+      )}
+
       <Notification popup={edited} text={"Projeto editado com sucesso."} />
     </>
   );

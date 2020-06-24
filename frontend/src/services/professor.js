@@ -89,6 +89,45 @@ export default {
     },
   },
 
+  update: {
+    project: async (course, unit, academic_year, project, projectData) => {
+      try {
+        const response = await API.put(
+          `courses/${course}/units/${unit}/projects/${academic_year}/${project}`,
+          projectData
+        );
+        return [response.data, response.status];
+      } catch ({ response }) {
+        return [response.data, response.status];
+      }
+    },
+    stage: async (course, unit, year, project, stage, stageData) => {
+      try {
+        const response = await API.put(
+          `courses/${course}/units/${unit}/projects/${year}/${project}/stages/${stage}`,
+          stageData
+        );
+        return [response.data, response.status];
+      } catch ({ response }) {
+        return [response.data, response.status];
+      }
+    },
+  },
+
+  remove: {
+    stage: async (course, unit, year, project, stage) => {
+      try {
+        const response = await API.delete(
+          `courses/${course}/units/${unit}/projects/${year}/${project}/stages/${stage}`
+        );
+
+        return [response.data, response.status];
+      } catch ({ response }) {
+        return [response.data, response.status];
+      }
+    },
+  },
+
   professorClasses: async (professor, year, semester) => {
     try {
       const response = await API.get(
