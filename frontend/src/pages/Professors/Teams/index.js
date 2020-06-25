@@ -4,7 +4,13 @@ import { useAuth } from '../../../hooks';
 import professorService from '../../../services/professor';
 import Table from '../../../components/Table';
 import Context from '../../../components/Context';
-import { FaListAlt, FaSearch, FaExternalLinkAlt } from 'react-icons/fa';
+import {
+	FaListAlt,
+	FaSearch,
+	FaExternalLinkAlt,
+	FaUsers,
+	FaQuestionCircle,
+} from 'react-icons/fa';
 
 import {
 	Container,
@@ -34,7 +40,9 @@ function Teams() {
 		(team) => [
 			{ data: team.team_number },
 			{ data: team.name, align: 'left' },
+			{ data: team.confirmed_members.length },
 			{ data: '0' },
+
 			{
 				data: (
 					<Link to={`${url}/${team.number}`}>
@@ -58,12 +66,30 @@ function Teams() {
 			);
 			setUnitData(unitData);
 
-			const teamsData = await professorService.get.teams(
+			const teams = await professorService.get.teams(
 				unitData.course_code,
 				unitData.code,
 				'2019-2020',
 				project
 			);
+			const teamsData = [];
+			for (let team of teams) {
+				const members = await professorService.get.teamMembers(
+					unitData.course_code,
+					unitData.code,
+					'2019-2020',
+					project,
+					team.team_number
+				);
+				const confirmed_members = members.filter(
+					(member) => member.role !== 'pending'
+				);
+				teamsData.push({
+					...team,
+					members,
+					confirmed_members,
+				});
+			}
 			setTeamsData(teamsData);
 			const rows = teamsData.map((team) => createTableRow(team));
 			setInitializing(false);
@@ -88,7 +114,7 @@ function Teams() {
 			{!initializing && (
 				<Context
 					path={[
-						{ tier: `projects/${unit}`, title: unitData.name },
+						{ tier: `projects/${unit}`, title: unitData.initials },
 						{
 							tier: `projects/${unit}/${project}/teams`,
 							title: `Projeto ${project} - Grupos`,
@@ -118,11 +144,12 @@ function Teams() {
 						</SearchSection>
 						<TableSection>
 							<Table
-								columns_width={[16, 50, 25, 9]}
+								columns_width={[16, 50, 12, 13, 9]}
 								columns={[
 									{ name: 'Número' },
 									{ name: 'Nome', align: 'left' },
-									{ name: 'Dúvidas' },
+									{ name: <FaUsers /> },
+									{ name: <FaQuestionCircle /> },
 								]}
 								rows={list}
 							/>

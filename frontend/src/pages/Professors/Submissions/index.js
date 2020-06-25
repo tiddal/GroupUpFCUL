@@ -5,6 +5,7 @@ import professorService from '../../../services/professor';
 import Table from '../../../components/Table';
 import Context from '../../../components/Context';
 import { FaListAlt, FaSearch, FaExternalLinkAlt } from 'react-icons/fa';
+import moment from 'moment';
 
 import {
 	Container,
@@ -18,7 +19,7 @@ import {
 } from './styles';
 import Spinner from '../../../components/Spinner';
 
-function Teams() {
+function Submissions() {
 	const [list, setList] = useState();
 	const [searchInput, setSearchInput] = useState('');
 	const { user } = useAuth();
@@ -32,12 +33,12 @@ function Teams() {
 
 	const createTableRow = useCallback(
 		(team) => [
-			{ data: team.number },
-			{ data: team.submitted_at },
+			{ data: team.team_number },
+			{ data: moment(team.submitted_at).format('DD/MM/YYYY, HH[h]mm') },
 			{ data: team.grade },
 			{
 				data: (
-					<Link to={`${url}/${team.number}`}>
+					<Link to={`${url}/${team.team_number}`}>
 						<FaExternalLinkAlt />
 					</Link>
 				),
@@ -124,9 +125,9 @@ function Teams() {
 						</SearchSection>
 						<TableSection>
 							<Table
-								columns_width={[45, 30, 16, 9]}
+								columns_width={[15, 45, 31, 9]}
 								columns={[
-									{ name: 'Grupo', align: 'left' },
+									{ name: 'Grupo' },
 									{ name: 'Data de Entrega' },
 									{ name: 'Avaliação' },
 								]}
@@ -140,4 +141,4 @@ function Teams() {
 	);
 }
 
-export default Teams;
+export default Submissions;

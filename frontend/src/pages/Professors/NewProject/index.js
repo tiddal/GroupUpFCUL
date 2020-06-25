@@ -233,20 +233,6 @@ function NewProject() {
 			if (status !== 201) return;
 		}
 
-		// stagesForm.map((stage) => {
-		// 	const stageData = {};
-		// 	stage.inputs.map((field) => (stageData[field.id] = field.value));
-		// 	stageData.assignment_url = stage.file.name;
-		// 	projectData.project.stages.push(stageData);
-		// 	return stage;
-		// });
-
-		// const [, status] = await professorService.create.project(
-		// 	unitData.course_code,
-		// 	unitData.code,
-		// 	projectData
-		// );
-		// if (status !== 201) return logout();
 		setProjectForm(initialProject);
 		setStagesForm([initialStage]);
 		setLoading(false);

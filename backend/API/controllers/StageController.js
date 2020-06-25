@@ -249,8 +249,9 @@ class StageController {
 				'SubmissionFile.original_filename AS filename',
 				'User.username',
 			])
-			.where('team_stage.stage_id', stage.id)
-			.where('SubmissionFile.team_id', team.id);
+			.where('SubmissionFile.stage_id', stage.id)
+			.where('SubmissionFile.team_id', team.id)
+			.distinct();
 		team_stage.artifacts = artifacts;
 		return response.json(team_stage);
 	}
@@ -265,11 +266,14 @@ class StageController {
 			.where({ team_number, project_id: stage.project_id });
 		if (!team) return next(errors.TEAM_NOT_FOUND(team_number, 'params'));
 		const { stage_grade, stage_feedback, submitted_at } = request.body;
-		const {
-			originalname: original_filename,
-			key: filename,
-			location: submission_url = '',
-		} = request.file;
+		let original_filename;
+		let filename;
+		let submission_url;
+		if (request.file) {
+			submission_url = request.file.location;
+			filename = request.file.key;
+			original_filename = request.file.originalname;
+		}
 		const [updatedStage] = await connection('team_stage')
 			.where({ team_id: team.id, stage_id: stage.id })
 			.update({ stage_grade, stage_feedback, submitted_at }, [
