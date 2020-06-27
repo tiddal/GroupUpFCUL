@@ -81,7 +81,14 @@ function Input({
 				</select>
 			</Select>
 		),
-		textarea: <textarea id={id} onChange={change} value={value}></textarea>,
+		textarea: (
+			<textarea
+				id={id}
+				onChange={change}
+				value={value}
+				disabled={disabled}
+			></textarea>
+		),
 		'datetime-local': (
 			<Select>
 				<span>

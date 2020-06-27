@@ -122,6 +122,16 @@ export default {
 				return error;
 			}
 		},
+		tasks: async (course, unit, year, project, team) => {
+			try {
+				const response = await API.get(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/tasks`
+				);
+				return response.data;
+			} catch (error) {
+				return error;
+			}
+		},
 	},
 	create: {
 		team: async (course, unit, year, project) => {
@@ -187,6 +197,17 @@ export default {
 				return [response.data, response.status];
 			}
 		},
+		task: async (course, unit, year, project, team, data) => {
+			try {
+				const response = await API.post(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/tasks`,
+					data
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
 	},
 
 	update: {
@@ -227,6 +248,17 @@ export default {
 			try {
 				const response = await API.put(
 					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/meetings/${meeting}`,
+					data
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
+		task: async (course, unit, year, project, team, task, data) => {
+			try {
+				const response = await API.put(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/tasks/${task}`,
 					data
 				);
 				return [response.data, response.status];
@@ -281,6 +313,16 @@ export default {
 			try {
 				const response = await API.delete(
 					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/meetings/${meeting}/members`
+				);
+				return [response.data, response.status];
+			} catch ({ response }) {
+				return [response.data, response.status];
+			}
+		},
+		task: async (course, unit, year, project, team, task) => {
+			try {
+				const response = await API.delete(
+					`courses/${course}/units/${unit}/projects/${year}/${project}/teams/${team}/tasks/${task}`
 				);
 				return [response.data, response.status];
 			} catch ({ response }) {

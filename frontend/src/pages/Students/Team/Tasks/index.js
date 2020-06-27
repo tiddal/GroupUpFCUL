@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
 	Container,
@@ -11,6 +11,8 @@ import {
 	Tag,
 	Button,
 	ProgressBar,
+	NewTaskTitle,
+	NewTaskCard,
 } from './styles';
 
 import {
@@ -22,11 +24,255 @@ import {
 	FaChartLine,
 	FaHammer,
 	FaClipboardList,
+	FaSave,
+	FaTimesCircle,
 } from 'react-icons/fa';
 
 import Input from '../../../../components/Input';
+import studentService from '../../../../services/student';
+import { ButtonSpinner } from '../../../../components/Spinner';
+import { validate } from '../../../../validators';
+import { useEffect } from 'react';
 
-function Tasks() {
+function Tasks({ course, unit, project, team, user, tasksData, setTasksData }) {
+	const [editMode, setEditMode] = useState({ status: false });
+	const [tasks, setTasks] = useState(tasksData);
+	const [newTaskMode, setNewTaskMode] = useState();
+	const [newTaskValidity, setNewTaskValidity] = useState(false);
+	const [newTask, setNewTask] = useState([
+		{
+			id: 'title',
+			type: 'text',
+			label: 'Título',
+			value: '',
+			validation: { required: true },
+			valid: false,
+			error: false,
+			info: '',
+		},
+		{
+			id: 'description',
+			type: 'textarea',
+			label: 'Descrição',
+			value: '',
+			validation: { required: true },
+			valid: false,
+			error: false,
+			info: '',
+		},
+	]);
+	const [loading, setLoading] = useState(false);
+	const [progress, setProgress] = useState(0);
+
+	useEffect(() => {
+		if (tasks.length === 0) return setProgress(0);
+		const tasksDone = tasks.filter((task) => task.performed_by !== null);
+		setProgress((tasksDone.length / tasks.length) * 100);
+	}, [tasks]);
+
+	function renderNewMeeting() {
+		return (
+			<NewTaskCard>
+				<NewTaskTitle>
+					<FaClipboardList />
+					<span>Nova tarefa</span>
+					<div>
+						<button onClick={() => setNewTaskMode(false)}>
+							<FaTimesCircle />
+						</button>
+					</div>
+				</NewTaskTitle>
+				<form onSubmit={handleNewTask} autoComplete="off">
+					{newTask.map((field, index) => (
+						<Input
+							key={field.id}
+							id={field.id}
+							type={field.type}
+							label={field.label}
+							change={({ target }) => handleNewTaskInputs(target, index)}
+							validation={{ required: true }}
+						/>
+					))}
+
+					<Button type="submit" disabled={!newTaskValidity}>
+						{loading ? <ButtonSpinner /> : 'Agendar'}
+					</Button>
+				</form>
+			</NewTaskCard>
+		);
+	}
+
+	async function handleEditTask(task_number) {
+		if (editMode.status === false) {
+			setEditMode({ status: true, task: task_number });
+		} else {
+			const edited_task = tasks.find((task) => task.number === task_number);
+			const taskData = {};
+			edited_task.inputs.map((task) => (taskData[task.id] = task.value));
+			taskData.title = edited_task.title;
+
+			const [, status] = await studentService.update.task(
+				course,
+				unit,
+				'2019-2020',
+				project,
+				team,
+				task_number,
+				{ task: taskData }
+			);
+			if (status !== 200) return;
+			setEditMode({ status: false });
+		}
+	}
+
+	function evaluateForm(taskForm) {
+		let validForm = true;
+		for (let key in taskForm) {
+			validForm = taskForm[key].valid && validForm;
+		}
+		return validForm;
+	}
+
+	function handleNewTaskInputs({ value }, index) {
+		const [valid, info] = validate(value, newTask[index].validation);
+		const updatedForm = [...newTask];
+		updatedForm[index] = {
+			...newTask[index],
+			value,
+			valid,
+			error: !valid,
+			info,
+		};
+		setNewTask(updatedForm);
+
+		setNewTaskValidity(evaluateForm(updatedForm));
+	}
+
+	async function handleNewTask(event) {
+		event.preventDefault();
+		if (!newTaskValidity) return;
+		setLoading(true);
+		const taskData = {};
+		newTask.map((field) => (taskData[field.id] = field.value));
+		const [response, status] = await studentService.create.task(
+			course,
+			unit,
+			'2019-2020',
+			project,
+			team,
+			{ task: taskData }
+		);
+		if (status !== 201) return;
+		const updatedTasks = [
+			...tasks,
+			{
+				number: parseInt(response.task_number),
+				title: response.title,
+				performed_by: null,
+				inputs: [
+					{
+						id: 'description',
+						type: 'textarea',
+						label: 'Descrição',
+						value: response.description,
+						validation: { required: false },
+						valid: false,
+						error: false,
+						info: '',
+					},
+					{
+						id: 'time',
+						type: 'text',
+						label: 'Tempo dedicado (h)',
+						value: response.time,
+						validation: { required: false },
+						valid: false,
+						error: false,
+						info: '',
+					},
+				],
+			},
+		];
+		setTasks(updatedTasks);
+		setTasksData(updatedTasks);
+		setLoading(false);
+		setNewTaskMode(false);
+		setNewTaskValidity(false);
+	}
+
+	async function handleRemoveTask(task_number) {
+		const [, status] = await studentService.remove.task(
+			course,
+			unit,
+			'2019-2020',
+			project,
+			team,
+			task_number
+		);
+		if (status !== 204) return;
+		const updatedTasks = tasks.filter((task) => task.number !== task_number);
+		setTasks(updatedTasks);
+		setTasksData(updatedTasks);
+	}
+
+	function handleTaskInput({ value }, task_index, index) {
+		const { inputs: task_fields } = { ...tasks[task_index] };
+		const [valid, info] = validate(value, task_fields[index].validation);
+		const updatedForm = [...tasks];
+		updatedForm[task_index].inputs[index] = {
+			...updatedForm[task_index].inputs[index],
+			value,
+			valid,
+			error: !valid,
+			info,
+		};
+		setTasks(updatedForm);
+		setTasksData(updatedForm);
+	}
+
+	function handleTaskTitle({ value }, index) {
+		const updatedTask = [...tasks];
+		updatedTask[index].title = value;
+		setTasks(updatedTask);
+		setTasksData(updatedTask);
+	}
+
+	async function handleConclusion(event, index) {
+		event.preventDefault();
+		setLoading(true);
+		const updatedTasks = [...tasks];
+		if (tasks[index].performed_by) {
+			const [, status] = await studentService.update.task(
+				course,
+				unit,
+				'2019-2020',
+				project,
+				team,
+				tasks[index].number,
+				{ task: { unset: true } }
+			);
+			if (status !== 200) return;
+			updatedTasks[index].performed_by = null;
+		} else {
+			const [, status] = await studentService.update.task(
+				course,
+				unit,
+				'2019-2020',
+				project,
+				team,
+				tasks[index].number,
+				{ task: { unset: false } }
+			);
+			if (status !== 200) return;
+			updatedTasks[index].performed_by = `${
+				user.first_name
+			} ${user.last_name.split(' ').pop()}`;
+		}
+		setLoading(false);
+		setTasks(updatedTasks);
+		setTasksData(updatedTasks);
+	}
+
 	return (
 		<Container>
 			<ProgressSection>
@@ -34,90 +280,101 @@ function Tasks() {
 					<FaChartLine />
 					<span>Progresso</span>
 				</ProgressTitle>
-				<ProgressBar progress={'50%'} type={'warning'}>
+				<ProgressBar
+					progress={`${progress}%`}
+					type={progress === 100 ? 'success' : 'warning'}
+				>
 					<div>
 						<div></div>
 					</div>
 					<span>
-						<strong>1</strong> de <strong>2</strong> tarefas concluídas
+						<strong>{Math.ceil((progress / 100) * tasks.length)}</strong> de{' '}
+						<strong>{tasks.length}</strong> tarefas concluídas
 					</span>
 				</ProgressBar>
 			</ProgressSection>
-			<MainButton>
-				<FaPlus />
-				Nova Tarefa
-			</MainButton>
-			<TaskCard>
-				<TaskTitle type="success">
-					<FaClipboardCheck />
-					<span>#1</span>
-					<input type="text" value="Fazer tudo" disabled />
-					<div></div>
-				</TaskTitle>
-				<TagsSection>
-					<Tag type="success">
-						<FaCheckCircle /> Concluída por Student Test
-					</Tag>
-				</TagsSection>
-				<form>
-					<Input
-						id="1"
-						type="textarea"
-						label="Descrição"
-						change={() => {}}
-						validation={{ required: false }}
-						value="Tem que se fazer tudo"
-					/>
-					<Input
-						id="2"
-						type="text"
-						label="Tempo dedicado (h)"
-						change={() => {}}
-						validation={{ required: false }}
-						value="4"
-					/>
-					<Button type="submit">Reabrir</Button>
-				</form>
-			</TaskCard>
-			<TaskCard>
-				<TaskTitle>
-					<FaClipboardList />
-					<span>#2</span>
-					<input type="text" value="Fazer nada" disabled />
-					<div>
-						<button>
-							<FaEdit />
-						</button>
-						<button>
-							<FaTrash />
-						</button>
-					</div>
-				</TaskTitle>
-				<TagsSection>
-					<Tag type="warning">
-						<FaHammer />A trabalhar
-					</Tag>
-				</TagsSection>
-				<form>
-					<Input
-						id="1"
-						type="textarea"
-						label="Descrição"
-						change={() => {}}
-						validation={{ required: false }}
-						value="Não é preciso fazer nada"
-					/>
-					<Input
-						id="2"
-						type="text"
-						label="Tempo dedicado (h)"
-						change={() => {}}
-						validation={{ required: false }}
-						value=""
-					/>
-					<Button type="submit">Concluír</Button>
-				</form>
-			</TaskCard>
+			{!newTaskMode && (
+				<MainButton
+					onClick={() => {
+						setNewTaskMode(true);
+					}}
+				>
+					<FaPlus />
+					Nova Tarefa
+				</MainButton>
+			)}
+
+			{newTaskMode && renderNewMeeting()}
+			{tasks.map((task, task_index) => (
+				<TaskCard key={task.number}>
+					<TaskTitle type={task.performed_by && 'success'}>
+						{task.performed_by ? <FaClipboardCheck /> : <FaClipboardList />}
+						<span>#{task.number}</span>
+						<input
+							type="text"
+							value={task.title}
+							onChange={({ target }) => {
+								handleTaskTitle(target, task_index);
+							}}
+							disabled={editMode.task !== task.number}
+						/>
+						<div>
+							{!task.performed_by && (
+								<>
+									<button onClick={() => handleEditTask(task.number)}>
+										{editMode.status && editMode.task === task.number ? (
+											<FaSave />
+										) : (
+											<FaEdit />
+										)}
+									</button>
+									<button onClick={() => handleRemoveTask(task.number)}>
+										<FaTrash />
+									</button>
+								</>
+							)}
+						</div>
+					</TaskTitle>
+					<TagsSection>
+						<Tag type={task.performed_by ? 'success' : 'warning'}>
+							{task.performed_by ? (
+								<>
+									<FaCheckCircle /> Concluída por {task.performed_by}
+								</>
+							) : (
+								<>
+									<FaHammer />A trabalhar
+								</>
+							)}
+						</Tag>
+					</TagsSection>
+					<form onSubmit={(event) => handleConclusion(event, task_index)}>
+						{task.inputs.map((key, index) => (
+							<Input
+								key={key.id}
+								id={key.id}
+								type={key.type}
+								label={key.label}
+								change={({ target }) =>
+									handleTaskInput(target, task_index, index)
+								}
+								validation={key.validation}
+								value={key.value}
+								disabled={editMode.task !== task.number}
+							/>
+						))}
+						{task.performed_by ? (
+							<Button type="submit">
+								{loading ? <ButtonSpinner /> : 'Reabrir'}
+							</Button>
+						) : (
+							<Button type="submit" disabled={editMode.task === task.number}>
+								{loading ? <ButtonSpinner /> : 'Concluír'}
+							</Button>
+						)}
+					</form>
+				</TaskCard>
+			))}
 		</Container>
 	);
 }

@@ -6,8 +6,8 @@ module.exports = {
 			task: Joi.object().required().keys({
 				title: Joi.string().required(),
 				description: Joi.string(),
-				start_date: Joi.string().required(),
-				end_date: Joi.string().required(),
+				start_date: Joi.string(),
+				end_date: Joi.string(),
 			}),
 		}),
 	}),
@@ -28,8 +28,8 @@ module.exports = {
 			task: Joi.object().required().keys({
 				title: Joi.string(),
 				description: Joi.string(),
-				start_date: Joi.string(),
-				end_date: Joi.string(),
+				time: Joi.number(),
+				unset: Joi.bool(),
 			}),
 		}),
 	}),

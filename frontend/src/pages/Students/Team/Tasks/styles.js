@@ -4,7 +4,8 @@ export const Container = styled.div`
 	display: grid;
 	padding: 30px 20px;
 	grid-template-columns: repeat(3, 1fr);
-	grid-template-rows: 120px 60px auto;
+	grid-template-rows: 120px;
+	grid-auto-rows: min-content;
 	gap: 30px;
 	background: ${({ theme }) => theme.colors.surface};
 	@media (min-width: 768px) {
@@ -59,6 +60,7 @@ export const ProgressBar = styled.div`
 		background: ${({ theme }) => theme.colors.surface};
 		border-radius: 4px;
 		div {
+			transition: width 2s ease;
 			height: 100%;
 			width: ${({ progress }) => progress};
 			background: ${({ theme, type }) => theme.colors[type]};
@@ -72,6 +74,7 @@ export const ProgressBar = styled.div`
 `;
 
 export const MainButton = styled.button`
+	margin: 10px 0;
 	height: 40px;
 	grid-column: 1 / -1;
 	display: flex;
@@ -135,6 +138,14 @@ export const TaskCard = styled.div`
 	}
 `;
 
+export const NewTaskCard = styled(TaskCard)`
+	@media (min-width: 768px) {
+		form div:last-of-type {
+			grid-column: 1 / -1;
+		}
+	}
+`;
+
 export const TaskTitle = styled.div`
 	grid-column: 1 / -1;
 	display: grid;
@@ -155,6 +166,7 @@ export const TaskTitle = styled.div`
 		overflow: hidden;
 		max-width: 100%;
 		text-overflow: ellipsis;
+		transition: all 0.2s ease;
 		:enabled {
 			margin: 0 5px;
 			background: ${({ theme }) => theme.colors.inputs.background};
@@ -185,25 +197,42 @@ export const TaskTitle = styled.div`
 		display: flex;
 		justify-content: space-around;
 		button {
-			transition: color 0.3s ease;
 			cursor: pointer;
 			svg {
 				color: ${({ theme }) => theme.colors.primary_variant};
 				font-size: 18px;
+				transition: color 0.3s ease;
 			}
-			&:hover svg {
+			&:hover {
 				color: ${({ theme }) => theme.colors.primary};
 			}
 			:last-child svg {
 				color: ${({ theme }) => theme.colors.danger};
 
-				&:hover svg {
+				&:hover {
 					color: ${({ theme }) => theme.colors.hover.danger};
 				}
 			}
 		}
 	}
 `;
+
+export const NewTaskTitle = styled(TaskTitle)`
+	grid-template-columns: 25px auto 60px;
+	svg {
+		font-size: 16px;
+	}
+	div {
+		justify-content: flex-end;
+		button svg {
+			color: ${({ theme }) => theme.colors.danger};
+			&:hover {
+				color: ${({ theme }) => theme.colors.hover.danger};
+			}
+		}
+	}
+`;
+
 export const TagsSection = styled.div`
 	display: grid;
 	grid-template-rows: repeat(2, 25px) auto;
@@ -251,7 +280,7 @@ export const Button = styled.button`
 		box-shadow: none;
 		cursor: not-allowed;
 	}
-	&:hover {
+	&:hover:enabled {
 		background: ${({ theme }) => theme.colors.primary_variant};
 	}
 	& > * {

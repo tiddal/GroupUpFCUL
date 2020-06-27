@@ -20,8 +20,18 @@ class TaskController {
 		const team = await this.findTeam(request, response, next);
 		if (!team) return next();
 		const tasks = await connection('Task')
-			.select(['task_number', 'title', 'description', 'start_date', 'end_date'])
-			.where({ team_id: team.id });
+			.leftJoin('User', 'User.id', '=', 'Task.performed_by')
+			.select(
+				'User.username',
+				'User.first_name',
+				'User.last_name',
+				'Task.task_number',
+				'Task.title',
+				'Task.description',
+				'Task.time'
+			)
+			.where({ team_id: team.id })
+			.distinct();
 		return response.json(tasks);
 	}
 
@@ -51,7 +61,7 @@ class TaskController {
 		if (!belongsToTeam) return next(errors.INVALID_IDENTITY());
 
 		let task_number = 1;
-		const { title, description, start_date, end_date } = request.body.task;
+		const { title, description } = request.body.task;
 		const id = uuidv4();
 		const { id: team_id } = team;
 		const [existentTask] = await connection('Task')
@@ -59,23 +69,21 @@ class TaskController {
 			.where({ team_id })
 			.orderBy('task_number', 'desc')
 			.limit(1);
-		if (existentTask) task_number = existentTask + 1;
+		if (existentTask) task_number = parseInt(existentTask.task_number) + 1;
 		try {
 			const [task] = await connection('Task').insert(
 				{
 					id,
-					student_id: user_id,
 					team_id,
 					task_number,
 					title,
 					description,
-					start_date,
-					end_date,
 				},
-				['task_number', 'title', 'description', 'start_date', 'end_date']
+				['task_number', 'title', 'description']
 			);
 			return response.status(201).json(task);
 		} catch (error) {
+			console.log(error);
 			return next(errors.UNIQUE_CONSTRAIN(error.detail));
 		}
 	}
@@ -83,14 +91,15 @@ class TaskController {
 	async modify(request, response, next) {
 		const task = await this.findTask(request, response, next);
 		if (!task) return next();
-		const { title, description, start_date, end_date } = request.body.task;
+		const { title, description, time, unset } = request.body.task;
+		let { id: performed_by } = request.user;
+		if (unset) performed_by = null;
 		const [updatedTask] = await connection('Task')
 			.where(task)
-			.update({ title, description, start_date, end_date }, [
+			.update({ title, description, performed_by, time }, [
 				'title',
 				'description',
-				'start_date',
-				'end_date',
+				'time',
 			]);
 		return response.json(updatedTask);
 	}

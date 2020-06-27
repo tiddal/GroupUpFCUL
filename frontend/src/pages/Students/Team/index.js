@@ -37,6 +37,7 @@ function Team() {
 	const [initializing, setInitializing] = useState(true);
 	const [selectedStage, setSelectedStage] = useState();
 	const [meetingsData, setMeetingsData] = useState();
+	const [tasksData, setTasksData] = useState();
 
 	useEffect(() => {
 		async function getInitialState() {
@@ -180,6 +181,48 @@ function Team() {
 				delete meeting.ends_at;
 				meetingsData.push(meeting);
 			}
+
+			const tasks = await studentService.get.tasks(
+				unitData.course_code,
+				unitData.code,
+				'2019-2020',
+				project,
+				team
+			);
+			const tasksData = [];
+			for (let task of tasks) {
+				const taskData = {
+					number: parseInt(task.task_number),
+					performed_by: task.username
+						? `${task.first_name} ${task.last_name.split(' ').pop()}`
+						: null,
+					title: task.title ? task.title : '',
+					inputs: [
+						{
+							id: 'description',
+							type: 'textarea',
+							label: 'Descrição',
+							value: task.description,
+							validation: { required: false },
+							valid: false,
+							error: false,
+							info: '',
+						},
+						{
+							id: 'time',
+							type: 'text',
+							label: 'Tempo dedicado (h)',
+							value: task.time ? task.time : '0',
+							validation: { required: false },
+							valid: false,
+							error: false,
+							info: '',
+						},
+					],
+				};
+				tasksData.push(taskData);
+			}
+			setTasksData(tasksData);
 			setMeetingsData(meetingsData);
 			setTeamData(teamData);
 			setSelectedStage(Object.keys(stages)[0]);
@@ -382,7 +425,21 @@ function Team() {
 									/>
 								)}
 							/>
-							<Route path={`${path}/tasks`} component={Tasks} />
+							<Route
+								path={`${path}/tasks`}
+								component={() => (
+									<Tasks
+										course={unitData.course_code}
+										unit={unit}
+										project={project}
+										team={team}
+										meetingsData={meetingsData}
+										user={user}
+										tasksData={tasksData}
+										setTasksData={setTasksData}
+									/>
+								)}
+							/>
 							<Route
 								path={`${path}/meetings`}
 								component={() => (
