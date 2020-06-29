@@ -3,13 +3,29 @@ import styled from 'styled-components';
 export const Container = styled.div`
 	padding: 30px 20px;
 	display: grid;
-	grid-template-rows: 40px repeat(3, auto);
+	grid-template-rows: 40px 40px repeat(3, auto);
 	gap: 30px;
 	padding-bottom: 20px;
 	@media (min-width: 768px) {
+		grid-template-rows: 40px repeat(3, auto);
+		grid-template-columns: repeat(2, 1fr);
 		padding: 30px 50px;
 	}
 	@media (min-width: 1450px) {
+		grid-template-columns: repeat(3, 1fr);
+	}
+`;
+
+export const ProjectTitle = styled.div`
+	color: ${({ theme }) => theme.colors.text};
+	font-weight: 700;
+	font-size: 20px;
+	align-self: center;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	@media (min-width: 1450px) {
+		grid-column: 1 / span 2;
 	}
 `;
 
@@ -58,6 +74,12 @@ export const Dropdown = styled.div`
 			color: ${({ theme }) => theme.colors.primary_variant};
 		}
 	}
+	@media (min-width: 768px) {
+		grid-column: 2;
+	}
+	@media (min-width: 1450px) {
+		grid-column: 3;
+	}
 `;
 
 export const InfoSection = styled.section`
@@ -68,6 +90,7 @@ export const InfoSection = styled.section`
 	@media (min-width: 768px) {
 		grid-template-rows: 25px auto;
 		grid-template-columns: repeat(3, 1fr);
+		grid-column: 1 / -1;
 	}
 	@media (min-width: 1450px) {
 		grid-template-columns: repeat(5, 1fr);
@@ -116,7 +139,7 @@ export const StageDescription = styled.div`
 	border: 1px solid ${({ theme }) => theme.colors.inputs.border};
 	gap: 20px;
 	div {
-		font-size: 12px;
+		font-size: 14px;
 	}
 `;
 
@@ -124,6 +147,10 @@ export const ArtifactsSection = styled.section`
 	display: grid;
 	grid-template-rows: 20px auto;
 	gap: 5px;
+
+	@media (min-width: 768px) {
+		grid-column: 1 / -1;
+	}
 `;
 
 export const SectionTitle = styled.div`
@@ -336,6 +363,9 @@ export const EvaluationSection = styled.section`
 	display: grid;
 	grid-template-rows: 20px auto;
 	gap: 5px;
+	@media (min-width: 768px) {
+		grid-column: 1 / -1;
+	}
 `;
 
 export const Feedback = styled.div`
@@ -348,7 +378,7 @@ export const Feedback = styled.div`
 	border: 1px solid ${({ theme }) => theme.colors.inputs.border};
 	gap: 20px;
 	div {
-		font-size: 12px;
+		font-size: 14px;
 	}
 	span {
 		font-size: 24px;

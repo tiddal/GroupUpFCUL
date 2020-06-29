@@ -50,7 +50,7 @@ function Projects() {
 				'2019-2020'
 			);
 			const projectsData = projects.map((project) => ({
-				expand: false,
+				expand: true,
 				number: project.number,
 				name: project.name,
 				min_students: project.min_students,

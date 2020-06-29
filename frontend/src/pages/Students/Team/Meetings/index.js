@@ -5,6 +5,7 @@ import {
 	Container,
 	Card,
 	Title,
+	NewMeetingTitle,
 	ParticipantsSection,
 	Button,
 	MainButton,
@@ -26,12 +27,20 @@ import { validate } from '../../../../validators';
 import studentService from '../../../../services/student';
 import { ButtonSpinner } from '../../../../components/Spinner';
 
-function Meetings({ course, unit, project, team, meetingsData, user }) {
-	const [meetings, setMeetings] = useState(meetingsData);
+function Meetings({
+	course,
+	unit,
+	project,
+	team,
+	meetings,
+	setMeetings,
+	user,
+}) {
 	const [editMode, setEditMode] = useState({ status: false });
 	const [newMeetingMode, setNewMeetingMode] = useState(false);
 	const [newMeetingValidity, setNewMeetingValidity] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const [editMeetings, setEditMeetings] = useState(meetings);
 	const [newMeeting, setNewMeeting] = useState([
 		{
 			id: 'date',
@@ -147,26 +156,25 @@ function Meetings({ course, unit, project, team, meetingsData, user }) {
 				],
 			},
 		];
-		setMeetings(updatedMeetings);
 		setLoading(false);
 		setNewMeetingMode(false);
 		setNewMeetingValidity(false);
+		setMeetings(updatedMeetings);
+		setEditMeetings(updatedMeetings);
 	}
 
 	function renderNewMeeting() {
 		return (
 			<Card>
-				<Title>
-					<span>
-						<FaHandshake />
-						Nova Reunião
-					</span>
+				<NewMeetingTitle>
+					<FaHandshake />
+					<span>Nova Reunião</span>
 					<div>
 						<button onClick={() => setNewMeetingMode(false)}>
 							<FaTimesCircle />
 						</button>
 					</div>
-				</Title>
+				</NewMeetingTitle>
 				<form onSubmit={handleNewMeeting} autoComplete="off">
 					{newMeeting.map((field, index) => (
 						<Input
@@ -178,8 +186,6 @@ function Meetings({ course, unit, project, team, meetingsData, user }) {
 							validation={{ required: true }}
 						/>
 					))}
-
-					<ParticipantsSection></ParticipantsSection>
 					<Button type="submit" disabled={!newMeetingValidity}>
 						{loading ? <ButtonSpinner /> : 'Agendar'}
 					</Button>
@@ -229,12 +235,13 @@ function Meetings({ course, unit, project, team, meetingsData, user }) {
 			m.number === meeting.number ? updatedMeeting : m
 		);
 		setMeetings(updatedMeetings);
+		setEditMeetings(updatedMeetings);
 	}
 
 	function handleMeetingInput({ value }, meeting_index, index) {
-		const { inputs: meeting_fields } = { ...meetings[meeting_index] };
+		const { inputs: meeting_fields } = { ...editMeetings[meeting_index] };
 		const [valid, info] = validate(value, meeting_fields[index].validation);
-		const updatedForm = [...meetings];
+		const updatedForm = [...editMeetings];
 		updatedForm[meeting_index].inputs[index] = {
 			...updatedForm[meeting_index].inputs[index],
 			value,
@@ -242,14 +249,14 @@ function Meetings({ course, unit, project, team, meetingsData, user }) {
 			error: !valid,
 			info,
 		};
-		setMeetings(updatedForm);
+		setEditMeetings(updatedForm);
 	}
 
 	async function handleEditMeeting(meeting_number) {
 		if (editMode.status === false) {
 			setEditMode({ status: true, meeting: meeting_number });
 		} else {
-			const edited_meeting = meetings.find(
+			const edited_meeting = editMeetings.find(
 				(meeting) => meeting.number === meeting_number
 			);
 			const meetingData = {};
@@ -290,11 +297,12 @@ function Meetings({ course, unit, project, team, meetingsData, user }) {
 			(meeting) => meeting.number !== meeting_number
 		);
 		setMeetings(updatedMeetings);
+		setEditMeetings(updatedMeetings);
 	}
 
 	return (
 		<Container>
-			{!newMeetingMode ? (
+			{!newMeetingMode && (
 				<MainButton
 					onClick={() => {
 						setNewMeetingMode(true);
@@ -303,8 +311,6 @@ function Meetings({ course, unit, project, team, meetingsData, user }) {
 					<FaPlus />
 					Marcar Reunião
 				</MainButton>
-			) : (
-				<div></div>
 			)}
 
 			{newMeetingMode && renderNewMeeting()}
@@ -312,10 +318,8 @@ function Meetings({ course, unit, project, team, meetingsData, user }) {
 				meetings.map((meeting, meeting_index) => (
 					<Card key={meeting.number}>
 						<Title>
-							<span>
-								<FaHandshake />
-								{meeting.number}ª Reunião
-							</span>
+							<FaHandshake />
+							<span>{meeting.number}ª Reunião</span>
 							<div>
 								<button onClick={() => handleEditMeeting(meeting.number)}>
 									{editMode.status && editMode.meeting === meeting.number ? (

@@ -1,11 +1,16 @@
 import React from 'react';
 
+import { ReactComponent as Construction } from '../../../../assets/construction.svg';
+
 import { Container } from './styles';
 
 function Schedules() {
 	return (
 		<Container>
-			<div>Em breve</div>
+			<div>
+				<Construction />
+				<p>Página em construção</p>
+			</div>
 		</Container>
 	);
 }

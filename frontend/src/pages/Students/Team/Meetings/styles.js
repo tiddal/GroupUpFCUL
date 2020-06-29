@@ -3,10 +3,10 @@ import styled from 'styled-components';
 export const Container = styled.div`
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
-	grid-template-rows: 60px auto;
+	grid-template-rows: auto;
+	grid-auto-rows: min-content;
 	padding: 50px 20px;
 	background: ${({ theme }) => theme.colors.surface};
-	grid-auto-rows: min-content;
 	gap: 30px;
 	@media (min-width: 768px) {
 		padding: 50px;
@@ -15,7 +15,8 @@ export const Container = styled.div`
 
 export const Card = styled.div`
 	display: grid;
-	grid-template-rows: 90px auto;
+	grid-template-rows: 90px;
+	grid-auto-rows: min-content;
 	grid-column: 1 / -1;
 	background: ${({ theme }) => theme.colors.background};
 	border-radius: 10px;
@@ -30,9 +31,8 @@ export const Card = styled.div`
 		box-shadow: none;
 		padding-bottom: 40px;
 		form {
-			grid-column: 1 / -1;
-			display: grid;
 			grid-template-columns: repeat(2, 1fr);
+			grid-auto-rows: min-content;
 			column-gap: 30px;
 		}
 	}
@@ -40,38 +40,59 @@ export const Card = styled.div`
 
 export const Title = styled.div`
 	grid-column: 1 / -1;
-	display: flex;
-	justify-content: space-between;
+	display: grid;
+	grid-template-columns: 25px auto 60px;
 	align-items: center;
 	color: ${({ theme }) => theme.colors.text};
+	svg {
+		color: ${({ theme, type }) => theme.colors[type || 'text']};
+		font-size: 16px;
+	}
+
 	span {
-		display: flex;
-		align-items: center;
-		font-size: 20px;
+		font-size: 18px;
+		white-space: nowrap;
 		font-weight: 700;
-		text-transform: uppercase;
-		svg {
-			width: 16px;
-			margin-right: 10px;
+		overflow: hidden;
+		max-width: 100%;
+		text-overflow: ellipsis;
+		color: ${({ theme }) => theme.colors.text};
+		@media (min-width: 768px) {
+			font-size: 20px;
 		}
 	}
 	div {
-		width: 75px;
+		width: 60px;
 		display: flex;
 		justify-content: space-around;
 		button {
-			transition: color 0.3s ease;
 			cursor: pointer;
-			font-size: 18px;
-			color: ${({ theme }) => theme.colors.primary_variant};
+			svg {
+				color: ${({ theme }) => theme.colors.primary_variant};
+				font-size: 18px;
+				transition: color 0.3s ease;
+			}
 			&:hover {
 				color: ${({ theme }) => theme.colors.primary};
 			}
-			:last-child {
+			:last-child svg {
 				color: ${({ theme }) => theme.colors.danger};
+
 				&:hover {
 					color: ${({ theme }) => theme.colors.hover.danger};
 				}
+			}
+		}
+	}
+`;
+
+export const NewMeetingTitle = styled(Title)`
+	div {
+		justify-content: flex-end;
+		button svg {
+			color: ${({ theme }) => theme.colors.danger};
+			&:hover {
+				color: ${({ theme }) => theme.colors.hover.danger};
 			}
 		}
 	}
@@ -132,7 +153,7 @@ export const Button = styled.button`
 		box-shadow: none;
 		cursor: not-allowed;
 	}
-	&:hover {
+	&:hover:enabled {
 		background: ${({ theme }) => theme.colors.primary_variant};
 	}
 	& > * {
@@ -141,6 +162,7 @@ export const Button = styled.button`
 	@media (min-width: 768px) {
 		width: 50%;
 		justify-self: end;
+		grid-column: 2;
 	}
 `;
 

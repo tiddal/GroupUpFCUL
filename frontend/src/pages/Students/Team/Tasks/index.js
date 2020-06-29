@@ -95,7 +95,7 @@ function Tasks({ course, unit, project, team, user, tasksData, setTasksData }) {
 					))}
 
 					<Button type="submit" disabled={!newTaskValidity}>
-						{loading ? <ButtonSpinner /> : 'Agendar'}
+						{loading ? <ButtonSpinner /> : 'Adicionar'}
 					</Button>
 				</form>
 			</NewTaskCard>
@@ -110,6 +110,7 @@ function Tasks({ course, unit, project, team, user, tasksData, setTasksData }) {
 			const taskData = {};
 			edited_task.inputs.map((task) => (taskData[task.id] = task.value));
 			taskData.title = edited_task.title;
+			taskData.unset = true;
 
 			const [, status] = await studentService.update.task(
 				course,
@@ -144,7 +145,6 @@ function Tasks({ course, unit, project, team, user, tasksData, setTasksData }) {
 			info,
 		};
 		setNewTask(updatedForm);
-
 		setNewTaskValidity(evaluateForm(updatedForm));
 	}
 
@@ -193,11 +193,11 @@ function Tasks({ course, unit, project, team, user, tasksData, setTasksData }) {
 				],
 			},
 		];
-		setTasks(updatedTasks);
-		setTasksData(updatedTasks);
 		setLoading(false);
 		setNewTaskMode(false);
 		setNewTaskValidity(false);
+		setTasks(updatedTasks);
+		setTasksData(updatedTasks);
 	}
 
 	async function handleRemoveTask(task_number) {
@@ -227,14 +227,12 @@ function Tasks({ course, unit, project, team, user, tasksData, setTasksData }) {
 			info,
 		};
 		setTasks(updatedForm);
-		setTasksData(updatedForm);
 	}
 
 	function handleTaskTitle({ value }, index) {
 		const updatedTask = [...tasks];
 		updatedTask[index].title = value;
 		setTasks(updatedTask);
-		setTasksData(updatedTask);
 	}
 
 	async function handleConclusion(event, index) {
@@ -321,14 +319,20 @@ function Tasks({ course, unit, project, team, user, tasksData, setTasksData }) {
 						<div>
 							{!task.performed_by && (
 								<>
-									<button onClick={() => handleEditTask(task.number)}>
+									<button
+										type="button"
+										onClick={() => handleEditTask(task.number)}
+									>
 										{editMode.status && editMode.task === task.number ? (
 											<FaSave />
 										) : (
 											<FaEdit />
 										)}
 									</button>
-									<button onClick={() => handleRemoveTask(task.number)}>
+									<button
+										type="button"
+										onClick={() => handleRemoveTask(task.number)}
+									>
 										<FaTrash />
 									</button>
 								</>

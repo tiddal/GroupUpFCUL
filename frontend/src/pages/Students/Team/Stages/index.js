@@ -3,6 +3,7 @@ import { useRouteMatch } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import {
 	Container,
+	ProjectTitle,
 	Dropdown,
 	InfoSection,
 	Badge,
@@ -43,6 +44,7 @@ function Stages({
 	course,
 	selectedStage,
 	setSelectedStage,
+	projectData,
 }) {
 	const { user } = useAuth();
 
@@ -184,6 +186,7 @@ function Stages({
 
 	return (
 		<Container>
+			<ProjectTitle>{projectData.name}</ProjectTitle>
 			<Dropdown>
 				<span>
 					<FaAngleDown />

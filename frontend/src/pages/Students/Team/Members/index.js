@@ -54,8 +54,8 @@ function Members({ team, handlers }) {
 		} else {
 			return (
 				<React.Fragment>
-					{stars.map((star) => (
-						<FaStar />
+					{stars.map((star, i) => (
+						<FaStar key={i} />
 					))}
 					<FaStar />
 				</React.Fragment>

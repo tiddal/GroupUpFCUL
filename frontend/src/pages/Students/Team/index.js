@@ -326,9 +326,11 @@ function Team() {
 	}
 
 	async function handleRate(username, rate) {
-		const ratedMember = teamData.teamRatings.find(
-			(member) => member.username === username
-		);
+		let index;
+		const ratedMember = teamData.teamRatings.find((member, i) => {
+			if (member.username === username) index = i;
+			return member.username === username;
+		});
 		if (!ratedMember) {
 			const [, status] = await studentService.create.teamRate(
 				unitData.course_code,
@@ -341,6 +343,9 @@ function Team() {
 					rate,
 				}
 			);
+			const teamRatingsUpdate = [...teamData.teamRatings, { username, rate }];
+			const updatedTeam = { ...teamData, teamRatings: teamRatingsUpdate };
+			setTeamData(updatedTeam);
 			if (status !== 201) return;
 		} else {
 			const [, status] = await studentService.update.teamRate(
@@ -354,6 +359,10 @@ function Team() {
 					rate,
 				}
 			);
+			const teamRatingsUpdate = [...teamData.teamRatings];
+			teamRatingsUpdate[index].rate = rate;
+			const updatedTeam = { ...teamData, teamRatings: teamRatingsUpdate };
+			setTeamData(updatedTeam);
 			if (status !== 200) return;
 		}
 	}
@@ -420,6 +429,7 @@ function Team() {
 										stages={stagesData}
 										setStages={setStagesData}
 										course={unitData.course_code}
+										projectData={projectData}
 										selectedStage={selectedStage}
 										setSelectedStage={setSelectedStage}
 									/>
@@ -433,7 +443,6 @@ function Team() {
 										unit={unit}
 										project={project}
 										team={team}
-										meetingsData={meetingsData}
 										user={user}
 										tasksData={tasksData}
 										setTasksData={setTasksData}
@@ -448,8 +457,9 @@ function Team() {
 										unit={unit}
 										project={project}
 										team={team}
-										meetingsData={meetingsData}
 										user={user}
+										meetings={meetingsData}
+										setMeetings={setMeetingsData}
 									/>
 								)}
 							/>
