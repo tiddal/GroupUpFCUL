@@ -1,6 +1,7 @@
 const express = require('express');
 const users = express.Router();
-
+const multer = require('multer');
+const multerImageConfig = require('../middleware/multerImages');
 //  Middleware
 const {
 	sessionRequired,
@@ -29,9 +30,9 @@ users.get('/:username', UserValidator.find, UserController.find);
 users.post('/', adminRequired, UserValidator.create, UserController.store);
 users.put(
 	'/:username',
-	adminRequired,
+	loginRequired,
 	UserValidator.find,
-	UserValidator.edit,
+	multer(multerImageConfig).single('file'),
 	UserController.modify
 );
 users.delete(
@@ -40,14 +41,5 @@ users.delete(
 	UserValidator.find,
 	UserController.remove
 );
-
-// router.put(
-// 	'/:id',
-// 	loginRequired,
-// 	selfRequired,
-// 	multer(multerConfig).single('file'),
-// 	UserController.edit
-// );
-// router.delete('/:id', UserController.delete);
 
 module.exports = users;

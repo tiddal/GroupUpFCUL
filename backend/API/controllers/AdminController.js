@@ -32,6 +32,8 @@ class AdminController {
 				'User.first_name',
 				'User.last_name',
 				'User.email',
+				'User.avatar_url',
+				'User.about',
 				'Admin.previleges',
 			])
 			.where('Admin.user_id', user.id);

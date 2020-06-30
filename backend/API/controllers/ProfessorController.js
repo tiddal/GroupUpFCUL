@@ -34,6 +34,8 @@ class ProfessorController {
 				'User.first_name',
 				'User.last_name',
 				'User.email',
+				'User.avatar_url',
+				'User.about',
 				'Professor.room',
 				'Professor.department',
 			])

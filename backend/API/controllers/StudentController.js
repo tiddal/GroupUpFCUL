@@ -18,6 +18,7 @@ class StudentController {
 				'User.last_name',
 				'User.email',
 				'User.avatar_url',
+				'User.about',
 				'User.status',
 				'Student.working_student',
 				'Student.github_url',
@@ -47,6 +48,7 @@ class StudentController {
 				'User.last_name',
 				'User.email',
 				'User.avatar_url',
+				'User.about',
 				'User.status',
 				'Student.working_student',
 				'Student.github_url',
@@ -70,22 +72,17 @@ class StudentController {
 		const user = await this.findUser(request, response, next);
 		if (!user) return next();
 		const [student] = await connection('Student')
-			.select('user_id')
+			.select('user_id', 'working_student')
 			.where({ user_id: user.id });
 		if (!student)
 			return next(errors.STUDENT_NOT_FOUND(user.username, 'params'));
-		const {
-			working_student,
-			github,
-			facebook,
-			instagram,
-			twitter,
-		} = request.body.student;
+		const { github, facebook, instagram, twitter } = request.body.student;
+
 		const [updatedStudent] = await connection('Student')
 			.where(student)
 			.update(
 				{
-					working_student,
+					working_student: student.working_student,
 					github_url: github ? `https://github.com/${github}` : undefined,
 					facebook_url: facebook
 						? `https://facebook.com/${facebook}`

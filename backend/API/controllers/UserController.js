@@ -2,6 +2,7 @@ const connection = require('../db/config/connection');
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcryptjs');
 const errors = require('../utils/errors');
+const aws = require('aws-sdk');
 
 class UserController {
 	constructor() {
@@ -98,36 +99,77 @@ class UserController {
 	}
 
 	async modify(request, response, next) {
-		//	Check if the avatar was uploaded and gets its location
-		const avatar_url = request.file
-			? request.file.location
-				? request.file.location
-				: `${process.env.APP_URL}/files/${request.file.key}`
-			: null;
-
 		//	Finding the User
 		const user = await this.findUser(request, response, next);
 		if (!user) return next();
-
-		//	Updating the User
-		let { password } = request.body.user;
-		const { first_name, last_name, email, status } = request.body.user;
-		if (password) password = bcrypt.hashSync(password, 10);
-		try {
-			const [updatedUser] = await connection('User')
-				.where(user)
-				.update(
-					{ first_name, last_name, email, password, status, avatar_url },
-					[
+		if (request.body.user) {
+			//	Updating the User
+			let { password } = request.body.user;
+			const { first_name, last_name, email, status } = request.body.user;
+			if (password) password = bcrypt.hashSync(password, 10);
+			try {
+				const [updatedUser] = await connection('User')
+					.where(user)
+					.update({ first_name, last_name, email, password, status }, [
 						'username',
 						'first_name',
 						'last_name',
 						'email',
 						'avatar_url',
 						'status',
-					]
-				);
-
+					]);
+				return response.json(updatedUser);
+			} catch (error) {
+				return response.status(409).json({
+					error: errors.UNIQUE_CONSTRAIN(error.detail),
+				});
+			}
+		}
+		//	Check if the avatar was uploaded and gets its location
+		let avatar_url;
+		let avatar_key;
+		if (request.file) {
+			avatar_url = request.file.location;
+			avatar_key = request.file.key;
+			const s3 = new aws.S3();
+			if (user.avatar_key) {
+				await s3
+					.deleteObject({
+						Bucket: process.env.AWS_FILES_BUCKET_NAME,
+						Key: user.avatar_key,
+					})
+					.promise();
+			}
+		}
+		let about;
+		if (request.body.about) {
+			about = request.body.about;
+		}
+		if (!about && !avatar_url) {
+			const [userNotUpdated] = await connection('User')
+				.select([
+					'username',
+					'first_name',
+					'last_name',
+					'email',
+					'avatar_url',
+					'status',
+				])
+				.where(user);
+			return response.json(userNotUpdated);
+		}
+		try {
+			const [updatedUser] = await connection('User')
+				.where(user)
+				.update({ avatar_url, avatar_key, about }, [
+					'username',
+					'first_name',
+					'last_name',
+					'email',
+					'avatar_url',
+					'status',
+					'about',
+				]);
 			return response.json(updatedUser);
 		} catch (error) {
 			return response.status(409).json({
@@ -149,7 +191,9 @@ class UserController {
 
 	async findUser(request, response, next) {
 		const { username } = request.params;
-		const [user] = await connection('User').select('id').where({ username });
+		const [user] = await connection('User')
+			.select('id', 'avatar_key')
+			.where({ username });
 		if (!user) return next(errors.USER_NOT_FOUND(username, 'params'));
 		return user;
 	}

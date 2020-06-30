@@ -83,7 +83,6 @@ class TaskController {
 			);
 			return response.status(201).json(task);
 		} catch (error) {
-			console.log(error);
 			return next(errors.UNIQUE_CONSTRAIN(error.detail));
 		}
 	}
