@@ -222,6 +222,7 @@ function Team() {
 				};
 				tasksData.push(taskData);
 			}
+			console.log(teamData);
 			setTasksData(tasksData);
 			setMeetingsData(meetingsData);
 			setTeamData(teamData);

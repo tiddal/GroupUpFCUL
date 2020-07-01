@@ -114,7 +114,8 @@ export const ParticipantsSection = styled.div`
 
 		@media (min-width: 1450px) {
 		}
-		span {
+		span,
+		img {
 			width: 40px;
 			height: 40px;
 			background: orange;

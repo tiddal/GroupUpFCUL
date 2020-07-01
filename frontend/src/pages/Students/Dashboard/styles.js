@@ -87,7 +87,6 @@ export const Submission = styled(NextClassName)`
 `;
 
 export const SubmissionDate = styled(UnitInfo)`
-	text-transform: lowercase;
 	font-weight: 600;
 	font-size: 12px;
 	color: ${({ theme }) => theme.colors.secondary_text};

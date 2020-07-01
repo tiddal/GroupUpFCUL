@@ -234,6 +234,7 @@ function Meetings({
 		const updatedMeetings = meetings.map((m) =>
 			m.number === meeting.number ? updatedMeeting : m
 		);
+		console.log(updatedMeetings);
 		setMeetings(updatedMeetings);
 		setEditMeetings(updatedMeetings);
 	}
@@ -356,8 +357,12 @@ function Meetings({
 								<div>Confirmados:</div>
 								<div>
 									{meeting.confirmed_members.map((member) =>
-										member.avatar_url ? (
-											<img key={member.username} alt="member" />
+										member.avatar_url || member.avatar ? (
+											<img
+												key={member.username}
+												src={member.avatar_url || member.avatar}
+												alt={member.username}
+											/>
 										) : (
 											<span key={member.username}>
 												{member.first_name.charAt(0)}

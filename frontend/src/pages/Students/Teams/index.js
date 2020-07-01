@@ -97,6 +97,7 @@ function Teams() {
 					});
 				}
 			}
+			console.log(teamsData);
 			setTeamsData(teamsData);
 			setProjectData(projectData);
 			setInitializing(false);
@@ -198,6 +199,43 @@ function Teams() {
 		}
 	}
 
+	function renderRate(rate) {
+		if (!rate)
+			return [...Array(5)].map((star, i) => (
+				<FaStar key={i} color={'#AAAAAA'} />
+			));
+		const decimalPart = parseInt((rate % 1).toFixed(1).substring(2));
+		const integerPart = parseInt(rate);
+		const stars = [...Array(integerPart)];
+		if (decimalPart === 0)
+			return (
+				<React.Fragment>
+					{stars.map((star, i) => (
+						<FaStar key={i} />
+					))}
+				</React.Fragment>
+			);
+		if (decimalPart <= 5) {
+			return (
+				<React.Fragment>
+					{stars.map((star, i) => (
+						<FaStar key={i} />
+					))}
+					<FaStarHalf />
+				</React.Fragment>
+			);
+		} else {
+			return (
+				<React.Fragment>
+					{stars.map((star, i) => (
+						<FaStar key={i} />
+					))}
+					<FaStar />
+				</React.Fragment>
+			);
+		}
+	}
+
 	return (
 		<>
 			{!initializing && (
@@ -244,7 +282,10 @@ function Teams() {
 										{projectData.max_students})
 									</span>
 									{team.confirmed_members.map((member) => (
-										<Member key={member.username}>
+										<Member
+											key={member.username}
+											to={`/profile/${member.username}`}
+										>
 											{member.avatar_url ? (
 												<img src={member.avatar_url} alt="foto de perfil" />
 											) : (
@@ -256,13 +297,7 @@ function Teams() {
 													{member.last_name.split(' ').pop()}
 												</p>
 												<p>{member.username}</p>
-												<p>
-													<FaStar />
-													<FaStar />
-													<FaStar />
-													<FaStar />
-													<FaStarHalf />
-												</p>
+												<p>{renderRate(member.rating)}</p>
 											</div>
 										</Member>
 									))}

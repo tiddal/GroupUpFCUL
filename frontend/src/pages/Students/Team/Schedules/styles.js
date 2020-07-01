@@ -10,8 +10,8 @@ export const Container = styled.div`
 	align-content: center;
 	align-items: center;
 	justify-items: center;
-	fill: ${({ theme }) => theme.colors.primary};
-	color: ${({ theme }) => theme.colors.primary};
+	fill: ${({ theme }) => theme.colors.primary_variant};
+	color: ${({ theme }) => theme.colors.primary_variant};
 	div {
 		width: 450px;
 		height: 450px;

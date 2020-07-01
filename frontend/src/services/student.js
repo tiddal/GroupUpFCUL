@@ -52,6 +52,16 @@ export default {
 				return error;
 			}
 		},
+		teamsFromUser: async (user, year, semester) => {
+			try {
+				const response = await API.get(
+					`users/students/${user}/teams/${year}/${semester}`
+				);
+				return response.data;
+			} catch (error) {
+				return error;
+			}
+		},
 		teams: async (course, unit, year, project) => {
 			try {
 				const response = await API.get(

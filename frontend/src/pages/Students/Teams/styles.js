@@ -139,10 +139,11 @@ export const MembersSection = styled.div`
 	}
 `;
 
-export const Member = styled.div`
+export const Member = styled(NavLink)`
 	display: grid;
 	grid-template-columns: 50px auto;
 	grid-template-rows: 100%;
+	text-decoration: none;
 	span {
 		grid-column: unset;
 		display: flex;

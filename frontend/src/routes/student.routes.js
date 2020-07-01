@@ -1,5 +1,7 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+
+import Notifications from '../pages/Notifications';
 
 import Dashboard from '../pages/Students/Dashboard';
 import Projects from '../pages/Students/Projects';
@@ -23,6 +25,8 @@ const StudentRoutes = () => (
 			<Route exact path="/projects/:unit" component={Projects} />
 			<Route exact path="/projects/:unit/:project/teams" component={Teams} />
 			<Route path="/projects/:unit/:project/teams/:team" component={Team} />
+			<Route path="/notifications" component={Notifications} />
+			<Route render={() => <Redirect to="/" />} />
 		</Switch>
 	</BrowserRouter>
 );

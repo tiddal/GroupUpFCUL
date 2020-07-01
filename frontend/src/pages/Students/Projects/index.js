@@ -8,7 +8,6 @@ import {
 	FaAngleDown,
 	FaUsers,
 	FaInfoCircle,
-	FaExternalLinkAlt,
 } from 'react-icons/fa';
 
 import {
@@ -49,6 +48,7 @@ function Projects() {
 				unitData.code,
 				'2019-2020'
 			);
+			console.log(projects);
 			const projectsData = projects.map((project) => ({
 				expand: true,
 				number: project.number,
@@ -56,6 +56,7 @@ function Projects() {
 				min_students: project.min_students,
 				max_students: project.max_students,
 				description: project.description,
+				objectives: project.objectives,
 			}));
 			setProjectsData(projectsData);
 			setInitializing(false);
@@ -94,24 +95,18 @@ function Projects() {
 							<Content expand={project.expand}>
 								<Info>
 									<InfoTitle>
-										<FaInfoCircle /> Projeto {project.number}
+										<FaInfoCircle />
+										{project.name}
 									</InfoTitle>
 									<p>
-										Etapa: 2/4
-										<br />
-										Grupos: 12
 										<br />
 										Alunos por grupo: {project.min_students}{' '}
 										{project.min_students !== project.max_students &&
 											`a ${project.max_students}`}
 										<br />
-										<a
-											href={project.assignment_url}
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											Enunciado <FaExternalLinkAlt />
-										</a>
+										Descrição: {project.description}
+										<br />
+										Objetivos: {project.objectives}
 									</p>
 								</Info>
 
