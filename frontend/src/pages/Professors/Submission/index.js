@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import moment from 'moment';
 
-import { useAuth } from '../../../hooks';
+import { useAuth, useYear } from '../../../hooks';
 import professorService from '../../../services/professor';
 
 import {
@@ -36,10 +36,12 @@ import {
 function Submission() {
 	const [unitData, setUnitData] = useState();
 	const { user } = useAuth();
+	const { selectedYear } = useYear();
 	const {
 		params: { unit, project, stage, team },
 	} = useRouteMatch('/projects/:unit/:project/stages/:stage/submissions/:team');
 	const [initializng, setInitializing] = useState(true);
+	const [formValidity, setFormValidity] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [submissionData, setSubmissionData] = useState();
 
@@ -47,7 +49,7 @@ function Submission() {
 		async function getInitialState() {
 			const classes = await professorService.get.classes(
 				user.username,
-				'2019-2020',
+				selectedYear,
 				2
 			);
 			const [unitData] = classes.filter(
@@ -56,14 +58,14 @@ function Submission() {
 			const stageData = await professorService.get.stage(
 				unitData.course_code,
 				unitData.code,
-				'2019-2020',
+				selectedYear,
 				project,
 				stage
 			);
 			const submission = await professorService.get.submission(
 				unitData.course_code,
 				unitData.code,
-				'2019-2020',
+				selectedYear,
 				project,
 				stage,
 				team
@@ -100,7 +102,15 @@ function Submission() {
 			setInitializing(false);
 		}
 		getInitialState();
-	}, [user, unit, stage, project, team]);
+	}, [user, unit, stage, project, team, selectedYear]);
+
+	function evaluateForm(submissionForm) {
+		let validForm = true;
+		for (let key in submissionForm) {
+			validForm = submissionForm[key].valid && validForm;
+		}
+		return validForm;
+	}
 
 	function handleProjectInputs({ value }, index) {
 		const [valid, info] = validate(
@@ -119,18 +129,19 @@ function Submission() {
 			info,
 		};
 		setSubmissionData(updatedForm);
+		setFormValidity(evaluateForm(updatedForm.inputs));
 	}
 
 	async function handleSubmission(event) {
 		event.preventDefault();
+		if (!formValidity) return;
 		setLoading(true);
 		const data = {};
 		submissionData.inputs.map((field) => (data[field.id] = field.value));
-		console.log(data);
 		const [, status] = await professorService.update.submission(
 			unitData.course_code,
 			unitData.code,
-			'2019-2020',
+			selectedYear,
 			project,
 			stage,
 			team,

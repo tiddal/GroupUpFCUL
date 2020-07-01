@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useAuth } from '../../../hooks';
+import { useAuth, useYear } from '../../../hooks';
 import professorService from '../../../services/professor';
 
 import { FaCalendarDay, FaBook } from 'react-icons/fa';
@@ -19,6 +19,7 @@ import Separator from '../../../components/Separator';
 function Dashboard() {
 	const { user } = useAuth();
 	const [unitsData, setUnitsData] = useState();
+	const { selectedYear } = useYear();
 	const [classesData, setClassesData] = useState();
 	const [initializing, setInitializing] = useState(true);
 	const [nextClass, setNextClass] = useState();
@@ -74,7 +75,7 @@ function Dashboard() {
 		async function getInitialState() {
 			const classes = await professorService.get.classes(
 				user.username,
-				'2019-2020',
+				selectedYear,
 				2
 			);
 			const units = classes.reduce((unique, unit) => {
@@ -87,7 +88,7 @@ function Dashboard() {
 				const unitProjects = await professorService.get.projects(
 					unit.course_code,
 					unit.code,
-					'2019-2020'
+					selectedYear
 				);
 				unitsData.push({ ...unit, projects: unitProjects.length });
 			}
@@ -108,7 +109,7 @@ function Dashboard() {
 			setInitializing(false);
 		}
 		getInitialState();
-	}, [user, findNextClass]);
+	}, [user, findNextClass, selectedYear]);
 
 	return (
 		<>

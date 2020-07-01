@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouteMatch } from 'react-router-dom';
-import { useAuth } from '../../../hooks';
+import { useAuth, useYear } from '../../../hooks';
 import professorService from '../../../services/professor';
 import Table from '../../../components/Table';
 import Context from '../../../components/Context';
@@ -23,6 +23,7 @@ function Submissions() {
 	const [list, setList] = useState();
 	const [searchInput, setSearchInput] = useState('');
 	const { user } = useAuth();
+	const { selectedYear } = useYear();
 	const {
 		params: { unit, project, stage },
 		url,
@@ -51,7 +52,7 @@ function Submissions() {
 		async function getInitialState() {
 			const classes = await professorService.get.classes(
 				user.username,
-				'2019-2020',
+				selectedYear,
 				2
 			);
 			const [unitData] = classes.filter(
@@ -62,18 +63,17 @@ function Submissions() {
 			const submissionsData = await professorService.get.submissions(
 				unitData.course_code,
 				unitData.code,
-				'2019-2020',
+				selectedYear,
 				project,
 				stage
 			);
-			console.log(submissionsData);
 			setSubmissionsData(submissionsData);
 			const rows = submissionsData.map((team) => createTableRow(team));
 			setInitializing(false);
 			setList(!!rows.length ? rows : undefined);
 		}
 		getInitialState();
-	}, [project, user, createTableRow, unit, stage]);
+	}, [project, user, createTableRow, unit, stage, selectedYear]);
 
 	function handleSearch(event) {
 		event.preventDefault();
