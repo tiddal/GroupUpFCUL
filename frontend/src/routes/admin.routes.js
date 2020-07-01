@@ -3,6 +3,8 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 // Dashboard
 import Dashboard from '../pages/Admins/Dashboard';
+import Profile from '../pages/Profile';
+import EditProfile from '../pages/EditProfile';
 
 //Panels
 import AdminPanel from '../pages/Admins/Panels/AdminPanel';
@@ -54,6 +56,8 @@ const AdminRoutes = () => (
 		<Navigation />
 		<Switch>
 			<Route exact path="/" component={Dashboard} />
+			<Route path="/profile/edit" component={EditProfile} />
+			<Route exact path="/profile/:user" component={Profile} />
 			{/* Admins */}
 			<Route exact path="/admins" component={AdminPanel} />
 			<Route path="/admins/new" component={NewAdmin} />

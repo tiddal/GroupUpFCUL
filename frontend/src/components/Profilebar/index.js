@@ -24,7 +24,7 @@ function Profilebar({ profilebarState, toggleProfilebar }) {
 
 	return (
 		<Container profilebarState={profilebarState}>
-			<User to={`/profile`}>
+			<User to={`/profile/${user.username}`}>
 				<UserAvatar>
 					{user.avatar ? (
 						<img src={user.avatar} alt="foto de perfil" />

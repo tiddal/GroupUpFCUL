@@ -36,9 +36,25 @@ class UserController {
 				'email',
 				'avatar_url',
 				'status',
+				'id',
+				'about',
 			])
 			.where({ username });
+
 		if (!user) return next(errors.USER_NOT_FOUND(username, 'params'));
+		const [admin] = await connection('Admin')
+			.select('user_id')
+			.where('user_id', user.id);
+		const [professor] = await connection('Professor')
+			.select('user_id')
+			.where('user_id', user.id);
+		const [student] = await connection('Student')
+			.select('user_id')
+			.where('user_id', user.id);
+		if (admin) user.role = 'admin';
+		if (professor) user.role = 'professor';
+		if (student) user.role = 'student';
+		delete user.id;
 		return response.json(user);
 	}
 

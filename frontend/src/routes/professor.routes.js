@@ -1,6 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
+import Profile from '../pages/Profile';
+import EditProfile from '../pages/EditProfile';
+
 import Dashboard from '../pages/Professors/Dashboard';
 import Projects from '../pages/Professors/Projects';
 import NewProject from '../pages/Professors/NewProject';
@@ -19,6 +22,8 @@ const ProfessorRoutes = () => (
 		<Navigation />
 		<Switch>
 			<Route exact path="/" component={Dashboard} />
+			<Route path="/profile/edit" component={EditProfile} />
+			<Route exact path="/profile/:user" component={Profile} />
 			<Route exact path="/projects/:unit" component={Projects} />
 			<Route path="/projects/:unit/new" component={NewProject} />
 			<Route exact path="/projects/:unit/:project/stages" component={Stages} />
