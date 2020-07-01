@@ -2,17 +2,14 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../../../hooks';
 import professorService from '../../../services/professor';
 
-import { FaCalendarDay, FaBook, FaQuestionCircle } from 'react-icons/fa';
+import { FaCalendarDay, FaBook } from 'react-icons/fa';
 import {
 	Container,
 	InfoSection,
 	UnitsSection,
-	QuestionsSection,
 	NextClassName,
 	NextClassDate,
 	UnitInfo,
-	ProjectQuestion,
-	ProjectQuestionTime,
 } from './styles';
 import { Card, MiniCard, TwoThirdsCard } from '../../../components/Card';
 import Spinner from '../../../components/Spinner';
@@ -153,7 +150,7 @@ function Dashboard() {
 							/>
 						))}
 					</UnitsSection>
-					<Separator>Dúvidas</Separator>
+					{/* <Separator>Dúvidas</Separator>
 					<QuestionsSection>
 						<Card
 							title={'p1 - projeto 1'}
@@ -168,7 +165,7 @@ function Dashboard() {
 								</>
 							}
 						/>
-					</QuestionsSection>
+					</QuestionsSection> */}
 				</Container>
 			)}
 		</>

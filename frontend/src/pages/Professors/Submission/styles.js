@@ -177,6 +177,7 @@ export const Artifact = styled.a`
 	color: ${({ type }) => fileTypesContrast[type] || '#ffffff'};
 	align-items: center;
 	justify-items: center;
+	text-decoration: none;
 	span {
 		:first-child {
 			height: 100%;

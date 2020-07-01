@@ -53,12 +53,13 @@ function Projects() {
 				'2019-2020'
 			);
 			const projectsData = projects.map((project) => ({
-				expand: false,
+				expand: true,
 				number: project.number,
 				name: project.name,
 				min_students: project.min_students,
 				max_students: project.max_students,
 				description: project.description,
+				objectives: project.objectives,
 			}));
 			setProjectsData(projectsData);
 			setInitializing(false);
@@ -104,7 +105,10 @@ function Projects() {
 										<FaInfoCircle /> Projeto {project.number} - {project.name}
 									</InfoTitle>
 									<p>
+										<br />
 										Descrição: {project.description}
+										<br />
+										Objetivos: {project.objectives}
 										<br />
 										Alunos por grupo: {project.min_students} a{' '}
 										{project.max_students}

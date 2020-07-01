@@ -9,6 +9,8 @@ import { FaArchive } from 'react-icons/fa';
 import Spinner from '../../../components/Spinner';
 import Context from '../../../components/Context';
 
+import moment from 'moment';
+
 function Stages() {
 	const { user } = useAuth();
 	const {
@@ -53,8 +55,8 @@ function Stages() {
 				);
 				stagesData.push({
 					number: stage.stage_number,
-					start_date: stage.start_date,
-					end_date: stage.end_date,
+					start_date: moment(stage.start_date).format('DD/MM/YYYY, HH[h]mm'),
+					end_date: moment(stage.end_date).format('DD/MM/YYYY, HH[h]mm'),
 					submissions: submissions.length,
 					teams: teams.length,
 				});

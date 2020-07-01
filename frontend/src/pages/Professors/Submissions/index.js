@@ -35,7 +35,7 @@ function Submissions() {
 		(team) => [
 			{ data: team.team_number },
 			{ data: moment(team.submitted_at).format('DD/MM/YYYY, HH[h]mm') },
-			{ data: team.grade },
+			{ data: `${team.stage_grade}%` },
 			{
 				data: (
 					<Link to={`${url}/${team.team_number}`}>
@@ -66,6 +66,7 @@ function Submissions() {
 				project,
 				stage
 			);
+			console.log(submissionsData);
 			setSubmissionsData(submissionsData);
 			const rows = submissionsData.map((team) => createTableRow(team));
 			setInitializing(false);
