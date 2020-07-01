@@ -23,20 +23,11 @@ function Dashboard() {
   const { user } = useAuth();
   const { selectedYear } = useYear();
 
-<<<<<<< HEAD
-  const [groups, setGroups] = useState([]);
+  const [teamsData, setTeamsData] = useState([]);
 
   const [unitsData, setUnitsData] = useState();
-  const [classesData, setClassesData] = useState();
   const [initializing, setInitializing] = useState(true);
   const [nextClass, setNextClass] = useState();
-=======
-	const [teamsData, setTeamsData] = useState([]);
-
-	const [unitsData, setUnitsData] = useState();
-	const [initializing, setInitializing] = useState(true);
-	const [nextClass, setNextClass] = useState();
->>>>>>> badfed57463d344adf39225714334362d15e37ad
 
   const findNextClass = useCallback((classes, currentWeekDay, currentTime) => {
     //	Sort classes by week_day and begining time
@@ -85,7 +76,6 @@ function Dashboard() {
     return `${begginingDate}, ${beggining_hours}h${begging_minutes}`;
   }
 
-<<<<<<< HEAD
   useEffect(() => {
     async function getInitialState() {
       const classes = await studentService.get.classes(
@@ -108,7 +98,6 @@ function Dashboard() {
         unitsData.push({ ...unit, projects: unitProjects.length });
       }
       setUnitsData(unitsData);
-      setClassesData(classes);
       if (classes.length) {
         const date = new Date();
         let currentTime = `${date.getHours()}:${date.getMinutes()}`;
@@ -121,6 +110,13 @@ function Dashboard() {
         begins_at = getBeginningDate(week_day, begins_at);
         setNextClass({ initials, number, begins_at });
       }
+
+      const teamsData = await studentService.get.teamsFromUser(
+        user.username,
+        selectedYear,
+        2
+      );
+      setTeamsData(teamsData);
       setInitializing(false);
     }
     getInitialState();
@@ -148,26 +144,43 @@ function Dashboard() {
               }
               link={{ path: "/", label: "Ver Horário" }}
             />
-            <MiniCard data={`${unitsData.length} cadeiras`} />
-            <MiniCard data={`${classesData.length} grupos`} />
-          </InfoSection>
-          <Separator>Grupos</Separator>
-          <GroupsSection>
-            <Card
-              title={"P1 - Grupo 23"}
-              icon={<FaUsers />}
-              content={
-                <>
-                  <Submission>Próxima entrega:</Submission>
-                  <SubmissionDate>22/07/2020, 23h55</SubmissionDate>
-                </>
-              }
-              link={{
-                path: `/projects/1/teams/1`,
-                label: "Ver Grupo",
-              }}
+            <MiniCard
+              data={`${unitsData.length} cadeira${
+                unitsData.length > 1 ? "s" : ""
+              }`}
             />
-          </GroupsSection>
+            <MiniCard
+              data={`${teamsData.length} grupo${
+                teamsData.length !== 1 ? "s" : ""
+              }`}
+            />
+          </InfoSection>
+          {teamsData.length > 0 && (
+            <>
+              {" "}
+              <Separator>Grupos</Separator>
+              <GroupsSection>
+                {teamsData.map((team) => (
+                  <Card
+                    key={team.initials}
+                    title={`${team.initials} - ${team.team_name}`}
+                    icon={<FaUsers />}
+                    content={
+                      <>
+                        <Submission>Projeto:</Submission>
+                        <SubmissionDate>{team.project_name}</SubmissionDate>
+                      </>
+                    }
+                    link={{
+                      path: `/projects/${team.unit_code}/${team.project_number}/teams/${team.team_number}`,
+                      label: "Ver Grupo",
+                    }}
+                  />
+                ))}
+              </GroupsSection>
+            </>
+          )}
+
           <Separator>Cadeiras</Separator>
           <UnitsSection>
             {unitsData.map((unit) => (
@@ -191,136 +204,6 @@ function Dashboard() {
       )}
     </>
   );
-=======
-	useEffect(() => {
-		async function getInitialState() {
-			const classes = await studentService.get.classes(
-				user.username,
-				'2019-2020',
-				2
-			);
-			const units = classes.reduce((unique, unit) => {
-				return unique.some((item) => item.code === unit.code)
-					? unique
-					: [...unique, unit];
-			}, []);
-			const unitsData = [];
-			for (let unit of units) {
-				const unitProjects = await studentService.get.projects(
-					unit.course_code,
-					unit.code,
-					'2019-2020'
-				);
-				unitsData.push({ ...unit, projects: unitProjects.length });
-			}
-			setUnitsData(unitsData);
-			if (classes.length) {
-				const date = new Date();
-				let currentTime = `${date.getHours()}:${date.getMinutes()}`;
-				let currentWeekDay = date.getDay();
-				let { initials, number, begins_at, week_day } = findNextClass(
-					classes,
-					currentWeekDay,
-					currentTime
-				);
-				begins_at = getBeginningDate(week_day, begins_at);
-				setNextClass({ initials, number, begins_at });
-			}
-
-			const teamsData = await studentService.get.teamsFromUser(
-				user.username,
-				'2019-2020',
-				2
-			);
-			setTeamsData(teamsData);
-			setInitializing(false);
-		}
-		getInitialState();
-	}, [user, findNextClass]);
-
-	return (
-		<>
-			{initializing ? (
-				<Spinner />
-			) : (
-				<Container>
-					<InfoSection>
-						<TwoThirdsCard
-							title={'Próxima Aula'}
-							icon={<FaCalendarDay />}
-							content={
-								nextClass && (
-									<>
-										<NextClassName>
-											{nextClass.initials} - {nextClass.number}
-										</NextClassName>
-										<NextClassDate>{nextClass.begins_at}</NextClassDate>
-									</>
-								)
-							}
-							link={{ path: '/', label: 'Ver Horário' }}
-						/>
-						<MiniCard
-							data={`${unitsData.length} cadeira${
-								unitsData.length > 1 ? 's' : ''
-							}`}
-						/>
-						<MiniCard
-							data={`${teamsData.length} grupo${
-								teamsData.length !== 1 ? 's' : ''
-							}`}
-						/>
-					</InfoSection>
-					{teamsData.length > 0 && (
-						<>
-							{' '}
-							<Separator>Grupos</Separator>
-							<GroupsSection>
-								{teamsData.map((team) => (
-									<Card
-										key={team.initials}
-										title={`${team.initials} - ${team.team_name}`}
-										icon={<FaUsers />}
-										content={
-											<>
-												<Submission>Projeto:</Submission>
-												<SubmissionDate>{team.project_name}</SubmissionDate>
-											</>
-										}
-										link={{
-											path: `/projects/${team.unit_code}/${team.project_number}/teams/${team.team_number}`,
-											label: 'Ver Grupo',
-										}}
-									/>
-								))}
-							</GroupsSection>
-						</>
-					)}
-
-					<Separator>Cadeiras</Separator>
-					<UnitsSection>
-						{unitsData.map((unit) => (
-							<Card
-								key={unit.code}
-								title={unit.initials}
-								icon={<FaBook />}
-								content={
-									<UnitInfo>
-										{unit.projects} Projeto{unit.projects !== 1 && 's'}
-									</UnitInfo>
-								}
-								link={{
-									path: `/projects/${unit.code}`,
-									label: 'Ver Projetos',
-								}}
-							/>
-						))}
-					</UnitsSection>
-				</Container>
-			)}
-		</>
-	);
->>>>>>> badfed57463d344adf39225714334362d15e37ad
 }
 
 export default Dashboard;
