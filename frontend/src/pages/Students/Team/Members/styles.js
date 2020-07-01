@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { NavLink } from 'react-router-dom';
 
 export const Container = styled.div`
 	padding: 20px;
@@ -60,12 +61,14 @@ export const Member = styled.div`
 	}
 `;
 
-export const MemberInfo = styled.div`
+export const MemberInfo = styled(NavLink)`
 	padding: 0 15px;
 	display: grid;
 	grid-template-rows: repeat(3, 1fr);
 	grid-template-columns: 100%;
 	align-items: center;
+	text-decoration: none;
+
 	p {
 		:first-child {
 			font-weight: 700;
@@ -116,7 +119,7 @@ export const PendingUsersOptions = styled(MembersOptions)`
 	}
 `;
 
-export const RateMember = styled(MemberInfo)`
+export const RateMember = styled(MemberInfo).attrs({ as: 'div' })`
 	p {
 		max-width: 100%;
 		white-space: nowrap;

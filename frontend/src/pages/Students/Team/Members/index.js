@@ -84,7 +84,7 @@ function Members({ team, handlers }) {
 						) : (
 							<span>{member.first_name.charAt(0)}</span>
 						)}
-						<MemberInfo>
+						<MemberInfo to={`/profile/${member.username}`}>
 							<p>
 								{member.first_name} {member.last_name.split(' ').pop()}
 							</p>
@@ -149,7 +149,7 @@ function Members({ team, handlers }) {
 							) : (
 								<span>{member.first_name.charAt(0)}</span>
 							)}
-							<MemberInfo>
+							<MemberInfo to={`profile/${member.username}`}>
 								<p>
 									{member.first_name} {member.last_name.split(' ').pop()}
 								</p>

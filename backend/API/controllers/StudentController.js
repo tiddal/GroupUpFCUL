@@ -5,6 +5,7 @@ class StudentController {
 	constructor() {
 		this.find = this.find.bind(this);
 		this.findClasses = this.findClasses.bind(this);
+		this.findTeams = this.findTeams.bind(this);
 		this.modify = this.modify.bind(this);
 	}
 
@@ -135,6 +136,34 @@ class StudentController {
 			)
 			.where({ student_id: student.user_id, academic_year, semester });
 		return response.json(classes);
+	}
+
+	async findTeams(request, response, next) {
+		const user = await this.findUser(request, response, next);
+		const [student] = await connection('Student')
+			.select('user_id')
+			.where({ user_id: user.id });
+		if (!student)
+			return next(errors.STUDENT_NOT_FOUND(user.username, 'params'));
+		const { academic_year, semester } = request.params;
+
+		const teams = await connection('team_student')
+			.leftJoin('Team', 'Team.id', '=', 'team_student.team_id')
+			.leftJoin('Project', 'Project.id', '=', 'Team.project_id')
+			.leftJoin('Unit', 'Unit.id', '=', 'Project.unit_id')
+			.select(
+				'Team.team_number',
+				'Team.name as team_name',
+				'Project.name as project_name',
+				'Project.number as project_number',
+				'Unit.name as unit_name',
+				'Unit.initials',
+				'Unit.code as unit_code'
+			)
+			.where('team_student.student_id', student.user_id)
+			.where('Project.academic_year', academic_year)
+			.where('Unit.semester', semester);
+		return response.json(teams);
 	}
 
 	async findUser(request, response, next) {
