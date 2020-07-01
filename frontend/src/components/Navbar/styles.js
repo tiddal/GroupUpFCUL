@@ -18,6 +18,9 @@ export const Container = styled.nav`
 	@media (min-width: 768px) {
 		justify-content: flex-start;
 		padding: 0;
+		select {
+			margin-left: 25px;
+		}
 	}
 `;
 

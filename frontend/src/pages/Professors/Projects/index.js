@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
-import { useAuth, useYear } from '../../../hooks';
+import { useAuth } from '../../../hooks';
 import professorService from '../../../services/professor';
 
 import {
@@ -29,7 +29,6 @@ import Context from '../../../components/Context';
 
 function Projects() {
 	const { user } = useAuth();
-	const { selectedYear } = useYear();
 	const {
 		params: { unit },
 	} = useRouteMatch('/projects/:unit');

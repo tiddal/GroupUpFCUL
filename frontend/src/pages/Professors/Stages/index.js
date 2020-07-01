@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
-import { useAuth, useYear } from '../../../hooks';
+import { useAuth } from '../../../hooks';
 import professorService from '../../../services/professor';
 
 import { Card } from '../../../components/Card';
@@ -13,7 +13,6 @@ import moment from 'moment';
 
 function Stages() {
 	const { user } = useAuth();
-	const { selectedYear } = useYear();
 	const {
 		params: { unit, project },
 		url,

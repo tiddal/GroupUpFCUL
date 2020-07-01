@@ -41,7 +41,6 @@ function Submission() {
 		params: { unit, project, stage, team },
 	} = useRouteMatch('/projects/:unit/:project/stages/:stage/submissions/:team');
 	const [initializng, setInitializing] = useState(true);
-	const [formValidity, setFormValidity] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [submissionData, setSubmissionData] = useState();
 
@@ -104,14 +103,6 @@ function Submission() {
 		getInitialState();
 	}, [user, unit, stage, project, team, selectedYear]);
 
-	function evaluateForm(submissionForm) {
-		let validForm = true;
-		for (let key in submissionForm) {
-			validForm = submissionForm[key].valid && validForm;
-		}
-		return validForm;
-	}
-
 	function handleProjectInputs({ value }, index) {
 		const [valid, info] = validate(
 			value,
@@ -129,12 +120,10 @@ function Submission() {
 			info,
 		};
 		setSubmissionData(updatedForm);
-		setFormValidity(evaluateForm(updatedForm.inputs));
 	}
 
 	async function handleSubmission(event) {
 		event.preventDefault();
-		if (!formValidity) return;
 		setLoading(true);
 		const data = {};
 		submissionData.inputs.map((field) => (data[field.id] = field.value));
