@@ -12,7 +12,7 @@ import Input from "../../../components/Input";
 import { validate } from "../../../validators";
 
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { useAuth } from "../../../hooks";
+import { useAuth, useYear } from "../../../hooks";
 
 function EditClass() {
   const initialState = {
@@ -113,6 +113,7 @@ function EditClass() {
   } = useRouteMatch("/courses/:course/units/:unit/classes/:class_number/edit");
   const history = useHistory();
   const { logout } = useAuth();
+  const { selectedYear } = useYear();
   const [initializing, setInitializing] = useState(true);
   const [unitData, setUnitData] = useState({
     course_initials: "",
@@ -155,7 +156,7 @@ function EditClass() {
       setUnitData({ course_initials, unit_initials });
       const [response, status] = await adminService.get.classByNumber(
         class_number,
-        "2019-2020",
+        selectedYear,
         course,
         unit
       );
@@ -185,7 +186,7 @@ function EditClass() {
     }
     getClass();
     return () => (isCancelled = true);
-  }, [course, history, unit, class_number]);
+  }, [course, history, unit, class_number, selectedYear]);
 
   function handleEditInputs(target, inputKey) {
     const [valid, info] = validate(target.value, editForm[inputKey].validation);
@@ -232,7 +233,8 @@ function EditClass() {
       classData,
       class_number,
       course,
-      unit
+      unit,
+      selectedYear
     );
     const error = {};
 
@@ -277,7 +279,7 @@ function EditClass() {
     if (!removeValid) return;
     setLoadingRemove(true);
     const [, status] = await adminService.remove.class(
-      "2019-2020",
+      selectedYear,
       class_number,
       course,
       unit
