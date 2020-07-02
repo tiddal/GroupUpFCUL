@@ -110,7 +110,7 @@ function Projects() {
 									</p>
 								</Info>
 
-								<Button to={`/projects/${unit}/1/teams`}>
+								<Button to={`/projects/${unit}/${project.number}/teams`}>
 									<FaUsers />
 									Ver Grupos
 								</Button>
