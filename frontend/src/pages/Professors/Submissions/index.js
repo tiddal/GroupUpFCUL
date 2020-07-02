@@ -36,7 +36,7 @@ function Submissions() {
 		(team) => [
 			{ data: team.team_number },
 			{ data: moment(team.submitted_at).format('DD/MM/YYYY, HH[h]mm') },
-			{ data: `${team.stage_grade}%` },
+			{ data: `${team.stage_grade ? team.stage_grade : '--'}%` },
 			{
 				data: (
 					<Link to={`${url}/${team.team_number}`}>

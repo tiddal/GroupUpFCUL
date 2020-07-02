@@ -51,7 +51,12 @@ module.exports = {
 			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 			'application/zip',
 			'application/x-7z-compressed',
+			'application/x-zip-compressed',
 			'application/vnd.rar',
+			'application/x-rar-compressed',
+			'application/octet-stream',
+			'multipart/x-zip',
+			'application/octet-stream',
 		];
 		if (allowedMimes.includes(file.mimetype)) {
 			callback(null, true);

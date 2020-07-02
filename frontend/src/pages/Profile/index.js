@@ -63,7 +63,6 @@ function Profile() {
 					twitter_url: student.twitter_url,
 				};
 			}
-			console.log(userData);
 			setUserData(userData);
 			setInitializing(false);
 		}

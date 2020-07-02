@@ -33,6 +33,7 @@ class StudentController {
 					'ROUND(AVG(rate) OVER (PARTITION BY User), 2)  AS rating'
 				)
 			)
+			.distinct()
 			.orderBy('User.username');
 		return response.json(students);
 	}
@@ -162,7 +163,8 @@ class StudentController {
 			)
 			.where('team_student.student_id', student.user_id)
 			.where('Project.academic_year', academic_year)
-			.where('Unit.semester', semester);
+			.where('Unit.semester', semester)
+			.whereNot('team_student.role', 'pending');
 		return response.json(teams);
 	}
 
