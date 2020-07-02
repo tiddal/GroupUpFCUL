@@ -4,7 +4,7 @@ export const validate = (value, rules) => {
 
 	if (rules.required) {
 		valid = value.trim() !== '' && valid;
-		if (!valid) msg = 'Este campo é obirgatório.';
+		if (!valid) msg = 'Este campo é obrigatório.';
 	}
 
 	if (rules.username) {
