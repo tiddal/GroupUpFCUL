@@ -1,10 +1,11 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 // Dashboard
 import Dashboard from '../pages/Admins/Dashboard';
 import Profile from '../pages/Profile';
 import EditProfile from '../pages/EditProfile';
+import Notifications from '../pages/Notifications';
 
 //Panels
 import AdminPanel from '../pages/Admins/Panels/AdminPanel';
@@ -116,6 +117,8 @@ const AdminRoutes = () => (
 				path="/courses/:course/units/:unit/classes/:class_number/members/new"
 				component={NewUserToClass}
 			/>
+			<Route path="/notifications" component={Notifications} />
+			<Route render={() => <Redirect to="/" />} />
 		</Switch>
 	</BrowserRouter>
 );
