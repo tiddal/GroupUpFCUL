@@ -1,0 +1,187 @@
+{
+	"courses": [
+		{
+			"code": "9119",
+			"name": "Engenharia Informática",
+			"cycle": 1,
+			"initials": "LEI",
+			"units": [
+				{
+					"code": 26737,
+					"name": "Teoria da Computação",
+					"semester": 2,
+					"initials": "TC",
+					"ects": 6
+				},
+				{
+					"code": 26704,
+					"name": "Redes de Computadores",
+					"semester": 2,
+					"initials": "RC",
+					"ects": 6
+				},
+				{
+					"code": 22701,
+					"name": "Introdução às Probabilidades e Estatística",
+					"semester": 2,
+					"initials": "IPE",
+					"ects": 6
+				},
+				{
+					"code": 26748,
+					"name": "Arquiteturas de Sistemas Computacionais",
+					"semester": 2,
+					"initials": "ASC",
+					"ects": 6
+				},
+				{
+					"code": 13533,
+					"name": "Cálculo",
+					"semester": 2,
+					"initials": "CLC",
+					"ects": 6
+				},
+				{
+					"code": 26722,
+					"name": "Introdução à Programação",
+					"semester": 2,
+					"initials": "IP",
+					"ects": 6
+				},
+				{
+					"code": 13539,
+					"name": "Lógica de Primeira Ordem",
+					"semester": 2,
+					"initials": "LPO",
+					"ects": 6
+				},
+				{
+					"code": 26759,
+					"name": "Produção de Documentos Técnicos",
+					"semester": 2,
+					"initials": "PDT",
+					"ects": 6
+				},
+				{
+					"code": 26723,
+					"name": "Algoritmos e Estruturas de Dados",
+					"semester": 2,
+					"initials": "AED",
+					"ects": 6
+				},
+				{
+					"code": 13540,
+					"name": "Elementos de Álgebra Linear",
+					"semester": 2,
+					"initials": "EAL",
+					"ects": 6
+				},
+				{
+					"code": 34706,
+					"name": "Física A",
+					"semester": 2,
+					"initials": "FA",
+					"ects": 6
+				},
+				{
+					"code": 26724,
+					"name": "Laboratórios de Programação",
+					"semester": 2,
+					"initials": "LP",
+					"ects": 6
+				},
+				{
+					"code": 85130,
+					"name": "Computadores e Sociedade",
+					"semester": 2,
+					"initials": "CS",
+					"ects": 3
+				},
+				{
+					"code": 34707,
+					"name": "Física Experimental",
+					"semester": 1,
+					"initials": "FE",
+					"ects": 6
+				},
+				{
+					"code": 22736,
+					"name": "Introdução à Investigação Operacional",
+					"semester": 1,
+					"initials": "IIO",
+					"ects": 6
+				},
+				{
+					"code": 26725,
+					"name": "Princípios de Programação",
+					"semester": 1,
+					"initials": "PP",
+					"ects": 6
+				},
+				{
+					"code": 26726,
+					"name": "Sistemas de Informação e Bases de Dados",
+					"semester": 1,
+					"initials": "SIB",
+					"ects": 6
+				},
+				{
+					"code": 26728,
+					"name": "Interfaces Pessoa Máquina",
+					"semester": 1,
+					"initials": "IPM",
+					"ects": 6
+				},
+				{
+					"code": 13528,
+					"name": "Matemática Discreta",
+					"semester": 1,
+					"initials": "MD",
+					"ects": 6
+				},
+				{
+					"code": 85119,
+					"name": "Pensamento Crítico",
+					"semester": 1,
+					"initials": "PC",
+					"ects": 6
+				},
+				{
+					"code": 26703,
+					"name": "Sistemas Operativos",
+					"semester": 1,
+					"initials": "SO",
+					"ects": 6
+				},
+				{
+					"code": 34716,
+					"name": "Astronomia e Astrofísica",
+					"semester": 1,
+					"initials": "AA",
+					"ects": 3
+				},
+				{
+					"code": 62831,
+					"name": "Bioética",
+					"semester": 1,
+					"initials": "BIO",
+					"ects": 3
+				},
+				{
+					"code": 93103,
+					"name": "Curso de Competências Sociais e Desenvolvimento Pessoal",
+					"semester": 1,
+					"initials": "CSD",
+					"ects": 3
+				},
+				{
+					"code": 26733,
+					"name": "Computação Gráfica",
+					"semester": 1,
+					"initials": "CG",
+					"ects": 6
+				}
+			]
+		}
+	]
+}

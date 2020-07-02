@@ -109,6 +109,17 @@
 				"type": "student",
 				"data": {}
 			}
+		},
+		{
+			"username": "fc50010",
+			"first_name": "Lionel",
+			"last_name": "Messi",
+			"email": "fc50010@test.com",
+			"password": "password",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
 		}
 	]
 }

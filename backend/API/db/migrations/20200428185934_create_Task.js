@@ -2,7 +2,7 @@ exports.up = function (knex) {
 	return knex.schema.createTable('Task', function (table) {
 		table.uuid('id').primary();
 		table.uuid('team_id').notNullable();
-		table.string('task_number').notNullable().unique();
+		table.string('task_number').notNullable();
 		table.string('title').notNullable();
 		table.string('description');
 		table.uuid('performed_by');

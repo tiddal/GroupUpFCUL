@@ -1,0 +1,59 @@
+{
+	"users": [
+		{
+			"username": "fc50011",
+			"first_name": "Eduardo",
+			"last_name": "Quaresma",
+			"email": "fc50011@test.com",
+			"password": "sim",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		},
+		{
+			"username": "fc50012",
+			"first_name": "Kylian",
+			"last_name": "Mbappé",
+			"email": "fc50012@test.com",
+			"password": "password",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		},
+		{
+			"username": "fc50013",
+			"first_name": "Erling",
+			"last_name": "Haland",
+			"email": "fc50013@test.com",
+			"password": "password",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		},
+		{
+			"username": "fc50014",
+			"first_name": "Gonzalo",
+			"last_name": "Plata",
+			"email": "fc50014@test.com",
+			"password": "password",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		},
+		{
+			"username": "fc50015",
+			"first_name": "Vinícius",
+			"last_name": "Júnior",
+			"email": "fc50015@test.com",
+			"password": "password",
+			"role": {
+				"type": "student",
+				"data": {}
+			}
+		}
+	]
+}
