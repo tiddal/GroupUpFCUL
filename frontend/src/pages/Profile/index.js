@@ -14,6 +14,7 @@ import {
 	AboutSection,
 	RatingSection,
 	EditButton,
+	BackButton,
 	A,
 	NoLink,
 } from './styles';
@@ -28,9 +29,10 @@ import {
 	FaStar,
 	FaStarHalf,
 	FaEdit,
+	FaArrowLeft,
 } from 'react-icons/fa';
 
-import { useRouteMatch } from 'react-router-dom';
+import { useRouteMatch, useHistory } from 'react-router-dom';
 
 function Profile() {
 	const {
@@ -39,6 +41,7 @@ function Profile() {
 	const { user: self } = useAuth();
 	const [userData, setUserData] = useState();
 	const [initializng, setInitializing] = useState(true);
+	const history = useHistory();
 
 	useEffect(() => {
 		async function getInitialState() {
@@ -116,6 +119,9 @@ function Profile() {
 						<FaEdit />
 					</EditButton>
 				)}
+				<BackButton onClick={() => history.goBack()}>
+					<FaArrowLeft />
+				</BackButton>
 
 				<Picture>
 					{userData.avatar_url ? (

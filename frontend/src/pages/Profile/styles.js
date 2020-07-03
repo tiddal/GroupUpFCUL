@@ -189,4 +189,13 @@ export const EditButton = styled(NavLink)`
 	top: 20px;
 	color: ${({ theme }) => theme.colors.primary_variant};
 	font-size: 18px;
+	transition: color 0.3s ease;
+	:hover {
+		color: ${({ theme }) => theme.colors.primary};
+	}
+`;
+
+export const BackButton = styled(EditButton).attrs({ as: 'button' })`
+	left: 20px;
+	cursor: pointer;
 `;
